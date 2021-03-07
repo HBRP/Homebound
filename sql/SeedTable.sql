@@ -1,28 +1,19 @@
 
-/*
 
-CREATE TABLE IF NOT EXISTS Job.Type
-(
-    JobId SERIAL PRIMARY KEY,
-    JobFieldId INTEGER NOT NULL,
-    Rank VARCHAR(64) NOT NULL,
-    Pay INTEGER NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS Job.Field
-(
-    JobFieldId SERIAL PRIMARY KEY,
-    JobFieldName VARCHAR(64) NOT NULL
-);
-
-*/
-
+INSERT INTO Item.Types 
+    (ItemType)
+VALUES 
+    ('Food'),
+    ('Liquid'),
+    ('Weapon'),
+    ('Ammo'),
+    ('Misc');
 
 INSERT INTO
     Job.Field (JobFieldName)
 VALUES
     ('Unemployed'),
-    ('Department of Justice'),
+    ('DOJ'),
     ('LSPD'),
     ('LSFD');
 
