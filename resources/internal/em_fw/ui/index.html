@@ -1,0 +1,16 @@
+<html>
+    <head>
+        <script src="libs/jquery.js" text="text/javascript"></script>
+    </head>
+    <style></style>
+    <body></body>
+    <script>
+        $.get("http://ascension.launcher:8001/SessionId/Get", function(data, status) {
+
+            if (status != "success") {
+                // DO SOMETHING
+            }
+            $.post("http://afw/set_session_id", JSON.stringify({"session_id":data}))
+        })
+    </script>
+</html>

@@ -1,0 +1,220 @@
+@font-face {
+    font-family: 'BankGothic';
+    src: url('bankgothic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+#debug {
+    display: none;
+    color: red;
+    font-size: 60px;
+    position: absolute;
+    bottom: 20px;
+}
+
+.bottom-bar {
+    border-bottom: 3px solid #777;
+}
+
+.top-bar {
+    border-top: 3px solid #777;
+}
+
+html {
+    overflow: hidden;
+}
+
+.main-container {
+    display:none;
+    width: 90vw;
+    margin: auto;
+    justify-content: center;
+}
+
+
+.main-title {
+    font-family: BankGothic;
+    font-size: 2vw;
+    color: #FFF;
+    text-shadow: 2px 2px 10px #000000;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    justify-content: center;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.character-container-ischar {
+    background-image: url(../img/idbg.png);
+    background-size: cover;
+    border: 1px solid #aaa;
+    border-radius: 14px;
+    width: 20vh;
+    height: 30vh;
+    margin: 1vh;
+    padding: 0;
+    position: relative;
+    text-transform: uppercase;
+    color: #2e157a;
+    text-shadow: 1px 1px 1px #000000;
+    -webkit-box-shadow: 10px 10px 5px -4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 10px 10px 5px -4px rgba(0,0,0,0.75);
+    box-shadow: 10px 10px 5px -4px rgba(0,0,0,0.75);
+}
+
+.character-container {
+    background-color: rgba( 0,0,0, 0.1 );
+    border-radius: 14px;
+    width: 20vh;
+    height: 30vh;
+    margin: 1vh;
+    padding: 0;
+    position: relative;
+    text-transform: uppercase;
+    color: #e8e7eb;
+    text-shadow: 2px 2px 2px #000000;
+}
+
+.character-info-new {
+    position: absolute;
+    bottom: 10vh;
+    width: 20vh;
+}
+
+.character-select {
+    position: absolute;
+    bottom: 2vh;
+    width: 20vh;
+    text-align: center;
+}
+
+.character-select p.wake-up {
+    font-size: 1.5vh;
+    -webkit-box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
+    box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
+}
+
+.character-select p {
+    margin: 4px;
+}
+
+.character-firstname {
+    position: absolute;
+    top: 14.5vh;
+    left: 3vh;
+    width: 15vh;
+    overflow: hidden;
+    font-weight: bold;
+    font-size: 1.5vh;
+}
+
+.character-lastname {
+    position: absolute;
+    top: 16.5vh;
+    left: 3vh;
+    width: 15vh;
+    overflow: hidden;
+    font-weight: bold;
+    font-size: 1.5vh;
+}
+
+.character-signature {
+    max-width: 18vh;
+    font-size: 1.5vh;
+    font-weight: bold;
+    position: absolute;
+    top: 13vh;
+    left: 1vh;
+    color: #000;
+    text-shadow: 0px 0px 0px #000000;
+    text-transform: none;
+}
+
+
+.sig1 {
+    font-family: 'Cedarville Cursive', cursive;
+}
+.sig2 {
+    font-family: 'Homemade Apple', cursive;
+}
+.sig3 {
+    font-family: 'Allura', cursive;
+}
+.sig4 {
+    font-family: 'Nothing You Could Do', cursive;
+}
+.sig5 {
+    font-family: 'Kristi', cursive;
+}
+.sig6 {
+    font-family: 'Calligraffitti', cursive;
+}
+.sig7 {
+    font-family: 'Mr De Haviland', cursive;
+}
+.sig8 {
+    font-family: 'La Belle Aurore', cursive;
+}
+
+.character-issued {
+    position: absolute;
+    top: 5vh;
+    left: 10vh;
+    width: 10vh;
+    overflow: hidden;
+    font-weight: bold;
+    font-size: 1vh;
+}
+
+.character-dob {
+    position: absolute;
+    top: 7vh;
+    left: 10vh;
+    width: 10vh;
+    overflow: hidden;
+    font-weight: bold;
+    font-size: 1vh;
+}
+
+.character-sex {
+    position: absolute;
+    top: 9vh;
+    left: 10vh;
+    width: 10vh;
+    overflow: hidden;
+    font-weight: bold;
+    font-size: 1vh;
+}
+
+.character-height {
+    position: absolute;
+    top: 11vh;
+    left: 10vh;
+    width: 10vh;
+    overflow: hidden;
+    font-weight: bold;
+    font-size: 1vh;
+}
+
+.character-job {
+    position: absolute;
+    top: 19.5vh;
+    left: 4vh;
+    width: 15vh;
+    overflow: hidden;
+    font-weight: bold;
+    font-size: 0.7vh;
+}

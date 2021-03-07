@@ -1,0 +1,47 @@
+body {
+    background-color: transparent !important;
+}
+
+.template, .notification {
+    display: none;
+}
+
+.notif-container {
+    width: 40vw;
+    position: absolute;
+    top: 2vw;
+    right: 2vw;
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    justify-content: flex-end; 
+}
+
+.notification {
+    padding: 0.3vw 0.7vw;
+    width: fit-content;
+    border-radius: 0.5vw;
+    margin: 0.5vw;
+    font: caption;
+    font-size: 1.25vh;
+    font-weight: normal;
+    text-shadow: 2px 2px 2px #000;
+    -webkit-box-shadow: 4px 4px 18px 0px rgba(0,0,0,0.51);
+    -moz-box-shadow: 4px 4px 18px 0px rgba(0,0,0,0.51);
+    box-shadow: 4px 4px 18px 0px rgba(0,0,0,0.51);
+}
+
+.success {
+    background: rgb(68, 128, 68);
+    color: #fff;
+}
+
+.inform {
+    background-color: rgb(47, 92, 115);
+    color: #ffffff;
+}
+
+.error {
+    background: rgb(224, 50, 50);
+    color: #fff;
+}

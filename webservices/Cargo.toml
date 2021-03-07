@@ -1,0 +1,22 @@
+[package]
+name = "webservice"
+version = "0.1.0"
+authors = ["Emma Davenport <davenport.physics@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rocket = "0.4.5"
+postgres = "0.17.5"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+rust-argon2 = "0.8"
+rand = "0.7"
+hex = "0.4"
+sha2 = "0.9.1"
+
+[dependencies.rocket_contrib]
+version = "0.4.5"
+default-features = false
+features = ["json"]
