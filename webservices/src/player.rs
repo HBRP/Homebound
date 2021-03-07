@@ -13,24 +13,9 @@ pub enum ResultCodes {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct UserCredentials {
+pub struct PlayerCredentials {
 
-    pub username: String,
-    pub password_hash: String,
-
-}
-#[derive(Serialize, Deserialize, Debug)]
-struct UserSession {
-
-    session_id: String,
-    result_code: ResultCodes
-
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct Session {
-
-    pub session_id: String
+    pub steamid: String,
 
 }
 
@@ -48,177 +33,111 @@ pub struct Player {
 
 }
 
-pub mod user {
+use crate::db_postgres;
 
-    use crate::db_postgres;
-    use crate::player::{UserCredentials, UserSession, ErrorResponse, ResultCodes};
-    use crate::service_hashing;
+pub fn get_player_id(player: PlayerCredentials) -> String {
 
-    pub fn create(user: UserCredentials) -> String {
+    if !exists(&player) {
 
-        let client = db_postgres::get_connection();
-        match client {
+        return create_player(player);
 
-            Ok(mut conn) => {
+    }
+    let client = db_postgres::get_connection();
+    match client {
 
-                let session_id     = create_player_records(&mut conn, &user);
-                let user_session   = UserSession {
+        Ok(mut client) => {
 
-                    session_id: session_id,
-                    result_code: ResultCodes::Successful
+            let row = client.query_one("SELECT * FROM Player.Players WHERE SteamId = $1", &[&player.steamid]).unwrap();
+            let player = Player {
 
-                };
-                serde_json::to_string(&user_session).unwrap()
+                player_id: row.get("PlayerId")
 
-            }
-            Err(err) => {
+            };
+            return serde_json::to_string(&player).unwrap()
 
-                println!("{:?}", err);
-                let error = ErrorResponse {
+        }
+        Err(_err) => return_generic_error()
+    }
 
-                    result_code: ResultCodes::GeneralError
+}
 
-                };
-                serde_json::to_string(&error).unwrap()
-            }
+pub fn create_player(player: PlayerCredentials) -> String {
 
+    let client = db_postgres::get_connection();
+    match client {
+
+        Ok(mut conn) => {
+
+            let player_id = create_player_records(&mut conn, &player);
+            let player = Player {
+
+                player_id: player_id
+
+            };
+            serde_json::to_string(&player).unwrap()
+
+        }
+        Err(err) => {
+
+            println!("{:?}", err);
+            return_generic_error()
         }
 
     }
 
-    pub fn exists(user: &UserCredentials) -> bool {
+}
 
-        let client = db_postgres::get_connection();
+pub fn exists(player: &PlayerCredentials) -> bool {
 
-        match client {
+    let client = db_postgres::get_connection();
 
-            Ok(mut client) => {
+    match client {
 
-                let row = client.query_one("SELECT * FROM Player.Players WHERE UserName = $1", &[&user.username]);
-                match row {
-                    Ok(_) => true,
-                    Err(err) => {
+        Ok(mut client) => {
 
-                        println!("{:?}", err);
-                        false
+            let row = client.query_one("SELECT * FROM Player.Players WHERE SteamId = $1", &[&player.steamid]);
+            match row {
+                Ok(_) => true,
+                Err(err) => {
 
-                    }
+                    println!("{:?}", err);
+                    false
+
                 }
             }
-            Err(err) => {
-
-                println!("{:?}", err);
-                true
-
-            }
         }
-    }
+        Err(err) => {
 
-    fn create_player_records(mut client: &mut postgres::Client, user: &UserCredentials) -> String {
+            println!("{:?}", err);
+            true
 
-        let argon2_hash = service_hashing::get_argon2_hash(&user.password_hash);
-
-        let row            = client.query_one("INSERT INTO Player.Players (UserName, PasswordHash, PasswordSalt) VALUES ($1, $2, $3) RETURNING PlayerId", &[&user.username, &argon2_hash.hash, &argon2_hash.salt]).unwrap();
-        let player_id: i32 = row.get("PlayerId");
-        let argon2_hash    = service_hashing::get_argon2_hash(&user.password_hash);
-        let session_id     = service_hashing::get_sha512_hash(&argon2_hash.hash);
-
-        client.execute("INSERT INTO Player.Sessions (PlayerId, SessionId) VALUES ($1, $2)", &[&player_id, &session_id]).unwrap();
-        create_player_queue_permissions(&mut client, player_id);
-        session_id
-
-    }
-
-    fn create_player_queue_permissions(client: &mut postgres::Client, player_id: i32) {
-
-        client.execute("INSERT INTO Queue.Permissions (PlayerId) VALUES ($1)", &[&player_id]).unwrap();
-
+        }
     }
 }
 
-pub mod login_user {
+fn return_generic_error() -> String {
 
-    use crate::db_postgres;
-    use crate::player::{UserCredentials, UserSession, ErrorResponse, ResultCodes, Player, Session};
-    use crate::service_hashing;
+    let error = ErrorResponse {
 
-    struct PersonUser {
+        result_code: ResultCodes::GeneralError
 
-        player_id     : i32,
-        password_hash : String,
-        password_salt : String
+    };
+    serde_json::to_string(&error).unwrap()
 
-    }
+}
 
-    pub fn login(user: UserCredentials) -> String {
+fn create_player_records(mut client: &mut postgres::Client, player: &PlayerCredentials) -> i32 {
 
-        let client = db_postgres::get_connection();
-        match client {
+    let row = client.query_one("INSERT INTO Player.Players (Steamid) VALUES ($1) RETURNING PlayerId", &[&player.steamid]).unwrap();
+    let player_id: i32 = row.get("PlayerId");
 
-            Ok(mut client) => {
+    create_player_queue_permissions(&mut client, player_id);
+    player_id
 
-                let person_user = get_person_user(&mut client, &user);
-                let argon2_hash = service_hashing::get_argon2_hash_salt(&user.password_hash, &person_user.password_salt);
-                if person_user.password_hash.eq(&argon2_hash.hash) {
+}
 
-                    let session_id = create_session(&mut client, &person_user);
-                    return serde_json::to_string(&UserSession {
+fn create_player_queue_permissions(client: &mut postgres::Client, player_id: i32) {
 
-                        result_code : ResultCodes::Successful,
-                        session_id  : session_id
+    client.execute("INSERT INTO Queue.Permissions (PlayerId) VALUES ($1)", &[&player_id]).unwrap();
 
-                    }).unwrap()
-
-                }
-                serde_json::to_string(&ErrorResponse {
-                    result_code : ResultCodes::GeneralError
-                }).unwrap()
-            }
-            Err(_err) => {
-                serde_json::to_string(&ErrorResponse {
-                    result_code : ResultCodes::GeneralError
-                }).unwrap()
-            }
-        }
-    }
-
-    pub fn get_player_id_by_session_id(session: Session) -> String {
-
-        let client = db_postgres::get_connection();
-        match client {
-
-            Ok(mut client) => {
-
-                let row = client.query_one("SELECT PlayerId FROM Player.Sessions WHERE SessionId = $1", &[&session.session_id]).unwrap();
-                serde_json::to_string(&Player {
-                    player_id : row.get("PlayerId")
-                }).unwrap()
-
-            }
-            Err(_err) => {
-                serde_json::to_string(&ErrorResponse {
-                    result_code : ResultCodes::GeneralError
-                }).unwrap()
-            }
-        }
-    }
-
-    fn get_person_user(client: &mut postgres::Client, user: &UserCredentials) -> PersonUser {
-
-        let row = client.query_one("SELECT * FROM Player.Players WHERE UserName = $1", &[&user.username]).unwrap();
-        PersonUser {
-            player_id     : row.get("PlayerId"),
-            password_hash : row.get("PasswordHash"),
-            password_salt : row.get("PasswordSalt")
-        }
-    }
-
-    fn create_session(client: &mut postgres::Client, person_user: &PersonUser) -> String {
-
-        let argon2_hash = service_hashing::get_argon2_hash(&person_user.password_hash);
-        let session_id  = service_hashing::get_sha512_hash(&argon2_hash.hash);
-        client.execute("INSERT INTO Player.Sessions (PlayerId, SessionId) VALUES ($1, $2)", &[&person_user.player_id, &session_id]).unwrap();
-        session_id
-
-    }
 }

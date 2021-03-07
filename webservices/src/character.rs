@@ -108,7 +108,18 @@ fn create_default_entries(client: &mut postgres::Client, character_id: &i32) {
 
     client.execute("INSERT INTO Bank.AccountOwner (BankAccountId, CharacterId) VALUES ($1, $2)", &[&bank_account_id, &character_id]).unwrap();
     client.execute("INSERT INTO Character.BankAccount (CharacterId, BankAccountId) VALUES ($1, $2)", &[&character_id, &bank_account_id]).unwrap();
-    let row = client.query_one("INSERT INTO Storage.Containers DEFAULT VALUES RETURNING StorageId", &[]).unwrap();
+
+    let row = client.query_one(
+        "INSERT INTO 
+            Storage.Containers (StorageTypeId)
+        SELECT  
+            ST.StorageTypeId
+        FROM Storage.Types ST
+        WHERE 
+            ST.StorageTypeName = 'Player Inventory'
+        RETURNING StorageId;", 
+    &[]).unwrap();
+
     let storage_id: i32 = row.get("StorageId");
 
     client.execute("INSERT INTO Character.Inventory (CharacterId, StorageId) VALUES ($1, $2)", &[&character_id, &storage_id]).unwrap();
@@ -122,7 +133,7 @@ pub fn get_characters(player: player::Player) -> String  {
     let mut all_characters = Characters {
         characters: Vec::new()
     };
-    for row in client.query("SELECT CharacterId, FirstName, LastName, DOB FROM Player.Characters WHERE PlayerId = $1 AND Disabled = 'f'", &[&player.player_id]).unwrap() {
+    for row in client.query("SELECT CharacterId, FirstName, LastName, DOB FROM Player.Characters WHERE PlayerId = $1 AND Deleted = 'f'", &[&player.player_id]).unwrap() {
 
         all_characters.characters.push(Character {
 
@@ -180,13 +191,13 @@ pub fn set_character_health(health: CharacterHealth) {
 pub fn disable_character(character: CharacterId) {
 
     let mut client = db_postgres::get_connection().unwrap();
-    client.execute("UPDATE Character.Health SET Disabled = 't' WHERE CharacterId = $1", &[&character.character_id]).unwrap();
+    client.execute("UPDATE Character.Health SET Deleted = 't' WHERE CharacterId = $1", &[&character.character_id]).unwrap();
 
 }
 
 pub fn enable_character(character: CharacterId) {
 
     let mut client = db_postgres::get_connection().unwrap();
-    client.execute("UPDATE Character.Health SET Disabled = 'f' WHERE CharacterId = $1", &[&character.character_id]).unwrap();
+    client.execute("UPDATE Character.Health SET Deleted = 'f' WHERE CharacterId = $1", &[&character.character_id]).unwrap();
 
 }

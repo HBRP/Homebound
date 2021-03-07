@@ -10,59 +10,17 @@ mod service_hashing;
 mod character;
 mod storage;
 
-#[post("/Player/Create", format = "json", data = "<user>")]
-fn player_create(user: Json<player::UserCredentials>) -> String {
+#[post("/Player/Create", format = "json", data = "<player_credentials>")]
+fn player_create(player_credentials: Json<player::PlayerCredentials>) -> String {
 
-    println!("{:?}", user);
-
-    let user = user.into_inner();
-
-    if !player::user::exists(&user) {
-
-        player::user::create(user)
-
-    } else {
-
-        let response = player::ErrorResponse {
-
-            result_code : player::ResultCodes::UserAlreadyExists
-
-        };
-        serde_json::to_string(&response).unwrap()
-
-    }
-}
-
-#[get("/Player/Login", format = "json", data = "<user>")]
-fn player_login(user: Json<player::UserCredentials>) -> String {
-
-    println!("{:?}", user);
-
-    let user = user.into_inner();
-    if player::user::exists(&user) {
-
-        player::login_user::login(user)
-
-    } else {
-
-        let response = player::ErrorResponse {
-
-            result_code : player::ResultCodes::UserDoesNotExist
-
-        };
-        serde_json::to_string(&response).unwrap()
-
-    }
+    player::create_player(player_credentials.into_inner())
 
 }
 
-#[get("/Player/PlayerId", format = "json", data = "<session>")]
-fn player_id(session: Json<player::Session>) -> String {
+#[get("/Player/GetPlayerId", format = "json", data = "<player_credentials>")]
+fn get_player_id(player_credentials: Json<player::PlayerCredentials>) -> String {
 
-    println!("{:?}", session);
-
-    let session = session.into_inner();
-    player::login_user::get_player_id_by_session_id(session)
+    player::get_player_id(player_credentials.into_inner())
 
 }
 
@@ -133,6 +91,6 @@ fn enable_character(character: Json<character::CharacterId>) {
 
 fn main() {
 
-    rocket::ignite().mount("/", routes![player_create, player_login, character_create, get_characters, get_character_position, get_character_health, player_id]).launch();
+    rocket::ignite().mount("/", routes![player_create, character_create, get_characters, get_character_position, get_character_health, get_player_id]).launch();
 
 }
