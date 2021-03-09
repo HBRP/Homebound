@@ -1,7 +1,8 @@
  
 local IsChoosing = true
-DisplayRadar(false)
 
+local cam = nil
+local cam2 = nil
 local function setup_character_ui()
 
     exports.spawnmanager:setAutoSpawn(false)
@@ -11,11 +12,14 @@ local function setup_character_ui()
         Citizen.Wait(4)
     end
 
+    SetEntityCoords(GetPlayerPed(-1), -1047.87, -2768.70, 4.63)
+    SetTimecycleModifier('hud_def_blur')
     FreezeEntityPosition(GetPlayerPed(-1), true)
-
+    cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", -1355.93,-1487.78,520.75, 300.00,0.00,0.00, 100.00, false, 0)
+    SetCamActive(cam, true)
+    RenderScriptCams(true, false, 1, true, true)
     SetNetworkIdExistsOnAllMachines(NetworkGetNetworkIdFromEntity(PlayerPedId()), true)
     NetworkFadeOutEntity(PlayerPedId(), true, false)
-    DoScreenFadeIn(10)
     SetNuiFocus(true, true)
     
     SendNUIMessage({
@@ -27,29 +31,30 @@ end
 
 local function spawn_character(character)
 
-    exports.spawnmanager:setAutoSpawn(false)
     
-    SetEntityCoords(GetPlayerPed(-1), (math.random(22175, 22185) * -0.01),(math.random(104900, 105500) * -0.01), 30.2)
-
-    PlaySoundFrontend(-1, "Zoom_Out", "DLC_HEIST_PLANNING_BOARD_SOUNDS", 1)
-    PlaySoundFrontend(-1, "CAR_BIKE_WHOOSH", "MP_LOBBY_SOUNDS", 1)
-
-    IsChoosing = false
-    DisplayRadar(false)
-    FreezeEntityPosition(GetPlayerPed(-1), false)
-
-    DoScreenFadeOut(500)
-    SetNetworkIdExistsOnAllMachines(NetworkGetNetworkIdFromEntity(PlayerPedId()), true)
-    SetEntityAlpha(PlayerPedId(), 0)
-    NetworkFadeInEntity(PlayerPedId(), 0)
-    ShutdownLoadingScreenNui()
-    SendLoadingScreenMessage(json.encode(
-        {
-            eventName = "fadeOutVideo"
-        }
-    ))
-    Wait(2300) 
+    SetTimecycleModifier('default')
+    local pos = character["position"];
+    SetEntityCoords(GetPlayerPed(-1), pos.x, pos.y, pos.z)
     DoScreenFadeIn(500)
+    Citizen.Wait(500)
+    cam2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", -1355.93,-1487.78,520.75, 300.00,0.00,0.00, 100.00, false, 0)
+    PointCamAtCoord(cam2, pos.x,pos.y,pos.z+200)
+    SetCamActiveWithInterp(cam2, cam, 900, true, true)
+    Citizen.Wait(900)
+
+    cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", pos.x,pos.y,pos.z+200, 300.00,0.00,0.00, 100.00, false, 0)
+    PointCamAtCoord(cam, pos.x,pos.y,pos.z+2)
+    SetCamActiveWithInterp(cam, cam2, 3700, true, true)
+    Citizen.Wait(3700)
+    PlaySoundFrontend(-1, "Zoom_Out", "DLC_HEIST_PLANNING_BOARD_SOUNDS", 1)
+    RenderScriptCams(false, true, 500, true, true)
+    PlaySoundFrontend(-1, "CAR_BIKE_WHOOSH", "MP_LOBBY_SOUNDS", 1)
+    FreezeEntityPosition(GetPlayerPed(-1), false)
+    Citizen.Wait(500)
+    SetCamActive(cam, false)
+    DestroyCam(cam, true)
+    IsChoosing = false
+    DisplayHud(true)
 
 end
 
@@ -70,7 +75,6 @@ RegisterNUICallback("CharacterChosen", function(data, cb)
     while not IsScreenFadedOut() do
         Citizen.Wait(4)
     end
-    cb("ok")
     spawn_character(character)
 
 
@@ -83,7 +87,7 @@ RegisterNUICallback("CreateCharacter", function(data, cb)
     local character = exports["em_fw"]:load_character(character_id)
 
     spawn_character(character)
-    
+
 end)
 
 RegisterNUICallback("DeleteCharacter", function(data, cb)
@@ -106,7 +110,7 @@ AddEventHandler("em_fw:player_loaded", function()
 
     Citizen.CreateThread(function()
 
-        Citizen.Wait(5)
+        Citizen.Wait(0)
         setup_character_ui()
 
     end)
