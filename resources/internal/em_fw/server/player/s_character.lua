@@ -16,10 +16,9 @@ AddEventHandler("em_fw:delete_character", function(character_id)
 
     local source = source
     local data   = {character_id = character_id}
-    HttpPost("/Character/Delete", data, function(error_code, result_data, result_headers)
+    HttpPut("/Character/Delete", data, function(error_code, result_data, result_headers)
 
-        Citizen.Trace("Deleted character_id = " .. character_id)
-        Citizen.Trace(result_data)
+        TriggerClientEvent("em_fw:delete_character:response", source)
 
     end)
 

@@ -34,28 +34,29 @@ AddEventHandler("em_fw:create_character:response", function(character)
 
 end)
 
+local deleted_character = false;
 function delete_character(character_id)
-
-    for i = 1, #player_characters do
-        if player_characters[i].character_id == character_id then
-            table.remove(player_characters, i)
-            break
-        end
-    end
     
-    TriggerServerEvent("DeleteCharacter", character_id)
+    deleted_character = false
+    TriggerServerEvent("em_fw:delete_character", character_id)
+    while not deleted_character do
+        Citizen.Wait(100)
+    end
 
 end
+
+RegisterNetEvent("em_fw:delete_character:response")
+AddEventHandler("em_fw:delete_character:response", function()
+
+    deleted_character = true
+
+end)
 
 function get_all_characters()
 
     return player_characters
 
 end
-
-
-
-
 
 function get_all_characters()
 
