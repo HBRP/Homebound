@@ -1,5 +1,5 @@
-RegisterNetEvent("CreateCharacter")
-AddEventHandler("CreateCharacter", function(player_id, firstname, lastname, dob) 
+RegisterNetEvent("em_fw:create_character")
+AddEventHandler("em_fw:create_character", function(player_id, firstname, lastname, dob) 
 
     local source = source
     local data   = {player_id = player_id, firstname = firstname, lastname = lastname, dob = dob}
@@ -11,27 +11,41 @@ AddEventHandler("CreateCharacter", function(player_id, firstname, lastname, dob)
 
 end)
 
-RegisterNetEvent("GetCharacterInfo")
-AddEventHandler("GetCharacterInfo", function(character_id) 
+RegisterNetEvent("em_fw:delete_character")
+AddEventHandler("em_fw:delete_character", function(character_id) 
 
     local source = source
-    local data = {player_id = player_id}
-    HttpGet("/Character/GetInfo", data, function(error_code, result_data, result_headers)
+    local data   = {character_id = character_id}
+    HttpPost("/Character/Delete", data, function(error_code, result_data, result_headers)
 
-        TriggerClientEvent("GetCharacterInfo:Response", source, result_data)
+        Citizen.Trace("Deleted character_id = " .. character_id)
+        Citizen.Trace(result_data)
 
     end)
 
 end)
 
-RegisterNetEvent("GetAllCharacters")
-AddEventHandler("GetAllCharacters", function(player_id) 
+RegisterNetEvent("em_fw:get_character_info")
+AddEventHandler("em_fw:get_character_info", function(character_id) 
+
+    local source = source
+    local data = {character_id = character_id}
+    HttpGet("/Character/GetInfo", data, function(error_code, result_data, result_headers)
+
+        TriggerClientEvent("em_fw:get_character_info", source, result_data)
+
+    end)
+
+end)
+
+RegisterNetEvent("em_fw:get_all_characters")
+AddEventHandler("em_fw:get_all_characters", function(player_id) 
 
     local source = source
     local data = {player_id = player_id}
     HttpGet("/Character/GetAll", data, function(error_code, result_data, result_headers)
 
-        TriggerClientEvent("GetAllCharacters:Response", source, result_data)
+        TriggerClientEvent("em_fw:get_all_characters:response", source, json.decode(result_data))
 
     end)
 

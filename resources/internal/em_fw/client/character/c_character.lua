@@ -25,6 +25,7 @@ function delete_character(character_id)
             break
         end
     end
+    
     TriggerServerEvent("DeleteCharacter", character_id)
 
 end
@@ -47,7 +48,7 @@ end)
 function init_all_characters()
 
     retrieved_characters = false
-    TriggerServerEvent("GetAllCharacters", get_player_id())
+    TriggerServerEvent("em_fw:get_all_characters", get_player_id())
 
 end
 
@@ -58,11 +59,11 @@ function characters_were_init()
 end
 
 
-RegisterNetEvent("GetAllCharacters:Response")
-AddEventHandler("GetAllCharacters:Response", function(characters)
+RegisterNetEvent("em_fw:get_all_characters:response")
+AddEventHandler("em_fw:get_all_characters:response", function(characters)
 
     retrieved_characters = true
-    player_characters = json.decode(characters)
+    player_characters = characters
 
 end)
 

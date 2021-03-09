@@ -26,6 +26,6 @@ end
 Citizen.CreateThread(function()
 
     Citizen.Wait(0)
-    base_service_url = GetConvar("ascension_service", "")
+    base_service_url = GetConvar("homebound_service", "")
 
 end)

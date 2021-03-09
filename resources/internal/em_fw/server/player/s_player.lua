@@ -1,37 +1,27 @@
 
-local sessions = {}
+function get_steam_id(source)
 
-RegisterNetEvent("GetPlayerInfo")
-AddEventHandler("GetPlayerInfo", function(session) 
+  for k,v in pairs(GetPlayerIdentifiers(source))do
+
+    if string.sub(v, 1, string.len("steam:")) == "steam:" then
+
+        return v
+
+    end
+
+  end
+
+end
+
+RegisterNetEvent("em_fw:get_player_id")
+AddEventHandler("em_fw:get_player_id", function() 
 
     local source = source
-    sessions[source] = {session_id = session["session_id"], player_id = nil}
-    HttpGet("/Player/PlayerId", session, function(error_code, result_data, result_headers)
+    local steamidentifier = {steamid = get_steam_id(source)}
+    HttpGet("/Player/GetPlayerId", steamidentifier, function(error_code, result_data, result_headers)
 
-        sessions[source].player_id = json.decode(result_data).player_id
-        TriggerClientEvent("GetPlayerInfo:Response", source, result_data)
+        TriggerClientEvent("get_player_info:response", source, json.decode(result_data))
 
     end)
 
 end)
-
-local function check_source(source)
-
-    assert(sessions[source], "get_player_id: Unable to find session for source " .. tostring(source))
-    assert(sessions[source].player_id, "get_player_id: Unable to find player_id for source " .. tostring(source))
-
-end
-
-function get_player_id(source)
-
-    check_source(source)
-    return sessions[source].player_id
-
-end
-
-function get_session_id(source)
-
-    check_source(source)
-    return sessions[source].session_id
-
-end

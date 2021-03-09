@@ -1,12 +1,12 @@
 
 local player_id = nil
 
-RegisterNetEvent("GetPlayerInfo:Response")
-AddEventHandler("GetPlayerInfo:Response", function(player_info)
+RegisterNetEvent("get_player_info:response")
+AddEventHandler("get_player_info:response", function(player_info)
 
-    player_id = json.decode(player_info)["player_id"]
-    init_all_characters(player_id)
-    
+    player_id = player_info["player_id"]
+    init_all_characters()
+
 end)
 
 

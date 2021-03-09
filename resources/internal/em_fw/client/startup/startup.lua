@@ -1,4 +1,5 @@
 
+--[[
 local session_id = nil
 
 Citizen.CreateThread(function()
@@ -16,4 +17,12 @@ RegisterNUICallback("set_session_id", function(data, cb)
     SetNuiFocus(false, false)
     TriggerServerEvent("GetPlayerInfo", data)
 
+end)
+]]
+
+Citizen.CreateThread(function()
+
+    Citizen.Wait(0)
+    TriggerServerEvent("em_fw:get_player_id")
+    
 end)
