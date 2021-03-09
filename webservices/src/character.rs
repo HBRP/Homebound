@@ -7,9 +7,10 @@ use crate::player;
 pub struct CreateCharacter {
 
     player_id: i32,
-    firstname: String,
-    lastname: String,
-    dob: String
+    first_name: String,
+    last_name: String,
+    dob: String,
+    gender: String
 
 }
 
@@ -17,9 +18,10 @@ pub struct CreateCharacter {
 pub struct Character {
 
     character_id: i32,
-    firstname: String,
-    lastname: String,
-    dob: String
+    first_name: String,
+    last_name: String,
+    dob: String,
+    gender: String
 
 }
 
@@ -69,7 +71,7 @@ struct CharacterInfo {
 
     character: Character,
     position: Position,
-    health: Health,
+    health: String,
 
 }
 
@@ -92,7 +94,7 @@ pub fn create(character: CreateCharacter) -> String {
 
 fn create_character_entry(client: &mut postgres::Client, character: &CreateCharacter) -> i32 {
 
-    let row = client.query_one("INSERT INTO Player.Characters (PlayerId, FirstName, LastName, DOB) VALUES ($1, $2, $3, $4) RETURNING CharacterId", &[&character.player_id, &character.firstname, &character.lastname, &character.dob]).unwrap();
+    let row = client.query_one("INSERT INTO Player.Characters (PlayerId, FirstName, LastName, DOB, Gender) VALUES ($1, $2, $3, $4) RETURNING CharacterId", &[&character.player_id, &character.first_name, &character.last_name, &character.dob, &character.gender]).unwrap();
     let character_id = row.get("CharacterId");
     character_id
 
@@ -133,14 +135,15 @@ pub fn get_characters(player: player::Player) -> String  {
     let mut all_characters = Characters {
         characters: Vec::new()
     };
-    for row in client.query("SELECT CharacterId, FirstName, LastName, DOB FROM Player.Characters WHERE PlayerId = $1 AND Deleted = 'f'", &[&player.player_id]).unwrap() {
+    for row in client.query("SELECT CharacterId, FirstName, LastName, DOB, Gender FROM Player.Characters WHERE PlayerId = $1 AND Deleted = 'f'", &[&player.player_id]).unwrap() {
 
         all_characters.characters.push(Character {
 
             character_id : row.get("CharacterId"),
-            firstname    : row.get("FirstName"),
-            lastname     : row.get("LastName"),
-            dob          : row.get("DOB")
+            first_name   : row.get("FirstName"),
+            last_name    : row.get("LastName"),
+            dob          : row.get("DOB"),
+            gender       : row.get("Gender")
 
         });
     }
@@ -148,24 +151,38 @@ pub fn get_characters(player: player::Player) -> String  {
 
 }
 
-pub fn get_character_position(character: CharacterId) -> String {
+fn get_character_position_struct(character: CharacterId) -> Position {
 
     let mut client = db_postgres::get_connection().unwrap();
     let row = client.query_one("SELECT CharacterId, X, Y, Z, Heading FROM Character.Positions WHERE CharacterId = $1", &[&character.character_id]).unwrap();
-    let positions = Position {
+    Position {
         x: row.get("X"),
         y: row.get("Y"),
         z: row.get("Z"),
-        heading: row.get("heading")
-    };
-    serde_json::to_string(&positions).unwrap()
+        heading: row.get("Heading")
+    }
+
+}
+
+pub fn get_character_position(character: CharacterId) -> String {
+
+    let position = get_character_position_struct(character);
+    serde_json::to_string(&position).unwrap()
+
+}
+
+pub fn get_character_info(character: CharacterId) -> String {
+
+    let mut client = db_postgres::get_connection().unwrap();
+    let position = get_character_position_struct(character);
+    "".to_string()
 
 }
 
 pub fn get_character_health(character: CharacterId) -> String {
 
     let mut client = db_postgres::get_connection().unwrap();
-    let row = client.query_one("SELECT CharacterId, Hunger, Thirst FROM Character.Health WHERE CharacterId = $1", &[&character.character_id]).unwrap();
+    let row = client.query_one("SELECT * FROM Character.Health WHERE CharacterId = $1", &[&character.character_id]).unwrap();
     let health = Health {
         hunger: row.get("Hunger"),
         thirst: row.get("Thirst")
@@ -188,7 +205,7 @@ pub fn set_character_health(health: CharacterHealth) {
 
 }
 
-pub fn disable_character(character: CharacterId) {
+pub fn delete_character(character: CharacterId) {
 
     let mut client = db_postgres::get_connection().unwrap();
     client.execute("UPDATE Character.Health SET Deleted = 't' WHERE CharacterId = $1", &[&character.character_id]).unwrap();
