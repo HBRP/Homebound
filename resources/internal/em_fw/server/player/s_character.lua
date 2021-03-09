@@ -1,11 +1,11 @@
 RegisterNetEvent("em_fw:create_character")
-AddEventHandler("em_fw:create_character", function(player_id, firstname, lastname, dob) 
+AddEventHandler("em_fw:create_character", function(character) 
 
     local source = source
-    local data   = {player_id = player_id, firstname = firstname, lastname = lastname, dob = dob}
+    local data   = character
     HttpPost("/Character/Create", data, function(error_code, result_data, result_headers)
 
-        Citizen.Trace(result_data)
+        TriggerClientEvent("em_fw:create_character:response", source, json.decode(result_data))
 
     end)
 
@@ -32,7 +32,7 @@ AddEventHandler("em_fw:get_character_info", function(character_id)
     local data = {character_id = character_id}
     HttpGet("/Character/GetInfo", data, function(error_code, result_data, result_headers)
 
-        TriggerClientEvent("em_fw:get_character_info", source, result_data)
+        TriggerClientEvent("em_fw:get_character_info:response", source, json.decode(result_data))
 
     end)
 

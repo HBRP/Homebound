@@ -5,7 +5,7 @@ RegisterNetEvent("get_player_info:response")
 AddEventHandler("get_player_info:response", function(player_info)
 
     player_id = player_info["player_id"]
-    init_all_characters()
+    TriggerEvent("em_fw:player_loaded")
 
 end)
 
@@ -15,3 +15,10 @@ function get_player_id()
     return player_id
 
 end
+
+Citizen.CreateThread(function()
+
+    Citizen.Wait(0)
+    TriggerServerEvent("em_fw:get_player_id")
+    
+end)

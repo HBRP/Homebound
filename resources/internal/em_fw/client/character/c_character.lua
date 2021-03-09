@@ -1,8 +1,9 @@
 
 local player_characters = {}
-local character = {}
+local current_character = {}
 
 local retrieved_characters = false
+local finished_creating_character = false
 
 function get_character_id()
 
@@ -10,10 +11,16 @@ function get_character_id()
 
 end
 
-function create_character(player_id, firstname, lastname, dob)
+function create_character(character)
 
-    player_characters[#player_characters + 1] = {player_id = player_id, firstname = firstname, lastname = lastname, dob = dob}
-    TriggerServerEvent("CreateCharacter", player_id, firstname, lastname, dob)
+    character.player_id = get_player_id()
+    TriggerServerEvent("em_fw:create_character", character)
+
+    while not finished_creating_character do
+        Citizen.Wait(5)
+    end
+
+    return current_character
 
 end
 
@@ -37,24 +44,24 @@ function get_all_characters()
 end
 
 
-RegisterNetEvent("CreateCharacter:Response")
-AddEventHandler("CreateCharacter:Response", function()
+RegisterNetEvent("em_fw:create_character:response")
+AddEventHandler("em_fw:create_character:response", function(character)
 
-
+    finished_creating_character = true
+    current_character = character
 
 end)
 
 
-function init_all_characters()
+function get_all_characters()
 
     retrieved_characters = false
     TriggerServerEvent("em_fw:get_all_characters", get_player_id())
+    while not retrieved_characters do
+        Citizen.Wait(100)
+    end
 
-end
-
-function characters_were_init()
-
-    return retrieved_characters
+    return player_characters
 
 end
 
@@ -67,10 +74,9 @@ AddEventHandler("em_fw:get_all_characters:response", function(characters)
 
 end)
 
-
 function load_character(character_id)
 
-    TriggerServerEvent("GetCharacterInfo", character_id)
+    TriggerServerEvent("em_fw:get_character_info", character_id)
 
 end
 
