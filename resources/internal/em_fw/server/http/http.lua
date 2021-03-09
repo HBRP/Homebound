@@ -1,13 +1,13 @@
 
 local base_service_url = ""
 local service_header   = {}
-
+service_header["Content-Type"] = "application/json"
 
 local function Http(method, endpoint, data, callback)
 
     local data = data or ''
     data = json.encode(data)
-    PerformHttpRequest(base_service_url .. endpoint, callback, 'GET', data, service_header)
+    PerformHttpRequest(base_service_url .. endpoint, callback, method, data, service_header)
 
 end
 

@@ -13,6 +13,7 @@ end
 
 function create_character(character)
 
+    finished_creating_character = false
     character.player_id = get_player_id()
     TriggerServerEvent("em_fw:create_character", character)
 
@@ -70,7 +71,7 @@ RegisterNetEvent("em_fw:get_all_characters:response")
 AddEventHandler("em_fw:get_all_characters:response", function(characters)
 
     retrieved_characters = true
-    player_characters = characters
+    player_characters = characters["characters"]
 
 end)
 
