@@ -94,7 +94,7 @@ pub fn create(character: CreateCharacter) -> String {
 
 fn create_character_entry(client: &mut postgres::Client, character: &CreateCharacter) -> i32 {
 
-    let row = client.query_one("INSERT INTO Player.Characters (PlayerId, FirstName, LastName, DOB, Gender) VALUES ($1, $2, $3, $4) RETURNING CharacterId", &[&character.player_id, &character.first_name, &character.last_name, &character.dob, &character.gender]).unwrap();
+    let row = client.query_one("INSERT INTO Player.Characters (PlayerId, FirstName, LastName, DOB, Gender) VALUES ($1, $2, $3, $4, $5) RETURNING CharacterId", &[&character.player_id, &character.first_name, &character.last_name, &character.dob, &character.gender]).unwrap();
     let character_id = row.get("CharacterId");
     character_id
 
