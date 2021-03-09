@@ -151,7 +151,7 @@ pub fn get_characters(player: player::Player) -> String  {
 
 }
 
-fn get_character_position_struct(character: CharacterId) -> Position {
+fn get_character_position_struct(character: &CharacterId) -> Position {
 
     let mut client = db_postgres::get_connection().unwrap();
     let row = client.query_one("SELECT CharacterId, X, Y, Z, Heading FROM Character.Positions WHERE CharacterId = $1", &[&character.character_id]).unwrap();
@@ -164,18 +164,36 @@ fn get_character_position_struct(character: CharacterId) -> Position {
 
 }
 
+fn get_character(character: &CharacterId) -> Character {
+
+    let mut client = db_postgres::get_connection().unwrap();
+    let row = client.query_one("SELECT CharacterId, FirstName, LastName, DOB, Gender FROM Player.Characters WHERE CharacterId = $1", &[&character.character_id]).unwrap();
+    Character {        
+        character_id : row.get("CharacterId"),
+        first_name   : row.get("FirstName"),
+        last_name    : row.get("LastName"),
+        dob          : row.get("DOB"),
+        gender       : row.get("Gender")
+    }
+}
+
 pub fn get_character_position(character: CharacterId) -> String {
 
-    let position = get_character_position_struct(character);
+    let position  = get_character_position_struct(&character);
     serde_json::to_string(&position).unwrap()
 
 }
 
 pub fn get_character_info(character: CharacterId) -> String {
-
-    let mut client = db_postgres::get_connection().unwrap();
-    let position = get_character_position_struct(character);
-    "".to_string()
+    
+    let position       = get_character_position_struct(&character);
+    let temp_character = get_character(&character);
+    let character_info = CharacterInfo {
+        character: temp_character,
+        position: position,
+        health: "".to_string()
+    };
+    serde_json::to_string(&character_info).unwrap()
 
 }
 
