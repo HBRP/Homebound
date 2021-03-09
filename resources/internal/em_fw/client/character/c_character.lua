@@ -1,6 +1,6 @@
 
 local player_characters = {}
-local current_character = {}
+
 
 local retrieved_characters = false
 local finished_creating_character = false
@@ -11,6 +11,7 @@ function get_character_id()
 
 end
 
+local current_character = {}
 function create_character(character)
 
     finished_creating_character = false
@@ -24,6 +25,14 @@ function create_character(character)
     return current_character
 
 end
+
+RegisterNetEvent("em_fw:create_character:response")
+AddEventHandler("em_fw:create_character:response", function(character)
+
+    finished_creating_character = true
+    current_character = character
+
+end)
 
 function delete_character(character_id)
 
@@ -45,13 +54,7 @@ function get_all_characters()
 end
 
 
-RegisterNetEvent("em_fw:create_character:response")
-AddEventHandler("em_fw:create_character:response", function(character)
 
-    finished_creating_character = true
-    current_character = character
-
-end)
 
 
 function get_all_characters()
@@ -75,18 +78,22 @@ AddEventHandler("em_fw:get_all_characters:response", function(characters)
 
 end)
 
+local loaded_character = nil
 function load_character(character_id)
 
+    loaded_character = nil
     TriggerServerEvent("em_fw:get_character_info", character_id)
+    while not loaded_character do
+        Citizen.Wait(100)
+    end
+    return loaded_character
 
 end
 
-RegisterNetEvent("GetCharacterInfo:Response")
-AddEventHandler("GetCharacterInfo:Response", function(characters)
+RegisterNetEvent("em_fw:get_character_info:response")
+AddEventHandler("em_fw:get_character_info:response", function(character)
 
-    assert(characters, "GetCharacterInfo:Response received nil characters")
-    character = json.decode(characters)
-    set_character_health(character["health"])
-    set_character_position(character["position"])
+    assert(character, "em_fw:get_character_info:response received nil character")
+    loaded_character = character
 
 end)

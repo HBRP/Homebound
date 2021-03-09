@@ -1,3 +1,6 @@
+
+var characters = null;
+
 $(function (){
     //$(".character-info-new").hide();
     $(".character-select").hide();
@@ -6,8 +9,7 @@ $(function (){
 $(".wake-up").click(function (e) {
     $("#debug").html( $(e.target).attr("char") );
     $.post("http://esx_kashacters/CharacterChosen", JSON.stringify({
-        charid: $(e.target).attr("char"),
-        ischar: "true"
+        character_id: characters[$(e.target).attr("char") - 1].character_id
     }));
     Kashacter.CloseUI();
 });
@@ -74,10 +76,8 @@ $(".deletechar").click(function (e) {
         if(data.characters == null) {
             return;
         }
-        console.log(data);
-        console.log(data.characters);
-         $.each(data.characters, function (i, char) {
-                console.log("here");
+        characters = data.characters
+         $.each(characters, function (i, char) {
                 var fake_char_id = i + 1
                 $('[data-charid=' + fake_char_id + '] .character-firstname').html(char.first_name);
                 $('[data-charid=' + fake_char_id + '] .character-lastname').html(char.last_name);

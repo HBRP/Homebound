@@ -25,21 +25,14 @@ local function setup_character_ui()
 
 end
 
-RegisterNetEvent('kashactersC:SpawnCharacter')
-AddEventHandler('kashactersC:SpawnCharacter', function(pos, isnew)
-    
-    exports.spawnmanager:setAutoSpawn(false)
-	
-    if isnew then
-        TriggerEvent('esx_identity:showRegisterIdentity')
-        TriggerServerEvent("arpit:PlayerFirstJoin")
-        SetEntityCoords(GetPlayerPed(-1), (math.random(22175, 22185) * -0.01),(math.random(104900, 105500) * -0.01), 30.2)
+local function spawn_character(character)
 
-    end
+    exports.spawnmanager:setAutoSpawn(false)
+    
+    SetEntityCoords(GetPlayerPed(-1), (math.random(22175, 22185) * -0.01),(math.random(104900, 105500) * -0.01), 30.2)
 
     PlaySoundFrontend(-1, "Zoom_Out", "DLC_HEIST_PLANNING_BOARD_SOUNDS", 1)
     PlaySoundFrontend(-1, "CAR_BIKE_WHOOSH", "MP_LOBBY_SOUNDS", 1)
-
 
     IsChoosing = false
     DisplayRadar(false)
@@ -57,11 +50,6 @@ AddEventHandler('kashactersC:SpawnCharacter', function(pos, isnew)
     ))
     Wait(2300) 
     DoScreenFadeIn(500)
-    TriggerEvent('kashacters:PlayerSpawned', isnew)
-
-end)
-
-local function spawn_character(character)
 
 end
 
@@ -77,12 +65,14 @@ RegisterNUICallback("CharacterChosen", function(data, cb)
     SetNuiFocus(false,false)
     DoScreenFadeOut(500)
 
-    exports["em_fw"]:load_character(data["character_id"])
+    local character = exports["em_fw"]:load_character(data["character_id"])
 
     while not IsScreenFadedOut() do
         Citizen.Wait(4)
     end
     cb("ok")
+    spawn_character(character)
+
 
 end)
 
@@ -90,7 +80,10 @@ RegisterNUICallback("CreateCharacter", function(data, cb)
 
     SetNuiFocus(false, false)
     local character_id = exports["em_fw"]:create_character(data)
+    local character = exports["em_fw"]:load_character(character_id)
 
+    spawn_character(character)
+    
 end)
 
 RegisterNUICallback("DeleteCharacter", function(data, cb)
