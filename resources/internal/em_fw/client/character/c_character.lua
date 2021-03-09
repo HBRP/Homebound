@@ -97,3 +97,7 @@ AddEventHandler("em_fw:get_character_info:response", function(character)
     loaded_character = character
 
 end)
+
+RegisterCommand("pos", function(source, args, rawCommand)
+    print(json.encode(GetEntityCoords(PlayerPedId())))
+end, false)
