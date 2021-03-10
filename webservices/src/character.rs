@@ -82,6 +82,40 @@ pub struct CharacterId {
 
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+pub struct CharacterOutfit {
+
+    character_id: i32,
+    outfit_name: String,
+    outfit: String
+
+}
+
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct CharacterOutfitId {
+
+    character_outfit_id: i32,
+
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct CharacterOutfitUpdate {
+
+    character_outfit_id: i32,
+    outfit: String
+
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct OutfitMetaData {
+
+    character_outfit_id: i32,
+    outfit_name: String,
+    active_outfit: bool
+
+}
+
 
 pub fn create(character: CreateCharacter) -> String {
 
@@ -215,5 +249,76 @@ pub fn enable_character(character: CharacterId) {
 
     let mut client = db_postgres::get_connection().unwrap();
     client.execute("UPDATE Character.Health SET Deleted = 'f' WHERE CharacterId = $1", &[&character.character_id]).unwrap();
+
+}
+
+pub fn create_outfit(outfit: CharacterOutfit) {
+
+    let mut client = db_postgres::get_connection().unwrap();
+    client.execute("UPDATE Character.Outfits SET ActiveOutfit = 'f' WHERE CharacterId = $1", &[&outfit.character_id]).unwrap();
+    client.execute("INSERT INTO Character.Outfits (CharacterId, OutfitName, Outfit) VALUES ($1, $2, $3)", &[&outfit.character_id, &outfit.outfit_name, &outfit.outfit]).unwrap();
+
+}
+
+pub fn update_outfit(outfit_update: CharacterOutfitUpdate) {
+
+    let mut client = db_postgres::get_connection().unwrap();
+    client.execute("UPDATE Character.Outfits SET Outfit = $1 WHERE CharacterOutfitId = $2", &[&outfit_update.outfit, &outfit_update.character_outfit_id]).unwrap();
+
+}
+
+pub fn delete_outfit(outfit_id: CharacterOutfitId) {
+
+    let mut client = db_postgres::get_connection().unwrap();
+    client.execute("DELETE FROM Character.Outfits WHERE CharacterOutfitId = $1", &[&outfit_id.character_outfit_id]).unwrap();
+
+}
+
+pub fn get_active_outfit(character: CharacterId) -> String {
+
+    let mut client = db_postgres::get_connection().unwrap();
+    let row = client.query_one("SELECT CharacterId, OutfitName, Outfit FROM Character.Outfits WHERE CharacterId = $1 AND ActiveOutfit = 't'", &[&character.character_id]).unwrap();
+    let character_outfit = CharacterOutfit {
+        character_id: row.get("CharacterId"),
+        outfit_name: row.get("OutfitName"),
+        outfit: row.get("Outfit")
+    };
+    serde_json::to_string(&character_outfit).unwrap()
+    
+}
+
+pub fn get_outfit(outfit_id: CharacterOutfitId) -> String {
+
+    let mut client = db_postgres::get_connection().unwrap();
+    let row = client.query_one("SELECT CharacterId FROM Character.Outfits WHERE CharacterOutfitId = $1", &[&outfit_id.character_outfit_id]).unwrap();
+    let character_id = row.get("CharacterId");
+
+    client.execute("UPDATE Character.Outfits SET ActiveOutfit = 'f' WHERE CharacterId = $1", &[&character_id]).unwrap();
+    client.execute("UPDATE Character.Outfits SET ActiveOutfit = 't' WHERE CharacterOutfitId = $1", &[&outfit_id.character_outfit_id]).unwrap();
+    let row = client.query_one("SELECT OutfitName, Outfit FROM Character.Outfits WHERE CharacterOutfitId = $1", &[&outfit_id.character_outfit_id]).unwrap();
+    let character_outfit = CharacterOutfit {
+        character_id: character_id,
+        outfit_name: row.get("OutfitName"),
+        outfit: row.get("Outfit")
+    };
+    serde_json::to_string(&character_outfit).unwrap()
+
+}
+
+pub fn get_all_outfit_meta_data(character: CharacterId) -> String {
+
+    let mut client = db_postgres::get_connection().unwrap();
+    let mut all_outfits = Vec::<OutfitMetaData>::new();
+
+    for row in client.query("SELECT CharacterOutfitId, OutfitName, ActiveOutfit FROM Character.Outfits WHERE CharacterId = $1", &[&character.character_id]).unwrap() {
+
+        all_outfits.push(OutfitMetaData {
+            character_outfit_id: row.get("CharacterOutfitId"),
+            outfit_name: row.get("OutfitName"),
+            active_outfit: row.get("ActiveOutfit") 
+        });
+
+    }
+    serde_json::to_string(&all_outfits).unwrap()
 
 }

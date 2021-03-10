@@ -73,6 +73,48 @@ fn enable_character(character: Json<character::CharacterId>) {
 
 }
 
+#[post("/CharacterOutfit/Create", format = "json", data = "<outfit>")]
+fn create_outfit(outfit: Json<character::CharacterOutfit>) {
+
+    character::create_outfit(outfit.into_inner());
+
+}
+
+#[put("/CharacterOutfit/Update", format = "json", data = "<outfit_update>")]
+fn update_outfit(outfit_update: Json<character::CharacterOutfitUpdate>) {
+
+    character::update_outfit(outfit_update.into_inner());
+
+}
+
+#[put("/CharacterOutfit/Delete", format = "json", data = "<outfit_id>")]
+fn delete_outfit(outfit_id:  Json<character::CharacterOutfitId>) {
+
+    character::delete_outfit(outfit_id.into_inner());
+
+}
+
+#[post("/CharacterOutfit/GetActive", format = "json", data = "<character>")]
+fn get_active_outfit(character: Json<character::CharacterId>) -> String {
+
+    character::get_active_outfit(character.into_inner())
+
+}
+
+#[post("/CharacterOutfit/Get", format = "json", data = "<outfit_id>")]
+pub fn get_outfit(outfit_id: Json<character::CharacterOutfitId>) -> String {
+
+    character::get_outfit(outfit_id.into_inner())
+
+}
+
+#[post("/CharacterOutfit/GetMetaData", format = "json", data = "<character>")]
+fn get_all_outfit_meta_data(character: Json<character::CharacterId>) -> String {
+
+    character::get_all_outfit_meta_data(character.into_inner())
+
+}
+
 
 fn main() {
 
