@@ -1,13 +1,12 @@
 
 local player_characters = {}
-
-
+local loaded_character = nil
 local retrieved_characters = false
 local finished_creating_character = false
 
 function get_character_id()
 
-    return character["character_id"]
+    return loaded_character["character"]["character_id"]
 
 end
 
@@ -79,7 +78,6 @@ AddEventHandler("em_fw:get_all_characters:response", function(characters)
 
 end)
 
-local loaded_character = nil
 function load_character(character_id)
 
     loaded_character = nil
@@ -96,6 +94,7 @@ AddEventHandler("em_fw:get_character_info:response", function(character)
 
     assert(character, "em_fw:get_character_info:response received nil character")
     loaded_character = character
+    TriggerEvent("em_fw:character_loaded")
 
 end)
 

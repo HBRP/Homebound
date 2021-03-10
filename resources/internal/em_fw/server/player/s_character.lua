@@ -86,11 +86,11 @@ AddEventHandler("UpdateCharacterHealth", function(character_id, health)
 
 end)
 
-RegisterNetEvent("UpdateCharacterPosition")
-AddEventHandler("UpdateCharacterPosition", function(character_id, position) 
+RegisterNetEvent("em_fw:update_character_position")
+AddEventHandler("em_fw:update_character_position", function(character_id, position) 
 
     local source = source
-    local data   = {character_id = character_id, position = position}
+    local data = {character_id = character_id, position = position}
     HttpPut("/Character/UpdatePosition", data)
 
 end)
