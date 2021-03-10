@@ -38,20 +38,6 @@ fn get_characters(player: Json<player::Player>) -> String {
 
 }
 
-#[get("/Character/GetPosition", format = "json", data = "<character>")]
-fn get_character_position(character: Json<character::CharacterId>) -> String {
-
-    character::get_character_position(character.into_inner())
-
-}
-
-#[get("/Character/GetHealth", format = "json", data = "<character>")]
-fn get_character_health(character: Json<character::CharacterId>) -> String {
-
-    character::get_character_health(character.into_inner())
-
-}
-
 #[get("/Character/GetInfo", format = "json", data = "<character>")]
 fn get_character_info(character: Json<character::CharacterId>) -> String {
 
@@ -90,6 +76,6 @@ fn enable_character(character: Json<character::CharacterId>) {
 
 fn main() {
 
-    rocket::ignite().mount("/", routes![player_create, character_create,get_character_info, get_characters, get_character_position, get_character_health, get_player_id, delete_character]).launch();
+    rocket::ignite().mount("/", routes![player_create, character_create,get_character_info, update_character_position, get_characters, get_player_id, delete_character]).launch();
 
 }

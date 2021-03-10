@@ -177,13 +177,6 @@ fn get_character(character: &CharacterId) -> Character {
     }
 }
 
-pub fn get_character_position(character: CharacterId) -> String {
-
-    let position  = get_character_position_struct(&character);
-    serde_json::to_string(&position).unwrap()
-
-}
-
 pub fn get_character_info(character: CharacterId) -> String {
     
     let position       = get_character_position_struct(&character);
@@ -194,18 +187,6 @@ pub fn get_character_info(character: CharacterId) -> String {
         health: "".to_string()
     };
     serde_json::to_string(&character_info).unwrap()
-
-}
-
-pub fn get_character_health(character: CharacterId) -> String {
-
-    let mut client = db_postgres::get_connection().unwrap();
-    let row = client.query_one("SELECT * FROM Character.Health WHERE CharacterId = $1", &[&character.character_id]).unwrap();
-    let health = Health {
-        hunger: row.get("Hunger"),
-        thirst: row.get("Thirst")
-    };
-    serde_json::to_string(&health).unwrap()
 
 }
 
