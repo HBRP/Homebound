@@ -1,8 +1,5 @@
 
-local player_characters = {}
 local loaded_character = nil
-local retrieved_characters = false
-local finished_creating_character = false
 
 function get_character_id()
 
@@ -10,30 +7,22 @@ function get_character_id()
 
 end
 
-local current_character = {}
 function create_character(character)
 
-    finished_creating_character = false
+    local created_character = nil
     character.player_id = get_player_id()
-    TriggerServerEvent("em_fw:create_character", character)
 
-    while not finished_creating_character do
-        Citizen.Wait(5)
-    end
+    trigger_server_callback("em_fw:create_character", 
+    function(temp_character)
 
-    return current_character
+        created_character = temp_character
+
+    end, character)
+
+    return created_character["character_id"]
 
 end
 
-RegisterNetEvent("em_fw:create_character:response")
-AddEventHandler("em_fw:create_character:response", function(character)
-
-    finished_creating_character = true
-    current_character = character
-
-end)
-
-local deleted_character = false;
 function delete_character(character_id)
     
     deleted_character = false
@@ -53,50 +42,29 @@ end)
 
 function get_all_characters()
 
-    return player_characters
+    local player_characters = nil
+    trigger_server_callback("em_fw:get_all_characters", function(all_characters)
 
-end
+        player_characters = all_characters["characters"]
 
-function get_all_characters()
-
-    retrieved_characters = false
-    TriggerServerEvent("em_fw:get_all_characters", get_player_id())
-    while not retrieved_characters do
-        Citizen.Wait(100)
-    end
+    end, get_player_id())
 
     return player_characters
 
 end
-
-
-RegisterNetEvent("em_fw:get_all_characters:response")
-AddEventHandler("em_fw:get_all_characters:response", function(characters)
-
-    retrieved_characters = true
-    player_characters = characters["characters"]
-
-end)
 
 function load_character(character_id)
 
-    loaded_character = nil
-    TriggerServerEvent("em_fw:get_character_info", character_id)
-    while not loaded_character do
-        Citizen.Wait(100)
-    end
+    trigger_server_callback("em_fw:get_character_info", function(retreived_character)
+
+        loaded_character = retreived_character
+        TriggerEvent("em_fw:character_loaded")
+
+    end, character_id)
+
     return loaded_character
 
 end
-
-RegisterNetEvent("em_fw:get_character_info:response")
-AddEventHandler("em_fw:get_character_info:response", function(character)
-
-    assert(character, "em_fw:get_character_info:response received nil character")
-    loaded_character = character
-    TriggerEvent("em_fw:character_loaded")
-
-end)
 
 RegisterCommand("pos", function(source, args, rawCommand)
     print(json.encode(GetEntityCoords(PlayerPedId())))

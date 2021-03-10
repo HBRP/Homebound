@@ -1,50 +1,46 @@
-RegisterNetEvent("em_fw:create_character")
-AddEventHandler("em_fw:create_character", function(character) 
 
-    local source = source
-    local data   = character
+register_server_callback("em_fw:create_character", function(source, callback, character)
+
+    local data = character
     HttpPost("/Character/Create", data, function(error_code, result_data, result_headers)
 
-        TriggerClientEvent("em_fw:create_character:response", source, json.decode(result_data))
+        local temp = json.decode(result_data)
+        callback(temp)
 
     end)
 
 end)
 
-RegisterNetEvent("em_fw:delete_character")
-AddEventHandler("em_fw:delete_character", function(character_id) 
+register_server_callback("em_fw:delete_character", function(source, callback, character_id)
 
-    local source = source
-    local data   = {character_id = character_id}
-    HttpPut("/Character/Delete", data, function(error_code, result_data, result_headers)
+    local data = {character_id = character_id}
+    HttpGet("/Character/Delete", data, function(error_code, result_data, result_headers)
 
-        TriggerClientEvent("em_fw:delete_character:response", source)
+        callback({})
 
     end)
 
 end)
 
-RegisterNetEvent("em_fw:get_character_info")
-AddEventHandler("em_fw:get_character_info", function(character_id) 
+register_server_callback("em_fw:get_character_info", function(source, callback, character_id)
 
-    local source = source
     local data = {character_id = character_id}
     HttpGet("/Character/GetInfo", data, function(error_code, result_data, result_headers)
 
-        TriggerClientEvent("em_fw:get_character_info:response", source, json.decode(result_data))
+        local temp = json.decode(result_data)
+        callback(temp)
 
     end)
 
 end)
 
-RegisterNetEvent("em_fw:get_all_characters")
-AddEventHandler("em_fw:get_all_characters", function(player_id) 
+register_server_callback("em_fw:get_all_characters", function(source, callback, player_id)
 
-    local source = source
     local data = {player_id = player_id}
     HttpGet("/Character/GetAll", data, function(error_code, result_data, result_headers)
 
-        TriggerClientEvent("em_fw:get_all_characters:response", source, json.decode(result_data))
+        local temp = json.decode(result_data)
+        callback(temp)
 
     end)
 
