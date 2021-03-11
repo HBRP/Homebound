@@ -4,7 +4,7 @@ Homebound consists of both internal and external resources.
 
 <b> Interal resources </b>
 
-Internal resources are developed by Homebound for Homebound. All internal resources are Licensed under the MIT License and are therefore free to use, modify and distribute if you abide by the terms listed in the MIT license.
+Internal resources are developed by Homebound for Homebound. All internal resources use the MIT License.
 
 <b> External resources </b>
 

@@ -1,0 +1,222 @@
+@font-face {
+    font-family: 'SignPainter';
+    src: url('assets/fonts/signpainter.woff2') format('woff2')
+}
+
+@font-face {
+    font-family: 'ChaletLondonNineteenSixty';
+    src: url('@cui_character/ui/assets/fonts/chaletlondon1960.woff2') format('woff2')
+}
+
+button {
+    background: none;
+    outline: none;
+    border: none;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    user-select: none;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+.main {
+    position: absolute;
+    width: 25vw;
+    max-height: calc(100% - 11vh);
+    top: 5vh;
+    right: 3vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: baseline;
+}
+
+#title {
+    width: calc(100% - 0.4vw);
+    font-family: 'SignPainter', sans-serif;
+    font-size: 4.5vw;
+    text-align: center;
+    left: 5%;
+    color: white;
+}
+
+#header {
+    width: 100%;
+    height: 3vh;
+    font-family: 'ChaletLondonNineteenSixty', sans-serif;
+    text-transform: uppercase;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#header-text {
+    width: 90%;
+    text-align: left;
+    margin-left: 0.2vw;
+}
+
+#header-counter {
+    width: 10%;
+    text-align: right;
+    margin-right: 0.2vw;
+}
+
+#outfit-list {
+    width: 100%;
+    min-height: 4.5vh; /* TODO: allow zero slots and remove this? */
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    overflow-y: scroll;
+}
+
+.slot {
+    position: relative;
+    width: 100%;
+    height: 4.5vh;
+    background: rgba(0, 0, 0, 0.5);
+    margin-top: 0.5vh;
+    box-sizing: border-box;
+    flex: 0 0 auto;
+}
+
+.slot:hover, .slot.active {
+    border-left: 0.5vh solid #2d6eb9;
+}
+
+.slot .slot-input {
+    -webkit-appearance: none;
+    outline: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    outline-offset: 0;
+    background-color: transparent;
+}
+
+.slot .slot-text, .slot .slot-input {
+    position: absolute;
+    width: 65%;
+    height: 4.5vh;
+    left: 5%;
+    font-family: 'ChaletLondonNineteenSixty', sans-serif;
+    font-size: 2vh;
+    font-weight: bold;
+    line-height: 4.5vh;
+    color: white;
+}
+
+.slot.empty .slot-text, .slot .slot-input::placeholder {
+    color: grey;
+    font-style: oblique;
+}
+
+.slot .controls {
+    position: absolute;
+    display: none;
+    width: 30%;
+    height: 100%;
+    right: 0%;
+    top: 0%;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.slot:hover .controls, .slot.active .controls {
+    display: flex;
+}
+
+.slot .controls button {
+    top: 0.5vh;
+    height: 3.5vh;
+    width: 3.5vh;
+    background-size: 70%;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-right: 0.1vw;
+}
+
+.slot .controls button:hover {
+    background-size: 80%;
+}
+
+.slot .controls button.edit {
+    background-image: url('assets/icons/save.svg');
+}
+
+.slot .controls button.clear {
+    background-image: url('assets/icons/clear.svg');
+}
+
+.slot .controls button.accept {
+    background-image: url('assets/icons/accept.svg');
+}
+
+.slot .controls button.cancel {
+    background-image: url('assets/icons/cancel.svg');
+}
+
+#info-panel {
+    position: relative;
+    width: calc(100% - 0.4vw);
+    height: 3vh;
+    background: rgba(0, 0, 0, 0.5);
+    margin-top: 0.5vh;
+    flex: 0 0 auto;
+}
+
+#info-panel #info-text {
+    position: absolute;
+    width: 80%;
+    left: 5%;
+    font-family: 'ChaletLondonNineteenSixty', sans-serif;
+    font-weight: normal;
+    font-size: 1.3vh;
+    line-height: 3vh;
+    color: white;
+}
+
+#info-panel #info-icon {
+    position: absolute;
+    height: 100%;
+    width: auto;
+    right: 5%;
+}
+
+#bottom-panel {
+    width: calc(100% - 0.4vw);
+    height: 5vh;
+    margin-top: 0.5vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#bottom-panel button {
+    width: 50%;
+    height: 100%;
+    font-family: 'ChaletLondonNineteenSixty', sans-serif;
+    font-size: 1.5vh;
+    text-align: center;
+    text-transform: uppercase;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+}
+
+#bottom-panel button:hover {
+    background-color: #646464;
+}
+
+::-webkit-scrollbar {
+    width: 0.4vw;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #f0f0f0
+}
