@@ -1524,52 +1524,6 @@ Citizen.CreateThread(function()
     end
 end)
 
--- Map Blips
-if Config.EnableClothingShops then
-    Citizen.CreateThread(function()
-        for k, v in ipairs(Config.ClothingShops) do
-            local blip = AddBlipForCoord(v)
-            SetBlipSprite(blip, 73)
-            SetBlipColour(blip, 84)
-            SetBlipAsShortRange(blip, true)
-
-            BeginTextCommandSetBlipName('STRING')
-            AddTextComponentString('Clothing Store')
-            EndTextCommandSetBlipName(blip)
-        end
-    end)
-end
-
-if Config.EnableBarberShops then
-    Citizen.CreateThread(function()
-        for k, v in ipairs(Config.BarberShops) do
-            local blip = AddBlipForCoord(v)
-            SetBlipSprite(blip, 71)
-            SetBlipColour(blip, 84)
-            SetBlipAsShortRange(blip, true)
-
-            BeginTextCommandSetBlipName('STRING')
-            AddTextComponentString('Barber Shop')
-            EndTextCommandSetBlipName(blip)
-        end
-    end)
-end
-
-if Config.EnablePlasticSurgeryUnits then
-    Citizen.CreateThread(function()
-        for k, v in ipairs(Config.PlasticSurgeryUnits) do
-            local blip = AddBlipForCoord(v)
-            SetBlipSprite(blip, 102)
-            SetBlipColour(blip, 84)
-            SetBlipAsShortRange(blip, true)
-
-            BeginTextCommandSetBlipName('STRING')
-            AddTextComponentString('Platic Surgery Unit')
-            EndTextCommandSetBlipName(blip)
-        end
-    end)
-end
-
 if Config.EnableNewIdentityProviders then
     Citizen.CreateThread(function()
         for k, v in ipairs(Config.NewIdentityProviders) do
@@ -1582,23 +1536,5 @@ if Config.EnableNewIdentityProviders then
             AddTextComponentString('Municipal Building')
             EndTextCommandSetBlipName(blip)
         end
-    end)
-end
-
--- ESX Identity Integration
-if Config.EnableESXIdentityIntegration then
-    function LoadIdentity(data)
-        currentIdentity = {}
-        for k, v in pairs(data) do
-            currentIdentity[k] = v
-        end
-    end
-
-    AddEventHandler('esx_skin:resetFirstSpawn', function()
-        firstSpawn = true
-    end)
-
-    AddEventHandler('cui_character:setCurrentIdentity', function(data)
-        currentIdentity = data
     end)
 end
