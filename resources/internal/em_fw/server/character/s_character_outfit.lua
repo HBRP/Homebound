@@ -3,6 +3,7 @@
 
 register_server_callback("em_fw:create_outfit", function(source, callback, character_id, outfit_name, outfit)
 
+    Citizen.Trace("Creating outfit\n")
     local data = {character_id = character_id, outfit_name = outfit_name, outfit = outfit}
     HttpPost("/CharacterOutfit/Create", data, function(error_code, result_data, result_headers)
 
@@ -13,9 +14,9 @@ register_server_callback("em_fw:create_outfit", function(source, callback, chara
 
 end)
 
-register_server_callback("em_fw:update_outfit", function(source, callback, character_outfit_id, outfit)
+register_server_callback("em_fw:update_outfit", function(source, callback, character_outfit_id, outfit_name, outfit)
 
-    local data = {character_outfit_id = character_outfit_id, outfit = outfit}
+    local data = {character_outfit_id = character_outfit_id, outfit_name = outfit_name, outfit = outfit}
     HttpPut("/CharacterOutfit/Update", data, function(error_code, result_data, result_headers)
 
         local temp = json.decode(result_data)
@@ -66,6 +67,40 @@ register_server_callback("em_fw:delete_outfit", function(source, callback, chara
 
     local data = {character_outfit_id = character_outfit_id}
     HttpPut("/CharacterOutfit/Delete", data, function(error_code, result_data, result_headers)
+
+        local temp = json.decode(result_data)
+        callback(temp)
+
+    end)
+
+end)
+
+register_server_callback("em_fw:create_skin", function(source, callback, character_id, character_skin)
+
+    local data = {character_id = character_id, character_skin = character_skin}
+    HttpPut("/Character/CreateSkin", data, function(error_code, result_data, result_headers)
+
+        callback({})
+
+    end)
+
+end)
+
+register_server_callback("em_fw:update_skin", function(source, callback, character_id, character_skin)
+
+    local data = {character_id = character_id, character_skin = character_skin}
+    HttpPut("/Character/UpdateSkin", data, function(error_code, result_data, result_headers)
+
+        callback({})
+
+    end)
+
+end)
+
+register_server_callback("em_fw:get_skin", function(source, callback, character_id)
+
+    local data = {character_id = character_id, character_skin = character_skin}
+    HttpPost("/Character/GetSkin", data, function(error_code, result_data, result_headers)
 
         local temp = json.decode(result_data)
         callback(temp)

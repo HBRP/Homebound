@@ -40,6 +40,7 @@ export 'create_character'
 export 'delete_character'
 export 'load_character'
 export 'get_all_characters'
+export 'get_character_gender'
 
 -- c_character_outfit.lua
 export 'create_outfit'
@@ -48,6 +49,10 @@ export 'get_outfit'
 export 'get_active_outfit'
 export 'delete_outfit'
 export 'get_all_outfit_meta_data'
+
+export 'create_skin'
+export 'get_skin'
+export 'update_skin'
 
 --c_blips.lua
 export 'get_blips'

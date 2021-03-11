@@ -19,8 +19,8 @@ function HttpPost(endpoint, data, callback)
     Http('POST', endpoint, data, callback)
 end
 
-function HttpPut(endpoint, data)
-    Http('PUT', endpoint, data, function() end)
+function HttpPut(endpoint, data, callback)
+    Http('PUT', endpoint, data, callback)
 end
 
 Citizen.CreateThread(function()

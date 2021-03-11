@@ -69,3 +69,20 @@ end
 RegisterCommand("pos", function(source, args, rawCommand)
     print(json.encode(GetEntityCoords(PlayerPedId())))
 end, false)
+
+
+function get_character_gender()
+
+    if GetEntityModel(PlayerPedId()) == GetHashKey("mp_m_freemode_01") then
+
+        return "male"
+
+    elseif GetEntityModel(PlayerPedId()) == GetHashKey("mp_f_freemode_01") then
+
+        return "female"
+
+    end
+    
+    return "male"
+
+end
