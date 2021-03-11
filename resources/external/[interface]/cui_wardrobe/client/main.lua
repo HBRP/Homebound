@@ -83,6 +83,11 @@ RegisterNUICallback('save', function(data, cb)
     if outfits[tonumber(data['slot'])] == nil then
         exports["em_fw"]:create_outfit(data['name'], json.encode(data['clothes']))
         local active_outfit = exports["em_fw"]:get_active_outfit()
+
+        outfits[tonumber(data['slot'])] = {}
+        outfits[tonumber(data['slot'])].outfit_name         = active_outfit["outfit_name"]
+        outfits[tonumber(data['slot'])].character_outfit_id = active_outfit["character_outfit_id"]
+
         TriggerEvent('cui_character:change_active_outfit', active_outfit["character_outfit_id"], active_outfit["outfit_name"])
     else
         exports["em_fw"]:update_outfit(outfits[tonumber(data['slot'])].character_outfit_id, data['name'], json.encode(data['clothes']))
