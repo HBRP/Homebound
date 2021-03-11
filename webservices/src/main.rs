@@ -74,7 +74,7 @@ fn enable_character(character: Json<character::CharacterId>) {
 }
 
 #[post("/CharacterOutfit/Create", format = "json", data = "<outfit>")]
-fn create_outfit(outfit: Json<character::CharacterOutfit>) {
+fn create_outfit(outfit: Json<character::CreateCharacterOutfit>) {
 
     character::create_outfit(outfit.into_inner());
 
@@ -118,6 +118,6 @@ fn get_all_outfit_meta_data(character: Json<character::CharacterId>) -> String {
 
 fn main() {
 
-    rocket::ignite().mount("/", routes![player_create, character_create,get_character_info, update_character_position, get_characters, get_player_id, delete_character]).launch();
+    rocket::ignite().mount("/", routes![player_create, character_create,get_character_info, update_character_position, get_characters, get_player_id, delete_character, create_outfit, update_outfit, delete_outfit, get_active_outfit, get_outfit, get_all_outfit_meta_data]).launch();
 
 }

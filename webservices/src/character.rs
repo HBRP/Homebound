@@ -1,5 +1,6 @@
 
 use serde::{Deserialize, Serialize};
+use serde_json::{json, Value};
 use crate::db_postgres;
 use crate::player;
 
@@ -83,7 +84,7 @@ pub struct CharacterId {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct CharacterOutfit {
+pub struct CreateCharacterOutfit {
 
     character_id: i32,
     outfit_name: String,
@@ -91,6 +92,15 @@ pub struct CharacterOutfit {
 
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+pub struct CharacterOutfit {
+
+    character_outfit_id: i32,
+    character_id: i32,
+    outfit_name: String,
+    outfit: String
+
+}
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CharacterOutfitId {
@@ -252,18 +262,20 @@ pub fn enable_character(character: CharacterId) {
 
 }
 
-pub fn create_outfit(outfit: CharacterOutfit) {
+pub fn create_outfit(outfit: CreateCharacterOutfit) {
 
     let mut client = db_postgres::get_connection().unwrap();
+    let temp_json_blob = json!(outfit.outfit);
     client.execute("UPDATE Character.Outfits SET ActiveOutfit = 'f' WHERE CharacterId = $1", &[&outfit.character_id]).unwrap();
-    client.execute("INSERT INTO Character.Outfits (CharacterId, OutfitName, Outfit) VALUES ($1, $2, $3)", &[&outfit.character_id, &outfit.outfit_name, &outfit.outfit]).unwrap();
+    client.execute("INSERT INTO Character.Outfits (CharacterId, OutfitName, Outfit) VALUES ($1, $2, $3)", &[&outfit.character_id, &outfit.outfit_name, &temp_json_blob]).unwrap();
 
 }
 
 pub fn update_outfit(outfit_update: CharacterOutfitUpdate) {
 
     let mut client = db_postgres::get_connection().unwrap();
-    client.execute("UPDATE Character.Outfits SET Outfit = $1 WHERE CharacterOutfitId = $2", &[&outfit_update.outfit, &outfit_update.character_outfit_id]).unwrap();
+    let temp_json_blob = json!(outfit_update.outfit);
+    client.execute("UPDATE Character.Outfits SET Outfit = $1 WHERE CharacterOutfitId = $2", &[&temp_json_blob, &outfit_update.character_outfit_id]).unwrap();
 
 }
 
@@ -277,9 +289,10 @@ pub fn delete_outfit(outfit_id: CharacterOutfitId) {
 pub fn get_active_outfit(character: CharacterId) -> String {
 
     let mut client = db_postgres::get_connection().unwrap();
-    let row = client.query_one("SELECT CharacterId, OutfitName, Outfit FROM Character.Outfits WHERE CharacterId = $1 AND ActiveOutfit = 't'", &[&character.character_id]).unwrap();
+    let row = client.query_one("SELECT CharacterId, CharacterOutfitId, OutfitName, CAST(Outfit AS TEXT) as Outfit FROM Character.Outfits WHERE CharacterId = $1 AND ActiveOutfit = 't'", &[&character.character_id]).unwrap();
     let character_outfit = CharacterOutfit {
         character_id: row.get("CharacterId"),
+        character_outfit_id: row.get("CharacterOutfitId"),
         outfit_name: row.get("OutfitName"),
         outfit: row.get("Outfit")
     };
@@ -295,9 +308,11 @@ pub fn get_outfit(outfit_id: CharacterOutfitId) -> String {
 
     client.execute("UPDATE Character.Outfits SET ActiveOutfit = 'f' WHERE CharacterId = $1", &[&character_id]).unwrap();
     client.execute("UPDATE Character.Outfits SET ActiveOutfit = 't' WHERE CharacterOutfitId = $1", &[&outfit_id.character_outfit_id]).unwrap();
-    let row = client.query_one("SELECT OutfitName, Outfit FROM Character.Outfits WHERE CharacterOutfitId = $1", &[&outfit_id.character_outfit_id]).unwrap();
+    let row = client.query_one("SELECT CharacterOutfitId, OutfitName, CAST(Outfit AS TEXT) as Outfit FROM Character.Outfits WHERE CharacterOutfitId = $1", &[&outfit_id.character_outfit_id]).unwrap();
+
     let character_outfit = CharacterOutfit {
         character_id: character_id,
+        character_outfit_id: row.get("CharacterOutfitId"),
         outfit_name: row.get("OutfitName"),
         outfit: row.get("Outfit")
     };
