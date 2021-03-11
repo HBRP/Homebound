@@ -19,10 +19,15 @@ end
 
 function get_outfit(character_outfit_id)
 
-    trigger_server_callback("em_fw:get_outfit", function()
+    local current_outfit = nil
 
+    trigger_server_callback("em_fw:get_outfit", function(outfit)
+
+        current_outfit = outfit
+        
     end, character_outfit_id)
 
+    return current_outfit
 end
 
 function get_active_outfit()
@@ -81,7 +86,7 @@ end
 function get_skin()
 
     local skin = nil
-    trigger_server_callback("em_fw:get_outfit", function(character_skin)
+    trigger_server_callback("em_fw:get_skin", function(character_skin)
 
         skin = character_skin
 

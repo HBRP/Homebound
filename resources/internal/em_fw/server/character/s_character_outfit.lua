@@ -3,7 +3,6 @@
 
 register_server_callback("em_fw:create_outfit", function(source, callback, character_id, outfit_name, outfit)
 
-    Citizen.Trace("Creating outfit\n")
     local data = {character_id = character_id, outfit_name = outfit_name, outfit = outfit}
     HttpPost("/CharacterOutfit/Create", data, function(error_code, result_data, result_headers)
 
