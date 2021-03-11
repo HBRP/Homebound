@@ -1,7 +1,7 @@
 Config = {}
 
 Config.HideMinimapOnOpen = false
-Config.SlotsNumber = 5
+Config.SlotsNumber = 10
 
 --[[
     UseAnywhere
