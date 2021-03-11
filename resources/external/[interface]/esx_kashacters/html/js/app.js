@@ -59,12 +59,10 @@ $("#create_character_button").click(function (e) {
 });
 
 $(".deletechar").click(function (e) {
-    $("#debug").html( $(e.target).attr("char") );
     $.post("http://esx_kashacters/DeleteCharacter", JSON.stringify({
-        charid: $(e.target).attr("char")
+        character_id: characters[$(e.target).attr("char") - 1].character_id
     }));
-    location.reload();
-    //Kashacter.CloseUI();
+    Kashacter.CloseUI();
 });
 
 (() => {

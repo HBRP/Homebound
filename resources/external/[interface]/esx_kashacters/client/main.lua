@@ -55,6 +55,7 @@ local function spawn_character(character)
     DestroyCam(cam, true)
     IsChoosing = false
     DisplayHud(true)
+    TriggerEvent("esx_kashacters:spawned_character")
 
 end
 
