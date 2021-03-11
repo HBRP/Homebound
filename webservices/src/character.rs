@@ -324,7 +324,7 @@ pub fn update_skin(character_skin: CharacterUpdateSkin) {
 
     let mut client = db_postgres::get_connection().unwrap();
     let temp_json_blob = json!(character_skin.character_skin);
-    client.execute("UPDATE Character.Skin SET Skin = $1 WHERE CharacterId = $2", &[&temp_json_blob]).unwrap();
+    client.execute("UPDATE Character.Skin SET Skin = $1 WHERE CharacterId = $2", &[&temp_json_blob, &character_skin.character_id]).unwrap();
 
 }
 
