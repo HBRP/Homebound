@@ -12,6 +12,8 @@ client_script 'client/character/c_character_health.lua'
 client_script 'client/character/c_character_position.lua'
 client_script 'client/character/c_character_outfit.lua'
 
+client_script 'client/blips/c_blips.lua'
+
 server_script 'server/http/http.lua'
 server_script 'server/http/http_sql.lua'
 server_script 'server/http/http_requests.lua'
@@ -21,6 +23,8 @@ server_script 'server/server_callbacks/s_server_callbacks.lua'
 server_script 'server/player/s_player.lua'
 server_script 'server/character/s_character.lua'
 server_script 'server/character/s_character_outfit.lua'
+
+server_script 'server/blips/s_blips.lua'
 
 ui_page 'ui/index.html'
 
