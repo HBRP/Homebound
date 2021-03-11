@@ -321,6 +321,28 @@ AddEventHandler('skinchanger:modelLoaded', function()
     -- empty for now, no idea what it's purpose really is
 end)
 
+character_outfit_id = nil
+outfit_name = nil
+function get_player_data_from_shim()
+
+    local player_data = exports["em_fw"]:get_skin()
+
+    if player_data == nil then
+        return { skin = nil, newPlayer = true}
+    else
+        local temp = json.decode(player_data["character_skin"])
+        character_outfit_id = player_data["character_outfit_id"]
+        outfit_name = player_data["outfit_name"]
+        return {skin = json.decode(temp), newPlayer = false}
+    end
+
+end
+
+AddEventHandler('cui_character:change_active_outfit', function(new_character_outfit_id, new_outfit_name)
+    character_outfit_id = new_character_outfit_id
+    outfit_name = new_outfit_name
+end)
+
 AddEventHandler('cui_character:close', function(save)
     if (not save) and (not isCancelable) then
         return
@@ -332,9 +354,12 @@ AddEventHandler('cui_character:close', function(save)
             oldChar[k] = currentChar[k]
         end
         if character_outfit_id == nil then
-            exports["em_fw"]:create_outfit("First Outfit", json.encode(currentChar))
+            exports["em_fw"]:create_skin(json.encode(currentChar))
+            exports["em_fw"]:create_outfit("First Outfit", json.encode(get_current_clothes()))
+            get_player_data_from_shim()
         else
-            exports["em_fw"]:update_outfit(character_outfit_id, json.encode(currentChar))
+            exports["em_fw"]:update_skin(json.encode(currentChar))
+            exports["em_fw"]:update_outfit(character_outfit_id, outfit_name, json.encode(get_current_clothes()))
         end
     else
         LoadCharacter(oldChar)
@@ -449,9 +474,9 @@ AddEventHandler('cui_character:playerPrepared', function(newplayer)
     end
 end)
 
-AddEventHandler('cui_character:getCurrentClothes', function(cb)
-    local result = {}
+function get_current_clothes()
 
+    local result = {}
     result.sex = currentChar.sex
     result.tshirt_1 = currentChar.tshirt_1
     result.tshirt_2 = currentChar.tshirt_2
@@ -484,33 +509,28 @@ AddEventHandler('cui_character:getCurrentClothes', function(cb)
     result.ears_1 = currentChar.ears_1
     result.ears_2 = currentChar.ears_2
 
-    cb(result)
+    return result
+
+end
+
+AddEventHandler('cui_character:getCurrentClothes', function(cb)
+
+    cb(get_current_clothes())
+
+
 end)
 
 AddEventHandler('cui_character:updateClothes', function(data, save, updateOld, callback)
     UpdateClothes(data, updateOld)
     if save then
-        exports["em_fw"]:create_outfit("First Outfit", json.encode(currentChar))
+        get_player_data_from_shim()
+        exports["em_fw"]:update_skin(json.encode(currentChar))
+        exports["em_fw"]:update_outfit(character_outfit_id, outfit_name, json.encode(get_current_clothes()))
     end
     if callback then
         callback()
     end
 end)
-
-character_outfit_id = nil
-local function get_player_data_from_shim()
-
-    local player_data = exports["em_fw"]:get_active_outfit()
-
-    if player_data == nil then
-        return { skin = nil, newPlayer = true}
-    else
-        local temp = json.decode(player_data["outfit"])
-        character_outfit_id = player_data["character_outfit_id"]
-        return {skin = json.decode(temp), newPlayer = false}
-    end
-
-end
 
 RegisterNetEvent("esx_kashacters:spawned_character")
 AddEventHandler("esx_kashacters:spawned_character", function()
