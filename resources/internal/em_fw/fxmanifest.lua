@@ -49,5 +49,8 @@ export 'get_active_outfit'
 export 'delete_outfit'
 export 'get_all_outfit_meta_data'
 
+--c_blips.lua
+export 'get_blips'
+
 -- c_player.lua
 export 'get_player_id'
