@@ -388,7 +388,7 @@ pub fn get_all_outfit_meta_data(character: CharacterId) -> String {
     let mut client = db_postgres::get_connection().unwrap();
     let mut all_outfits = Vec::<OutfitMetaData>::new();
 
-    for row in client.query("SELECT CharacterOutfitId, OutfitName, ActiveOutfit FROM Character.Outfits WHERE CharacterId = $1", &[&character.character_id]).unwrap() {
+    for row in client.query("SELECT CharacterOutfitId, OutfitName, ActiveOutfit FROM Character.Outfits WHERE CharacterId = $1 ORDER BY CharacterOutfitId", &[&character.character_id]).unwrap() {
 
         all_outfits.push(OutfitMetaData {
             character_outfit_id: row.get("CharacterOutfitId"),
