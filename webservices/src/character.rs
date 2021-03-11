@@ -113,6 +113,7 @@ pub struct CharacterOutfitId {
 pub struct CharacterOutfitUpdate {
 
     character_outfit_id: i32,
+    outfit_name: String,
     outfit: String
 
 }
@@ -123,6 +124,31 @@ pub struct OutfitMetaData {
     character_outfit_id: i32,
     outfit_name: String,
     active_outfit: bool
+
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct CharacterSkin {
+
+    character_outfit_id: i32,
+    outfit_name: String,
+    character_skin: String,
+
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct CharacterCreateSkin {
+
+    character_id: i32,
+    character_skin: String
+
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct CharacterUpdateSkin {
+
+    character_id: i32,
+    character_skin: String
 
 }
 
@@ -275,7 +301,7 @@ pub fn update_outfit(outfit_update: CharacterOutfitUpdate) {
 
     let mut client = db_postgres::get_connection().unwrap();
     let temp_json_blob = json!(outfit_update.outfit);
-    client.execute("UPDATE Character.Outfits SET Outfit = $1 WHERE CharacterOutfitId = $2", &[&temp_json_blob, &outfit_update.character_outfit_id]).unwrap();
+    client.execute("UPDATE Character.Outfits SET OutfitName = $1, Outfit = $2 WHERE CharacterOutfitId = $3", &[&outfit_update.outfit_name, &temp_json_blob, &outfit_update.character_outfit_id]).unwrap();
 
 }
 
@@ -283,6 +309,43 @@ pub fn delete_outfit(outfit_id: CharacterOutfitId) {
 
     let mut client = db_postgres::get_connection().unwrap();
     client.execute("DELETE FROM Character.Outfits WHERE CharacterOutfitId = $1", &[&outfit_id.character_outfit_id]).unwrap();
+
+}
+
+pub fn create_skin(character_skin: CharacterCreateSkin) {
+
+    let mut client = db_postgres::get_connection().unwrap();
+    let temp_json_blob = json!(character_skin.character_skin);
+    client.execute("INSERT INTO Character.Skin (CharacterId, Skin) VALUES ($1, $2)", &[&character_skin.character_id, &temp_json_blob]).unwrap();
+
+}
+
+pub fn update_skin(character_skin: CharacterUpdateSkin) {
+
+    let mut client = db_postgres::get_connection().unwrap();
+    let temp_json_blob = json!(character_skin.character_skin);
+    client.execute("UPDATE Character.Skin SET Skin = $1 WHERE CharacterId = $2", &[&temp_json_blob]).unwrap();
+
+}
+
+pub fn get_skin(character: CharacterId) -> String {
+
+    let mut client = db_postgres::get_connection().unwrap();
+    let row = client.query_one("
+        SELECT 
+            CO.CharacterOutfitId, CO.OutfitName, CAST(CS.Skin AS Text) as Skin
+        FROM 
+            Character.Skin CS
+            INNER JOIN Character.Outfits CO ON CO.CharacterId = CS.CharacterId
+        WHERE
+            CS.CharacterId = $1 AND CO.ActiveOutfit = 't'
+        ", &[&character.character_id]).unwrap();
+    let character_skin = CharacterSkin {
+        outfit_name : row.get("OutfitName"),
+        character_outfit_id : row.get("CharacterOutfitId"),
+        character_skin : row.get("Skin")
+    };
+    serde_json::to_string(&character_skin).unwrap()
 
 }
 

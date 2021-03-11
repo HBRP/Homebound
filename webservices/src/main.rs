@@ -95,6 +95,27 @@ fn delete_outfit(outfit_id:  Json<character::CharacterOutfitId>) {
 
 }
 
+#[put("/Character/CreateSkin", format = "json", data = "<character_skin>")]
+fn create_skin(character_skin: Json<character::CharacterCreateSkin>) {
+
+    character::create_skin(character_skin.into_inner());
+
+}
+
+#[put("/Character/UpdateSkin", format = "json", data = "<character_skin>")]
+fn update_skin(character_skin: Json<character::CharacterUpdateSkin>) {
+
+    character::update_skin(character_skin.into_inner());
+
+}
+
+#[post("/Character/GetSkin", format = "json", data = "<character>")]
+fn get_skin(character: Json<character::CharacterId>) -> String {
+
+    character::get_skin(character.into_inner())
+
+}
+
 #[post("/CharacterOutfit/GetActive", format = "json", data = "<character>")]
 fn get_active_outfit(character: Json<character::CharacterId>) -> String {
 
@@ -119,6 +140,6 @@ fn get_all_outfit_meta_data(character: Json<character::CharacterId>) -> String {
 
 fn main() {
 
-    rocket::ignite().mount("/", routes![player_create, character_create,get_character_info, update_character_position, get_characters, get_player_id, delete_character, create_outfit, update_outfit, delete_outfit, get_active_outfit, get_outfit, get_all_outfit_meta_data, blips::get_blips]).launch();
+    rocket::ignite().mount("/", routes![player_create, character_create,get_character_info, update_character_position, get_characters, get_player_id, delete_character, get_skin, create_skin, update_skin, create_outfit, update_outfit, delete_outfit, get_active_outfit, get_outfit, get_all_outfit_meta_data, blips::get_blips]).launch();
 
 }
