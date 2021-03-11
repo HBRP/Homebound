@@ -8,9 +8,11 @@ function create_outfit(outfit_name, outfit)
 
 end
 
-function update_outfit()
+function update_outfit(character_outfit_id, outfit)
 
+    trigger_server_callback("em_fw:update_outfit", function()
 
+    end, character_outfit_id, outfit)
 
 end
 

@@ -13,6 +13,18 @@ register_server_callback("em_fw:create_outfit", function(source, callback, chara
 
 end)
 
+register_server_callback("em_fw:update_outfit", function(source, callback, character_outfit_id, outfit)
+
+    local data = {character_outfit_id = character_outfit_id, outfit = outfit}
+    HttpPut("/CharacterOutfit/Update", data, function(error_code, result_data, result_headers)
+
+        local temp = json.decode(result_data)
+        callback(temp)
+
+    end)
+
+end)
+
 register_server_callback("em_fw:get_outfit", function(source, callback, character_outfit_id)
 
     local data = {character_outfit_id = character_outfit_id}
