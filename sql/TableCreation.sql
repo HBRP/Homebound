@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS Character.Outfits
     CharacterId INTEGER NOT NULL,
     ActiveOutfit BOOLEAN NOT NULL DEFAULT('1'),
     OutfitName VARCHAR(64) NOT NULL,
-    Outfit JSONB
+    Outfit JSONB NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Character.Jobs
