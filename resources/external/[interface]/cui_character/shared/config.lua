@@ -58,7 +58,7 @@ Config.PlasticSurgeryUnits = {
     -- vector3(-246.9, 6330.5, 31.4)    -- The Bay Care Center (Paleto)
 }
 
-Config.EnableNewIdentityProviders = true
+Config.EnableNewIdentityProviders = false
 Config.NewIdentityProviders = {
     -- vector3(233.2, -410.1, 47.3),    -- Los Santos City Hall
     vector3(-544.9, -204.4, 37.5),      -- Rockford Hills City Hall
