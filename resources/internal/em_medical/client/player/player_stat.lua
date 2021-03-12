@@ -1,6 +1,11 @@
 RequestAnimDict('mp_player_intdrink')
 RequestAnimDict('mp_player_inteat@burger')
 
+local STANDARD_DEPRECIATION    = 1/(2*3600)
+local ACTIVE_DEPRECIATION      = 2 * STANDARD_DEPRECIATION
+local VERY_ACTIVE_DEPRECIATION = 10 * ACTIVE_DEPRECIATION
+
+
 function get_stat(name)
 
     assert(name ~= nil)
@@ -98,16 +103,16 @@ function food_loop()
         end
     else
         if IsPedInAnyVehicle(ped, false) then
-            PLAYER.MISC_LEVELS.FOOD = PLAYER.MISC_LEVELS.FOOD - 138
+            PLAYER.MISC_LEVELS.FOOD = PLAYER.MISC_LEVELS.FOOD - STANDARD_DEPRECIATION
         else
             if IsPedSwimming(ped) or IsPedSwimmingUnderWater(ped) then
-                PLAYER.MISC_LEVELS.FOOD = PLAYER.MISC_LEVELS.FOOD - 555 -- ~30 Mins of swimming
+                PLAYER.MISC_LEVELS.FOOD = PLAYER.MISC_LEVELS.FOOD - ACTIVE_DEPRECIATION -- ~30 Mins of swimming
             elseif IsPedRunning(ped) or IsPedSprinting(ped) then
-                PLAYER.MISC_LEVELS.FOOD = PLAYER.MISC_LEVELS.FOOD - 555 -- ~30 Mins of running
+                PLAYER.MISC_LEVELS.FOOD = PLAYER.MISC_LEVELS.FOOD - VERY_ACTIVE_DEPRECIATION -- ~30 Mins of running
             elseif IsPedWalking(ped) then
-                PLAYER.MISC_LEVELS.FOOD = PLAYER.MISC_LEVELS.FOOD - 277 -- ~1 Hour of walking
+                PLAYER.MISC_LEVELS.FOOD = PLAYER.MISC_LEVELS.FOOD - ACTIVE_DEPRECIATION -- ~1 Hour of walking
             else
-                PLAYER.MISC_LEVELS.FOOD = PLAYER.MISC_LEVELS.FOOD - 138 -- ~2 Hours standing still
+                PLAYER.MISC_LEVELS.FOOD = PLAYER.MISC_LEVELS.FOOD - STANDARD_DEPRECIATION -- ~2 Hours standing still
             end
         end
     end
@@ -126,17 +131,18 @@ function water_loop()
         end
     else
         if IsPedInAnyVehicle(ped, false) then
-            PLAYER.MISC_LEVELS.WATER = PLAYER.MISC_LEVELS.WATER - 138
+            PLAYER.MISC_LEVELS.WATER = PLAYER.MISC_LEVELS.WATER - STANDARD_DEPRECIATION
         else
             if IsPedRunning(ped) or IsPedSprinting(ped) then
-                PLAYER.MISC_LEVELS.WATER = PLAYER.MISC_LEVELS.WATER - 555  -- ~30 Mins of running
+                PLAYER.MISC_LEVELS.WATER = PLAYER.MISC_LEVELS.WATER - 100 * VERY_ACTIVE_DEPRECIATION  -- ~30 Mins of running
             elseif IsPedWalking(ped) then
-                PLAYER.MISC_LEVELS.WATER = PLAYER.MISC_LEVELS.WATER - 277 -- ~1 Hour of walking
+                PLAYER.MISC_LEVELS.WATER = PLAYER.MISC_LEVELS.WATER - ACTIVE_DEPRECIATION -- ~1 Hour of walking
             else
-                PLAYER.MISC_LEVELS.WATER = PLAYER.MISC_LEVELS.WATER - 138 -- ~2 Hours of standing still
+                PLAYER.MISC_LEVELS.WATER = PLAYER.MISC_LEVELS.WATER - STANDARD_DEPRECIATION -- ~2 Hours of standing still
             end
         end
     end
+
 end
 
 
