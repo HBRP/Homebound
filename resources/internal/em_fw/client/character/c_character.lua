@@ -7,6 +7,12 @@ function get_character_id()
 
 end
 
+function get_character_name()
+
+    return loaded_character["character"]["first_name"] .. " " .. loaded_character["character"]["last_name"]
+
+end
+
 function create_character(character)
 
     local created_character = nil

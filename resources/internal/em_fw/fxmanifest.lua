@@ -41,6 +41,7 @@ export 'delete_character'
 export 'load_character'
 export 'get_all_characters'
 export 'get_character_gender'
+export 'get_character_name'
 
 -- c_character_outfit.lua
 export 'create_outfit'
