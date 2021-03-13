@@ -36,7 +36,7 @@ pub fn can_use_command(command_request: Json<CommandRequest>) -> String {
     let row = client.query_one(
     "
         SELECT * FROM Command.PlayerTypePermissions CPTP
-        INNER JOIN Player.Players PP ON PP.PlayerTypeId <= CPTP.PlayerTypeId
+        INNER JOIN Player.Players PP ON PP.PlayerTypeId >= CPTP.PlayerTypeId
         WHERE PP.PlayerId = $1 AND CPTP.Permission = $2
     ", &[&player_id, &command_request.command]).unwrap();
 
