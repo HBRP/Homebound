@@ -51,7 +51,6 @@ end, "Talk in local ooc")
 register_command("tpm", function(source, args, raw)
 
     local waypoint_coords = GetBlipCoords(GetFirstBlipInfoId(8))
-    --local z = GetHeightmapBottomZForPosition(waypoint_coords.x, waypoint_coords.y)
     local _, z = GetGroundZFor_3dCoord(waypoint_coords.x, waypoint_coords.y, waypoint_coords.z+100)
     FreezeEntityPosition(PlayerPedId(), true)
     SetEntityCoords(PlayerPedId(), waypoint_coords.x, waypoint_coords.y, z+1)
