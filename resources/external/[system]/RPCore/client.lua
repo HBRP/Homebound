@@ -242,10 +242,9 @@ if Config.fingerpoint then
 end
 
 if Config.deleteveh then
-    RegisterCommand( "dv", function()
+    exports["em_commands"]:register_command( "dv", function()
         TriggerEvent( "RPCore:deleteVehicle" )
-    end, false )
-    TriggerEvent( "chat:addSuggestion", "/dv", "Deletes the vehicle you're sat in, or standing next to." )
+    end, "Deletes the vehicle you're sat in, or standing next to." )
 
     local distanceToCheck = 5.0
     local numRetries = 5
