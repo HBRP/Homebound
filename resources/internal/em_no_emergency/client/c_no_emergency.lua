@@ -21,6 +21,12 @@ local function remove_vehicles_from_areas()
 
 end
 
+local function never_wanted()
+    SetPlayerWantedLevel(PlayerId(), 0, false)
+    SetPlayerWantedLevelNow(PlayerId(), false)
+    SetPlayerWantedLevelNoDrop(PlayerId(), 0, false)
+end
+
 Citizen.CreateThread(function()
 
     while true do
@@ -35,6 +41,7 @@ Citizen.CreateThread(function()
         Citizen.Wait(0)
         clear_local_area_of_cops()
         disable_dispatch_service()
+        never_wanted()
         remove_vehicles_from_areas()
     end
 
