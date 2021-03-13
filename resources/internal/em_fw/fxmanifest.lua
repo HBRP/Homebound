@@ -60,3 +60,6 @@ export 'get_blips'
 
 -- c_player.lua
 export 'get_player_id'
+
+export 'trigger_server_callback'
+server_export 'register_server_callback'
