@@ -4,6 +4,7 @@ games { 'gta5' }
 
 client_scripts {
 
-    'client/c_no_emergency.lua'
+    'client/c_no_emergency.lua',
+    'client/c_no_ped_weapon_drops.lua'
 
 }
