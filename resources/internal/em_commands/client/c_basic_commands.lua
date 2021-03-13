@@ -15,7 +15,7 @@ AddEventHandler('em_commands:propagate_to_nearby_clients:response', function(id,
 end)
 
 
-RegisterCommand("ad", function (source, args, raw)
+register_command("ad", function (source, args, raw)
 
     local msg = raw:sub(4)
     local fal = exports["em_fw"]:get_character_name()
@@ -24,9 +24,9 @@ RegisterCommand("ad", function (source, args, raw)
         args = { fal, msg }
     })
 
-end)
+end, 'Send an advertisement')
 
-RegisterCommand("me", function (source, args, raw)
+register_command("me", function (source, args, raw)
 
     local msg = raw:sub(4)
     local fal = exports["em_fw"]:get_character_name()
@@ -35,9 +35,9 @@ RegisterCommand("me", function (source, args, raw)
             args = { fal, msg }
     }, 15.0)
 
-end)
+end, 'Express yourself')
 
-RegisterCommand("looc", function (source, args, raw)
+register_command("looc", function(source, args, raw)
 
     local msg = raw:sub(5)
     local fal = exports["em_fw"]:get_character_name()
@@ -46,13 +46,4 @@ RegisterCommand("looc", function (source, args, raw)
             args = { fal, msg }
     }, 15.0)
 
-end)
-
-Citizen.CreateThread(function()
-
-    Citizen.Wait(0)
-    TriggerEvent('chat:addSuggestion', '/me', 'Express yourself')
-    TriggerEvent('chat:addSuggestion', '/looc', 'Talk in local ooc')
-    TriggerEvent('chat:addSuggestion', '/ad', 'Send an advertisement')
-
-end)
+end, "Talk in local ooc")

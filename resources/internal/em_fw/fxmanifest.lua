@@ -12,6 +12,7 @@ client_script 'client/character/c_character_health.lua'
 client_script 'client/character/c_character_position.lua'
 client_script 'client/character/c_character_outfit.lua'
 
+client_script 'client/commands/c_commands.lua'
 client_script 'client/blips/c_blips.lua'
 
 server_script 'server/http/http.lua'
@@ -24,6 +25,7 @@ server_script 'server/player/s_player.lua'
 server_script 'server/character/s_character.lua'
 server_script 'server/character/s_character_outfit.lua'
 
+server_script 'server/commands/s_commands.lua'
 server_script 'server/blips/s_blips.lua'
 
 ui_page 'ui/index.html'
@@ -54,6 +56,8 @@ export 'get_all_outfit_meta_data'
 export 'create_skin'
 export 'get_skin'
 export 'update_skin'
+
+export 'can_use_command'
 
 --c_blips.lua
 export 'get_blips'
