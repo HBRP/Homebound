@@ -111,11 +111,11 @@ VALUES
     (71, 84, 'Barber Shop', 1212.8, -472.9, 65.2),
     (71, 84, 'Barber Shop', -32.9, -152.3, 56.1),
     (71, 84, 'Barber Shop', -278.1, 6228.5, 30.7),
-    (102, 84, 'Platic Surgery Unit', 338.8, -1394.5, 31.5),      -- Central Los Santos Medical Center
-    (102, 84, 'Platic Surgery Unit', -874.7, -307.5, 38.5),      -- Portola Trinity Medical Center
-    (102, 84, 'Platic Surgery Unit', -676.7, 311.5, 82.5),       -- Eclipse Medical Tower
-    (102, 84, 'Platic Surgery Unit', -449.8, -341.0, 33.7),      -- Mount Zonah Medical Center
-    (102, 84, 'Platic Surgery Unit', 298.7, -584.6, 42.2);       -- Pillbox Hill Medical Center
+    (102, 84, 'Plastic Surgery Unit', 338.8, -1394.5, 31.5),      -- Central Los Santos Medical Center
+    (102, 84, 'Plastic Surgery Unit', -874.7, -307.5, 38.5),      -- Portola Trinity Medical Center
+    (102, 84, 'Plastic Surgery Unit', -676.7, 311.5, 82.5),       -- Eclipse Medical Tower
+    (102, 84, 'Plastic Surgery Unit', -449.8, -341.0, 33.7),      -- Mount Zonah Medical Center
+    (102, 84, 'Plastic Surgery Unit', 298.7, -584.6, 42.2);       -- Pillbox Hill Medical Center
 
 
 INSERT INTO 
