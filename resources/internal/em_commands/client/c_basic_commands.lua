@@ -20,7 +20,7 @@ register_command("ad", function (source, args, raw)
     local msg = raw:sub(4)
     local fal = exports["em_fw"]:get_character_name()
     TriggerServerEvent("em_commands:propagate_to_clients", {
-        template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(214, 168, 0, 1); border-radius: 3px; font-size:18px;"> ({0}) Advertisement: {1}</div>',
+        template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(214, 168, 0, 1); border-radius: 3px; font-size:18px;"> Ad ({0}): {1}</div>',
         args = { fal, msg }
     })
 
@@ -57,3 +57,15 @@ register_command("tpm", function(source, args, raw)
     FreezeEntityPosition(PlayerPedId(), false)
 
 end, "Teleport to marker")
+
+
+register_command("pos", function(source, args, rawCommand)
+
+    local coords = GetEntityCoords(PlayerPedId())
+    print(json.encode(coords))
+    TriggerEvent('chat:addMessage', {
+            template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(140, 140, 140, 0.6); border-radius: 3px; font-size:18px;"> (POS) X: {0}, Y: {1}, Z: {1} </div>',
+            args = { coords.x, coords.y, coords.z }
+    })
+
+end, "Give your position")

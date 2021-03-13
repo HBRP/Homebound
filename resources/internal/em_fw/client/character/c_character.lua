@@ -72,11 +72,6 @@ function load_character(character_id)
 
 end
 
-RegisterCommand("pos", function(source, args, rawCommand)
-    print(json.encode(GetEntityCoords(PlayerPedId())))
-end, false)
-
-
 function get_character_gender()
 
     if GetEntityModel(PlayerPedId()) == GetHashKey("mp_m_freemode_01") then
