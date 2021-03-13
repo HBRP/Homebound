@@ -1558,3 +1558,29 @@ if Config.EnableNewIdentityProviders then
         end
     end)
 end
+
+
+
+exports["em_commands"]:register_command("character", function(source, args, rawCommand)
+
+    TriggerEvent('cui_character:open', { 'features', 'style', 'apparel' })
+
+end, "(DEV) Character Editor")
+
+exports["em_commands"]:register_command("features", function(source, args, rawCommand)
+
+    TriggerEvent('cui_character:open', { 'features' })
+
+end, "(DEV) Character Features Editor")
+
+exports["em_commands"]:register_command("style", function(source, args, rawCommand)
+
+    TriggerEvent('cui_character:open', { 'style' })
+
+end, "(DEV) Character Style Editor")
+
+exports["em_commands"]:register_command("apparel", function(source, args, rawCommand)
+
+    TriggerEvent('cui_character:open', { 'apparel' })
+
+end, "(DEV) Character Apparel Editor")

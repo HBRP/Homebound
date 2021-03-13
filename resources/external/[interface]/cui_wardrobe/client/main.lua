@@ -236,3 +236,9 @@ Citizen.CreateThread(function()
         Citizen.Wait(0)
     end
 end)
+
+exports["em_commands"]:register_command('wardrobe', function(source, args, raw)
+
+    TriggerEvent('cui_wardrobe:open')
+
+end, "(DEV) Open Wardrobe")

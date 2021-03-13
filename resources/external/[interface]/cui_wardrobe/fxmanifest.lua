@@ -31,6 +31,7 @@ dependencies {
 
 dependencies {
 
-    'em_fw'
+    'em_fw',
+    'em_commands'
 
 }
