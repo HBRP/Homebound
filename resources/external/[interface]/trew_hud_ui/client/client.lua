@@ -62,7 +62,7 @@ Citizen.CreateThread(function()
 		end
 
 		locationMessage = string.format(
-			Locales[Config.Locale]['you_are_on_location'],
+			'You are on <strong>%s</strong>',
 			locationMessage
 		)
 

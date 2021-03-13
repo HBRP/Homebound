@@ -30,7 +30,7 @@ Config.voice = {
 
 
 Config.vehicle = {
-	speedUnit = 'KMH',
+	speedUnit = 'MPH',
 	maxSpeed = 240,
 
 	keys = {
