@@ -123,4 +123,5 @@ INSERT INTO
 VALUES
     (1, 'me'),
     (1, 'looc'),
-    (1, 'ad');
+    (1, 'ad'),
+    (3, 'dv');
