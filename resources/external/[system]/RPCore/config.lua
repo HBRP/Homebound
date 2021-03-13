@@ -8,8 +8,6 @@ Config.fingerpoint = true -- Press b to point
 Config.nogrip = true -- When jumping and running, there is an 90% chance of falling (Customizable)
 Config.pvp = true -- Enable pvp
 Config.delallveh = true -- Delete all vehicles on the map
-Config.neverwanted = true -- Disable wanted level and emergency services
-
 
 -- Customize the NoGrip script here --
 

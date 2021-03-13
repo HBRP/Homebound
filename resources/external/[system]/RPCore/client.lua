@@ -63,20 +63,6 @@ if Config.noreticle then
     end)
 end
 
-if Config.neverwanted then
-    Citizen.CreateThread(function()
-        while true do
-            Citizen.Wait(10)
-            for i = 1, 12 do
-                EnableDispatchService(i, false)
-            end
-            SetPlayerWantedLevel(PlayerId(), 0, false)
-            SetPlayerWantedLevelNow(PlayerId(), false)
-            SetPlayerWantedLevelNoDrop(PlayerId(), 0, false)
-        end
-    end)
-end
-
 if Config.crouch then
     local crouched = false
     
