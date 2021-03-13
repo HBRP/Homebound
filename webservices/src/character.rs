@@ -19,6 +19,7 @@ pub struct CreateCharacter {
 pub struct Character {
 
     character_id: i32,
+    storage_id: i32,
     first_name: String,
     last_name: String,
     dob: String,
@@ -205,11 +206,19 @@ pub fn get_characters(player: player::Player) -> String  {
     let mut all_characters = Characters {
         characters: Vec::new()
     };
-    for row in client.query("SELECT CharacterId, FirstName, LastName, DOB, Gender FROM Player.Characters WHERE PlayerId = $1 AND Deleted = 'f'", &[&player.player_id]).unwrap() {
+    for row in client.query(
+            "
+                SELECT PC.CharacterId, CI.StorageId, PC.FirstName, PC.LastName, PC.DOB, PC.Gender
+                FROM 
+                    Player.Characters PC
+                INNER JOIN Character.Inventory CI ON CI.CharacterId = PC.CharacterId
+                WHERE PC.PlayerId = $1 AND PC.Deleted = 'f'
+            ", &[&player.player_id]).unwrap() {
 
         all_characters.characters.push(Character {
 
             character_id : row.get("CharacterId"),
+            storage_id   : row.get("StorageId"),
             first_name   : row.get("FirstName"),
             last_name    : row.get("LastName"),
             dob          : row.get("DOB"),
@@ -237,9 +246,16 @@ fn get_character_position_struct(character: &CharacterId) -> Position {
 fn get_character(character: &CharacterId) -> Character {
 
     let mut client = db_postgres::get_connection().unwrap();
-    let row = client.query_one("SELECT CharacterId, FirstName, LastName, DOB, Gender FROM Player.Characters WHERE CharacterId = $1", &[&character.character_id]).unwrap();
+    let row = client.query_one(
+            "
+                SELECT PC.CharacterId, CI.StorageId, PC.FirstName, PC.LastName, PC.DOB, PC.Gender 
+                FROM Player.Characters PC
+                INNER JOIN Character.Inventory CI ON CI.CharacterId = PC.CharacterId
+                WHERE PC.CharacterId = $1
+            ", &[&character.character_id]).unwrap();
     Character {        
         character_id : row.get("CharacterId"),
+        storage_id   : row.get("StorageId"),
         first_name   : row.get("FirstName"),
         last_name    : row.get("LastName"),
         dob          : row.get("DOB"),
