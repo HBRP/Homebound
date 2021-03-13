@@ -124,5 +124,11 @@ VALUES
     (1, 'me'),
     (1, 'looc'),
     (1, 'ad'),
+    (1, 'pos'),
     (3, 'dv'),
-    (3, 'tpm');
+    (3, 'tpm'),
+    (3, 'character'),
+    (3, 'features'),
+    (3, 'style'),
+    (3, 'apparel'),
+    (3, 'wardrobe');
