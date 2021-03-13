@@ -10,6 +10,7 @@ mod service_hashing;
 mod character;
 mod storage;
 mod blips;
+mod commands;
 
 #[post("/Player/Create", format = "json", data = "<player_credentials>")]
 fn player_create(player_credentials: Json<player::PlayerCredentials>) -> String {
@@ -140,6 +141,8 @@ fn get_all_outfit_meta_data(character: Json<character::CharacterId>) -> String {
 
 fn main() {
 
-    rocket::ignite().mount("/", routes![player_create, character_create,get_character_info, update_character_position, get_characters, get_player_id, delete_character, get_skin, create_skin, update_skin, create_outfit, update_outfit, delete_outfit, get_active_outfit, get_outfit, get_all_outfit_meta_data, blips::get_blips]).launch();
+    rocket::ignite().mount("/", routes![player_create, character_create,get_character_info, update_character_position, get_characters, get_player_id, 
+        delete_character, get_skin, create_skin, update_skin, create_outfit, 
+        update_outfit, delete_outfit, get_active_outfit, get_outfit, get_all_outfit_meta_data, blips::get_blips, commands::can_use_command]).launch();
 
 }
