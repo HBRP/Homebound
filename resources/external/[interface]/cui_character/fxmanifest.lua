@@ -54,3 +54,9 @@ exports {
 provide {
     'skinchanger'
 }
+
+dependencies {
+
+    'em_fw'
+
+}

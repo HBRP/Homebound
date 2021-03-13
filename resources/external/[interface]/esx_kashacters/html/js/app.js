@@ -8,7 +8,7 @@ $(function (){
 
 $(".wake-up").click(function (e) {
     $("#debug").html( $(e.target).attr("char") );
-    $.post("http://esx_kashacters/CharacterChosen", JSON.stringify({
+    $.post("https://esx_kashacters/CharacterChosen", JSON.stringify({
         character_id: characters[$(e.target).attr("char") - 1].character_id
     }));
     Kashacter.CloseUI();
@@ -47,7 +47,7 @@ $("#create_character_button").click(function (e) {
         return;
         
     }
-    $.post("http://esx_kashacters/CreateCharacter", JSON.stringify({
+    $.post("https://esx_kashacters/CreateCharacter", JSON.stringify({
         first_name: first_name,
         last_name: last_name,
         dob: birthday,
@@ -59,7 +59,7 @@ $("#create_character_button").click(function (e) {
 });
 
 $(".deletechar").click(function (e) {
-    $.post("http://esx_kashacters/DeleteCharacter", JSON.stringify({
+    $.post("https://esx_kashacters/DeleteCharacter", JSON.stringify({
         character_id: characters[$(e.target).attr("char") - 1].character_id
     }));
     Kashacter.CloseUI();

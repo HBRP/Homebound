@@ -28,3 +28,9 @@ files {
 dependencies {
     'cui_character'
 }
+
+dependencies {
+
+    'em_fw'
+
+}
