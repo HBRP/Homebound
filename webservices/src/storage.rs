@@ -44,13 +44,24 @@ pub struct StorageMoveRequest {
 pub struct StorageGiveRequest {
 
     storage_id: i32,
+    item_id: i32,
+    slot: i32,
+    amount: i32
+
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct StorageGiveResponse {
+
+    storage_item_id: i32
 
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct StorageRemoveRequest {
 
-    storage_id: i32
+    storage_item_id: i32,
+    amount: i32
 
 }
 
@@ -105,7 +116,16 @@ fn update_original_storage(storage_move_request: &StorageMoveRequest) {
 
 }
 
-fn switch_storage_spots(storage_move_request: &StorageMoveRequest, other_item_id: i32, other_storage_item_id: i32) -> String {
+fn get_item_max_stack(item_id: i32) -> i32 {
+
+    let mut client = db_postgres::get_connection().unwrap();
+    let row = client.query_one("SELECT ItemMaxStack FROM Item.Items WHERE ItemId = $1", &[&item_id]).unwrap();
+    let item_stack_row: i32 = row.get("ItemMaxStack");
+
+    item_stack_row
+}
+
+fn switch_storage_spots(storage_move_request: &StorageMoveRequest, other_item_id: i32, other_storage_item_id: i32, other_storage_amount: i32) -> String {
 
     let mut client = db_postgres::get_connection().unwrap();
 
@@ -116,8 +136,18 @@ fn switch_storage_spots(storage_move_request: &StorageMoveRequest, other_item_id
 
     if other_item_id == storage_move_request.item_id {
 
-        client.execute("UPDATE Storage.Items SET Amount = Amount + $1 WHERE StorageItemId = $2", &[&storage_move_request.amount, &other_storage_item_id]).unwrap();
-        update_original_storage(&storage_move_request);
+        let item_stack_row = get_item_max_stack(other_item_id);
+        if other_storage_amount + storage_move_request.amount <= item_stack_row {
+
+            client.execute("UPDATE Storage.Items SET Amount = Amount + $1 WHERE StorageItemId = $2", &[&storage_move_request.amount, &other_storage_item_id]).unwrap();
+            update_original_storage(&storage_move_request);
+
+        } else {
+
+            response.response = "Unable to move into full stack".to_string();
+
+        }
+
 
     } else {
 
@@ -146,7 +176,7 @@ pub fn move_storage_item(storage_move_request: Json<StorageMoveRequest>) -> Stri
     let storage_move_request = storage_move_request.into_inner();
     let mut client = db_postgres::get_connection().unwrap();
 
-    let row = client.query_one("SELECT StorageItemId, ItemId FROM Storage.Items WHERE StorageId = $1 AND Slot = $2 AND Deleted = '0'", &[&storage_move_request.new_storage_id, &storage_move_request.new_slot_id]).unwrap();
+    let row = client.query_one("SELECT StorageItemId, ItemId, Amount FROM Storage.Items WHERE StorageId = $1 AND Slot = $2 AND Deleted = '0'", &[&storage_move_request.new_storage_id, &storage_move_request.new_slot_id]).unwrap();
     if row.is_empty() {
 
         client.execute("INSERT INTO Storage.Items (StorageId, ItemId, Slot, Amount) VALUES ($1, $2, $3, $4)", &[&storage_move_request.new_storage_id, &storage_move_request.item_id, &storage_move_request.new_slot_id, &storage_move_request.amount]).unwrap();
@@ -154,9 +184,11 @@ pub fn move_storage_item(storage_move_request: Json<StorageMoveRequest>) -> Stri
 
     } else {
 
+        // existing stack in new slow
         let other_item_id: i32 = row.get("ItemId");
         let other_storage_item_id: i32 = row.get("StorageItemId");
-        return switch_storage_spots(&storage_move_request, other_item_id, other_storage_item_id);
+        let other_storage_amount: i32 = row.get("Amount");
+        return switch_storage_spots(&storage_move_request, other_item_id, other_storage_item_id, other_storage_amount);
 
     }
 
@@ -168,3 +200,72 @@ pub fn move_storage_item(storage_move_request: Json<StorageMoveRequest>) -> Stri
     return serde_json::to_string(&response).unwrap();
 
 }
+
+#[post("/Storage/Give", format = "json", data = "<storage_move_request>")]
+pub fn give_storage_item(storage_give_request: Json<StorageGiveRequest>) -> String {
+
+    /*
+    let storage_give_request = storage_give_request.into_inner();
+    let mut client = db_postgres::get_connection().unwrap();
+
+    let mut slot = 0;
+
+    if storage_give_request == -1 {
+
+
+
+    }
+
+    for row in client.query(
+        "
+            SELECT 
+                ST.StorageTypeSlots,
+                SI.Slot
+            FROM Storage.Items SI
+            INNER JOIN Storage.Containers SC ON SC.StorageId = SI.StorageId
+            INNER JOIN Storage.Types ST ON ST.StorageTypeId = SC.StorageTypeId
+            WHERE 
+                SI.StorageId = $1 AND Deleted = 'f'
+        ", &[&storage_give_request.storage_id]).unwrap() 
+    {
+
+        let storage_slots: i32 = row.get("StorageTypeSlots");
+        let storage_slot
+
+    }
+    let row = client.query_one("SELECT * FROM Storage.Items WHERE StorageId = $1")
+
+    */
+
+    "".to_string()
+
+}
+
+/*
+#[derive(Serialize, Deserialize, Debug)]
+pub struct StorageGiveRequest {
+
+    storage_id: i32,
+    item_id: i32,
+    amount: i32
+
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct StorageRemoveRequest {
+
+    storage_item_id: i32,
+    amount: i32
+
+}
+
+        "INSERT INTO 
+            Storage.Containers (StorageTypeId)
+        SELECT  
+            ST.StorageTypeId
+        FROM Storage.Types ST
+        WHERE 
+            ST.StorageTypeName = 'Player Inventory'
+        RETURNING StorageId;"
+
+*/
