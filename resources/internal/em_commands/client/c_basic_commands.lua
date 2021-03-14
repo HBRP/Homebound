@@ -50,12 +50,22 @@ end, "Talk in local ooc")
 
 register_command("tpm", function(source, args, raw)
 
-    local waypoint_coords = GetBlipCoords(GetFirstBlipInfoId(8))
-    local _, z = GetGroundZFor_3dCoord(waypoint_coords.x, waypoint_coords.y, waypoint_coords.z+100)
-    FreezeEntityPosition(PlayerPedId(), true)
-    SetEntityCoords(PlayerPedId(), waypoint_coords.x, waypoint_coords.y, z+1)
-    FreezeEntityPosition(PlayerPedId(), false)
+    Citizen.CreateThread(function()
 
+        local waypoint_coords = GetBlipCoords(GetFirstBlipInfoId(8))
+        for i = 1, 20 do
+            SetEntityCoords(PlayerPedId(), waypoint_coords.x, waypoint_coords.y, waypoint_coords.z + (i*50))
+            Citizen.Wait(100)
+            local _, z = GetGroundZFor_3dCoord(waypoint_coords.x, waypoint_coords.y, waypoint_coords.z + (i*50), 1)
+
+            if z ~= 0.0 then
+                SetEntityCoords(PlayerPedId(), waypoint_coords.x, waypoint_coords.y, z + 1)
+                return
+            end
+        end
+
+    end)
+    
 end, "Teleport to marker")
 
 
