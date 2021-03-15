@@ -6,7 +6,12 @@ RegisterNetEvent('em_commands:propagate_to_nearby_clients:response')
 AddEventHandler('em_commands:propagate_to_nearby_clients:response', function(id, content, proximity)
 
     local myId = PlayerId()
+    local my_server_id = GetPlayerServerId(myId)
     local pid = GetPlayerFromServerId(id)
+
+    if pid == -1 and my_server_id ~= id then
+        return
+    end
 
     if pid == myId or GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(myId)), GetEntityCoords(GetPlayerPed(pid)), true) < proximity then
         TriggerEvent('chat:addMessage', content)
