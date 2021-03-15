@@ -33,15 +33,13 @@ local end_time = 0
 local function draw_character_ids()
 
     Citizen.Wait(500)
-    while end_time < GetGameTimer() do
+    while end_time > GetGameTimer() do
         for _, id in ipairs(GetActivePlayers()) do
             local targetPed = GetPlayerPed(id)
-            if targetPed ~= PlayerPedId() then
-                if playerDistances[id] then
-                    if playerDistances[id].distance < disPlayerNames then
-                        local targetPedCords = GetEntityCoords(targetPed)
-                        DrawText3D(targetPedCords, playerDistances[id].character_id , 255,255,255)
-                    end
+            if playerDistances[id] then
+                if playerDistances[id].distance < disPlayerNames then
+                    local targetPedCords = GetEntityCoords(targetPed)
+                    DrawText3D(targetPedCords, playerDistances[id].character_id, 255,255,255)
                 end
             end
         end
@@ -52,20 +50,28 @@ end
 
 local function set_player_coords()
 
-    while end_time < GetGameTimer() do
+    local playerPed = PlayerPedId()
+    local playerCoords = GetEntityCoords(playerPed)
+    playerDistances = {}
 
-        local playerPed = PlayerPedId()
-        local playerCoords = GetEntityCoords(playerPed)
-        playerDistances = {}
+    local server_ids = {}
+    for _, id in ipairs(GetActivePlayers()) do
 
-        for _, id in ipairs(GetActivePlayers()) do
-            local targetPed = GetPlayerPed(id)
-            if targetPed ~= playerPed then
-                local distance = #(playerCoords - GetEntityCoords(targetPed))
-                playerDistances[id] = {distance = distance, character_id = get_target_character_id(GetPlayerServerId(id))}
+        local targetPed = GetPlayerPed(id)
+        local distance = #(playerCoords - GetEntityCoords(targetPed))
+        local server_id = GetPlayerServerId(id)
+        table.insert(server_ids, server_id)
+        playerDistances[id] = {distance = distance, server_id = server_id}
+
+    end
+
+    local character_ids = exports["em_fw"]:get_target_character_id_batch(server_ids)
+    for k, v in pairs(playerDistances) do
+        for i = 1, #character_ids do
+            if v.server_id == character_ids[i].source then
+                playerDistances[k].character_id = character_ids[i].character_id
             end
         end
-        Citizen.Wait(1000)
     end
 
 end
@@ -73,7 +79,7 @@ end
 exports["em_commands"]:register_command("ids", function(source, args, raw) 
 
     end_time = GetGameTimer() + 5000
-    Citizen.CreateThread(set_player_coords)
+    set_player_coords()
     Citizen.CreateThread(draw_character_ids)
 
 end, "Show Character id's on people heads.")
