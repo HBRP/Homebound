@@ -4,7 +4,7 @@ Homebound is an open-source collection of plugins that utilize the "em_fw" inter
 
 The collection of plugins is designed and maintained by experienced software developers. Data-Orientated design and DRY are driving principals in this project.
 
-The projects consists of both internal and external resources, along with sql files to setup a basic version of our postgre database and the rust webservice.
+The projects consists of both internal and external resources, along with sql files to setup a basic version of our postgres database and the rust webservice.
 
 ## Interal resources
 
