@@ -33,6 +33,19 @@ function get_target_character_id_batch(targets)
 
 end
 
+function get_server_id_from_character_id(character_id)
+
+    local temp_server_id = nil
+    trigger_server_callback("em_fw:get_server_id_from_character_id", function(server_id)
+
+        temp_server_id = server_id
+
+    end, character_id)
+
+    return temp_server_id
+
+end
+
 function get_character_name()
 
     return loaded_character["character"]["first_name"] .. " " .. loaded_character["character"]["last_name"]

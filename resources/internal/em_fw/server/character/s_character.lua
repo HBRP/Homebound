@@ -4,7 +4,7 @@ local character_ids = {}
 local function register_character_id_to_source(source, player_id, character_id)
 
     for i = 1, #character_ids do
-        if character_ids[i].source == source then
+        if character_ids[i].source == source or character_ids[i].character_id == character_id then
             table.remove(character_ids, i)
             break
         end
@@ -41,6 +41,18 @@ function get_character_ids_from_sources(sources)
 
 end
 
+local function get_server_id_from_character_id(character_id)
+
+    for i = 1, #character_ids do
+        if character_ids[i].character_id == character_id then
+            return character_ids[i].source
+        end
+    end
+
+    return nil
+
+end
+
 register_server_callback("em_fw:get_player_character_id", function(source, callback, target)
 
     callback(get_character_id_from_source(target))
@@ -50,6 +62,12 @@ end)
 register_server_callback("em_fw:get_player_character_id_batch", function(source, callback, targets)
 
     callback(get_character_ids_from_sources(targets))
+
+end)
+
+register_server_callback("em_fw:get_server_id_from_character_id", function(source, callback, character_id)
+
+    callback(get_server_id_from_character_id(character_id))
 
 end)
 

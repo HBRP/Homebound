@@ -47,6 +47,7 @@ export 'get_character_name'
 export 'get_character_id'
 export 'get_target_character_id'
 export 'get_target_character_id_batch'
+export 'get_server_id_from_character_id'
 
 -- c_character_outfit.lua
 export 'create_outfit'
