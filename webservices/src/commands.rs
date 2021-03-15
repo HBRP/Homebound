@@ -92,17 +92,14 @@ pub fn can_use_command(command_request: Json<CommandRequest>) -> String {
     if can_use_as_player(&command_request, &mut client) {
 
         response.can_use = true;
-        return serde_json::to_string(&response).unwrap();
 
     } else if can_use_as_group(&command_request, &mut client) {
 
         response.can_use = true;
-        return serde_json::to_string(&response).unwrap();
 
     } else if can_use_as_rank(&command_request, &mut client) {
 
         response.can_use = true;
-        return serde_json::to_string(&response).unwrap();
 
     }
 
