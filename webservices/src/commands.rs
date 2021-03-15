@@ -32,10 +32,9 @@ fn can_use_as_player(command_request: &CommandRequest, client: &mut postgres::Cl
     ", &[&player_id, &command_request.command]);
 
     match row {
-        Ok(row) => !row.is_empty(),
-        Err(_err) => false
+        Ok(row) => return !row.is_empty(),
+        Err(_err) => return false
     };
-    return false
 
 }
 
@@ -52,10 +51,9 @@ fn can_use_as_group(command_request: &CommandRequest, client: &mut postgres::Cli
     ", &[&command_request.character_id, &command_request.character_id, &command_request.command]);
 
     match row {
-        Ok(row) => !row.is_empty(),
-        Err(_err) => false
+        Ok(row) => return !row.is_empty(),
+        Err(_err) => return false
     };
-    return false
 
 }
 
@@ -71,10 +69,9 @@ fn can_use_as_rank(command_request: &CommandRequest, client: &mut postgres::Clie
     ", &[&command_request.character_id, &command_request.character_id, &command_request.command]);
 
     match row {
-        Ok(row) => !row.is_empty(),
-        Err(_err) => false
+        Ok(row) => return !row.is_empty(),
+        Err(_err) => return false
     };
-    return false
 
 }
 
