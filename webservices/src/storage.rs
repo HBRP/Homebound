@@ -201,9 +201,65 @@ pub fn move_storage_item(storage_move_request: Json<StorageMoveRequest>) -> Stri
 
 }
 
-fn get_empty_slot(storage_id: i32) -> i32 {
+fn get_empty_slot(storage_id: i32, client: &mut postgres::Client) -> i32 {
 
-    0
+    let row = client.query_one(
+        "
+            DO $$ 
+            DECLARE 
+                    check_slot INTEGER;
+                    max_slots  INTEGER;
+                    slot_temp  INTEGER;
+                    storage_id INTEGER;
+            BEGIN
+                check_slot := 1;
+                storage_id := $1;
+                CREATE TEMP TABLE slot_ids(
+                    Slot INTEGER NOT NULL
+                );
+
+                INSERT INTO slot_ids 
+                SELECT SI.Slot FROM Storage.Items SI
+                WHERE SI.StorageId = storage_id and SI.deleted ='f';
+
+                SELECT 
+                    ST.StorageTypeSlots INTO max_slots 
+                    FROM Storage.Containers SC 
+                    INNER JOIN Storage.Types ST ON ST.StorageTypeId = SC.StorageTypeId 
+                    WHERE SC.StorageId = storage_id
+                    LIMIT 1;
+                
+                LOOP
+                    SELECT Slot INTO slot_temp FROM slot_ids WHERE Slot = check_slot LIMIT 1;
+                    IF slot_temp IS NULL THEN
+                        CREATE TABLE slot AS SELECT check_slot AS Slot;
+                        EXIT;
+                    END IF;
+                
+                    check_slot := check_slot + 1;
+                    
+                    IF check_slot > max_slots THEN
+                        CREATE TABLE slot (Slot INTEGER NOT NULL);
+                        EXIT;
+                    END IF;
+                END LOOP;
+            END $$;
+            
+            SELECT * FROM slot;
+            DROP TABLE slot_ids;
+            DROP TABLE slot;
+        ", &[&storage_id]);
+
+    match row {
+        Ok(row) => {
+            if row.is_empty() {
+                return -1;
+            }
+            return row.get("Slot");
+        },
+        Err(_) => return -1
+    };
+
 }
 
 fn can_give_item_in_slot(storage_give_request: StorageGiveRequest) -> bool {
