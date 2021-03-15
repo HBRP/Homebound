@@ -1,17 +1,25 @@
 # Homebound
 
-Homebound consists of both internal and external resources.
+Homebound is an open-source collection of plugins that utilize the "em_fw" interface to communicate with a rust backend. The rust backend communicates with a PostgreSQL database, instead of the typical MySQL/MariaDB databases.
 
-<b> Interal resources </b>
+The collection of plugins is designed and maintained by experienced software developers. Data-Orientated design and DRY are driving principals in this project.
 
-Internal resources are developed by Homebound for Homebound. All internal resources use the MIT License.
+The projects consists of both internal and external resources, along with sql files to setup a basic version of our postgre database and the rust webservice.
 
-<b> External resources </b>
+## Interal resources
 
-External resources are resources that have been gathered from the FiveM community respectively. To use any of those resources, you must abide by the original author's license.
+All internal resources use the MIT License and are authored by the Homebound team.
 
-External resources from this repository may be heavily modified to fit the needs of the overall project. 
+## External resources
 
-<b> Contribute </b>
+External resources are resources that have been gathered from the FiveM community. To use any of those resources, you must abide by the original author's license.
 
-Contributions to the project require that the developer forfeit ownership of the modifications to the project itself. All code within the internal resource folder is licensed under the MIT license, while licensing within the external directory is at the discretion of the original resource author.
+External resources are often heavily modified to fit the needs of the project. 
+
+## Contribute
+
+Contributions to the project require that the developer forfeit ownership of the modifications to the project itself, or to the external plugin.
+
+## Experience
+
+If you'd like to play on a server that uses this code, stop by [Homebound Discord](https://discord.gg/M8NyRKWQQA) and submit a whitelist application.
