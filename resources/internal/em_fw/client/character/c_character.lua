@@ -7,6 +7,32 @@ function get_character_id()
 
 end
 
+function get_target_character_id(target)
+
+    local target_character_id
+    trigger_server_callback("em_fw:get_player_character_id", function(character_id)
+
+        target_character_id = character_id
+
+    end, target)
+
+    return target_character_id
+
+end
+
+function get_target_character_id_batch(targets)
+
+    local target_character_ids
+    trigger_server_callback("em_fw:get_player_character_id_batch", function(character_ids)
+
+        target_character_ids = character_ids
+
+    end, targets)
+
+    return target_character_ids
+
+end
+
 function get_character_name()
 
     return loaded_character["character"]["first_name"] .. " " .. loaded_character["character"]["last_name"]

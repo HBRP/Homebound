@@ -44,6 +44,9 @@ export 'load_character'
 export 'get_all_characters'
 export 'get_character_gender'
 export 'get_character_name'
+export 'get_character_id'
+export 'get_target_character_id'
+export 'get_target_character_id_batch'
 
 -- c_character_outfit.lua
 export 'create_outfit'

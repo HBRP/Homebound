@@ -1,4 +1,58 @@
 
+
+local character_ids = {}
+local function register_character_id_to_source(source, player_id, character_id)
+
+    for i = 1, #character_ids do
+        if character_ids[i].source == source then
+            table.remove(character_ids, i)
+            break
+        end
+    end
+    table.insert(character_ids, {source = source, character_id = character_id})
+
+end
+
+function get_character_id_from_source(source)
+
+    for i = 1, #character_ids do
+        if character_ids[i].source == source then
+            return character_ids[i].character_id
+        end
+    end
+
+    return nil
+
+end
+
+function get_character_ids_from_sources(sources)
+
+    local temp_character_ids = {}
+    for i = 1, #character_ids do
+        for j = 1, #sources do
+            if sources[j] == character_ids[i].source then
+                table.insert(temp_character_ids, {source = sources[j], character_id = character_ids[i].character_id})
+                break
+            end
+        end
+    end
+
+    return temp_character_ids
+
+end
+
+register_server_callback("em_fw:get_player_character_id", function(source, callback, target)
+
+    callback(get_character_id_from_source(target))
+
+end)
+
+register_server_callback("em_fw:get_player_character_id_batch", function(source, callback, targets)
+
+    callback(get_character_ids_from_sources(targets))
+
+end)
+
 register_server_callback("em_fw:create_character", function(source, callback, character)
 
     local data = character
@@ -28,6 +82,7 @@ register_server_callback("em_fw:get_character_info", function(source, callback, 
     HttpGet("/Character/GetInfo", data, function(error_code, result_data, result_headers)
 
         local temp = json.decode(result_data)
+        register_character_id_to_source(source, character_id, temp["character"]["character_id"])
         callback(temp)
 
     end)
