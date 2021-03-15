@@ -21,7 +21,6 @@ pub struct CommandReponse {
 
 fn can_use_as_player(command_request: &CommandRequest, client: &mut postgres::Client) -> bool {
 
-    println!("can_use_as_player");
     let row = client.query_one("SELECT PC.PlayerId FROM Player.Characters PC WHERE PC.CharacterId = $1;", &[&command_request.character_id]).unwrap();
     let player_id: i32 = row.get("PlayerId");
 
@@ -42,7 +41,6 @@ fn can_use_as_player(command_request: &CommandRequest, client: &mut postgres::Cl
 
 fn can_use_as_group(command_request: &CommandRequest, client: &mut postgres::Client) -> bool {
 
-    println!("can_use_as_group");
     let row = client.query_one(
     "
         SELECT * FROM Command.GroupPermissions CGP
@@ -63,7 +61,6 @@ fn can_use_as_group(command_request: &CommandRequest, client: &mut postgres::Cli
 
 fn can_use_as_rank(command_request: &CommandRequest, client: &mut postgres::Client) -> bool {
 
-    println!("can_use_as_rank");
     let row = client.query_one(
     "
         SELECT * FROM Command.GroupRankPermissions CGRP
