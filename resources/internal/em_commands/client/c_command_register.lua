@@ -6,6 +6,8 @@ function register_command(command, callback, ...)
 
         if exports["em_fw"]:can_use_command(command) then
             callback(source, args, raw)
+        else
+            exports['t-notify']:Alert({ style = 'error', message = 'Cannot use command' })
         end
 
     end)

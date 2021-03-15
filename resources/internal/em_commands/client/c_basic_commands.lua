@@ -20,7 +20,7 @@ register_command("ad", function (source, args, raw)
     local msg = raw:sub(4)
     local fal = exports["em_fw"]:get_character_name()
     TriggerServerEvent("em_commands:propagate_to_clients", {
-        template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(214, 168, 0, 1); border-radius: 3px; font-size:18px;"> Ad ({0}): {1}</div>',
+        template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(214, 168, 0, 1); border-radius: 3px; font-size:18px;"> (AD) ({0}): {1}</div>',
         args = { fal, msg }
     })
 

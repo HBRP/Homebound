@@ -10,6 +10,8 @@ export 'register_command'
 
 dependencies {
 
-    'em_fw'
+    'em_fw',
+    't-notify',
+    'mythic_notify'
 
 }
