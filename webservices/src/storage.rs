@@ -130,7 +130,7 @@ fn remove_item(storage_item_id: i32, amount: i32, client: &mut postgres::Client)
 
 }
 
-fn transfer_metadata(storage_item_id: i32, created_storage_item_id: i32, client: &mut postgres::Client) {
+fn transfer_metadata(created_storage_item_id: i32, storage_item_id: i32, client: &mut postgres::Client) {
 
     client.execute("UPDATE Storage.ItemMetaData SET StorageItemId = $1 WHERE StorageItemId = $2", &[&created_storage_item_id, &storage_item_id]).unwrap();
 
@@ -158,12 +158,18 @@ fn switch_storage_spots(storage_move_request: &ItemMoveRequest, other_storage_it
     if amount_in_original_spot == storage_move_request.amount {
 
         client.execute("UPDATE Storage.Items SET Deleted = 't' WHERE StorageItemId = $1 or StorageItemId = $2", &[&other_storage_item_id, &storage_move_request.old_storage_item_id]).unwrap();
-        client.execute("INSERT INTO Storage.Items (StorageId, ItemId, Slot, Amount) SELECT SI.StorageItem, SI.ItemId, SI.Slot, SI.Amount FROM Storage.Items SI WHERE SI.StorageItemId = $1", &[&other_storage_item_id]).unwrap();
-        client.execute("INSERT INTO Storage.Items (StorageId, ItemId, Slot, Amount) SELECT SI.StorageItem, SI.ItemId, SI.Slot, SI.Amount FROM Storage.Items SI WHERE SI.StorageItemId = $1", &[&storage_move_request.old_storage_item_id]).unwrap();
+        let row = client.query_one("INSERT INTO Storage.Items (StorageId, ItemId, Slot, Amount) SELECT $1, SI.ItemId, SI.Slot, SI.Amount FROM Storage.Items SI WHERE SI.StorageItemId = $2 RETURNING StorageItemId", &[&storage_move_request.old_storage_id, &other_storage_item_id]).unwrap();
+        let new_other_storage_item_id: i32 = row.get("StorageItemId");
+
+        let row = client.query_one("INSERT INTO Storage.Items (StorageId, ItemId, Slot, Amount) SELECT $1, SI.ItemId, SI.Slot, SI.Amount FROM Storage.Items SI WHERE SI.StorageItemId = $2 RETURNING StorageItemId", &[&storage_move_request.new_storage_id, &storage_move_request.old_storage_item_id]).unwrap();
+        let new_old_storage_item_id: i32 = row.get("StorageItemId");
+
+        transfer_metadata(new_other_storage_item_id, storage_move_request.old_storage_item_id, client);
+        transfer_metadata(new_old_storage_item_id, other_storage_item_id, client);
 
     } else {
 
-        response.response.success = true;
+        response.response.success = false;
         response.response.message = "Unable to move partial stack into other, non similar stack".to_string();
 
     }
@@ -188,7 +194,7 @@ fn update_storage_slot(storage_move_request: &ItemMoveRequest, other_item_id: i3
 
     } else {
 
-        response.response.success = true;
+        response.response.success = false;
         response.response.message = "Unable to move into full stack".to_string();
 
     }
@@ -208,7 +214,7 @@ pub fn move_storage_item(storage_move_request: Json<ItemMoveRequest>) -> String 
         let row = client.query_one("INSERT INTO Storage.Items (StorageId, ItemId, Slot, Amount) VALUES ($1, $2, $3, $4) RETURNING StorageItemId", &[&storage_move_request.new_storage_id, &storage_move_request.item_id, &storage_move_request.new_slot_id, &storage_move_request.amount]).unwrap();
         let created_storage_item_id = row.get("StorageItemId");
 
-        transfer_metadata(storage_move_request.old_storage_item_id, created_storage_item_id, &mut client);
+        transfer_metadata(created_storage_item_id, storage_move_request.old_storage_item_id, &mut client);
         remove_item(storage_move_request.old_storage_item_id, storage_move_request.amount, &mut client);
 
     } else {
