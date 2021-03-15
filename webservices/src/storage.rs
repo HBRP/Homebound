@@ -41,8 +41,8 @@ pub struct GetStorageResponse {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ItemMoveRequest {
 
-    storage_id: i32,
-    storage_item_id: i32,
+    old_storage_id: i32,
+    old_storage_item_id: i32,
     new_storage_id: i32,
     new_slot_id: i32,
     item_id: i32,
@@ -130,18 +130,20 @@ fn remove_item(storage_item_id: i32, amount: i32, client: &mut postgres::Client)
 
 }
 
-fn get_item_max_stack(item_id: i32, client: &mut postgres::Client) -> i32 {
+fn transfer_metadata(storage_item_id: i32, created_storage_item_id: i32, client: &mut postgres::Client) {
 
-    let mut client = db_postgres::get_connection().unwrap();
-    let row = client.query_one("SELECT ItemMaxStack FROM Item.Items WHERE ItemId = $1", &[&item_id]).unwrap();
-    let item_stack_row: i32 = row.get("ItemMaxStack");
+    client.execute("UPDATE Storage.ItemMetaData SET StorageItemId = $1 WHERE StorageItemId = $2", &[&created_storage_item_id, &storage_item_id]).unwrap();
 
-    item_stack_row
 }
 
-fn switch_storage_spots(storage_move_request: &ItemMoveRequest, other_item_id: i32, other_storage_item_id: i32, other_storage_amount: i32) -> String {
+fn get_item_max_stack(item_id: i32, client: &mut postgres::Client) -> i32 {
 
-    let mut client = db_postgres::get_connection().unwrap();
+    let row = client.query_one("SELECT ItemMaxStack FROM Item.Items WHERE ItemId = $1", &[&item_id]).unwrap();
+    return row.get("ItemMaxStack");
+
+}
+
+fn switch_storage_spots(storage_move_request: &ItemMoveRequest, other_storage_item_id: i32, client: &mut postgres::Client) -> String {
 
     let mut response = StorageResponse {
         response: Response {
@@ -150,40 +152,48 @@ fn switch_storage_spots(storage_move_request: &ItemMoveRequest, other_item_id: i
         }
     };
 
-    if other_item_id == storage_move_request.item_id {
+    let row = client.query_one("SELECT Amount FROM Storage.Items WHERE StorageItemId = $1", &[&storage_move_request.old_storage_item_id]).unwrap();
+    let amount_in_original_spot: i32 = row.get("Amount");
 
-        let item_stack_row = get_item_max_stack(other_item_id, &mut client);
-        if other_storage_amount + storage_move_request.amount <= item_stack_row {
+    if amount_in_original_spot == storage_move_request.amount {
 
-            client.execute("UPDATE Storage.Items SET Amount = Amount + $1 WHERE StorageItemId = $2", &[&storage_move_request.amount, &other_storage_item_id]).unwrap();
-            remove_item(storage_move_request.storage_item_id, storage_move_request.amount, &mut client);
-
-        } else {
-
-            response.response.message = "Unable to move into full stack".to_string();
-
-        }
-
+        client.execute("UPDATE Storage.Items SET Deleted = 't' WHERE StorageItemId = $1 or StorageItemId = $2", &[&other_storage_item_id, &storage_move_request.old_storage_item_id]).unwrap();
+        client.execute("INSERT INTO Storage.Items (StorageId, ItemId, Slot, Amount) SELECT SI.StorageItem, SI.ItemId, SI.Slot, SI.Amount FROM Storage.Items SI WHERE SI.StorageItemId = $1", &[&other_storage_item_id]).unwrap();
+        client.execute("INSERT INTO Storage.Items (StorageId, ItemId, Slot, Amount) SELECT SI.StorageItem, SI.ItemId, SI.Slot, SI.Amount FROM Storage.Items SI WHERE SI.StorageItemId = $1", &[&storage_move_request.old_storage_item_id]).unwrap();
 
     } else {
 
-        let row = client.query_one("SELECT Amount FROM Storage.Items WHERE StorageItemId = $1", &[&storage_move_request.storage_item_id]).unwrap();
-        let amount_in_original_spot: i32 = row.get("Amount");
+        response.response.success = true;
+        response.response.message = "Unable to move partial stack into other, non similar stack".to_string();
 
-        if amount_in_original_spot == storage_move_request.amount {
+    }
 
-            client.execute("UPDATE Storage.Items SET Deleted = 't' WHERE StorageItemId = $1 or StorageItemId = $2", &[&other_storage_item_id, &storage_move_request.storage_item_id]).unwrap();
-            client.execute("INSERT INTO Storage.Items (StorageId, ItemId, Slot, Amount) SELECT SI.StorageItem, SI.ItemId, SI.Slot, SI.Amount FROM Storage.Items SI WHERE SI.StorageItemId = $1", &[&other_storage_item_id]).unwrap();
-            client.execute("INSERT INTO Storage.Items (StorageId, ItemId, Slot, Amount) SELECT SI.StorageItem, SI.ItemId, SI.Slot, SI.Amount FROM Storage.Items SI WHERE SI.StorageItemId = $1", &[&storage_move_request.storage_item_id]).unwrap();
+    return serde_json::to_string(&response).unwrap();
+}
 
-        } else {
+fn update_storage_slot(storage_move_request: &ItemMoveRequest, other_item_id: i32, other_storage_amount: i32, other_storage_item_id: i32, client: &mut postgres::Client) -> String {
 
-            response.response.message = "Unable to move partial stack into other, non similar stack".to_string();
-
+    let mut response = StorageResponse {
+        response: Response {
+            success: true,
+            message: "".to_string()
         }
+    };
+
+    let item_max_stack = get_item_max_stack(other_item_id, client);
+    if other_storage_amount + storage_move_request.amount <= item_max_stack {
+
+        client.execute("UPDATE Storage.Items SET Amount = Amount + $1 WHERE StorageItemId = $2", &[&storage_move_request.amount, &other_storage_item_id]).unwrap();
+        remove_item(storage_move_request.old_storage_item_id, storage_move_request.amount, client);
+
+    } else {
+
+        response.response.success = true;
+        response.response.message = "Unable to move into full stack".to_string();
 
     }
     return serde_json::to_string(&response).unwrap();
+
 }
 
 #[post("/Storage/Move", format = "json", data = "<storage_move_request>")]
@@ -192,23 +202,34 @@ pub fn move_storage_item(storage_move_request: Json<ItemMoveRequest>) -> String 
     let storage_move_request = storage_move_request.into_inner();
     let mut client = db_postgres::get_connection().unwrap();
 
-    let row = client.query_one("SELECT StorageItemId, ItemId, Amount FROM Storage.Items WHERE StorageId = $1 AND Slot = $2 AND Deleted = '0'", &[&storage_move_request.new_storage_id, &storage_move_request.new_slot_id]).unwrap();
+    let row = client.query_one("SELECT StorageItemId, ItemId, Amount FROM Storage.Items WHERE StorageId = $1 AND Slot = $2 AND Deleted = 'f'", &[&storage_move_request.new_storage_id, &storage_move_request.new_slot_id]).unwrap();
     if row.is_empty() {
 
-        client.execute("INSERT INTO Storage.Items (StorageId, ItemId, Slot, Amount) VALUES ($1, $2, $3, $4)", &[&storage_move_request.new_storage_id, &storage_move_request.item_id, &storage_move_request.new_slot_id, &storage_move_request.amount]).unwrap();
-        remove_item(storage_move_request.storage_item_id, storage_move_request.amount, &mut client);
+        let row = client.query_one("INSERT INTO Storage.Items (StorageId, ItemId, Slot, Amount) VALUES ($1, $2, $3, $4) RETURNING StorageItemId", &[&storage_move_request.new_storage_id, &storage_move_request.item_id, &storage_move_request.new_slot_id, &storage_move_request.amount]).unwrap();
+        let created_storage_item_id = row.get("StorageItemId");
+
+        transfer_metadata(storage_move_request.old_storage_item_id, created_storage_item_id, &mut client);
+        remove_item(storage_move_request.old_storage_item_id, storage_move_request.amount, &mut client);
 
     } else {
 
-        // existing stack in new slow
+        //Existing item in slot.
         let other_item_id: i32 = row.get("ItemId");
         let other_storage_item_id: i32 = row.get("StorageItemId");
         let other_storage_amount: i32 = row.get("Amount");
-        return switch_storage_spots(&storage_move_request, other_item_id, other_storage_item_id, other_storage_amount);
+        if other_item_id == storage_move_request.item_id {
+
+            return update_storage_slot(&storage_move_request, other_item_id, other_storage_amount, other_storage_item_id, &mut client);
+
+        } else {
+
+            return switch_storage_spots(&storage_move_request, other_storage_item_id, &mut client);
+
+        }
 
     }
 
-    let mut response = StorageResponse {
+    let response = StorageResponse {
         response: Response {
             success: true,
             message: "".to_string()
