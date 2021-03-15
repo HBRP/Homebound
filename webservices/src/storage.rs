@@ -201,17 +201,49 @@ pub fn move_storage_item(storage_move_request: Json<StorageMoveRequest>) -> Stri
 
 }
 
-#[post("/Storage/Give", format = "json", data = "<storage_move_request>")]
-pub fn give_storage_item(storage_give_request: Json<StorageGiveRequest>) -> String {
+fn get_empty_slot(storage_id: i32) -> i32 {
 
-    /*
+    0
+}
+
+fn can_give_item_in_slot(storage_give_request: StorageGiveRequest) -> bool {
+
+    let mut client = db_postgres::get_connection().unwrap();
+    let row = client.query_one("SELECT Amount, ItemId FROM Storage.Items WHERE StorageId = $1 AND Slot = $2 AND Deleted = 'f'", &[&storage_give_request.storage_id, &storage_give_request.slot]).unwrap();
+    if row.is_empty() {
+
+        return true;
+
+    } else {
+
+        let max_stack = get_item_max_stack(storage_give_request.item_id);
+        let slot_item_id: i32 = row.get("ItemId");
+        let slot_amount: i32 = row.get("Amount");
+        if slot_amount + storage_give_request.amount > max_stack {
+            return false;
+        }
+        if slot_item_id != storage_give_request.item_id {
+            return false;
+        }
+
+    }
+
+    return true;
+
+}
+
+#[post("/Storage/Give", format = "json", data = "<storage_give_request>")]
+pub fn give_storage_item(storage_give_request: Json<StorageGiveRequest>) -> String {
+/*
     let storage_give_request = storage_give_request.into_inner();
     let mut client = db_postgres::get_connection().unwrap();
 
     let mut slot = 0;
 
-    if storage_give_request == -1 {
+    if storage_give_request.slot == -1 || can_give_item_in_slot(storage_give_request) {
 
+
+    } else {
 
 
     }
@@ -234,7 +266,6 @@ pub fn give_storage_item(storage_give_request: Json<StorageGiveRequest>) -> Stri
 
     }
     let row = client.query_one("SELECT * FROM Storage.Items WHERE StorageId = $1")
-
     */
 
     "".to_string()
