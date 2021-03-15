@@ -123,11 +123,10 @@ pub fn get_storage(storage_request: Json<GetStorageRequest>) -> String {
 
 }
 
-fn update_original_storage(storage_move_request: &ItemMoveRequest) {
+fn remove_item(storage_item_id: i32, amount: i32, client: &mut postgres::Client) {
 
-    let mut client = db_postgres::get_connection().unwrap();
-    client.execute("UPDATE Storage.Items SET amount = amount - $1 WHERE StorageItemId = $2", &[&storage_move_request.amount, &storage_move_request.storage_item_id]).unwrap();
-    client.execute("UPDATE Storage.Items SET Deleted = 't' WHERE StorageItemId = $1 AND Amount = 0", &[&storage_move_request.storage_item_id]).unwrap();
+    client.execute("UPDATE Storage.Items SET amount = amount - $1 WHERE StorageItemId = $2", &[&amount, &storage_item_id]).unwrap();
+    client.execute("UPDATE Storage.Items SET Deleted = 't' WHERE StorageItemId = $1 AND Amount = 0", &[&storage_item_id]).unwrap();
 
 }
 
@@ -157,7 +156,7 @@ fn switch_storage_spots(storage_move_request: &ItemMoveRequest, other_item_id: i
         if other_storage_amount + storage_move_request.amount <= item_stack_row {
 
             client.execute("UPDATE Storage.Items SET Amount = Amount + $1 WHERE StorageItemId = $2", &[&storage_move_request.amount, &other_storage_item_id]).unwrap();
-            update_original_storage(&storage_move_request);
+            remove_item(storage_move_request.storage_item_id, storage_move_request.amount, &mut client);
 
         } else {
 
@@ -197,7 +196,7 @@ pub fn move_storage_item(storage_move_request: Json<ItemMoveRequest>) -> String 
     if row.is_empty() {
 
         client.execute("INSERT INTO Storage.Items (StorageId, ItemId, Slot, Amount) VALUES ($1, $2, $3, $4)", &[&storage_move_request.new_storage_id, &storage_move_request.item_id, &storage_move_request.new_slot_id, &storage_move_request.amount]).unwrap();
-        update_original_storage(&storage_move_request);
+        remove_item(storage_move_request.storage_item_id, storage_move_request.amount, &mut client);
 
     } else {
 
@@ -339,5 +338,21 @@ pub fn give_storage_item(item_give_request: Json<ItemGiveRequest>) -> String {
     give_response.storage_item_id  = row.get("StorageItemId");
     give_response.response.success = true;
     return serde_json::to_string(&give_response).unwrap();
+
+}
+
+#[post("/Storage/Remove", format = "json", data = "<item_remove_request>")]
+pub fn remove_storage_item(item_remove_request: Json<ItemRemoveRequest>) -> String {
+
+    let item_remove_request = item_remove_request.into_inner();
+    let mut client = db_postgres::get_connection().unwrap();
+    remove_item(item_remove_request.storage_item_id, item_remove_request.amount, &mut client);
+
+    return serde_json::to_string(&StorageResponse {
+        response: Response {
+            success: true,
+            message: "".to_string()
+        }
+    }).unwrap();
 
 }
