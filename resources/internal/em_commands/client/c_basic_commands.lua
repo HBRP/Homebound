@@ -15,7 +15,7 @@ AddEventHandler('em_commands:propagate_to_nearby_clients:response', function(id,
 end)
 
 
-register_command("ad", function (source, args, raw)
+register_command_no_perms("ad", function (source, args, raw)
 
     local msg = raw:sub(4)
     local fal = exports["em_fw"]:get_character_name()
@@ -26,7 +26,7 @@ register_command("ad", function (source, args, raw)
 
 end, 'Send an advertisement')
 
-register_command("me", function (source, args, raw)
+register_command_no_perms("me", function (source, args, raw)
 
     local msg = raw:sub(4)
     local fal = exports["em_fw"]:get_character_name()
@@ -37,7 +37,7 @@ register_command("me", function (source, args, raw)
 
 end, 'Express yourself')
 
-register_command("looc", function(source, args, raw)
+register_command_no_perms("looc", function(source, args, raw)
 
     local msg = raw:sub(5)
     local fal = exports["em_fw"]:get_character_name()
@@ -69,7 +69,7 @@ register_command("tpm", function(source, args, raw)
 end, "Teleport to marker")
 
 
-register_command("pos", function(source, args, rawCommand)
+register_command_no_perms("pos", function(source, args, rawCommand)
 
     local coords = GetEntityCoords(PlayerPedId())
     print(json.encode(coords))

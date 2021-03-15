@@ -15,3 +15,15 @@ function register_command(command, callback, ...)
     TriggerEvent('chat:addSuggestion', "/" .. command, ...)
 
 end
+
+function register_command_no_perms(command, callback, ...)
+
+    RegisterCommand(command, function (source, args, raw)
+
+        callback(source, args, raw)
+
+    end)
+
+    TriggerEvent('chat:addSuggestion', "/" .. command, ...)
+
+end
