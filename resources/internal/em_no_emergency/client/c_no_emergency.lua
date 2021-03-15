@@ -3,7 +3,7 @@
 local function clear_local_area_of_cops()
 
     local coords = GetEntityCoords(PlayerPedId())
-    ClearAreaOfCops(coords.x, coords.y, coords.z , 1000.0)
+    ClearAreaOfCops(coords.x, coords.y, coords.z , 500.0)
 
 end
 
@@ -48,7 +48,7 @@ end)
 Citizen.CreateThread(function()
 
     while true do
-        Citizen.Wait(0)
+        Citizen.Wait(5)
         clear_local_area_of_cops()
         never_wanted()
     end
