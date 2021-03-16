@@ -1,6 +1,12 @@
 
 local loaded_character = nil
 
+function get_character_storage_id()
+
+    return loaded_character["character"]["storage_id"]
+
+end
+
 function get_character_id()
 
     return loaded_character["character"]["character_id"]

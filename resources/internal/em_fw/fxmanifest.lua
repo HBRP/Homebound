@@ -2,31 +2,33 @@
 fx_version 'bodacious'
 games { 'gta5' }
 
+client_scripts {
+    'client/server_callbacks/c_server_callbacks.lua',
+    'client/startup/startup.lua',
+    'client/player/c_player.lua',
+    'client/character/c_character.lua',
+    'client/character/c_character_health.lua',
+    'client/character/c_character_position.lua',
+    'client/character/c_character_outfit.lua',
+    'client/commands/c_commands.lua',
+    'client/blips/c_blips.lua',
+    'client/storage/c_storage.lua'
+}
 
-client_script 'client/server_callbacks/c_server_callbacks.lua'
+server_scripts {
 
-client_script 'client/startup/startup.lua'
-client_script 'client/player/c_player.lua'
-client_script 'client/character/c_character.lua'
-client_script 'client/character/c_character_health.lua'
-client_script 'client/character/c_character_position.lua'
-client_script 'client/character/c_character_outfit.lua'
+    'server/http/http.lua',
+    'server/http/http_sql.lua',
+    'server/http/http_requests.lua',
+    'server/server_callbacks/s_server_callbacks.lua',
+    'server/player/s_player.lua',
+    'server/character/s_character.lua',
+    'server/character/s_character_outfit.lua',
+    'server/commands/s_commands.lua',
+    'server/blips/s_blips.lua',
+    'server/storage/s_storage.lua'
 
-client_script 'client/commands/c_commands.lua'
-client_script 'client/blips/c_blips.lua'
-
-server_script 'server/http/http.lua'
-server_script 'server/http/http_sql.lua'
-server_script 'server/http/http_requests.lua'
-
-server_script 'server/server_callbacks/s_server_callbacks.lua'
-
-server_script 'server/player/s_player.lua'
-server_script 'server/character/s_character.lua'
-server_script 'server/character/s_character_outfit.lua'
-
-server_script 'server/commands/s_commands.lua'
-server_script 'server/blips/s_blips.lua'
+}
 
 ui_page 'ui/index.html'
 
@@ -44,6 +46,7 @@ export 'load_character'
 export 'get_all_characters'
 export 'get_character_gender'
 export 'get_character_name'
+export 'get_character_storage_id'
 export 'get_character_id'
 export 'get_target_character_id'
 export 'get_target_character_id_batch'
@@ -69,5 +72,13 @@ export 'get_blips'
 -- c_player.lua
 export 'get_player_id'
 
+
+-- c_storage.lua
+export 'get_storage'
+export 'give_item'
+export 'remove_item'
+
+-- c_server_callback.lua
 export 'trigger_server_callback'
+-- s_server_callback.lua
 server_export 'register_server_callback'
