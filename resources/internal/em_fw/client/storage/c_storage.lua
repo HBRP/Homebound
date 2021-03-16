@@ -14,11 +14,11 @@ function get_storage(storage_id)
 end
 
 
-function give_item(storage_id, item_id, amount, slot)
+function give_item(storage_id, item_id, amount, storage_item_id, slot)
 
     trigger_server_callback("em_fw:give_item", function(result)
 
-    end, storage_id, item_id, amount, slot)
+    end, storage_id, item_id, amount, storage_item_id, slot)
 
 end
 

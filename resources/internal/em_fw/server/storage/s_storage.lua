@@ -25,9 +25,9 @@ register_server_event("em_fw:move_item", function(source, callback, storage_id, 
 end)
 ]]
 
-register_server_callback("em_fw:give_item", function(source, callback, storage_id, item_id, amount, slot)
+register_server_callback("em_fw:give_item", function(source, callback, storage_id, item_id, amount, storage_item_id, slot)
 
-    local data = {storage_id = storage_id, item_id = item_id, amount = amount, slot = slot}
+    local data = {storage_id = storage_id, item_id = item_id, amount = amount, storage_item_id = storage_item_id, slot = slot}
     
     HttpPost("/Storage/Give", data, function(error_code, result_data, result_headers)
 
