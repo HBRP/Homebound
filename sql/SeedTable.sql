@@ -202,4 +202,5 @@ VALUES
     (3, 'features'),
     (3, 'style'),
     (3, 'apparel'),
-    (3, 'wardrobe');
+    (3, 'wardrobe'),
+    (5, 'give_item');
