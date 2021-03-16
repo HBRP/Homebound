@@ -56,6 +56,7 @@ pub struct ItemGiveRequest {
     storage_id: i32,
     item_id: i32,
     slot: i32,
+    storage_item_id: i32,
     amount: i32
 
 }
@@ -317,9 +318,15 @@ pub fn give_storage_item(item_give_request: Json<ItemGiveRequest>) -> String {
 
     let row = client.query_one("INSERT INTO Storage.Items (StorageId, ItemId, Slot, Amount) VALUES ($1, $2, $3, $4) RETURNING StorageItemId;", &[&item_give_request.storage_id, &item_give_request.item_id, &slot, &item_give_request.amount]).unwrap();
 
-    give_response.storage_item_id  = row.get("StorageItemId");
-    give_response.response.success = true;
+    give_response.storage_item_id = row.get("StorageItemId");
 
+    if item_give_request.storage_item_id != -1 {
+
+        transfer_metadata(give_response.storage_item_id, item_give_request.storage_item_id, &mut client);
+
+    }
+
+    give_response.response.success = true;
 
     return serde_json::to_string(&give_response).unwrap();
 
