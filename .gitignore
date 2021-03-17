@@ -1,0 +1,5 @@
+webservices/target
+/server
+/txData
+*.bat
+*.7z
