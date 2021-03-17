@@ -34,6 +34,7 @@ pub struct GetStorageResponse {
 
     response: Response,
     storage_id: i32,
+    storage_max_slots: i32,
     storage_items: Vec<StorageItems>
 
 }
@@ -97,6 +98,7 @@ pub fn get_storage(storage_request: Json<GetStorageRequest>) -> String {
             message: "".to_string()
         },
         storage_id: storage_request.storage_id,
+        storage_max_slots: get_storage_max_slots(storage_request.storage_id, &mut client),
         storage_items: Vec::new()
 
     };
@@ -141,6 +143,23 @@ fn get_item_max_stack(item_id: i32, client: &mut postgres::Client) -> i32 {
 
     let row = client.query_one("SELECT ItemMaxStack FROM Item.Items WHERE ItemId = $1", &[&item_id]).unwrap();
     return row.get("ItemMaxStack");
+
+}
+
+fn get_storage_max_slots(storage_id: i32,  client: &mut postgres::Client) -> i32 {
+
+    let row = client.query_one(
+        "
+            SELECT 
+                 StorageTypeSlots
+            FROM 
+                Storage.Containers SC
+            INNER JOIN Storage.Types ST ON ST.StorageTypeId = SC.StorageTypeId
+            WHERE 
+                SC.StorageId = $1
+        ", &[&storage_id]).unwrap();
+
+    return row.get("StorageTypeSlots");
 
 }
 
