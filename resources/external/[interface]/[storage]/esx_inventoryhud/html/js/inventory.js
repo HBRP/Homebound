@@ -83,11 +83,10 @@ window.addEventListener("message", function (event) {
         drop: function (event, ui) {
             itemData = ui.draggable.data("item");
 
-            console.log("here")
-            console.log(document.querySelectorAll( ":hover" ));
-            console.log(event)
-            console.log(event.target.id)
-            console.log("yes")
+            if (itemData.label === "") {
+                return;
+            }
+
             if (itemData == undefined || itemData.canRemove == undefined) {
                 return;
             }
@@ -97,6 +96,19 @@ window.addEventListener("message", function (event) {
             if (itemInventory == undefined || itemInventory == "second") {
                 return;
             }
+
+            var other_item_id = event.target.id
+            var inventory_to = other_item_id.includes("Other") ? "other" : "main";
+            $.post("http://esx_inventoryhud/MoveItem", JSON.stringify({
+
+                item_slot_from: itemData.slot,
+                item_slot_to: Number(other_item_id.substring(other_item_id.indexOf("-")+1)) + 1,
+                item_id: itemData.item_id,
+                inventory_from: "main",
+                inventory_to: inventory_to
+
+
+            }));
         }
     })
     } else if (event.data.action == "setSecondInventoryItems") {

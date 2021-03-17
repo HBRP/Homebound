@@ -291,11 +291,13 @@ function loadPlayerInventory()
                 label = string.upper(item_in_slot.item_name),
                 name  = item_in_slot.item_name,
                 count = item_in_slot.amount,
+                item_id = item_in_slot.item_id,
                 rare  = false,
                 type  = "item_standard",
                 canRemove = true,
                 usable = true,
                 limit = -1,
+                slot  = i
 
             })
         else
@@ -304,11 +306,13 @@ function loadPlayerInventory()
                 label = "",
                 name  = "",
                 count = 0,
+                item_id = 0,
                 rare  = false,
                 type  = "item_standard",
                 canRemove = false,
                 usable = false,
                 limit = -1,
+                slot = i
 
             })
         end
@@ -322,6 +326,31 @@ function loadPlayerInventory()
     )
     
 end
+
+
+--[[
+
+    #[derive(Serialize, Deserialize, Debug)]
+    pub struct ItemMoveRequest {
+
+        old_storage_id: i32,
+        old_storage_item_id: i32,
+        new_storage_id: i32,
+        new_slot_id: i32,
+        item_id: i32,
+        amount: i32
+
+    }
+
+]]
+
+
+RegisterNUICallback("MoveItem", function(data, cb)
+
+    print(json.encode(data))
+
+end)
+
 
 Citizen.CreateThread(
     function()
