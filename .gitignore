@@ -1,5 +1,6 @@
 webservices/target
 /server
 /txData
+/not_used
 *.bat
 *.7z
