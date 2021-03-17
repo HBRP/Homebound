@@ -102,11 +102,11 @@ pub fn get_storage(storage_request: Json<GetStorageRequest>) -> String {
     };
     for row in client.query(
         "
-            SELECT ItemId, II.ItemName Slot, Amount 
+            SELECT SI.ItemId, II.ItemName, SI.Slot, SI.Amount 
             FROM Storage.Items SI 
             INNER JOIN Item.Items II ON II.ItemId = SI.ItemId
             WHERE 
-                SI.StorageId = $1 AND SI.Deleted = 0
+                SI.StorageId = $1 AND SI.Deleted = 'f'
         ", &[&storage_request.storage_id]).unwrap() {
 
         storage_response.storage_items.push(StorageItems {
