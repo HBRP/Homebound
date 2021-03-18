@@ -169,8 +169,6 @@ RegisterNUICallback(
 
 RegisterNUICallback("UseItem", function(data, cb)
 
-    Citizen.Trace(json.encode(data) .. "\n")
-
     exports["em_items"]:use_item(data["item"].item_id, data["item"].item_type_id, data["item"].storage_item_id)
     loadPlayerInventory()
     cb("ok")
@@ -331,6 +329,7 @@ RegisterNUICallback("MoveItem", function(data, cb)
         Citizen.Trace("Unable to move\n")
     end
     loadPlayerInventory()
+    cb("ok")
 
 end)
 
