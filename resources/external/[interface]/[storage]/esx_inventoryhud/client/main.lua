@@ -167,78 +167,75 @@ RegisterNUICallback(
     end
 )
 
-RegisterNUICallback(
-    "UseItem",
-    function(data, cb)
-        --TriggerServerEvent("esx:useItem", data.item.name)
+RegisterNUICallback("UseItem", function(data, cb)
 
-        if shouldCloseInventory(data.item.name) then
-            closeInventory()
-        else
-            Citizen.Wait(250)
-            loadPlayerInventory()
-        end
+    Citizen.Trace(json.encode(data) .. "\n")
 
-        cb("ok")
+    exports["em_items"]:use_item(data["item"].item_id, data["item"].item_type_id, data["item"].storage_item_id)
+
+    if shouldCloseInventory(data.item.name) then
+        closeInventory()
+    else
+        Citizen.Wait(250)
+        loadPlayerInventory()
     end
-)
 
-RegisterNUICallback(
-    "DropItem",
-    function(data, cb)
-        if IsPedSittingInAnyVehicle(playerPed) then
-            return
+    cb("ok")
+
+end)
+
+RegisterNUICallback("DropItem", function(data, cb)
+
+    if IsPedSittingInAnyVehicle(playerPed) then
+        return
+    end
+
+    if type(data.number) == "number" and math.floor(data.number) == data.number then
+        --TriggerServerEvent("esx:removeInventoryItem", data.item.type, data.item.name, data.number)
+    end
+
+    Wait(250)
+    loadPlayerInventory()
+
+    cb("ok")
+    
+end)
+
+RegisterNUICallback("GiveItem", function(data, cb)
+    local playerPed = PlayerPedId()
+    local players, nearbyPlayer = ESX.Game.GetPlayersInArea(GetEntityCoords(playerPed), 3.0)
+    local foundPlayer = false
+    for i = 1, #players, 1 do
+        if players[i] ~= PlayerId() then
+            if GetPlayerServerId(players[i]) == data.player then
+                foundPlayer = true
+            end
+        end
+    end
+
+    if foundPlayer then
+        local count = tonumber(data.number)
+
+        if data.item.type == "item_weapon" then
+            count = GetAmmoInPedWeapon(PlayerPedId(), GetHashKey(data.item.name))
         end
 
-        if type(data.number) == "number" and math.floor(data.number) == data.number then
-            --TriggerServerEvent("esx:removeInventoryItem", data.item.type, data.item.name, data.number)
-        end
-
+        --TriggerServerEvent("esx:giveInventoryItem", data.player, data.item.type, data.item.name, count)
         Wait(250)
         loadPlayerInventory()
-
-        cb("ok")
+    else
+        exports.pNotify:SendNotification(
+            {
+                text = _U("player_nearby"),
+                type = "error",
+                timeout = 3000,
+                layout = "bottomCenter",
+                queue = "inventoryhud"
+            }
+        )
     end
-)
-
-RegisterNUICallback(
-    "GiveItem",
-    function(data, cb)
-        local playerPed = PlayerPedId()
-        local players, nearbyPlayer = ESX.Game.GetPlayersInArea(GetEntityCoords(playerPed), 3.0)
-        local foundPlayer = false
-        for i = 1, #players, 1 do
-            if players[i] ~= PlayerId() then
-                if GetPlayerServerId(players[i]) == data.player then
-                    foundPlayer = true
-                end
-            end
-        end
-
-        if foundPlayer then
-            local count = tonumber(data.number)
-
-            if data.item.type == "item_weapon" then
-                count = GetAmmoInPedWeapon(PlayerPedId(), GetHashKey(data.item.name))
-            end
-
-            --TriggerServerEvent("esx:giveInventoryItem", data.player, data.item.type, data.item.name, count)
-            Wait(250)
-            loadPlayerInventory()
-        else
-            exports.pNotify:SendNotification(
-                {
-                    text = _U("player_nearby"),
-                    type = "error",
-                    timeout = 3000,
-                    layout = "bottomCenter",
-                    queue = "inventoryhud"
-                }
-            )
-        end
-        cb("ok")
-    end
-)
+    cb("ok")
+end)
 
 function shouldCloseInventory(itemName)
     for index, value in ipairs(Config.CloseUiItems) do
@@ -292,32 +289,34 @@ function loadPlayerInventory()
         if item_in_slot ~= nil then
             table.insert(items, {
 
-                label = string.upper(item_in_slot.item_name),
-                name  = item_in_slot.item_name,
-                count = item_in_slot.amount,
-                item_id = item_in_slot.item_id,
+                label           = string.upper(item_in_slot.item_name),
+                name            = item_in_slot.item_name,
+                count           = item_in_slot.amount,
+                item_id         = item_in_slot.item_id,
+                item_type_id    = item_in_slot.item_type_id,
                 storage_item_id = item_in_slot.storage_item_id,
-                rare  = false,
-                type  = "item_standard",
-                canRemove = true,
-                usable = true,
-                limit = -1,
-                slot  = i
+                rare            = false,
+                type            = "item_standard",
+                canRemove       = true,
+                usable          = true,
+                limit           = -1,
+                slot            = i
 
             })
         else
             table.insert(items, {
-                label = "",
-                name  = "",
-                count = 0,
-                item_id = 0,
+                label           = "",
+                name            = "",
+                count           = 0,
+                item_id         = 0,
                 storage_item_id = 0,
-                rare  = false,
-                type  = "item_standard",
-                canRemove = false,
-                usable = false,
-                limit = -1,
-                slot = i
+                item_type_id    = 0,
+                rare            = false,
+                type            = "item_standard",
+                canRemove       = false,
+                usable          = false,
+                limit           = -1,
+                slot            = i
             })
         end
 

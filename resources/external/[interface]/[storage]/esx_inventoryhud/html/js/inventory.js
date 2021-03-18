@@ -304,7 +304,6 @@ $(document).ready(function () {
         hoverClass: 'hoverControl',
         drop: function (event, ui) {
             itemData = ui.draggable.data("item");
-            console.log("use item")
 
             if (itemData == undefined || itemData.usable == undefined) {
                 return;
