@@ -2,6 +2,8 @@ var type = "normal";
 var disabled = false;
 var disabledFunction = null;
 
+var shift_enabled = false
+
 window.addEventListener("message", function (event) {
     if (event.data.action == "display") {
         type = event.data.type;
@@ -99,14 +101,16 @@ window.addEventListener("message", function (event) {
 
             var other_item_id = event.target.id
             var inventory_to = other_item_id.includes("Other") ? "other" : "main";
+            var amount = shift_enabled == true ? Math.ceil(itemData.amount/2) : parseInt($("#count").val());
             $.post("http://esx_inventoryhud/MoveItem", JSON.stringify({
 
                 item_slot_from: itemData.slot,
                 item_slot_to: Number(other_item_id.substring(other_item_id.indexOf("-")+1)) + 1,
                 item_id: itemData.item_id,
+                storage_item_id: itemData.storage_item_id,
                 inventory_from: "main",
+                amount : amount,
                 inventory_to: inventory_to
-
 
             }));
         }
@@ -267,6 +271,8 @@ function formatMoney(n, c, d, t) {
 };
 
 $(document).ready(function () {
+
+
     $("#count").focus(function () {
         $(this).val("")
     }).blur(function () {
@@ -278,6 +284,19 @@ $(document).ready(function () {
     $("body").on("keyup", function (key) {
         if (Config.closeKeys.includes(key.which)) {
             closeInventory();
+        } else if (key.which == 16) {
+
+            // SHIFT
+            shift_enabled = false
+
+        }
+    });
+
+    $("body").on("keydown", function (key) {
+        if (key.which == 16) {
+
+            shift_enabled = true
+
         }
     });
 

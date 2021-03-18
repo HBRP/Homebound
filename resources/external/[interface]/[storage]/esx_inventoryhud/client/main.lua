@@ -276,9 +276,13 @@ local function get_item_in_slot(storage_items, slot)
 
 end
 
+local left_storage_id  = nil
+local right_storage_id = nil
+
 function loadPlayerInventory()
 
-    local inventory         = exports["em_fw"]:get_storage(exports["em_fw"]:get_character_storage_id())
+    left_storage_id         = exports["em_fw"]:get_character_storage_id()
+    local inventory         = exports["em_fw"]:get_storage(left_storage_id)
     local storage_items     = inventory["storage_items"]
     local max_storage_slots = inventory["storage_max_slots"]
     items = {}
@@ -292,6 +296,7 @@ function loadPlayerInventory()
                 name  = item_in_slot.item_name,
                 count = item_in_slot.amount,
                 item_id = item_in_slot.item_id,
+                storage_item_id = item_in_slot.storage_item_id,
                 rare  = false,
                 type  = "item_standard",
                 canRemove = true,
@@ -302,18 +307,17 @@ function loadPlayerInventory()
             })
         else
             table.insert(items, {
-
                 label = "",
                 name  = "",
                 count = 0,
                 item_id = 0,
+                storage_item_id = 0,
                 rare  = false,
                 type  = "item_standard",
                 canRemove = false,
                 usable = false,
                 limit = -1,
                 slot = i
-
             })
         end
 
@@ -327,27 +331,28 @@ function loadPlayerInventory()
     
 end
 
-
 --[[
 
-    #[derive(Serialize, Deserialize, Debug)]
-    pub struct ItemMoveRequest {
-
-        old_storage_id: i32,
-        old_storage_item_id: i32,
-        new_storage_id: i32,
-        new_slot_id: i32,
-        item_id: i32,
-        amount: i32
-
-    }
+                item_slot_from: itemData.slot,
+                item_slot_to: Number(other_item_id.substring(other_item_id.indexOf("-")+1)) + 1,
+                item_id: itemData.item_id,
+                storage_item_id: itemData.storage_item_id,
+                inventory_from: "main",
+                inventory_to: inventory_to
 
 ]]
+    --old_storage_id, old_storage_item_id, new_storage_id, new_slot_id, item_id, amount
 
 
 RegisterNUICallback("MoveItem", function(data, cb)
 
     print(json.encode(data))
+    if data.inventory_from == "main" and data.inventory_to == "main" then
+        exports["em_fw"]:move_item(left_storage_id, data.storage_item_id, left_storage_id, data.item_slot_to, data.item_id, data.amount)
+    else
+        Citizen.Trace("Unable to move\n")
+    end
+    loadPlayerInventory()
 
 end)
 
