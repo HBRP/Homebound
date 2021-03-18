@@ -234,18 +234,18 @@ pub fn move_storage_item(storage_move_request: Json<ItemMoveRequest>) -> String 
     match row {
         Ok(row) => {
 
-                let other_item_id: i32 = row.get("ItemId");
-                let other_storage_item_id: i32 = row.get("StorageItemId");
-                let other_storage_amount: i32 = row.get("Amount");
-                if other_item_id == storage_move_request.item_id {
+            let other_item_id: i32 = row.get("ItemId");
+            let other_storage_item_id: i32 = row.get("StorageItemId");
+            let other_storage_amount: i32 = row.get("Amount");
+            if other_item_id == storage_move_request.item_id {
 
-                    return update_storage_slot(&storage_move_request, other_item_id, other_storage_amount, other_storage_item_id, &mut client);
+                return update_storage_slot(&storage_move_request, other_item_id, other_storage_amount, other_storage_item_id, &mut client);
 
-                } else {
+            } else {
 
-                    return switch_storage_spots(&storage_move_request, other_storage_item_id, &mut client);
+                return switch_storage_spots(&storage_move_request, other_storage_item_id, &mut client);
 
-                }
+            }
 
         },
         Err(_err) => {
