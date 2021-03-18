@@ -39,7 +39,7 @@ Citizen.CreateThread(function()
     Citizen.Wait(0)
     disable_dispatch_service()
     while true do
-        Citizen.Wait(200)
+        Citizen.Wait(50)
         remove_vehicles_from_areas()
     end
 
