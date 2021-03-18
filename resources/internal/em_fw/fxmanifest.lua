@@ -3,6 +3,7 @@ fx_version 'bodacious'
 games { 'gta5' }
 
 client_scripts {
+
     'client/server_callbacks/c_server_callbacks.lua',
     'client/startup/startup.lua',
     'client/player/c_player.lua',
@@ -12,7 +13,9 @@ client_scripts {
     'client/character/c_character_outfit.lua',
     'client/commands/c_commands.lua',
     'client/blips/c_blips.lua',
-    'client/storage/c_storage.lua'
+    'client/storage/c_storage.lua',
+    'client/items/c_items.lua'
+    
 }
 
 server_scripts {
@@ -26,7 +29,8 @@ server_scripts {
     'server/character/s_character_outfit.lua',
     'server/commands/s_commands.lua',
     'server/blips/s_blips.lua',
-    'server/storage/s_storage.lua'
+    'server/storage/s_storage.lua',
+    'server/items/s_items.lua'
 
 }
 
@@ -78,6 +82,9 @@ export 'give_item'
 export 'get_storage'
 export 'remove_item'
 export 'move_item'
+
+-- c_items.lua
+export 'get_item_modifiers'
 
 -- c_server_callback.lua
 export 'trigger_server_callback'

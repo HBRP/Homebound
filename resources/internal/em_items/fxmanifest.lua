@@ -13,6 +13,7 @@ export 'use_item'
 
 dependencies {
 
-    'em_fw'
+    'em_fw',
+    'em_medical'
 
 }
