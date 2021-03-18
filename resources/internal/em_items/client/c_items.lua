@@ -77,6 +77,18 @@ function get_item_weapon_model(item_id)
 
 end
 
+function get_item_in_slot(storage_items, slot)
+
+    for i = 1, #storage_items do
+        if slot == storage_items[i].slot then
+            return storage_items[i]
+        end
+    end
+
+    return nil
+
+end
+
 local function setup_weapon_cache()
 
     weapons = exports["em_fw"]:get_weapons()
