@@ -295,8 +295,8 @@ CREATE TABLE IF NOT EXISTS Item.Weapons
     ItemId INTEGER NOT NULL,
     ItemWeaponModel VARCHAR(32) NOT NULL,
     ItemWeaponHash INTEGER NOT NULL,
-    ItemUsesAmmo BIT NOT NULL,
-    ItemAlertsCops BIT NOT NULL
+    ItemUsesAmmo BOOLEAN NOT NULL DEFAULT('1'),
+    ItemAlertsCops BOOLEAN NOT NULL DEFAULT('1')
 );
 
 CREATE SCHEMA Blip;
