@@ -66,13 +66,13 @@ INSERT INTO
     Item.ModifierTypes (ItemModifierTypeName)
 VALUES
     ('Food'),
-    ('Water');
+    ('Liquid');
 
 INSERT INTO
     Item.Modifiers (ItemModifierTypeId, ItemId, ItemModifier)
 VALUES
-    (1, 1, .50),
-    (2, 2, .50);
+    (1, 1, 50),
+    (2, 2, 50);
 
 INSERT INTO
     Item.Weapons (ItemId, ItemWeaponModel, ItemWeaponHash, ItemUsesAmmo, ItemAlertsCops)

@@ -11,6 +11,7 @@ mod character;
 mod storage;
 mod blips;
 mod commands;
+mod items;
 
 #[post("/Player/Create", format = "json", data = "<player_credentials>")]
 fn player_create(player_credentials: Json<player::PlayerCredentials>) -> String {
@@ -144,6 +145,7 @@ fn main() {
     rocket::ignite().mount("/", routes![player_create, character_create,get_character_info, update_character_position, get_characters, get_player_id, 
         delete_character, get_skin, create_skin, update_skin, create_outfit, 
         update_outfit, delete_outfit, get_active_outfit, get_outfit, get_all_outfit_meta_data, blips::get_blips, commands::can_use_command,
-        storage::move_storage_item, storage::give_storage_item, storage::remove_storage_item, storage::get_storage]).launch();
+        storage::move_storage_item, storage::give_storage_item, storage::remove_storage_item, storage::get_storage,
+        items::get_item_modifiers]).launch();
 
 }

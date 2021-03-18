@@ -16,6 +16,7 @@ pub struct Response {
 pub struct StorageItems {
 
     item_id: i32,
+    item_type_id: i32,
     storage_item_id: i32,
     item_name: String,
     slot: i32,
@@ -105,7 +106,7 @@ pub fn get_storage(storage_request: Json<GetStorageRequest>) -> String {
     };
     for row in client.query(
         "
-            SELECT SI.ItemId, SI.StorageItemId, II.ItemName, SI.Slot, SI.Amount 
+            SELECT SI.ItemId, II.ItemTypeId, SI.StorageItemId, II.ItemName, SI.Slot, SI.Amount 
             FROM Storage.Items SI 
             INNER JOIN Item.Items II ON II.ItemId = SI.ItemId
             WHERE 
@@ -115,6 +116,7 @@ pub fn get_storage(storage_request: Json<GetStorageRequest>) -> String {
         storage_response.storage_items.push(StorageItems {
 
             item_id: row.get("ItemId"),
+            item_type_id: row.get("ItemTypeId"),
             storage_item_id: row.get("StorageItemId"),
             item_name: row.get("ItemName"),
             slot: row.get("Slot"),
