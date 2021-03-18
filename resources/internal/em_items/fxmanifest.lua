@@ -9,7 +9,13 @@ client_scripts {
 
 }
 
-export 'use_item'
+exports {
+
+    'use_item',
+    'get_item_weapon_model',
+    'is_item_type_a_weapon'
+
+}
 
 dependencies {
 

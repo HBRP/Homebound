@@ -85,6 +85,7 @@ export 'move_item'
 
 -- c_items.lua
 export 'get_item_modifiers'
+export 'get_weapons'
 
 -- c_server_callback.lua
 export 'trigger_server_callback'

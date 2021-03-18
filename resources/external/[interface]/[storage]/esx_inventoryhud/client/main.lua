@@ -278,10 +278,16 @@ function loadPlayerInventory()
 
         local item_in_slot = get_item_in_slot(storage_items, i)
         if item_in_slot ~= nil then
+
+            local name = item_in_slot.item_name
+            if exports["em_items"]:is_item_type_a_weapon(item_in_slot.item_type_id) then
+                name = exports["em_items"]:get_item_weapon_model(item_in_slot.item_id)
+            end
+
             table.insert(items, {
 
                 label           = string.upper(item_in_slot.item_name),
-                name            = item_in_slot.item_name,
+                name            = name,
                 count           = item_in_slot.amount,
                 item_id         = item_in_slot.item_id,
                 item_type_id    = item_in_slot.item_type_id,

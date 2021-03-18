@@ -10,3 +10,15 @@ function get_item_modifiers(item_id)
     return modifiers
 
 end
+
+function get_weapons()
+
+    local weapons = nil
+    trigger_server_callback("em_fw:get_weapons", function(result)
+
+        weapons = result
+
+    end)
+    return weapons
+
+end

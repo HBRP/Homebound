@@ -19,6 +19,8 @@ local item_modifier_type_ids = {
 
 }
 
+local weapons = nil
+
 local function apply_item_modifiers(item_id)
 
     local item_modifiers = exports["em_fw"]:get_item_modifiers(item_id)
@@ -55,3 +57,36 @@ function use_item(item_id, item_type_id, storage_item_id)
     end
 
 end
+
+function is_item_type_a_weapon(item_type_id)
+
+    return item_type_ids.WEAPON == item_type_id
+
+end
+
+function get_item_weapon_model(item_id)
+
+    for i = 1, #weapons do
+
+        if weapons[i].item_id == item_id then
+            return weapons[i].item_weapon_model
+        end
+
+    end
+    return nil
+
+end
+
+local function setup_weapon_cache()
+
+    weapons = exports["em_fw"]:get_weapons()
+
+end
+
+Citizen.CreateThread(function()
+
+    Citizen.Wait(0)
+    setup_weapon_cache()
+
+
+end)

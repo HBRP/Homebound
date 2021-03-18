@@ -146,6 +146,6 @@ fn main() {
         delete_character, get_skin, create_skin, update_skin, create_outfit, 
         update_outfit, delete_outfit, get_active_outfit, get_outfit, get_all_outfit_meta_data, blips::get_blips, commands::can_use_command,
         storage::move_storage_item, storage::give_storage_item, storage::remove_storage_item, storage::get_storage,
-        items::get_item_modifiers]).launch();
+        items::get_item_modifiers, items::get_weapons]).launch();
 
 }
