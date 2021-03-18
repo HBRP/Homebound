@@ -16,6 +16,7 @@ pub struct Response {
 pub struct StorageItems {
 
     item_id: i32,
+    storage_item_id: i32,
     item_name: String,
     slot: i32,
     amount: i32
@@ -104,7 +105,7 @@ pub fn get_storage(storage_request: Json<GetStorageRequest>) -> String {
     };
     for row in client.query(
         "
-            SELECT SI.ItemId, II.ItemName, SI.Slot, SI.Amount 
+            SELECT SI.ItemId, SI.StorageItemId, II.ItemName, SI.Slot, SI.Amount 
             FROM Storage.Items SI 
             INNER JOIN Item.Items II ON II.ItemId = SI.ItemId
             WHERE 
@@ -114,6 +115,7 @@ pub fn get_storage(storage_request: Json<GetStorageRequest>) -> String {
         storage_response.storage_items.push(StorageItems {
 
             item_id: row.get("ItemId"),
+            storage_item_id: row.get("StorageItemId"),
             item_name: row.get("ItemName"),
             slot: row.get("Slot"),
             amount: row.get("Amount")
@@ -228,29 +230,30 @@ pub fn move_storage_item(storage_move_request: Json<ItemMoveRequest>) -> String 
     let storage_move_request = storage_move_request.into_inner();
     let mut client = db_postgres::get_connection().unwrap();
 
-    let row = client.query_one("SELECT StorageItemId, ItemId, Amount FROM Storage.Items WHERE StorageId = $1 AND Slot = $2 AND Deleted = 'f'", &[&storage_move_request.new_storage_id, &storage_move_request.new_slot_id]).unwrap();
-    if row.is_empty() {
+    let row = client.query_one("SELECT StorageItemId, ItemId, Amount FROM Storage.Items WHERE StorageId = $1 AND Slot = $2 AND Deleted = 'f'", &[&storage_move_request.new_storage_id, &storage_move_request.new_slot_id]);
+    match row {
+        Ok(row) => {
 
-        let row = client.query_one("INSERT INTO Storage.Items (StorageId, ItemId, Slot, Amount) VALUES ($1, $2, $3, $4) RETURNING StorageItemId", &[&storage_move_request.new_storage_id, &storage_move_request.item_id, &storage_move_request.new_slot_id, &storage_move_request.amount]).unwrap();
-        let created_storage_item_id = row.get("StorageItemId");
+                let other_item_id: i32 = row.get("ItemId");
+                let other_storage_item_id: i32 = row.get("StorageItemId");
+                let other_storage_amount: i32 = row.get("Amount");
+                if other_item_id == storage_move_request.item_id {
 
-        transfer_metadata(created_storage_item_id, storage_move_request.old_storage_item_id, &mut client);
-        remove_item(storage_move_request.old_storage_item_id, storage_move_request.amount, &mut client);
+                    return update_storage_slot(&storage_move_request, other_item_id, other_storage_amount, other_storage_item_id, &mut client);
 
-    } else {
+                } else {
 
-        //Existing item in slot.
-        let other_item_id: i32 = row.get("ItemId");
-        let other_storage_item_id: i32 = row.get("StorageItemId");
-        let other_storage_amount: i32 = row.get("Amount");
-        if other_item_id == storage_move_request.item_id {
+                    return switch_storage_spots(&storage_move_request, other_storage_item_id, &mut client);
 
-            return update_storage_slot(&storage_move_request, other_item_id, other_storage_amount, other_storage_item_id, &mut client);
+                }
 
-        } else {
+        },
+        Err(_err) => {
+            let row = client.query_one("INSERT INTO Storage.Items (StorageId, ItemId, Slot, Amount) VALUES ($1, $2, $3, $4) RETURNING StorageItemId", &[&storage_move_request.new_storage_id, &storage_move_request.item_id, &storage_move_request.new_slot_id, &storage_move_request.amount]).unwrap();
+            let created_storage_item_id = row.get("StorageItemId");
 
-            return switch_storage_spots(&storage_move_request, other_storage_item_id, &mut client);
-
+            transfer_metadata(created_storage_item_id, storage_move_request.old_storage_item_id, &mut client);
+            remove_item(storage_move_request.old_storage_item_id, storage_move_request.amount, &mut client);
         }
 
     }
