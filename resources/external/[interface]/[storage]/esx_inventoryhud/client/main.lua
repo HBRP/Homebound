@@ -331,22 +331,8 @@ function loadPlayerInventory()
     
 end
 
---[[
-
-                item_slot_from: itemData.slot,
-                item_slot_to: Number(other_item_id.substring(other_item_id.indexOf("-")+1)) + 1,
-                item_id: itemData.item_id,
-                storage_item_id: itemData.storage_item_id,
-                inventory_from: "main",
-                inventory_to: inventory_to
-
-]]
-    --old_storage_id, old_storage_item_id, new_storage_id, new_slot_id, item_id, amount
-
-
 RegisterNUICallback("MoveItem", function(data, cb)
 
-    print(json.encode(data))
     if data.inventory_from == "main" and data.inventory_to == "main" then
         exports["em_fw"]:move_item(left_storage_id, data.storage_item_id, left_storage_id, data.item_slot_to, data.item_id, data.amount)
     else
