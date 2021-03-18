@@ -109,7 +109,7 @@ pub fn get_storage(storage_request: Json<GetStorageRequest>) -> String {
             FROM Storage.Items SI 
             INNER JOIN Item.Items II ON II.ItemId = SI.ItemId
             WHERE 
-                SI.StorageId = $1 AND SI.Deleted = 'f'
+                SI.StorageId = $1 AND SI.Empty = 'f'
         ", &[&storage_request.storage_id]).unwrap() {
 
         storage_response.storage_items.push(StorageItems {
@@ -128,13 +128,6 @@ pub fn get_storage(storage_request: Json<GetStorageRequest>) -> String {
 
 }
 
-fn remove_item(storage_item_id: i32, amount: i32, client: &mut postgres::Client) {
-
-    client.execute("UPDATE Storage.Items SET amount = amount - $1 WHERE StorageItemId = $2", &[&amount, &storage_item_id]).unwrap();
-    client.execute("UPDATE Storage.Items SET Deleted = 't' WHERE StorageItemId = $1 AND Amount = 0", &[&storage_item_id]).unwrap();
-
-}
-
 fn transfer_metadata(created_storage_item_id: i32, storage_item_id: i32, client: &mut postgres::Client) {
 
     client.execute("UPDATE Storage.ItemMetaData SET StorageItemId = $1 WHERE StorageItemId = $2", &[&created_storage_item_id, &storage_item_id]).unwrap();
@@ -145,6 +138,44 @@ fn get_item_max_stack(item_id: i32, client: &mut postgres::Client) -> i32 {
 
     let row = client.query_one("SELECT ItemMaxStack FROM Item.Items WHERE ItemId = $1", &[&item_id]).unwrap();
     return row.get("ItemMaxStack");
+
+}
+
+fn does_slot_exist(storage_id: i32, slot: i32, client: &mut postgres::Client) -> bool {
+
+    let row = client.query_one("SELECT StorageItemId FROM Storage.Items WHERE StorageId = $1 AND Slot = $2;", &[&storage_id, &slot]);
+    match row {
+        Ok(_) => return true,
+        Err(_) => return false
+    }
+
+}
+
+fn create_slot(storage_id: i32, slot: i32, client: &mut postgres::Client) -> i32 {
+
+    let row = client.query_one("INSERT INTO Storage.Items (StorageId, ItemId, Slot, Amount) VALUES ($1, 0, $2, 0) RETURNING StorageItemId;", &[&storage_id, &slot]).unwrap();
+    return row.get("StorageItemId");
+
+}
+
+fn get_existing_storage_item_id(storage_id: i32, slot: i32, client: &mut postgres::Client) -> i32 {
+
+    let row = client.query_one("SELECT StorageItemId FROM Storage.Items WHERE StorageId = $1 AND Slot = $2;", &[&storage_id, &slot]).unwrap();
+    return row.get("StorageItemId");
+
+}
+
+fn set_storage_item(storage_item_id: i32, item_id: i32, amount: i32, client: &mut postgres::Client) {
+
+    client.execute("UPDATE Storage.Items SET Amount = $1, ItemId = $2, Empty = 'f' WHERE StorageItemId = $3", &[&amount, &item_id, &storage_item_id]).unwrap();
+    client.execute("UPDATE Storage.Items SET Empty = 't' WHERE StorageItemId = $1 AND Amount = 0", &[&storage_item_id]).unwrap();
+
+}
+
+fn change_item_amount(storage_item_id: i32, amount: i32, client: &mut postgres::Client) {
+
+    client.execute("UPDATE Storage.Items SET amount = amount + $1 WHERE StorageItemId = $2", &[&amount, &storage_item_id]).unwrap();
+    client.execute("UPDATE Storage.Items SET Empty = 't' WHERE StorageItemId = $1 AND Amount = 0", &[&storage_item_id]).unwrap();
 
 }
 
@@ -179,15 +210,15 @@ fn switch_storage_spots(storage_move_request: &ItemMoveRequest, other_storage_it
 
     if amount_in_original_spot == storage_move_request.amount {
 
-        client.execute("UPDATE Storage.Items SET Deleted = 't' WHERE StorageItemId = $1 or StorageItemId = $2", &[&other_storage_item_id, &storage_move_request.old_storage_item_id]).unwrap();
-        let row = client.query_one("INSERT INTO Storage.Items (StorageId, ItemId, Slot, Amount) SELECT $1, SI.ItemId, SI.Slot, SI.Amount FROM Storage.Items SI WHERE SI.StorageItemId = $2 RETURNING StorageItemId", &[&storage_move_request.old_storage_id, &other_storage_item_id]).unwrap();
-        let new_other_storage_item_id: i32 = row.get("StorageItemId");
+        let row = client.query_one("SELECT ItemId, Amount FROM Storage.Items WHERE StorageItemId = $1", &[&other_storage_item_id]).unwrap();
+        let other_item_id: i32 = row.get("ItemId");
+        let other_amount: i32  = row.get("Amount");
 
-        let row = client.query_one("INSERT INTO Storage.Items (StorageId, ItemId, Slot, Amount) SELECT $1, SI.ItemId, SI.Slot, SI.Amount FROM Storage.Items SI WHERE SI.StorageItemId = $2 RETURNING StorageItemId", &[&storage_move_request.new_storage_id, &storage_move_request.old_storage_item_id]).unwrap();
-        let new_old_storage_item_id: i32 = row.get("StorageItemId");
+        set_storage_item(other_storage_item_id, storage_move_request.item_id, storage_move_request.amount, client);
+        set_storage_item(storage_move_request.old_storage_item_id, other_item_id, other_amount, client);
 
-        transfer_metadata(new_other_storage_item_id, storage_move_request.old_storage_item_id, client);
-        transfer_metadata(new_old_storage_item_id, other_storage_item_id, client);
+        transfer_metadata(other_storage_item_id, storage_move_request.old_storage_item_id, client);
+        transfer_metadata(storage_move_request.old_storage_item_id, other_storage_item_id, client);
 
     } else {
 
@@ -211,8 +242,8 @@ fn update_storage_slot(storage_move_request: &ItemMoveRequest, other_item_id: i3
     let item_max_stack = get_item_max_stack(other_item_id, client);
     if other_storage_amount + storage_move_request.amount <= item_max_stack {
 
-        client.execute("UPDATE Storage.Items SET Amount = Amount + $1 WHERE StorageItemId = $2", &[&storage_move_request.amount, &other_storage_item_id]).unwrap();
-        remove_item(storage_move_request.old_storage_item_id, storage_move_request.amount, client);
+        change_item_amount(other_storage_item_id, storage_move_request.amount, client);
+        change_item_amount(storage_move_request.old_storage_item_id, -storage_move_request.amount, client);
 
     } else {
 
@@ -230,14 +261,21 @@ pub fn move_storage_item(storage_move_request: Json<ItemMoveRequest>) -> String 
     let storage_move_request = storage_move_request.into_inner();
     let mut client = db_postgres::get_connection().unwrap();
 
-    let row = client.query_one("SELECT StorageItemId, ItemId, Amount FROM Storage.Items WHERE StorageId = $1 AND Slot = $2 AND Deleted = 'f'", &[&storage_move_request.new_storage_id, &storage_move_request.new_slot_id]);
+    let row = client.query_one("SELECT StorageItemId, ItemId, Amount, Empty FROM Storage.Items WHERE StorageId = $1 AND Slot = $2", &[&storage_move_request.new_storage_id, &storage_move_request.new_slot_id]);
     match row {
         Ok(row) => {
 
             let other_item_id: i32 = row.get("ItemId");
             let other_storage_item_id: i32 = row.get("StorageItemId");
             let other_storage_amount: i32 = row.get("Amount");
-            if other_item_id == storage_move_request.item_id {
+            let empty: bool = row.get("Empty");
+
+            if empty {
+
+                set_storage_item(other_storage_item_id, storage_move_request.item_id, storage_move_request.amount, &mut client);
+                change_item_amount(storage_move_request.old_storage_item_id, -storage_move_request.amount, &mut client);
+
+            } else if other_item_id == storage_move_request.item_id {
 
                 return update_storage_slot(&storage_move_request, other_item_id, other_storage_amount, other_storage_item_id, &mut client);
 
@@ -249,11 +287,13 @@ pub fn move_storage_item(storage_move_request: Json<ItemMoveRequest>) -> String 
 
         },
         Err(_err) => {
-            let row = client.query_one("INSERT INTO Storage.Items (StorageId, ItemId, Slot, Amount) VALUES ($1, $2, $3, $4) RETURNING StorageItemId", &[&storage_move_request.new_storage_id, &storage_move_request.item_id, &storage_move_request.new_slot_id, &storage_move_request.amount]).unwrap();
-            let created_storage_item_id = row.get("StorageItemId");
 
+            let created_storage_item_id = create_slot(storage_move_request.new_storage_id, storage_move_request.new_slot_id, &mut client);
+
+            set_storage_item(created_storage_item_id, storage_move_request.item_id, storage_move_request.amount, &mut client);
             transfer_metadata(created_storage_item_id, storage_move_request.old_storage_item_id, &mut client);
-            remove_item(storage_move_request.old_storage_item_id, storage_move_request.amount, &mut client);
+            change_item_amount(storage_move_request.old_storage_item_id, -storage_move_request.amount, &mut client);
+
         }
 
     }
@@ -286,21 +326,31 @@ fn get_empty_slot(storage_id: i32, client: &mut postgres::Client) -> i32 {
 
 fn can_give_item_in_slot(item_give_request: &ItemGiveRequest, client: &mut postgres::Client) -> bool {
 
-    let row = client.query_one("SELECT Amount, ItemId FROM Storage.Items WHERE StorageId = $1 AND Slot = $2 AND Deleted = 'f'", &[&item_give_request.storage_id, &item_give_request.slot]).unwrap();
-    if row.is_empty() {
+    let row = client.query_one("SELECT Amount, ItemId, Empty FROM Storage.Items WHERE StorageId = $1 AND Slot = $2", &[&item_give_request.storage_id, &item_give_request.slot]);
 
-        return true;
+    match row {
 
-    } else {
+        Ok(row) => {
 
-        let max_stack = get_item_max_stack(item_give_request.item_id, client);
-        let slot_item_id: i32 = row.get("ItemId");
-        let slot_amount: i32  = row.get("Amount");
-        if slot_amount + item_give_request.amount > max_stack {
-            return false;
-        }
-        if slot_item_id != item_give_request.item_id {
-            return false;
+            let slot_empty: bool = row.get("Empty");
+            if slot_empty {
+                return true;
+            }
+
+            let max_stack = get_item_max_stack(item_give_request.item_id, client);
+            let slot_item_id: i32 = row.get("ItemId");
+            let slot_amount: i32  = row.get("Amount");
+
+            if slot_amount + item_give_request.amount > max_stack {
+                return false;
+            }
+            if slot_item_id !=  item_give_request.item_id {
+                return false;
+            }
+
+        },
+        Err(_) => {
+            return true;
         }
 
     }
@@ -338,18 +388,19 @@ pub fn give_storage_item(item_give_request: Json<ItemGiveRequest>) -> String {
 
     }
 
-    let row = client.query_one("INSERT INTO Storage.Items (StorageId, ItemId, Slot, Amount) VALUES ($1, $2, $3, $4) RETURNING StorageItemId;", &[&item_give_request.storage_id, &item_give_request.item_id, &slot, &item_give_request.amount]).unwrap();
+    if !does_slot_exist(item_give_request.storage_id, slot, &mut client) {
+        create_slot(item_give_request.storage_id, slot, &mut client);
+    }
 
-    give_response.storage_item_id = row.get("StorageItemId");
+    let storage_item_id = get_existing_storage_item_id(item_give_request.storage_id, slot, &mut client);
+    set_storage_item(storage_item_id, item_give_request.item_id, item_give_request.amount,  &mut client);
+    give_response.storage_item_id = storage_item_id;
 
     if item_give_request.storage_item_id != -1 {
-
         transfer_metadata(give_response.storage_item_id, item_give_request.storage_item_id, &mut client);
-
     }
 
     give_response.response.success = true;
-
     return serde_json::to_string(&give_response).unwrap();
 
 }
@@ -359,7 +410,7 @@ pub fn remove_storage_item(item_remove_request: Json<ItemRemoveRequest>) -> Stri
 
     let item_remove_request = item_remove_request.into_inner();
     let mut client = db_postgres::get_connection().unwrap();
-    remove_item(item_remove_request.storage_item_id, item_remove_request.amount, &mut client);
+    change_item_amount(item_remove_request.storage_item_id, -item_remove_request.amount, &mut client);
 
     return serde_json::to_string(&StorageResponse {
         response: Response {
