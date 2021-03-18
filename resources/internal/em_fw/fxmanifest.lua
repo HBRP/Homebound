@@ -74,9 +74,10 @@ export 'get_player_id'
 
 
 -- c_storage.lua
-export 'get_storage'
 export 'give_item'
+export 'get_storage'
 export 'remove_item'
+export 'move_item'
 
 -- c_server_callback.lua
 export 'trigger_server_callback'

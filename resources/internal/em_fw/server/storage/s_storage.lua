@@ -49,3 +49,17 @@ register_server_callback("em_fw:remove_item", function(source, callback, storage
     end)
 
 end)
+
+
+register_server_callback("em_fw:move_item", function(source, callback, old_storage_id, old_storage_item_id, new_storage_id, new_slot_id, item_id, amount)
+
+
+    local data = {old_storage_id = old_storage_id, old_storage_item_id = old_storage_item_id, new_storage_id = new_storage_id, new_slot_id = new_slot_id, item_id = item_id, amount = amount}
+    HttpPost("/Storage/Move", data, function(error_code, result_data, result_headers)
+
+        local temp = json.decode(result_data)
+        callback(temp)
+
+    end)
+
+end)
