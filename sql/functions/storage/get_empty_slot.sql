@@ -14,7 +14,7 @@ AS $function$
 
         INSERT INTO slot_ids 
         SELECT SI.Slot FROM Storage.Items SI
-        WHERE SI.StorageId = storage_id and SI.deleted ='f';
+        WHERE SI.StorageId = storage_id and SI.Empty ='f';
 
         SELECT 
             ST.StorageTypeSlots INTO max_slots 
