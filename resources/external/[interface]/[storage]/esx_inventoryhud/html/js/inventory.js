@@ -161,8 +161,12 @@ function inventorySetup(items) {
                 bgColor = "rgba(218, 165, 32, 0.4)";
             }
         }
+        var hot_bar_number = ""
+        if (index < 5) {
+            hot_bar_number = '<div class="item-hot-bar">' + String(index + 1) + '</div>'
+        }
 
-        $("#playerInventory").append('<div class="slot" style="background-color: ' + bgColor + ';"><div id="item-' + index + '" class="item" style = "background-image: url(\'img/items/' + item.name + '.png\')">' +
+        $("#playerInventory").append('<div class="slot" style="background-color: ' + bgColor + ';"><div id="item-' + index + '" class="item" style = "background-image: url(\'img/items/' + item.name + '.png\')">' + hot_bar_number + 
             '<div class="item-count">' + count + '</div> <div class="item-name">' + item.label + '</div> </div ><div class="item-name-bg"></div></div>');
         $('#item-' + index).data('item', item);
         $('#item-' + index).data('inventory', "main");

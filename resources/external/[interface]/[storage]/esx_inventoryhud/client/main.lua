@@ -248,22 +248,6 @@ function shouldSkipAccount(accountName)
     return false
 end
 
-local function get_item_in_slot(storage_items, slot)
-
-    for i = 1, #storage_items do
-
-        if slot == storage_items[i].slot then
-
-            return storage_items[i]
-
-        end
-
-    end
-
-    return nil
-
-end
-
 local left_storage_id  = nil
 local right_storage_id = nil
 
@@ -276,7 +260,7 @@ function loadPlayerInventory()
     items = {}
     for i = 1, max_storage_slots do
 
-        local item_in_slot = get_item_in_slot(storage_items, i)
+        local item_in_slot = exports["em_items"]:get_item_in_slot(storage_items, i)
         if item_in_slot ~= nil then
 
             local name = item_in_slot.item_name

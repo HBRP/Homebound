@@ -109,15 +109,27 @@ input[type=number] {
     background-color: rgba(128, 128, 128, 0.0);
 }
 
+
 .ui-draggable-dragging .item-name,
-.ui-draggable-dragging .item-count {
+.ui-draggable-dragging .item-count,
+.ui-draggable-dragging .item-hot-bar {
     display: none;
 }
+
 
 .item-count {
     position: absolute;
     top: 0;
     text-align: right;
+    width: 114px;
+    height: 20px;
+    z-index: 500;
+}
+
+.item-hot-bar {
+    position: absolute;
+    top: 0;
+    text-align: left;
     width: 114px;
     height: 20px;
     z-index: 500;
