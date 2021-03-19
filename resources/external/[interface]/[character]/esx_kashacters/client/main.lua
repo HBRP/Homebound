@@ -45,6 +45,7 @@ local function spawn_character(character)
     cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", pos.x,pos.y,pos.z+200, 300.00,0.00,0.00, 100.00, false, 0)
     PointCamAtCoord(cam, pos.x,pos.y,pos.z+2)
     SetCamActiveWithInterp(cam, cam2, 3700, true, true)
+    SetEntityCoords(GetPlayerPed(-1), pos.x, pos.y, pos.z)
     Citizen.Wait(3700)
     PlaySoundFrontend(-1, "Zoom_Out", "DLC_HEIST_PLANNING_BOARD_SOUNDS", 1)
     RenderScriptCams(false, true, 500, true, true)
@@ -55,6 +56,7 @@ local function spawn_character(character)
     DestroyCam(cam, true)
     IsChoosing = false
     DisplayHud(true)
+    SetEntityCoords(GetPlayerPed(-1), pos.x, pos.y, pos.z)
     TriggerEvent("esx_kashacters:spawned_character")
 
 end
