@@ -7,6 +7,12 @@ function get_character_storage_id()
 
 end
 
+function get_character_storage()
+
+    return get_storage(get_character_storage_id())
+
+end
+
 function get_character_id()
 
     return loaded_character["character"]["character_id"]

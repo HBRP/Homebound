@@ -9,8 +9,7 @@ local keys = {
 
 local function use_item_in_slot(slot)
 
-    local character_storage = exports["em_fw"]:get_storage(exports["em_fw"]:get_character_storage_id())
-    local storage_items = character_storage["storage_items"]
+    local storage_items = (exports["em_fw"]:get_character_storage())["storage_items"]
     local item_in_slot = get_item_in_slot(storage_items, slot)
 
     if item_in_slot == nil then
@@ -24,7 +23,6 @@ local function check_for_hotkeys()
 
     for i = 1, #keys do
         if IsDisabledControlJustReleased(0, keys[i].key) then
-            Citizen.Trace(keys[i].key)
             use_item_in_slot(keys[i].slot)
             break
         end

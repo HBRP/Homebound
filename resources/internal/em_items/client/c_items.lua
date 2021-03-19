@@ -54,6 +54,12 @@ function use_item(item_id, item_type_id, storage_item_id)
         apply_item_modifiers(item_id)
         exports["em_fw"]:remove_item(storage_item_id, 1)
 
+    elseif item_type_id == item_type_ids.WEAPON then
+
+        local hash = get_item_weapon_hash(item_id)
+        GiveWeaponToPed(PlayerPedId(), hash, 0, false, true)
+        SetCurrentPedWeapon(PlayerPedId(), hash, true)
+
     end
 
 end
@@ -70,6 +76,19 @@ function get_item_weapon_model(item_id)
 
         if weapons[i].item_id == item_id then
             return weapons[i].item_weapon_model
+        end
+
+    end
+    return nil
+
+end
+
+function get_item_weapon_hash(item_id)
+
+    for i = 1, #weapons do
+
+        if weapons[i].item_id == item_id then
+            return weapons[i].item_weapon_hash
         end
 
     end
