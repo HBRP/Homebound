@@ -4,6 +4,7 @@ games { 'gta5' }
 
 client_scripts {
 
+    'config.lua',
     'client/c_consumable_animations.lua',
     'client/c_hotbar.lua',
     'client/c_weapons.lua',
