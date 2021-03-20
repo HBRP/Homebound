@@ -228,36 +228,15 @@ RegisterNUICallback("GiveItem", function(data, cb)
     cb("ok")
 end)
 
-function shouldCloseInventory(itemName)
-    for index, value in ipairs(Config.CloseUiItems) do
-        if value == itemName then
-            return true
-        end
-    end
-
-    return false
-end
-
-function shouldSkipAccount(accountName)
-    for index, value in ipairs(Config.ExcludeAccountsList) do
-        if value == accountName then
-            return true
-        end
-    end
-
-    return false
-end
 
 local left_storage_id  = nil
 local right_storage_id = nil
 
-function loadPlayerInventory()
+local function get_items_from_storage(storage_container)
 
-    left_storage_id         = exports["em_fw"]:get_character_storage_id()
-    local inventory         = exports["em_fw"]:get_character_storage()
-    local storage_items     = inventory["storage_items"]
-    local max_storage_slots = inventory["storage_max_slots"]
-    items = {}
+    local storage_items     = storage_container["storage_items"]
+    local max_storage_slots = storage_container["storage_max_slots"]
+    local temp_items = {}
     for i = 1, max_storage_slots do
 
         local item_in_slot = exports["em_items"]:get_item_in_slot(storage_items, i)
@@ -268,7 +247,7 @@ function loadPlayerInventory()
                 name = exports["em_items"]:get_item_weapon_model(item_in_slot.item_id)
             end
 
-            table.insert(items, {
+            table.insert(temp_items, {
 
                 label           = string.upper(item_in_slot.item_name),
                 name            = name:gsub(" ", "_"),
@@ -285,7 +264,7 @@ function loadPlayerInventory()
 
             })
         else
-            table.insert(items, {
+            table.insert(temp_items, {
                 label           = "",
                 name            = "",
                 count           = 0,
@@ -300,8 +279,17 @@ function loadPlayerInventory()
                 slot            = i
             })
         end
-
     end
+    return temp_items
+end
+
+function loadPlayerInventory()
+
+    left_storage_id         = exports["em_fw"]:get_character_storage_id()
+    local storage_container = exports["em_fw"]:get_character_storage()
+
+    items = get_items_from_storage(storage_container)
+
     SendNUIMessage(
         {
             action = "setItems",
