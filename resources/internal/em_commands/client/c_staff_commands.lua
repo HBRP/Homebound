@@ -22,7 +22,6 @@ end, "Teleport to marker")
 
 register_command("give_item", function(source, args, raw)
 
-    Citizen.Trace(json.encode(args))
     local storage_id = exports["em_fw"]:get_character_storage_id()
     local response = exports["em_fw"]:give_item(storage_id, tonumber(args[1]), tonumber(args[2]), -1, -1)
 

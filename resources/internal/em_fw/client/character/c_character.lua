@@ -1,5 +1,6 @@
 
-local loaded_character = nil
+local loaded_character  = nil
+local character_storage = nil
 
 function get_character_storage_id()
 
@@ -9,7 +10,11 @@ end
 
 function get_character_storage()
 
-    return get_storage(get_character_storage_id())
+    if character_storage == nil then
+        character_storage = get_storage(get_character_storage_id())
+    end
+
+    return character_storage
 
 end
 
@@ -118,6 +123,7 @@ function load_character(character_id)
         TriggerEvent("em_fw:character_loaded")
 
     end, character_id)
+    character_storage = nil
 
     return loaded_character
 
@@ -138,3 +144,10 @@ function get_character_gender()
     return "male"
 
 end
+
+
+AddEventHandler('em_fw:inventory_change', function()
+
+    character_storage = nil
+
+end)

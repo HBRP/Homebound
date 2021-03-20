@@ -56,7 +56,6 @@ end, "Talk in local ooc")
 register_command_no_perms("pos", function(source, args, rawCommand)
 
     local coords = GetEntityCoords(PlayerPedId())
-    print(json.encode(coords))
     TriggerEvent('chat:addMessage', {
             template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(140, 140, 140, 0.6); border-radius: 3px; font-size:18px;"> (POS) X: {0}, Y: {1}, Z: {2} </div>',
             args = { coords.x, coords.y, coords.z }
