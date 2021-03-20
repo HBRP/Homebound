@@ -25,6 +25,7 @@ exports {
 dependencies {
 
     'em_fw',
-    'em_medical'
+    'em_medical',
+    't-notify'
 
 }
