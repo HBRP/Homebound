@@ -22,3 +22,15 @@ function get_weapons()
     return weapons
 
 end
+
+function get_items()
+
+    local items = nil
+    trigger_server_callback("em_fw:get_items", function(result)
+
+        items = result
+
+    end)
+    return items
+
+end
