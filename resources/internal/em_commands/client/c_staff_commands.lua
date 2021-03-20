@@ -26,7 +26,7 @@ register_command("give_item", function(source, args, raw)
     local response = exports["em_fw"]:give_item(storage_id, tonumber(args[1]), tonumber(args[2]), -1, -1)
 
     if response.response.success then
-        exports['t-notify']:Alert({ style = 'inform', message = 'Gave item' })
+        exports['t-notify']:Alert({ style = 'info', message = 'Gave item' })
     else
         exports['t-notify']:Alert({ style = 'error', message = 'Could not give item' })
     end
