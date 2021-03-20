@@ -7,6 +7,8 @@ local keys = {
     {key = 165, slot = 5}
 }
 
+local key_tab = 37
+
 local function use_item_in_slot(slot)
 
     local storage_items = (exports["em_fw"]:get_character_storage())["storage_items"]
@@ -27,6 +29,9 @@ local function check_for_hotkeys()
             break
         end
     end
+    if IsDisabledControlJustReleased(0, key_tab) then
+        SetPedCurrentWeaponVisible(PlayerPedId(), false, true, false, false)
+    end
 
 end
 
@@ -35,6 +40,7 @@ local function disable_hotkeys()
     for i = 1, #keys do
         DisableControlAction(0, keys[i].key, true)
     end
+    DisableControlAction(0, key_tab, true)
 
 end
 
