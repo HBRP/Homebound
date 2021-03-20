@@ -254,7 +254,7 @@ local right_storage_id = nil
 function loadPlayerInventory()
 
     left_storage_id         = exports["em_fw"]:get_character_storage_id()
-    local inventory         = exports["em_fw"]:get_storage(left_storage_id)
+    local inventory         = exports["em_fw"]:get_character_storage()
     local storage_items     = inventory["storage_items"]
     local max_storage_slots = inventory["storage_max_slots"]
     items = {}
