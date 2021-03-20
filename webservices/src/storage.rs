@@ -257,11 +257,32 @@ fn update_storage_slot(storage_move_request: &ItemMoveRequest, other_item_id: i3
 
 }
 
+fn get_amount_in_storage_item_id(storage_item_id: i32, client: &mut postgres::Client) -> i32 {
+
+
+    let row = client.query_one("SELECT Amount FROM Storage.Items WHERE StorageItemId = $1", &[&storage_item_id]).unwrap();
+    return row.get("Amount")
+
+}
+
 #[post("/Storage/Move", format = "json", data = "<storage_move_request>")]
 pub fn move_storage_item(storage_move_request: Json<ItemMoveRequest>) -> String {
 
     let storage_move_request = storage_move_request.into_inner();
     let mut client = db_postgres::get_connection().unwrap();
+
+    let real_amount_in_slot = get_amount_in_storage_item_id(storage_move_request.old_storage_item_id, &mut client);
+    if real_amount_in_slot < storage_move_request.amount {
+
+        let response = StorageResponse {
+            response: Response {
+                success: false,
+                message: "Not enough items in slot".to_string()
+            }
+        };
+        return serde_json::to_string(&response).unwrap();
+
+    }
 
     let row = client.query_one("SELECT StorageItemId, ItemId, Amount, Empty FROM Storage.Items WHERE StorageId = $1 AND Slot = $2", &[&storage_move_request.new_storage_id, &storage_move_request.new_slot_id]);
     match row {
