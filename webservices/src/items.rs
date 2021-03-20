@@ -22,6 +22,18 @@ struct Weapon {
 
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+struct Item {
+
+    item_id: i32,
+    item_type_id: i32,
+    item_name: String,
+    item_weight: f32,
+    item_max_stack: i32
+
+}
+
+
 #[get("/Item/Modifiers/<item_id>")]
 pub fn get_item_modifiers(item_id: i32) -> String {
 
@@ -64,5 +76,28 @@ pub fn get_weapons() -> String {
 
     }
     serde_json::to_string(&weapons).unwrap()
+
+}
+
+#[get("/Item/Items")]
+pub fn get_items() -> String {
+
+    let mut client = db_postgres::get_connection().unwrap();
+    let mut items: Vec<Item> = Vec::new();
+
+    for row in client.query("SELECT ItemId, ItemTypeId, ItemName, ItemWeight, ItemMaxStack FROM Item.Items;", &[]).unwrap() {
+
+        items.push(Item {
+
+            item_id        : row.get("ItemId"),
+            item_type_id   : row.get("ItemTypeId"),
+            item_name      : row.get("ItemName"),
+            item_weight    : row.get("ItemWeight"),
+            item_max_stack : row.get("ItemMaxStack")
+
+        });
+
+    }
+    serde_json::to_string(&items).unwrap()
 
 }
