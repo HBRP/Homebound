@@ -87,6 +87,25 @@ pub struct StorageResponse {
 
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+pub struct NearbyStashRequest {
+
+    x: f32,
+    y: f32,
+    z: f32
+
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Stash {
+
+    storage_id: i32,
+    x: f32,
+    y: f32,
+    z: f32
+
+}
+
 
 #[post("/Storage/Get", format = "json", data = "<storage_request>")]
 pub fn get_storage(storage_request: Json<GetStorageRequest>) -> String {
@@ -441,5 +460,28 @@ pub fn remove_storage_item(item_remove_request: Json<ItemRemoveRequest>) -> Stri
             message: "".to_string()
         }
     }).unwrap();
+
+}
+
+#[post("/Storage/GetStash", format = "json", data = "<nearby_stash_request>")]
+pub fn get_nearby_stashes(nearby_stash_request: Json<NearbyStashRequest>) -> String {
+
+    let nearby_stash_request = nearby_stash_request.into_inner();
+    let mut client = db_postgres::get_connection().unwrap();
+    let mut stashes: Vec<Stash> = Vec::new();
+
+    for row in client.query("SELECT StorageId, X, Y, Z FROM Storage.Stashes WHERE SQRT(POWER(X - $1, 2) + POWER(Y - $2, 2) + POWER(Z - $3, 2)) < 500;", &[&nearby_stash_request.x, &nearby_stash_request.y, &nearby_stash_request.z]).unwrap() {
+
+        stashes.push(Stash {
+
+            storage_id: row.get("StorageId"),
+            x: row.get("X"),
+            y: row.get("Y"),
+            z: row.get("Z")
+
+        });
+
+    }
+    serde_json::to_string(&stashes).unwrap()
 
 }
