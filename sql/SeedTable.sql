@@ -50,29 +50,33 @@ VALUES
     ('Ammo'),
     ('Attachment'),
     ('Bag'),
-    ('Misc');
+    ('Misc'),
+    ('Armour');
 
 INSERT INTO 
     Item.Items (ItemTypeId, ItemName, ItemWeight, ItemMaxStack)
 VALUES
-    (1, 'Sandwich', '.200', 1),
-    (2, 'Water', '.500', 1),
-    (3, 'Baseball Bat', '1.0', 1),
-    (3, 'Pistol', '.600', 1),
-    (4, '9mm Bullet', '.01406', 120),
-    (6, 'Backpack', '0.250', 1);
+    (1, 'Sandwich', 0.200, 1),
+    (2, 'Water', 0.500, 1),
+    (3, 'Baseball Bat', 1.0, 1),
+    (3, 'Pistol', 0.600, 1),
+    (4, '9mm round', 0.01406, 120),
+    (6, 'Backpack', 0.250, 1),
+    (8, 'Bulletproof vest', 1.0, 1);
 
 INSERT INTO
     Item.ModifierTypes (ItemModifierTypeName)
 VALUES
     ('Food'),
-    ('Liquid');
+    ('Liquid'),
+    ('Armour');
 
 INSERT INTO
     Item.Modifiers (ItemModifierTypeId, ItemId, ItemModifier)
 VALUES
     (1, 1, 50),
-    (2, 2, 50);
+    (2, 2, 50),
+    (3, 7, 75);
 
 INSERT INTO
     Item.Weapons (ItemId, ItemWeaponModel, ItemWeaponHash, ItemUsesAmmo, ItemAlertsCops)
