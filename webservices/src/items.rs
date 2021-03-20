@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use serde_json::{json};
 use crate::db_postgres;
 
 
@@ -17,6 +16,7 @@ struct Weapon {
     item_id: i32,
     item_weapon_model: String,
     item_weapon_hash: i32,
+    ammo_item_id: i32,
     item_uses_ammo: bool,
     item_alerts_cops: bool
 
@@ -49,13 +49,14 @@ pub fn get_weapons() -> String {
     let mut client = db_postgres::get_connection().unwrap();
     let mut weapons: Vec<Weapon> = Vec::new();
 
-    for row in client.query("SELECT ItemId, ItemWeaponModel, ItemWeaponHash, ItemUsesAmmo, ItemAlertsCops FROM Item.Weapons;", &[]).unwrap() {
+    for row in client.query("SELECT ItemId, ItemWeaponModel, ItemWeaponHash, AmmoItemId, ItemUsesAmmo, ItemAlertsCops FROM Item.Weapons;", &[]).unwrap() {
 
         weapons.push(Weapon {
 
             item_id          : row.get("ItemId"),
             item_weapon_model: row.get("ItemWeaponModel"),
             item_weapon_hash : row.get("ItemWeaponHash"),
+            ammo_item_id     : row.get("AmmoItemId"),
             item_uses_ammo   : row.get("ItemUsesAmmo"),
             item_alerts_cops : row.get("ItemAlertsCops")
 
