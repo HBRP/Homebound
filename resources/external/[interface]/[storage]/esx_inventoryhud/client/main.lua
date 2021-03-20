@@ -89,7 +89,15 @@ Citizen.CreateThread(
     end
 )
 
+
+local left_storage_id  = nil
+local right_storage_id = nil
+
 function openInventory()
+
+    left_storage_id  = nil
+    right_storage_id = nil
+
     loadPlayerInventory()
     isInInventory = true
     SendNUIMessage(
@@ -228,10 +236,6 @@ RegisterNUICallback("GiveItem", function(data, cb)
     cb("ok")
 end)
 
-
-local left_storage_id  = nil
-local right_storage_id = nil
-
 local function get_items_from_storage(storage_container)
 
     local storage_items     = storage_container["storage_items"]
@@ -285,18 +289,44 @@ end
 
 function loadPlayerInventory()
 
-    left_storage_id         = exports["em_fw"]:get_character_storage_id()
+    left_storage_id = exports["em_fw"]:get_character_storage_id()
     local storage_container = exports["em_fw"]:get_character_storage()
-
-    items = get_items_from_storage(storage_container)
 
     SendNUIMessage(
         {
             action = "setItems",
-            itemList = items
+            itemList = get_items_from_storage(storage_container)
         }
     )
     
+end
+
+local function load_secondary_inventory(storage_id)
+
+    local storage_container = exports["em_fw"]:get_storage(right_storage_id)
+    SendNUIMessage(
+    {
+        action = "setSecondInventoryItems",
+        itemList = get_items_from_storage(storage_container)
+    })
+
+end
+
+AddEventHandler("esx_inventoryhud:open_secondary_inventory", function(other_storage_id)
+
+    openInventory()
+    right_storage_id = other_storage_id
+    load_secondary_inventory(right_storage_id)
+
+end)
+
+local function reload_inventories()
+
+    loadPlayerInventory()
+    if right_storage_id ~= nil then
+        load_secondary_inventory(right_storage_id)
+    end
+
 end
 
 RegisterNUICallback("MoveItem", function(data, cb)
@@ -310,10 +340,19 @@ RegisterNUICallback("MoveItem", function(data, cb)
 
         end
 
+    elseif data.inventory_from == "main" and data.inventory_to == "other" then
+
+        local response = exports["em_fw"]:move_item(left_storage_id, data.storage_item_id, right_storage_id, data.item_slot_to, data.item_id, data.amount)
+        if not response.response.success then
+
+            exports['t-notify']:Alert({ style = 'error', message = response.response.message })
+
+        end
+        
     else
         Citizen.Trace("Unable to move\n")
     end
-    loadPlayerInventory()
+    reload_inventories()
     cb("ok")
 
 end)
