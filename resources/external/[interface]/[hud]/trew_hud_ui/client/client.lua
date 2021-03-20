@@ -214,10 +214,15 @@ end)
 -- Everything that neededs to be at WAIT 0
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(0)
+		Citizen.Wait(5)
 		local player = GetPlayerPed(-1)
 		local vehicle = GetVehiclePedIsIn(player, false)
 		local vehicleClass = GetVehicleClass(vehicle)
+
+		if not IsPedInAnyVehicle(player, false) then
+			Citizen.Wait(1000)
+			goto vehicle_goto
+		end
 
 		-- Vehicle Seatbelt
 		if IsPedInAnyVehicle(player, false) and GetIsVehicleEngineRunning(vehicle) then
@@ -271,6 +276,7 @@ Citizen.CreateThread(function()
 
 			TriggerEvent('trew_hud_ui:setCarSignalLights', vehicleSignalIndicator)
 		end
+		::vehicle_goto::
 	end
 end)
 
