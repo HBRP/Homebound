@@ -64,3 +64,17 @@ function donut(prop_name)
         end)
     end
 end
+
+function apply_armour_anim()
+
+    if not IsAnimated then
+
+        IsAnimated = true
+
+        
+        
+        IsAnimated = false
+
+    end
+
+end

@@ -13,6 +13,10 @@ local function apply_item_modifiers(item_id)
 
             exports["em_medical"]:add_stat("WATER", item_modifiers[i].item_modifier)
             
+        elseif item_modifiers[i].item_modifier_type_id == item_modifier_type_ids.ARMOUR then
+
+            AddArmourToPed(PlayerPedId(), item_modifiers[i].item_modifier)
+
         end
 
     end
@@ -30,6 +34,12 @@ function use_item(item_id, item_type_id, storage_item_id)
     elseif item_type_id == item_type_ids.LIQUID then
 
         drink()
+        apply_item_modifiers(item_id)
+        exports["em_fw"]:remove_item(storage_item_id, 1)
+
+    elseif item_type_id == item_type_ids.ARMOUR then
+
+        apply_armour_anim()
         apply_item_modifiers(item_id)
         exports["em_fw"]:remove_item(storage_item_id, 1)
 
