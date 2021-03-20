@@ -38,6 +38,7 @@ files {
 dependencies {
 
   "em_fw",
-  "em_items"
+  "em_items",
+  't-notify'
 
 }

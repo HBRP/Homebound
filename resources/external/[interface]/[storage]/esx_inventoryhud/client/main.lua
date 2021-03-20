@@ -271,7 +271,7 @@ function loadPlayerInventory()
             table.insert(items, {
 
                 label           = string.upper(item_in_slot.item_name),
-                name            = name,
+                name            = name:gsub(" ", "_"),
                 count           = item_in_slot.amount,
                 item_id         = item_in_slot.item_id,
                 item_type_id    = item_in_slot.item_type_id,
@@ -314,7 +314,14 @@ end
 RegisterNUICallback("MoveItem", function(data, cb)
 
     if data.inventory_from == "main" and data.inventory_to == "main" then
-        exports["em_fw"]:move_item(left_storage_id, data.storage_item_id, left_storage_id, data.item_slot_to, data.item_id, data.amount)
+
+        local response = exports["em_fw"]:move_item(left_storage_id, data.storage_item_id, left_storage_id, data.item_slot_to, data.item_id, data.amount)
+        if not response.response.success then
+
+            exports['t-notify']:Alert({ style = 'error', message = response.response.message })
+
+        end
+
     else
         Citizen.Trace("Unable to move\n")
     end
