@@ -18,7 +18,8 @@ exports {
     'get_item_weapon_model',
     'is_item_type_a_weapon',
     'is_item_type_ammo',
-    'get_item_in_slot'
+    'get_item_in_slot',
+    'register_item_use'
 
 }
 
