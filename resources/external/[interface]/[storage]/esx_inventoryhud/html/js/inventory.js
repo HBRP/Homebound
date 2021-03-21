@@ -178,10 +178,6 @@ window.addEventListener("message", function (event) {
 
             itemInventory = ui.draggable.data("inventory");
 
-            if (itemInventory == undefined || itemInventory == "second") {
-                return;
-            }
-
             var other_item_id = event.target.id
             var inventory_to = other_item_id.includes("Other") ? "other" : "main";
             var amount = shift_enabled == true ? Math.ceil(itemData.amount/2) : parseInt($("#count").val());
