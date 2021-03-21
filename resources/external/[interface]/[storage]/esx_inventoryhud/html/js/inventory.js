@@ -114,9 +114,91 @@ window.addEventListener("message", function (event) {
 
             }));
         }
-    })
+        })
     } else if (event.data.action == "setSecondInventoryItems") {
         secondInventorySetup(event.data.itemList);
+
+        $('.item').draggable({
+            helper: 'clone',
+            appendTo: 'body',
+            zIndex: 99999,
+            revert: 'invalid',
+            start: function (event, ui) {
+
+                if (disabled) {
+
+                    $(this).stop();
+                    return;
+
+                }
+                $(this).css('background-image', 'none');
+                itemData = $(this).data("item");
+                itemInventory = $(this).data("inventory");
+
+                if (itemInventory == "second" || !itemData.canRemove) {
+
+                    $("#drop").addClass("disabled");
+                    $("#give").addClass("disabled");
+
+                }
+
+                if (itemInventory == "second" || !itemData.usable) {
+
+                    $("#use").addClass("disabled");
+
+                }
+
+            },
+            stop: function () {
+                itemData = $(this).data("item");
+
+                if (itemData !== undefined && itemData.name !== undefined) {
+
+                    $(this).css('background-image', 'url(\'img/items/' + itemData.name + '.png\'');
+                    $("#drop").removeClass("disabled");
+                    $("#use").removeClass("disabled");
+                    $("#give").removeClass("disabled");
+
+                }
+            }
+        });
+
+        $(".item").droppable({
+        hoverClass: 'hoverControl',
+        drop: function (event, ui) {
+            itemData = ui.draggable.data("item");
+
+            if (itemData.label === "") {
+                return;
+            }
+
+            if (itemData == undefined || itemData.canRemove == undefined) {
+                return;
+            }
+
+            itemInventory = ui.draggable.data("inventory");
+
+            if (itemInventory == undefined || itemInventory == "second") {
+                return;
+            }
+
+            var other_item_id = event.target.id
+            var inventory_to = other_item_id.includes("Other") ? "other" : "main";
+            var amount = shift_enabled == true ? Math.ceil(itemData.amount/2) : parseInt($("#count").val());
+            $.post("http://esx_inventoryhud/MoveItem", JSON.stringify({
+
+                item_slot_from: itemData.slot,
+                item_slot_to: Number(other_item_id.substring(other_item_id.indexOf("-")+1)) + 1,
+                item_id: itemData.item_id,
+                storage_item_id: itemData.storage_item_id,
+                inventory_from: "main",
+                amount : amount,
+                inventory_to: inventory_to
+
+            }));
+        }
+        })
+
     } else if (event.data.action == "setInfoText") {
         $(".info-div").html(event.data.text);
     } else if (event.data.action == "nearPlayers") {
