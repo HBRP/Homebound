@@ -62,7 +62,8 @@ VALUES
     (3, 'Pistol', 0.600, 1),
     (4, '9mm round', 0.01406, 120),
     (6, 'Backpack', 0.250, 1),
-    (8, 'Bulletproof vest', 1.0, 1);
+    (8, 'Bulletproof vest', 1.0, 1),
+    (3, 'Flashbang', 0.5, 1);
 
 INSERT INTO
     Item.ModifierTypes (ItemModifierTypeName)
@@ -79,10 +80,11 @@ VALUES
     (3, 7, 75);
 
 INSERT INTO
-    Item.Weapons (ItemId, ItemWeaponModel, ItemWeaponHash, ItemUsesAmmo, ItemAlertsCops)
+    Item.Weapons (ItemId, ItemWeaponModel, ItemWeaponHash, ItemUsesAmmo, ItemAlertsCops, AmmoItemId)
 VALUES
-    (3, 'WEAPON_BAT', CAST(x'958A4A8F' as INT), '0', '0'),
-    (4, 'WEAPON_PISTOL', CAST(x'1B06D571' as INT), '1', '1');
+    (3, 'WEAPON_BAT', CAST(x'958A4A8F' as INT), '0', '0', 0),
+    (4, 'WEAPON_PISTOL', CAST(x'1B06D571' as INT), '1', '1', 4),
+    (8, 'WEAPON_FLASHBANG', CAST(x'FBA1FB98' as INT), 't', 'f', 8);
 
 INSERT INTO
     Groups.Types (GroupTypeName)
