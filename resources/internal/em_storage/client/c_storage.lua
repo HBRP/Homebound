@@ -1,7 +1,13 @@
 
 local nearby_stashes = {}
+local running_stash_loop = false
 
 local function stash_loop()
+
+    if running_stash_loop then
+        return
+    end
+    running_stash_loop = true
 
     local triggered_ui = false
     while true do
@@ -17,7 +23,8 @@ local function stash_loop()
                 if IsControlJustReleased(0, 38) then
                     TriggerEvent("esx_inventoryhud:open_secondary_inventory", nearby_stashes[i].storage_id)
                     TriggerEvent('cd_drawtextui:HideUI')
-                    Citizen.Wait(1000)
+                    running_stash_loop = false
+                    return
                 end
             end
         end
@@ -41,6 +48,12 @@ local function stash_refresh_loop()
     end
 
 end
+
+AddEventHandler("closed_inventory", function() 
+
+    Citizen.CreateThread(stash_loop)
+
+end)
 
 Citizen.CreateThread(stash_loop)
 Citizen.CreateThread(stash_refresh_loop)

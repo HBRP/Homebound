@@ -117,6 +117,7 @@ function closeInventory()
         }
     )
     SetNuiFocus(false, false)
+    TriggerEvent("closed_inventory")
 end
 
 RegisterNUICallback(
