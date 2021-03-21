@@ -463,14 +463,13 @@ pub fn remove_storage_item(item_remove_request: Json<ItemRemoveRequest>) -> Stri
 
 }
 
-#[post("/Storage/GetStash", format = "json", data = "<nearby_stash_request>")]
-pub fn get_nearby_stashes(nearby_stash_request: Json<NearbyStashRequest>) -> String {
+#[get("/Storage/NearbyStashes/<x>/<y>/<z>")]
+pub fn get_nearby_stashes(x: f32, y: f32, z: f32) -> String {
 
-    let nearby_stash_request = nearby_stash_request.into_inner();
     let mut client = db_postgres::get_connection().unwrap();
     let mut stashes: Vec<Stash> = Vec::new();
 
-    for row in client.query("SELECT StorageId, X, Y, Z FROM Storage.Stashes WHERE SQRT(POWER(X - $1, 2) + POWER(Y - $2, 2) + POWER(Z - $3, 2)) < 500;", &[&nearby_stash_request.x, &nearby_stash_request.y, &nearby_stash_request.z]).unwrap() {
+    for row in client.query("SELECT StorageId, X, Y, Z FROM Storage.Stashes WHERE SQRT(POWER(X - $1, 2) + POWER(Y - $2, 2) + POWER(Z - $3, 2)) < 250;", &[&x, &y, &z]).unwrap() {
 
         stashes.push(Stash {
 
