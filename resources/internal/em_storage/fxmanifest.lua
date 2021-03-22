@@ -4,7 +4,8 @@ games { 'gta5' }
 
 client_scripts {
 
-    'client/c_storage.lua'
+    'client/c_storage.lua',
+    'client/c_vehicle.lua'
 
 }
 

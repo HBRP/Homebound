@@ -12,7 +12,7 @@ exports["em_commands"]:register_command_no_perms("open_glovebox", function(sourc
     local ped_in_driver = GetPedInVehicleSeat(vehicle, -1)
     local ped_in_front_passenger = GetPedInVehicleSeat(vehicle, 0)
 
-    if ped ~= ped_in_driver or ped ~= ped_in_front_passenger then
+    if ped ~= ped_in_driver and ped ~= ped_in_front_passenger then
         return
     end
 
