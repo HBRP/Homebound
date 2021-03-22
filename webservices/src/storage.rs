@@ -106,12 +106,9 @@ pub struct Stash {
 
 }
 
+fn get_storage(storage_request: GetStorageRequest) -> String {
 
-#[post("/Storage/Get", format = "json", data = "<storage_request>")]
-pub fn get_storage(storage_request: Json<GetStorageRequest>) -> String {
-
-    let storage_request = storage_request.into_inner();
-    let mut client = db_postgres::get_connection().unwrap();
+      let mut client = db_postgres::get_connection().unwrap();
 
     let mut storage_response = GetStorageResponse {
         response: Response {
@@ -145,7 +142,13 @@ pub fn get_storage(storage_request: Json<GetStorageRequest>) -> String {
 
     }
     storage_response.response.success = true;
-    serde_json::to_string(&storage_response).unwrap()
+    serde_json::to_string(&storage_response).unwrap()  
+}
+
+#[post("/Storage/Get", format = "json", data = "<storage_request>")]
+pub fn get_storage_request(storage_request: Json<GetStorageRequest>) -> String {
+
+    get_storage(storage_request.into_inner())
 
 }
 
@@ -483,4 +486,59 @@ pub fn get_nearby_stashes(x: f32, y: f32, z: f32) -> String {
     }
     serde_json::to_string(&stashes).unwrap()
 
+}
+
+fn create_vehicle_storage(plate: String, storage_id: i32, client: &mut postgres::Client) {
+
+    client.execute("INSERT INTO Storage.Vehicle (StorageId, Plate) VALUES ($1, $2)", &[&storage_id, &plate]).unwrap();
+
+}
+
+pub fn create_storage(storage_type_name: String,  client: &mut postgres::Client) -> i32 {
+
+    let row = client.query_one(
+        "INSERT INTO 
+            Storage.Containers (StorageTypeId)
+        SELECT  
+            ST.StorageTypeId
+        FROM Storage.Types ST
+        WHERE 
+            ST.StorageTypeName = $1
+        RETURNING StorageId;", 
+    &[&storage_type_name]).unwrap();
+    return row.get("StorageId");
+
+}
+
+
+#[get("/Storage/VehicleStorage/<plate>/<location>")]
+pub fn get_vehicle_storage(plate: String, location: String) -> String {
+
+    let mut client = db_postgres::get_connection().unwrap();
+
+    let row = client.query_one(
+        "
+            SELECT SV.StorageId 
+            FROM Storage.Vehicle SV
+            INNER JOIN Storage.Containers SC ON SC.StorageId = SV.StorageId
+            INNER JOIN Storage.Types ST ON ST.StorageTypeId = SC.StorageTypeId
+            WHERE 
+                SV.Plate = $1 AND ST.StorageTypeName = $2
+            LIMIT 1;"
+        , &[&plate, &location]);
+
+    match row {
+        Ok(row) => {
+            return get_storage(GetStorageRequest {
+                storage_id: row.get("StorageId")
+            })
+        },
+        Err(_) => {
+            let storage_id = create_storage(location, &mut client);
+            create_vehicle_storage(plate, storage_id, &mut client);
+            return get_storage(GetStorageRequest {
+                storage_id: storage_id
+            });
+        }
+    }
 }
