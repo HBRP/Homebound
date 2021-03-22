@@ -4,13 +4,10 @@ Citizen.CreateThread(function()
     while true do
 
         Citizen.Wait(5)
-
         if GetVehiclePedIsIn(PlayerPedId(), false) == 0 then
             DisplayRadar(false)
-            Citizen.Wait(1000)
         else
             DisplayRadar(true)
-            Citizen.Wait(1000)
         end
 
     end
