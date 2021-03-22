@@ -106,6 +106,13 @@ pub struct Stash {
 
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+pub struct GetVehicleStorageIdResponse {
+
+    storage_id: i32
+
+}
+
 fn get_storage(storage_request: GetStorageRequest) -> String {
 
       let mut client = db_postgres::get_connection().unwrap();
@@ -541,4 +548,41 @@ pub fn get_vehicle_storage(plate: String, location: String) -> String {
             });
         }
     }
+}
+
+#[get("/Storage/VehicleStorageId/<plate>/<location>")]
+pub fn get_vehicle_storage_id(plate: String, location: String) -> String {
+
+    let mut client = db_postgres::get_connection().unwrap();
+    let mut vehicle_storage_id_response = GetVehicleStorageIdResponse {
+        storage_id: 0
+    };
+
+    let row = client.query_one(
+        "
+            SELECT SV.StorageId 
+            FROM Storage.Vehicle SV
+            INNER JOIN Storage.Containers SC ON SC.StorageId = SV.StorageId
+            INNER JOIN Storage.Types ST ON ST.StorageTypeId = SC.StorageTypeId
+            WHERE 
+                SV.Plate = $1 AND ST.StorageTypeName = $2
+            LIMIT 1;"
+        , &[&plate, &location]);
+
+    match row {
+        Ok(row) => {
+
+            vehicle_storage_id_response.storage_id = row.get("StorageId")
+
+        },
+        Err(_) => {
+
+            let storage_id = create_storage(location, &mut client);
+            create_vehicle_storage(plate, storage_id, &mut client);
+            vehicle_storage_id_response.storage_id = storage_id
+
+        }
+    }
+    serde_json::to_string(&vehicle_storage_id_response).unwrap()
+    
 }

@@ -85,6 +85,7 @@ export 'remove_item'
 export 'move_item'
 export 'get_nearby_stashes'
 export 'get_vehicle_storage'
+export 'get_vehicle_storage_id'
 
 -- c_items.lua
 export 'get_item_modifiers'
