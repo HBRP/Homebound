@@ -311,13 +311,19 @@ local function load_secondary_inventory(storage_id)
         itemList = get_items_from_storage(storage_container)
     })
 
+
 end
 
-AddEventHandler("esx_inventoryhud:open_secondary_inventory", function(other_storage_id)
+AddEventHandler("esx_inventoryhud:open_secondary_inventory", function(other_storage_id, name)
 
     openInventory()
     right_storage_id = other_storage_id
     load_secondary_inventory(right_storage_id)
+    SendNUIMessage(
+    {
+        action = "setInfoText",
+        text   = name
+    })
 
 end)
 
