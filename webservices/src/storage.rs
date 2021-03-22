@@ -584,5 +584,24 @@ pub fn get_vehicle_storage_id(plate: String, location: String) -> String {
         }
     }
     serde_json::to_string(&vehicle_storage_id_response).unwrap()
-    
+
+}
+
+
+#[put("/Storage/ResetTemp")]
+pub fn reset_temporary_storage() {
+
+    let mut client = db_postgres::get_connection().unwrap();
+    client.execute(
+        "
+            UPDATE Storage.Items SI Set Empty = 't' 
+            FROM Storage.Drop as SD 
+            where SD.StorageId = SI.StorageId;
+            
+            UPDATE Storage.Items SI Set Empty = 't' 
+            FROM Storage.Vehicle SV
+            where SV.StorageId = SI.StorageId;
+        "
+        , &[]).unwrap();
+
 }
