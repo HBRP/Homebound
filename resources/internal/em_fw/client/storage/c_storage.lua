@@ -63,3 +63,18 @@ function get_nearby_stashes()
     return nearby_stashes
 
 end
+
+
+function get_vehicle_storage(plate, location)
+
+    local storage = nil
+
+    trigger_server_callback("em_fw:get_vehicle_storage", function(result)
+
+        storage = result
+
+    end, plate, location)
+
+    return storage
+
+end
