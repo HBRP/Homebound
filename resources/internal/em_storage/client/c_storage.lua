@@ -21,7 +21,7 @@ local function stash_loop()
                 triggered_ui   = true
                 nearby_a_stash = true
                 if IsControlJustReleased(0, 38) then
-                    TriggerEvent("esx_inventoryhud:open_secondary_inventory", nearby_stashes[i].storage_id)
+                    TriggerEvent("esx_inventoryhud:open_secondary_inventory", nearby_stashes[i].storage_id, "Stash")
                     TriggerEvent('cd_drawtextui:HideUI')
                     running_stash_loop = false
                     return

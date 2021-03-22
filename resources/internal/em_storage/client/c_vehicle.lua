@@ -6,6 +6,7 @@ exports["em_commands"]:register_command_no_perms("open_glovebox", function(sourc
     local vehicle = GetVehiclePedIsIn(ped, false)
 
     if vehicle == 0 then
+        exports["t-notify"]:Alert({ style = "error", message = "Not in a vehicle" })
         return
     end
 
@@ -17,6 +18,6 @@ exports["em_commands"]:register_command_no_perms("open_glovebox", function(sourc
     end
 
     local storage_id = exports["em_fw"]:get_vehicle_storage_id(GetVehicleNumberPlateText(vehicle), "Glovebox")
-    TriggerEvent("esx_inventoryhud:open_secondary_inventory", storage_id)
+    TriggerEvent("esx_inventoryhud:open_secondary_inventory", storage_id, "Glovebox")
 
 end)

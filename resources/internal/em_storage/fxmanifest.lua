@@ -12,6 +12,7 @@ client_scripts {
 dependencies {
 
     'em_fw',
-    'em_commands'
+    'em_commands',
+    't-notify'
 
 }
