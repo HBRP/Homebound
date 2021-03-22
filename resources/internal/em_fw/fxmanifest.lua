@@ -14,7 +14,9 @@ client_scripts {
     'client/commands/c_commands.lua',
     'client/blips/c_blips.lua',
     'client/storage/c_storage.lua',
-    'client/items/c_items.lua'
+    'client/items/c_items.lua',
+    'client/enumerator/c_enumerator.lua',
+    'client/vehicle/c_vehicle.lua'
     
 }
 
@@ -91,6 +93,9 @@ export 'get_vehicle_storage_id'
 export 'get_item_modifiers'
 export 'get_weapons'
 export 'get_items'
+
+-- c_vehicle.lua
+export 'get_nearest_vehicle'
 
 -- c_server_callback.lua
 export 'trigger_server_callback'
