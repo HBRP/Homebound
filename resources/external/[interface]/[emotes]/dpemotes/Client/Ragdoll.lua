@@ -1,25 +1,25 @@
 local isInRagdoll = false
+local ped = nil
 
-Citizen.CreateThread(function()
- while true do
-    Citizen.Wait(10)
-    if isInRagdoll then
-      SetPedToRagdoll(GetPlayerPed(-1), 1000, 1000, 0, 0, 0, 0)
-    end
-  end
-end)
-
-Citizen.CreateThread(function()
+local function ragdoll_loop()
+    
     while true do
-    Citizen.Wait(0)
-    if IsControlJustPressed(2, Config.RagdollKeybind) and Config.RagdollEnabled and IsPedOnFoot(PlayerPedId()) then
+        Citizen.Wait(10)
         if isInRagdoll then
-            isInRagdoll = false
-        else
-            isInRagdoll = true
-            Wait(500)
+            SetPedToRagdoll(ped, 1000, 1000, 0, 0, 0, 0)
         end
     end
-  end
-end)
 
+end
+
+exports["em_commands"]:register_command_no_perms("ragdoll", function(source, args, raw)
+
+    isInRagdoll = not isInRagdoll
+    if not isInRagdoll then
+        return
+    end
+
+    ped = PlayerPedId()
+    Citizen.CreateThread(ragdoll_loop)
+
+end, "Toggle Ragdolling")
