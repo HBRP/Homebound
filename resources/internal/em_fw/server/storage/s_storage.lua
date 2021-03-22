@@ -89,3 +89,14 @@ register_server_callback("em_fw:get_vehicle_storage_id", function(source, callba
     end)
 
 end)
+
+
+Citizen.CreateThread(function()
+
+    Citizen.Wait(0)
+    HttpPut("/Storage/ResetTemp", nil, function(error_code, result_data, result_headers)
+
+        
+    end)
+
+end)

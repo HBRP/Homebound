@@ -597,11 +597,14 @@ pub fn reset_temporary_storage() {
             UPDATE Storage.Items SI Set Empty = 't' 
             FROM Storage.Drop as SD 
             where SD.StorageId = SI.StorageId;
-            
+        "
+        , &[]).unwrap();
+
+    client.execute(
+        "
             UPDATE Storage.Items SI Set Empty = 't' 
             FROM Storage.Vehicle SV
             where SV.StorageId = SI.StorageId;
-        "
-        , &[]).unwrap();
+        ", &[]).unwrap();
 
 }
