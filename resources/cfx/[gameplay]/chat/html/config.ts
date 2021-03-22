@@ -10,8 +10,8 @@ export default {
   fadeTimeout: 7000,
   suggestionLimit: 5,
   style: {
-    background: 'rgba(52, 73, 94, 0.7)',
-    width: '38vw',
+    background: 'rgba(52, 73, 94, 0.0)',
+    width: '25vw',
     height: '22%',
   }
 };
