@@ -19,11 +19,15 @@ function eat(prop_name)
             ClearPedSecondaryTask(ped)
             DeleteObject(prop)
         end)
+        exports["rprogress"]:Custom({
+            Async    = false,
+            Duration = 3000,
+            Label = "Eating food"
+        })
     end
 end
 
 function drink(prop_name)
-    Citizen.Trace("Here\n")
     if not IsAnimated then
         prop_name = prop_name or 'prop_ld_flow_bottle'
         IsAnimated = true
@@ -42,6 +46,11 @@ function drink(prop_name)
             ClearPedSecondaryTask(ped)
             DeleteObject(prop)
         end)
+        exports["rprogress"]:Custom({
+            Async    = false,
+            Duration = 3000,
+            Label = "Drinking"
+        })
     end
 end
 
