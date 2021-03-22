@@ -27,6 +27,7 @@ dependencies {
 
     'em_fw',
     'em_medical',
-    't-notify'
+    't-notify',
+    'rprogress'
 
 }

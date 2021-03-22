@@ -71,7 +71,11 @@ function apply_armour_anim()
 
         IsAnimated = true
 
-        
+        exports["rprogress"]:Custom({
+            Async    = false,
+            Duration = 5000,
+            Label = "Putting on armour"
+        })
         
         IsAnimated = false
 
