@@ -449,6 +449,7 @@ pub fn give_storage_item(item_give_request: Json<ItemGiveRequest>) -> String {
     give_response.storage_item_id = storage_item_id;
 
     if item_give_request.storage_item_id != -1 {
+        change_item_amount(item_give_request.storage_item_id, -item_give_request.amount, &mut client);
         transfer_metadata(give_response.storage_item_id, item_give_request.storage_item_id, &mut client);
     }
 
