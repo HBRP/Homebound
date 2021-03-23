@@ -675,3 +675,20 @@ pub fn get_free_drop_zone(x: f32, y: f32, z: f32) -> String {
     return thing;
 
 }
+
+#[put("/Storage/SetDropZoneInactive/<storage_id>")]
+pub fn set_drop_zon_to_inactive(storage_id: i32) -> String {
+
+    let mut client = db_postgres::get_connection().unwrap();
+    client.execute("UPDATE Storage.Drop SET Active = 'f' WHERE StorageId = $1", &[&storage_id]).unwrap();
+
+    let response = StorageResponse{
+        response: Response {
+            success: true,
+            message: "Successfully set to inactive".to_string()
+        }
+    };
+
+    serde_json::to_string(&response).unwrap()
+
+}
