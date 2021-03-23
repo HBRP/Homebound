@@ -16,6 +16,7 @@ client_scripts {
     'client/storage/c_storage.lua',
     'client/storage/c_stashes.lua',
     'client/storage/c_vehicle_storage.lua',
+    'client/storage/c_drop.lua',
     'client/items/c_items.lua',
     'client/enumerator/c_enumerator.lua',
     'client/vehicle/c_vehicle.lua'
@@ -36,6 +37,7 @@ server_scripts {
     'server/storage/s_storage.lua',
     'server/storage/s_stashes.lua',
     'server/storage/s_vehicle_storage.lua',
+    'server/storage/s_drop.lua',
     'server/items/s_items.lua'
 
 }
@@ -83,15 +85,22 @@ export 'get_blips'
 -- c_player.lua
 export 'get_player_id'
 
-
 -- c_storage.lua
 export 'give_item'
 export 'get_storage'
 export 'remove_item'
 export 'move_item'
+
+-- c_stashes.lua
 export 'get_nearby_stashes'
+
+-- c_vehicle_storage.lua
 export 'get_vehicle_storage'
 export 'get_vehicle_storage_id'
+
+-- c_drop.lua
+export 'get_nearby_drops'
+export 'get_free_drop_zone'
 
 -- c_items.lua
 export 'get_item_modifiers'
