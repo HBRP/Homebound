@@ -97,7 +97,7 @@ pub struct NearbyStashRequest {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct Stash {
+pub struct StorageLocation {
 
     storage_id: i32,
     x: f32,
@@ -107,7 +107,7 @@ pub struct Stash {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct GetVehicleStorageIdResponse {
+pub struct GetStorageIdResponse {
 
     storage_id: i32
 
@@ -477,11 +477,11 @@ pub fn remove_storage_item(item_remove_request: Json<ItemRemoveRequest>) -> Stri
 pub fn get_nearby_stashes(x: f32, y: f32, z: f32) -> String {
 
     let mut client = db_postgres::get_connection().unwrap();
-    let mut stashes: Vec<Stash> = Vec::new();
+    let mut stashes: Vec<StorageLocation> = Vec::new();
 
     for row in client.query("SELECT StorageId, X, Y, Z FROM Storage.Stashes WHERE SQRT(POWER(X - $1, 2) + POWER(Y - $2, 2) + POWER(Z - $3, 2)) < 250;", &[&x, &y, &z]).unwrap() {
 
-        stashes.push(Stash {
+        stashes.push(StorageLocation {
 
             storage_id: row.get("StorageId"),
             x: row.get("X"),
@@ -501,7 +501,7 @@ fn create_vehicle_storage(plate: String, storage_id: i32, client: &mut postgres:
 
 }
 
-pub fn create_storage(storage_type_name: String,  client: &mut postgres::Client) -> i32 {
+pub fn create_storage(storage_type_name: String, client: &mut postgres::Client) -> i32 {
 
     let row = client.query_one(
         "INSERT INTO 
@@ -554,7 +554,7 @@ pub fn get_vehicle_storage(plate: String, location: String) -> String {
 pub fn get_vehicle_storage_id(plate: String, location: String) -> String {
 
     let mut client = db_postgres::get_connection().unwrap();
-    let mut vehicle_storage_id_response = GetVehicleStorageIdResponse {
+    let mut vehicle_storage_id_response = GetStorageIdResponse {
         storage_id: 0
     };
 
@@ -606,5 +606,68 @@ pub fn reset_temporary_storage() {
             FROM Storage.Vehicle SV
             where SV.StorageId = SI.StorageId;
         ", &[]).unwrap();
+
+}
+
+#[get("/Storage/Drops/<x>/<y>/<z>")]
+pub fn get_nearby_drops(x: i32, y: i32, z: i32) -> String {
+
+    let mut client = db_postgres::get_connection().unwrap();
+    let mut drops: Vec<StorageLocation> = Vec::new();
+    for row in client.query("SELECT StorageId, X, Y, Z FROM Storage.Drop WHERE SQRT(POWER(X - $1, 2) + POWER(Y - $2, 2) + POWER(Z - $3, 2)) < 200 AND Active = 't';", &[&x, &y, &z]).unwrap() {
+
+        drops.push(StorageLocation {
+
+            storage_id: row.get("StorageId"),
+            x: row.get("X"),
+            y: row.get("Y"),
+            z: row.get("Z")
+
+        });
+
+    }
+    serde_json::to_string(&drops).unwrap()
+
+}
+
+fn create_drop(x: i32, y: i32, z: i32,  client: &mut postgres::Client) -> i32 {
+
+    let storage_id = create_storage("Drop".to_string(), client);
+    client.query_one("INSERT INTO Storage.Drop (StorageId, X, Y, Z, Active) VALUES ($1, $2, $3, $4, 't')", &[&storage_id, &x, &y, &z]).unwrap();
+    storage_id
+
+}
+
+#[get("/Storage/GetFreeDropZone/<x>/<y>/<z>")]
+pub fn get_free_drop_zone(x: i32, y: i32, z: i32) -> String {
+
+    let mut client = db_postgres::get_connection().unwrap();
+    let row = client.query_one("SELECT StorageId FROM Storage.Drop WHERE Active 'f' LIMIT 1", &[]);
+    let mut storage = GetStorageIdResponse {
+        storage_id: 0
+    };
+
+    match row {
+        Ok(row) => {
+
+            if row.is_empty() {
+
+                storage.storage_id = create_drop(x, y, z, &mut client);
+
+            } else {
+
+                storage.storage_id = row.get("StorageId");
+                client.execute("UPDATE Storage.Drop SET X = $1, Y = $2, Z = $3 WHERE StorageId = $4", &[&x, &y, &z, &storage.storage_id]).unwrap();
+
+            }
+
+        },
+        Err(_) => {
+            
+            storage.storage_id = create_drop(x, y, z, &mut client);
+
+        }
+    }
+    serde_json::to_string(&storage).unwrap()
 
 }
