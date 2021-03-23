@@ -114,7 +114,8 @@ VALUES
     ('Stash', 120),
     ('Trunk', 120),
     ('Glovebox', 40),
-    ('Bag', 30);
+    ('Bag', 30),
+    ('Drop', 20);
 
 INSERT INTO 
     Store.Types (StoreTypeName)
