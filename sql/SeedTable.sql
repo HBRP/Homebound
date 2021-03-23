@@ -126,32 +126,32 @@ VALUES
 INSERT INTO Blip.Blips
     (BlipType, BlipColor, BlipName, X, Y, Z, Static)
 VALUES
-    (73, 84, 'Clothing Store', 72.3, -1399.1, 28.4, 'f'),
-    (73, 84, 'Clothing Store', -703.8, -152.3, 36.4, 'f'),
-    (73, 84, 'Clothing Store', -167.9, -299.0, 38.7, 'f'),
-    (73, 84, 'Clothing Store', 428.7, -800.1, 28.5, 'f'),
-    (73, 84, 'Clothing Store', -829.4, -1073.7, 10.3, 'f'),
-    (73, 84, 'Clothing Store', -1447.8, -242.5, 48.8, 'f'),
-    (73, 84, 'Clothing Store', 11.6, 6514.2, 30.9, 'f'),
-    (73, 84, 'Clothing Store', 123.6, -219.4, 53.6, 'f'),
-    (73, 84, 'Clothing Store', 1696.3, 4829.3, 41.1, 'f'),
-    (73, 84, 'Clothing Store', 618.1, 2759.6, 41.1, 'f'),
-    (73, 84, 'Clothing Store', 1190.6, 2713.4, 37.2, 'f'),
-    (73, 84, 'Clothing Store', -1193.4, -772.3, 16.3, 'f'),
-    (73, 84, 'Clothing Store', -3172.5, 1048.1, 19.9, 'f'),
-    (73, 84, 'Clothing Store', -1108.4, 2708.9, 18.1, 'f'),
-    (71, 84, 'Barber Shop', -814.3, -183.8, 36.6, 'f'),
-    (71, 84, 'Barber Shop', 136.8, -1708.4, 28.3, 'f'),
-    (71, 84, 'Barber Shop', -1282.6, -1116.8, 6.0, 'f'),
-    (71, 84, 'Barber Shop', 1931.5, 3729.7, 31.8, 'f'),
-    (71, 84, 'Barber Shop', 1212.8, -472.9, 65.2, 'f'),
-    (71, 84, 'Barber Shop', -32.9, -152.3, 56.1, 'f'),
-    (71, 84, 'Barber Shop', -278.1, 6228.5, 30.7, 'f'),
-    (102, 84, 'Plastic Surgery Unit', 338.8, -1394.5, 31.5, 'f'),      -- Central Los Santos Medical Center
-    (102, 84, 'Plastic Surgery Unit', -874.7, -307.5, 38.5, 'f'),      -- Portola Trinity Medical Center
-    (102, 84, 'Plastic Surgery Unit', -676.7, 311.5, 82.5, 'f'),       -- Eclipse Medical Tower
-    (102, 84, 'Plastic Surgery Unit', -449.8, -341.0, 33.7, 'f'),      -- Mount Zonah Medical Center
-    (102, 84, 'Plastic Surgery Unit', 298.7, -584.6, 42.2, 'f'),       -- Pillbox Hill Medical Center
+    (73, 4, 'Clothing Store', 72.3, -1399.1, 28.4, 'f'),
+    (73, 4, 'Clothing Store', -703.8, -152.3, 36.4, 'f'),
+    (73, 4, 'Clothing Store', -167.9, -299.0, 38.7, 'f'),
+    (73, 4, 'Clothing Store', 428.7, -800.1, 28.5, 'f'),
+    (73, 4, 'Clothing Store', -829.4, -1073.7, 10.3, 'f'),
+    (73, 4, 'Clothing Store', -1447.8, -242.5, 48.8, 'f'),
+    (73, 4, 'Clothing Store', 11.6, 6514.2, 30.9, 'f'),
+    (73, 4, 'Clothing Store', 123.6, -219.4, 53.6, 'f'),
+    (73, 4, 'Clothing Store', 1696.3, 4829.3, 41.1, 'f'),
+    (73, 4, 'Clothing Store', 618.1, 2759.6, 41.1, 'f'),
+    (73, 4, 'Clothing Store', 1190.6, 2713.4, 37.2, 'f'),
+    (73, 4, 'Clothing Store', -1193.4, -772.3, 16.3, 'f'),
+    (73, 4, 'Clothing Store', -3172.5, 1048.1, 19.9, 'f'),
+    (73, 4, 'Clothing Store', -1108.4, 2708.9, 18.1, 'f'),
+    (71, 4, 'Barber Shop', -814.3, -183.8, 36.6, 'f'),
+    (71, 4, 'Barber Shop', 136.8, -1708.4, 28.3, 'f'),
+    (71, 4, 'Barber Shop', -1282.6, -1116.8, 6.0, 'f'),
+    (71, 4, 'Barber Shop', 1931.5, 3729.7, 31.8, 'f'),
+    (71, 4, 'Barber Shop', 1212.8, -472.9, 65.2, 'f'),
+    (71, 4, 'Barber Shop', -32.9, -152.3, 56.1, 'f'),
+    (71, 4, 'Barber Shop', -278.1, 6228.5, 30.7, 'f'),
+    (102, 4, 'Plastic Surgery Unit', 338.8, -1394.5, 31.5, 'f'),      -- Central Los Santos Medical Center
+    (102, 4, 'Plastic Surgery Unit', -874.7, -307.5, 38.5, 'f'),      -- Portola Trinity Medical Center
+    (102, 4, 'Plastic Surgery Unit', -676.7, 311.5, 82.5, 'f'),       -- Eclipse Medical Tower
+    (102, 4, 'Plastic Surgery Unit', -449.8, -341.0, 33.7, 'f'),      -- Mount Zonah Medical Center
+    (102, 4, 'Plastic Surgery Unit', 298.7, -584.6, 42.2, 'f'),       -- Pillbox Hill Medical Center
     (361, 4, 'Gas Station', 49.4187, 2778.793, 58.043, 'f'),
     (361, 4, 'Gas Station', 263.894, 2606.463, 44.983, 'f'),
     (361, 4, 'Gas Station', 1039.958, 2671.134, 39.550, 'f'),
