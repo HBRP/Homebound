@@ -55,9 +55,6 @@ end)
 Citizen.CreateThread(function()
 
     Citizen.Wait(0)
-    HttpPut("/Storage/ResetTemp", nil, function(error_code, result_data, result_headers)
-
-        
-    end)
+    HttpPut("/Storage/ResetTemp", nil, function(error_code, result_data, result_headers) end)
 
 end)

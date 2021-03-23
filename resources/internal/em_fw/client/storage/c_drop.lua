@@ -23,6 +23,7 @@ function get_free_drop_zone()
         drop_zone = result
 
     end, coords.x, coords.y, coords.z)
+    
     return drop_zone
 
 end

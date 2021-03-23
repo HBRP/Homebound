@@ -5,7 +5,14 @@ games { 'gta5' }
 client_scripts {
 
     'client/c_storage.lua',
-    'client/c_vehicle.lua'
+    'client/c_vehicle.lua',
+    'client/c_drop.lua'
+
+}
+
+exports {
+
+    'get_nearby_drop_storage_id'
 
 }
 

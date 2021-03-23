@@ -190,9 +190,9 @@ RegisterNUICallback("DropItem", function(data, cb)
         return
     end
 
-    if type(data.number) == "number" and math.floor(data.number) == data.number then
-        --TriggerServerEvent("esx:removeInventoryItem", data.item.type, data.item.name, data.number)
-    end
+    item = data["item"]
+    local drop_storage_id = exports["em_storage"]:get_nearby_drop_storage_id()
+    exports["em_fw"]:give_item(drop_storage_id, item.item_id, data["number"], item.storage_item_id, -1)
 
     Wait(250)
     loadPlayerInventory()

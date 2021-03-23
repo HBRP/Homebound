@@ -16,7 +16,7 @@ local function stash_loop()
         local ped_coords = GetEntityCoords(PlayerPedId())
         local nearby_a_stash = false
         for i = 1, #nearby_stashes do
-            if GetDistanceBetweenCoords(ped_coords.x, ped_coords.y, ped_coords.z, nearby_stashes[i].x, nearby_stashes[i].y, nearby_stashes[i].z, true) < 5 then
+            if GetDistanceBetweenCoords(ped_coords.x, ped_coords.y, ped_coords.z, nearby_stashes[i].x, nearby_stashes[i].y, nearby_stashes[i].z, true) < 2 then
                 TriggerEvent('cd_drawtextui:ShowUI', 'show', "Press [E] to access stash")
                 triggered_ui   = true
                 nearby_a_stash = true
