@@ -22,3 +22,15 @@ register_server_callback("em_fw:get_free_drop_zone", function(source, callback, 
     end)
 
 end)
+
+register_server_callback("em_fw:set_drop_zone_inactive", function(source, callback, storage_id)
+
+    local endpoint = string.format("/Storage/SetDropZoneInactive/%d", storage_id)
+    HttpPut(endpoint, nil, function(error_code, result_data, result_headers)
+
+        local temp = json.decode(result_data)
+        callback(temp)
+
+    end)
+
+end)

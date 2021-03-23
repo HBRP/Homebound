@@ -92,6 +92,7 @@ Citizen.CreateThread(
 
 local left_storage_id  = nil
 local right_storage_id = nil
+local right_inventory_name = nil
 
 function openInventory()
 
@@ -193,6 +194,7 @@ RegisterNUICallback("DropItem", function(data, cb)
     item = data["item"]
     local drop_storage_id = exports["em_storage"]:get_nearby_drop_storage_id()
     exports["em_fw"]:give_item(drop_storage_id, item.item_id, data["number"], item.storage_item_id, -1)
+    TriggerEvent("em_storage:manual_drop_refresh")
 
     Wait(250)
     loadPlayerInventory()
@@ -305,6 +307,18 @@ end
 local function load_secondary_inventory(storage_id)
 
     local storage_container = exports["em_fw"]:get_storage(right_storage_id)
+
+    if right_inventory_name == "Drop" and #storage_container["storage_items"] == 0 then
+
+        exports["em_fw"]:set_drop_zone_inactive(right_storage_id)
+        TriggerEvent("em_storage:manual_drop_refresh")
+        closeInventory()
+        right_storage_id = nil
+        right_inventory_name = nil
+        return
+
+    end
+
     SendNUIMessage(
     {
         action = "setSecondInventoryItems",
@@ -316,8 +330,10 @@ end
 
 AddEventHandler("esx_inventoryhud:open_secondary_inventory", function(other_storage_id, name)
 
+
     openInventory()
     right_storage_id = other_storage_id
+    right_inventory_name = name
     load_secondary_inventory(right_storage_id)
     SendNUIMessage(
     {
@@ -329,10 +345,10 @@ end)
 
 local function reload_inventories()
 
-    loadPlayerInventory()
     if right_storage_id ~= nil then
         load_secondary_inventory(right_storage_id)
     end
+    loadPlayerInventory()
 
 end
 

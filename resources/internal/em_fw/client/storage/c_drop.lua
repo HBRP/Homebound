@@ -23,7 +23,20 @@ function get_free_drop_zone()
         drop_zone = result
 
     end, coords.x, coords.y, coords.z)
-    
+
+    return drop_zone
+
+end
+
+function set_drop_zone_inactive(storage_id)
+
+    local drop_zone = nil
+    trigger_server_callback("em_fw:set_drop_zone_inactive", function(result)
+
+        drop_zone = result
+
+    end, storage_id)
+
     return drop_zone
 
 end
