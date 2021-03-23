@@ -657,7 +657,7 @@ pub fn get_free_drop_zone(x: i32, y: i32, z: i32) -> String {
             } else {
 
                 storage.storage_id = row.get("StorageId");
-                client.execute("UPDATE Storage.Drop SET X = $1, Y = $2, Z = $3 WHERE StorageId = $4", &[&x, &y, &z, &storage.storage_id]).unwrap();
+                client.execute("UPDATE Storage.Drop SET X = $1, Y = $2, Z = $3, Active = 't' WHERE StorageId = $4", &[&x, &y, &z, &storage.storage_id]).unwrap();
 
             }
 
