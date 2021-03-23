@@ -635,7 +635,7 @@ pub fn get_nearby_drops(x: f32, y: f32, z: f32) -> String {
 fn create_drop(x: f32, y: f32, z: f32,  client: &mut postgres::Client) -> i32 {
 
     let storage_id = create_storage("Drop".to_string(), client);
-    client.query_one("INSERT INTO Storage.Drop (StorageId, X, Y, Z, Active) VALUES ($1, $2, $3, $4, 't')", &[&storage_id, &x, &y, &z]).unwrap();
+    client.execute("INSERT INTO Storage.Drop (StorageId, X, Y, Z, Active) VALUES ($1, $2, $3, $4, 't')", &[&storage_id, &x, &y, &z]).unwrap();
     return storage_id;
 
 }
