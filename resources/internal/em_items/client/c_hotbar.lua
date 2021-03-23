@@ -17,7 +17,6 @@ local function use_item_in_slot(slot)
     if item_in_slot == nil then
         return
     end
-    --exports['t-notify']:Alert({ style = 'info', message = string.format('Using item "%s"', item_in_slot.item_name) })
     use_item(item_in_slot.item_id, item_in_slot.item_type_id, item_in_slot.storage_item_id)
 
 end

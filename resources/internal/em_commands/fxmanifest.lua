@@ -13,6 +13,6 @@ export 'register_command_no_perms'
 dependencies {
 
     'em_fw',
-    't-notify'
+    'swt_notifications'
     
 }
