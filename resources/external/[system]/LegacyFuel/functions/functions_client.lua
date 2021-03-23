@@ -40,22 +40,6 @@ function Round(num, numDecimalPlaces)
 	return math.floor(num * mult + 0.5) / mult
 end
 
-function CreateBlip(coords)
-	local blip = AddBlipForCoord(coords)
-
-	SetBlipSprite(blip, 361)
-	SetBlipScale(blip, 0.9)
-	SetBlipColour(blip, 4)
-	SetBlipDisplay(blip, 4)
-	SetBlipAsShortRange(blip, true)
-
-	BeginTextCommandSetBlipName("STRING")
-	AddTextComponentString("Gas Station")
-	EndTextCommandSetBlipName(blip)
-
-	return blip
-end
-
 function FindNearestFuelPump()
 	local coords = GetEntityCoords(PlayerPedId())
 	local fuelPumps = {}
