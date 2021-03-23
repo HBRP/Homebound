@@ -343,7 +343,7 @@ RegisterNUICallback("MoveItem", function(data, cb)
         local response = exports["em_fw"]:move_item(left_storage_id, data.storage_item_id, left_storage_id, data.item_slot_to, data.item_id, data.amount)
         if not response.response.success then
 
-            exports['t-notify']:Alert({ style = 'error', message = response.response.message })
+            exports['swt_notifications']:Negative("Storage", response.response.message, "top", 2000, true)
 
         end
 
@@ -352,7 +352,7 @@ RegisterNUICallback("MoveItem", function(data, cb)
         local response = exports["em_fw"]:move_item(left_storage_id, data.storage_item_id, right_storage_id, data.item_slot_to, data.item_id, data.amount)
         if not response.response.success then
 
-            exports['t-notify']:Alert({ style = 'error', message = response.response.message })
+            exports['swt_notifications']:Negative("Storage", response.response.message, "top", 2000, true)
 
         end
         

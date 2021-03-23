@@ -15,5 +15,6 @@ server_scripts {
 
 
 dependencies {
-    'em_commands'
+    'em_commands',
+    'swt_notifications'
 }

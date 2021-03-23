@@ -39,6 +39,6 @@ dependencies {
 
   "em_fw",
   "em_items",
-  't-notify'
+  'swt_notifications'
 
 }
