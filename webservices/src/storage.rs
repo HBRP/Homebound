@@ -600,6 +600,8 @@ pub fn reset_temporary_storage() {
         "
         , &[]).unwrap();
 
+    client.execute("UPDATE Storage.Drop SET Active = 'f'", &[]).unwrap();
+
     client.execute(
         "
             UPDATE Storage.Items SI Set Empty = 't' 
@@ -610,7 +612,7 @@ pub fn reset_temporary_storage() {
 }
 
 #[get("/Storage/Drops/<x>/<y>/<z>")]
-pub fn get_nearby_drops(x: i32, y: i32, z: i32) -> String {
+pub fn get_nearby_drops(x: f32, y: f32, z: f32) -> String {
 
     let mut client = db_postgres::get_connection().unwrap();
     let mut drops: Vec<StorageLocation> = Vec::new();
@@ -630,19 +632,19 @@ pub fn get_nearby_drops(x: i32, y: i32, z: i32) -> String {
 
 }
 
-fn create_drop(x: i32, y: i32, z: i32,  client: &mut postgres::Client) -> i32 {
+fn create_drop(x: f32, y: f32, z: f32,  client: &mut postgres::Client) -> i32 {
 
     let storage_id = create_storage("Drop".to_string(), client);
     client.query_one("INSERT INTO Storage.Drop (StorageId, X, Y, Z, Active) VALUES ($1, $2, $3, $4, 't')", &[&storage_id, &x, &y, &z]).unwrap();
-    storage_id
+    return storage_id;
 
 }
 
 #[get("/Storage/GetFreeDropZone/<x>/<y>/<z>")]
-pub fn get_free_drop_zone(x: i32, y: i32, z: i32) -> String {
+pub fn get_free_drop_zone(x: f32, y: f32, z: f32) -> String {
 
     let mut client = db_postgres::get_connection().unwrap();
-    let row = client.query_one("SELECT StorageId FROM Storage.Drop WHERE Active 'f' LIMIT 1", &[]);
+    let row = client.query_one("SELECT StorageId FROM Storage.Drop WHERE Active ='f' LIMIT 1", &[]);
     let mut storage = GetStorageIdResponse {
         storage_id: 0
     };
@@ -668,6 +670,7 @@ pub fn get_free_drop_zone(x: i32, y: i32, z: i32) -> String {
 
         }
     }
-    serde_json::to_string(&storage).unwrap()
+    let thing = serde_json::to_string(&storage).unwrap();
+    return thing;
 
 }
