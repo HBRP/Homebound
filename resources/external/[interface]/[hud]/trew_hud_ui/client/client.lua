@@ -103,7 +103,7 @@ Citizen.CreateThread(function()
 
 			-- Vehicle Fuel and Gear
 			local vehicleFuel
-			vehicleFuel = GetVehicleFuelLevel(vehicle)
+			vehicleFuel = exports["LegacyFuel"]:GetFuel(vehicle)
 
 			local vehicleGear = GetVehicleCurrentGear(vehicle)
 

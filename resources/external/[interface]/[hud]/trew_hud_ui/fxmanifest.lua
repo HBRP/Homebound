@@ -129,3 +129,9 @@ server_scripts {
 	'server/server.lua',
 	'server/milleniumfalcon.lua'
 }
+
+dependencies {
+
+	'LegacyFuel'
+
+}
