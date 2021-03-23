@@ -14,6 +14,8 @@ client_scripts {
     'client/commands/c_commands.lua',
     'client/blips/c_blips.lua',
     'client/storage/c_storage.lua',
+    'client/storage/c_stashes.lua',
+    'client/storage/c_vehicle_storage.lua',
     'client/items/c_items.lua',
     'client/enumerator/c_enumerator.lua',
     'client/vehicle/c_vehicle.lua'
@@ -32,6 +34,8 @@ server_scripts {
     'server/commands/s_commands.lua',
     'server/blips/s_blips.lua',
     'server/storage/s_storage.lua',
+    'server/storage/s_stashes.lua',
+    'server/storage/s_vehicle_storage.lua',
     'server/items/s_items.lua'
 
 }
