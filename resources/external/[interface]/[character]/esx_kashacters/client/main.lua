@@ -5,37 +5,33 @@ local cam = nil
 local cam2 = nil
 local function setup_character_ui()
 
-    exports.spawnmanager:setAutoSpawn(false)
+    Citizen.CreateThread(function()
 
-    DoScreenFadeOut(10)
-    while not IsScreenFadedOut() do
-        Citizen.Wait(4)
-    end
+        exports.spawnmanager:setAutoSpawn(false)
+        SetEntityCoords(GetPlayerPed(-1), -1047.87, -2768.70, 4.63)
+        SetTimecycleModifier('hud_def_blur')
+        FreezeEntityPosition(GetPlayerPed(-1), true)
+        cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", -1355.93,-1487.78,520.75, 300.00,0.00,0.00, 100.00, false, 0)
+        SetCamActive(cam, true)
+        RenderScriptCams(true, false, 1, true, true)
+        SetNetworkIdExistsOnAllMachines(NetworkGetNetworkIdFromEntity(PlayerPedId()), true)
+        NetworkFadeOutEntity(PlayerPedId(), true, false)
+        SetNuiFocus(true, true)
+        
+        SendNUIMessage({
+            action = "openui",
+            characters = exports["em_fw"]:get_all_characters()
+        })
 
-    SetEntityCoords(GetPlayerPed(-1), -1047.87, -2768.70, 4.63)
-    SetTimecycleModifier('hud_def_blur')
-    FreezeEntityPosition(GetPlayerPed(-1), true)
-    cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", -1355.93,-1487.78,520.75, 300.00,0.00,0.00, 100.00, false, 0)
-    SetCamActive(cam, true)
-    RenderScriptCams(true, false, 1, true, true)
-    SetNetworkIdExistsOnAllMachines(NetworkGetNetworkIdFromEntity(PlayerPedId()), true)
-    NetworkFadeOutEntity(PlayerPedId(), true, false)
-    SetNuiFocus(true, true)
-    
-    SendNUIMessage({
-        action = "openui",
-        characters = exports["em_fw"]:get_all_characters()
-    })
+    end)
 
 end
 
 local function spawn_character(character)
 
-    
     SetTimecycleModifier('default')
     local pos = character["position"];
     SetEntityCoords(GetPlayerPed(-1), pos.x, pos.y, pos.z)
-    DoScreenFadeIn(500)
     Citizen.Wait(500)
     cam2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", -1355.93,-1487.78,520.75, 300.00,0.00,0.00, 100.00, false, 0)
     PointCamAtCoord(cam2, pos.x,pos.y,pos.z+200)
@@ -70,39 +66,29 @@ end
 
 RegisterNUICallback("CharacterChosen", function(data, cb)
 
-    SetNuiFocus(false,false)
-    DoScreenFadeOut(500)
-
-    local character = exports["em_fw"]:load_character(data["character_id"])
-
-    while not IsScreenFadedOut() do
-        Citizen.Wait(4)
-    end
-    spawn_character(character)
-
+    Citizen.CreateThread(function()
+        SetNuiFocus(false,false)
+        local character = exports["em_fw"]:load_character(data["character_id"])
+        spawn_character(character)
+    end)
 
 end)
 
 RegisterNUICallback("CreateCharacter", function(data, cb)
 
-    SetNuiFocus(false, false)
-    local character_id = exports["em_fw"]:create_character(data)
-    local character = exports["em_fw"]:load_character(character_id)
-
-    spawn_character(character)
+    Citizen.CreateThread(function()
+        SetNuiFocus(false, false)
+        local character_id = exports["em_fw"]:create_character(data)
+        local character = exports["em_fw"]:load_character(character_id)
+        spawn_character(character)
+    end)
 
 end)
 
 RegisterNUICallback("DeleteCharacter", function(data, cb)
 
     SetNuiFocus(false,false)
-    DoScreenFadeOut(500)
-
     exports["em_fw"]:delete_character(data["character_id"])
-
-    while not IsScreenFadedOut() do
-        Citizen.Wait(4)
-    end
     cb("ok")
     reload_characters()
 
