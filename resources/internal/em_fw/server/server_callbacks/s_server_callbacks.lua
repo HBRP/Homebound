@@ -42,6 +42,14 @@ end)
 
 function register_server_callback(event, callback)
 
+    for i = 1, #server_callbacks do
+        if server_callbacks[i].event == event then
+            Citizen.Trace("Replacing identical server_callback " .. event .. "\n")
+            server_callbacks[i].callback = callback
+            return
+        end
+    end
+
     table.insert(server_callbacks, {event = event, callback = callback})
 
 end
