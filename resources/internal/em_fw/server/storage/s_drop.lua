@@ -16,7 +16,6 @@ register_server_callback("em_fw:get_free_drop_zone", function(source, callback, 
     local endpoint = string.format("/Storage/GetFreeDropZone/%.4f/%.4f/%.4f", x, y, z)
     HttpGet(endpoint, nil, function(error_code, result_data, result_headers)
 
-        Citizen.Trace(result_data .. "\n")
         local temp = json.decode(result_data)
         callback(temp)
 
