@@ -21,3 +21,9 @@ exports {
 	'GetFuel',
 	'SetFuel'
 }
+
+dependencies {
+
+    'cd_drawtextui'
+
+}

@@ -66,16 +66,22 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
+
+	local text_id = -1
+
 	while true do
 		Citizen.Wait(250)
-
 		local pumpObject, pumpDistance = FindNearestFuelPump()
 
 		if pumpDistance < 2.5 then
 			isNearPump = pumpObject
 			if not IsPedInAnyVehicle(PlayerPedId()) then
 				if not isFueling and GetVehicleFuelLevel(GetPlayersLastVehicle()) < 95 then
-					TriggerEvent('cd_drawtextui:ShowUI', 'show', "Press [E] to fill up gas tank")
+					if not exports["cd_drawtextui"]:is_in_queue(text_id) then
+						text_id = exports["cd_drawtextui"]:show_text("Press [E] to fill up gas tank")
+					end
+				elseif isFueling then
+					exports["cd_drawtextui"]:hide_text(text_id)
 				end
 			end
 			if Config.UseESX then
@@ -88,7 +94,9 @@ Citizen.CreateThread(function()
 				end
 			end
 		else
-			TriggerEvent('cd_drawtextui:HideUI')
+			if exports["cd_drawtextui"]:is_in_queue(text_id) then
+				exports["cd_drawtextui"]:hide_text(text_id)
+			end
 			isNearPump = false
 			Citizen.Wait(math.ceil(pumpDistance * 20))
 		end
@@ -146,7 +154,7 @@ AddEventHandler('fuel:refuelFromPump', function(pumpObject, ped, vehicle)
 	TaskPlayAnim(ped, "timetable@gardener@filling_can", "gar_ig_5_filling_can", 2.0, 8.0, -1, 50, 0, 0, 0, 0)
 
 	TriggerEvent('fuel:startFuelUpTick', pumpObject, ped, vehicle)
-	TriggerEvent('cd_drawtextui:ShowUI', 'show', "Press [E] to stop fueling")
+	local text_id = exports["cd_drawtextui"]:show_text("Press [E] to stop fueling")
 	while isFueling do
 		for _, controlIndex in pairs(Config.DisableKeys) do
 			DisableControlAction(0, controlIndex)
@@ -179,22 +187,29 @@ AddEventHandler('fuel:refuelFromPump', function(pumpObject, ped, vehicle)
 		Citizen.Wait(0)
 	end
 
-	TriggerEvent('cd_drawtextui:HideUI')
+	exports["cd_drawtextui"]:hide_text(text_id)
 	ClearPedTasks(ped)
 	RemoveAnimDict("timetable@gardener@filling_can")
 end)
 
 Citizen.CreateThread(function()
+	local vehicle_text_id = -1
+	local full_tank_id    = -1
 	while true do
 		local ped = PlayerPedId()
 		if not isFueling and ((isNearPump and GetEntityHealth(isNearPump) > 0) or (GetSelectedPedWeapon(ped) == 883325847 and not isNearPump)) then
 			if IsPedInAnyVehicle(ped) and GetPedInVehicleSeat(GetVehiclePedIsIn(ped), -1) == ped then
 				local pumpCoords = GetEntityCoords(isNearPump)
-
-				TriggerEvent('cd_drawtextui:ShowUI', 'show', "Exit the vehicle to refuel")
+				if not exports["cd_drawtextui"]:is_in_queue(vehicle_text_id) then
+					vehicle_text_id = exports["cd_drawtextui"]:show_text("Exit the vehicle to refuel")
+				end
 			else
 				local vehicle = GetPlayersLastVehicle()
 				local vehicleCoords = GetEntityCoords(vehicle)
+
+				if exports["cd_drawtextui"]:is_in_queue(vehicle_text_id) then
+					exports["cd_drawtextui"]:hide_text(vehicle_text_id)
+				end
 
 				if DoesEntityExist(vehicle) and GetDistanceBetweenCoords(GetEntityCoords(ped), vehicleCoords) < 2.5 then
 					if not DoesEntityExist(GetPedInVehicleSeat(vehicle, -1)) then
@@ -221,7 +236,9 @@ Citizen.CreateThread(function()
 						elseif not canFuel then
 							DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Config.Strings.JerryCanEmpty)
 						else
-							TriggerEvent('cd_drawtextui:ShowUI', 'show', "Full tank")
+							if not exports["cd_drawtextui"]:is_in_queue(full_tank_id) then
+								full_tank_id = exports["cd_drawtextui"]:show_text("Full tank")
+							end
 						end
 					end
 				elseif isNearPump then
@@ -273,6 +290,8 @@ Citizen.CreateThread(function()
 				end
 			end
 		else
+			exports["cd_drawtextui"]:hide_text(vehicle_text_id)
+			exports["cd_drawtextui"]:hide_text(full_tank_id)
 			Citizen.Wait(250)
 		end
 
