@@ -18,3 +18,11 @@ files {
 client_scripts {
 	'client/main.lua'
 }
+
+exports {
+
+    'show_text',
+    'hide_text',
+    'is_in_queue'
+
+}

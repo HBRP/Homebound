@@ -7,7 +7,7 @@ local bags = {}
 local function nearby_drop_loop()
 
     local nearby_a_drop   = false
-    local was_near_a_drop = false
+    local text_id = 0
     while true do
 
         Citizen.Wait(5)
@@ -15,17 +15,19 @@ local function nearby_drop_loop()
         local ped_coords = GetEntityCoords(PlayerPedId())
         for i = 1, #nearby_drops do
             if GetDistanceBetweenCoords(ped_coords.x, ped_coords.y, ped_coords.z, nearby_drops[i].x, nearby_drops[i].y, nearby_drops[i].z, true) < 2 then
-                TriggerEvent('cd_drawtextui:ShowUI', 'show', "Press [E] to open bag")
-                nearby_a_drop   = true
-                was_near_a_drop = true
+                if not exports["cd_drawtextui"]:is_in_queue(text_id) then
+                    text_id = exports["cd_drawtextui"]:show_text("Press [E] to open bag")
+                end
+                nearby_a_drop = true
                 if IsControlJustReleased(0, 38) then
                     TriggerEvent("esx_inventoryhud:open_secondary_inventory", nearby_drops[i].storage_id, "Drop")
                 end
             end
         end
-        if was_near_a_drop and not nearby_a_drop then
-            TriggerEvent('cd_drawtextui:HideUI')
-            was_near_a_drop = false
+        if not nearby_a_drop then
+            if exports["cd_drawtextui"]:is_in_queue(text_id) then
+                exports["cd_drawtextui"]:hide_text(text_id)
+            end
         end
     end
 

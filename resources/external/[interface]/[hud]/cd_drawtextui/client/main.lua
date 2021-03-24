@@ -12,3 +12,94 @@ AddEventHandler('cd_drawtextui:HideUI', function()
 		action = 'hide'
 	})
 end)
+
+local unique_id  = 0
+local active_id  = 0
+local active_ids = {}
+
+local inventory_open = false
+
+function show_text(text)
+
+    unique_id = unique_id + 1
+    table.insert(active_ids, {id = unique_id, text = text})
+    return unique_id 
+
+end
+
+function hide_text(id)
+
+    for i = 1, #active_ids do
+        if active_ids[i].id == id then
+            table.remove(active_ids, i)
+            break
+        end
+    end
+
+end
+
+function is_in_queue(id)
+
+    for i = 1, #active_ids do
+        if active_ids[i].id == id then
+            return true
+        end
+    end
+    return false
+
+end
+
+local function hide_everything()
+
+    SendNUIMessage({
+        action = 'hide'
+    })
+    active_id = 0
+
+end
+
+local function show_next_text_in_queue()
+
+    SendNUIMessage({
+        action = "show",
+        text = active_ids[1].text,
+    })
+    active_id = active_ids[1].id
+
+end
+
+Citizen.CreateThread(function()
+
+    while true do
+        Citizen.Wait(100)
+
+        if inventory_open then
+            goto continue
+        end
+
+        if #active_ids == 0 and active_id ~= 0 then
+            hide_everything()
+        elseif #active_ids > 0 and active_id ~= active_ids[1].id then
+            show_next_text_in_queue()
+        end
+        ::continue::
+    end
+
+end)
+
+
+AddEventHandler("closed_inventory", function() 
+
+    inventory_open = false
+    show_next_text_in_queue()
+
+end)
+
+AddEventHandler("opened_inventory", function() 
+
+    inventory_open = true
+    SendNUIMessage({
+        action = 'hide'
+    })
+    
+end)

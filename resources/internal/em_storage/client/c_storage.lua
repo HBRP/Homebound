@@ -9,7 +9,7 @@ local function stash_loop()
     end
     running_stash_loop = true
 
-    local triggered_ui = false
+    local ui_id = -1
     while true do
 
         Citizen.Wait(5)
@@ -17,20 +17,20 @@ local function stash_loop()
         local nearby_a_stash = false
         for i = 1, #nearby_stashes do
             if GetDistanceBetweenCoords(ped_coords.x, ped_coords.y, ped_coords.z, nearby_stashes[i].x, nearby_stashes[i].y, nearby_stashes[i].z, true) < 2 then
-                TriggerEvent('cd_drawtextui:ShowUI', 'show', "Press [E] to access stash")
-                triggered_ui   = true
+
+                if not exports["cd_drawtextui"]:is_in_queue(ui_id) then
+                    ui_id = exports["cd_drawtextui"]:show_text("Press [E] to access stash")
+                end
+
                 nearby_a_stash = true
                 if IsControlJustReleased(0, 38) then
                     TriggerEvent("esx_inventoryhud:open_secondary_inventory", nearby_stashes[i].storage_id, "Stash")
-                    TriggerEvent('cd_drawtextui:HideUI')
-                    running_stash_loop = false
-                    return
                 end
             end
         end
         if not nearby_a_stash then
-            if triggered_ui then
-                TriggerEvent('cd_drawtextui:HideUI')
+            if exports["cd_drawtextui"]:is_in_queue(ui_id) then
+                exports["cd_drawtextui"]:hide_text(ui_id)
             end
             Citizen.Wait(500)
         end
@@ -48,12 +48,6 @@ local function stash_refresh_loop()
     end
 
 end
-
-AddEventHandler("closed_inventory", function() 
-
-    Citizen.CreateThread(stash_loop)
-
-end)
 
 Citizen.CreateThread(stash_loop)
 Citizen.CreateThread(stash_refresh_loop)
