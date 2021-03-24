@@ -192,7 +192,14 @@ RegisterNUICallback("DropItem", function(data, cb)
     end
 
     item = data["item"]
+
+    if data["number"] > item.count then
+        exports['swt_notifications']:Negative("Storage", "Cannot drop more items than available in slot", "top", 3000, true)
+        return
+    end
+
     local drop_storage_id = exports["em_storage"]:get_nearby_drop_storage_id()
+
     exports["em_fw"]:give_item(drop_storage_id, item.item_id, data["number"], item.storage_item_id, -1)
     TriggerEvent("em_storage:manual_drop_refresh")
 
