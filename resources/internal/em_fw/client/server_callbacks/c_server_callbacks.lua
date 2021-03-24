@@ -23,7 +23,7 @@ function trigger_server_callback(event, callback, ...)
     TriggerServerEvent("em_fw:server_callback", event, callback_event.callback_id, ...)
     while not callback_event.event_returned do
 
-        Citizen.Wait(100)
+        Citizen.Wait(0)
 
     end
     callback(table.unpack(callback_event.arg))
