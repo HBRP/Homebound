@@ -91,7 +91,9 @@ end)
 AddEventHandler("closed_inventory", function() 
 
     inventory_open = false
-    show_next_text_in_queue()
+    if #active_ids > 0 then
+        show_next_text_in_queue()
+    end
 
 end)
 
