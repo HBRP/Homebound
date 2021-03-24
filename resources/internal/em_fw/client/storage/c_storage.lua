@@ -48,3 +48,14 @@ function move_item(old_storage_id, old_storage_item_id, new_storage_id, new_slot
     return move_item_response
 
 end
+
+function move_item_async(callback, old_storage_id, old_storage_item_id, new_storage_id, new_slot_id, item_id, amount)
+
+    trigger_server_callback_async("em_fw:move_item", function(result) 
+
+        callback(result)
+        TriggerEvent('em_fw:inventory_change')
+
+    end, old_storage_id, old_storage_item_id, new_storage_id, new_slot_id, item_id, amount)
+
+end

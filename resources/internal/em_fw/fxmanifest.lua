@@ -90,6 +90,7 @@ export 'give_item'
 export 'get_storage'
 export 'remove_item'
 export 'move_item'
+export 'move_item_async'
 
 -- c_stashes.lua
 export 'get_nearby_stashes'
@@ -113,5 +114,6 @@ export 'get_nearest_vehicle'
 
 -- c_server_callback.lua
 export 'trigger_server_callback'
+export 'trigger_server_callback_async'
 -- s_server_callback.lua
 server_export 'register_server_callback'

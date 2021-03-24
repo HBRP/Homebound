@@ -16,7 +16,7 @@ end
 
 function trigger_server_callback(event, callback, ...)
 
-    local callback_event = {callback_id = callback_id, callback = callback, event_returned = false, arg = nil}
+    local callback_event = {callback_id = callback_id, callback = callback, event_returned = false, arg = nil, async = false}
     table.insert(callbacks, callback_event)
     callback_id = callback_id + 1
 
@@ -31,11 +31,25 @@ function trigger_server_callback(event, callback, ...)
 
 end
 
+function trigger_server_callback_async(event, callback, ...)
+
+    local callback_event = {callback_id = callback_id, callback = callback, event_returned = false, arg = nil, async = true}
+    table.insert(callbacks, callback_event)
+    callback_id = callback_id + 1
+    TriggerServerEvent("em_fw:server_callback", event, callback_event.callback_id, ...)
+
+end
+
 RegisterNetEvent("em_fw:server_callback:response")
 AddEventHandler("em_fw:server_callback:response", function(callback_id, ...)
 
     local idx = find_callbacks_index(callback_id)
     callbacks[idx].arg = {...}
     callbacks[idx].event_returned = true
+
+    if callbacks[idx].async then
+        callbacks[idx].callback(table.unpack(callbacks[idx].arg))
+        table.remove(callbacks, idx)
+    end
 
 end)
