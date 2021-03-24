@@ -334,7 +334,7 @@ end
 AddEventHandler("esx_inventoryhud:open_secondary_inventory", function(other_storage_id, name)
 
     openInventory()
-    right_storage_id = other_storage_id
+    right_storage_id     = other_storage_id
     right_inventory_name = name
     load_secondary_inventory(right_storage_id)
     SendNUIMessage(
@@ -347,15 +347,16 @@ end)
 
 local function reload_inventories()
 
+    loadPlayerInventory()
     if right_storage_id ~= nil then
         load_secondary_inventory(right_storage_id)
     end
-    loadPlayerInventory()
 
 end
 
 RegisterNUICallback("MoveItem", function(data, cb)
 
+    Citizen.Trace("Moving Item\n")
     if data.inventory_from == "main" and data.inventory_to == "main" then
 
         local response = exports["em_fw"]:move_item(left_storage_id, data.storage_item_id, left_storage_id, data.item_slot_to, data.item_id, data.amount)
