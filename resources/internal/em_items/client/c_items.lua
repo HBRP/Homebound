@@ -13,7 +13,7 @@ local function fire_item_callback(item_id)
 
 end
 
-local function get_item_id_from_name(item_name)
+function get_item_id_from_name(item_name)
 
     for i = 1, #items_cache do
         if items_cache[i].item_name == item_name then
