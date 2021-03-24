@@ -78,16 +78,14 @@ local Keys = {
 
 isInInventory = false
 
-Citizen.CreateThread(
-    function()
-        while true do
-            Citizen.Wait(0)
-            if IsControlJustReleased(0, Config.OpenControl) and IsInputDisabled(0) then
-                openInventory()
-            end
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(5)
+        if IsControlJustReleased(0, Config.OpenControl) and IsInputDisabled(0) then
+            openInventory()
         end
     end
-)
+end)
 
 
 local left_storage_id  = nil
@@ -202,8 +200,6 @@ RegisterNUICallback("DropItem", function(data, cb)
 
     exports["em_fw"]:give_item(drop_storage_id, item.item_id, data["number"], item.storage_item_id, -1)
     TriggerEvent("em_storage:manual_drop_refresh")
-
-    Wait(250)
     loadPlayerInventory()
 
     cb("ok")
@@ -337,7 +333,6 @@ end
 
 AddEventHandler("esx_inventoryhud:open_secondary_inventory", function(other_storage_id, name)
 
-
     openInventory()
     right_storage_id = other_storage_id
     right_inventory_name = name
@@ -365,22 +360,18 @@ RegisterNUICallback("MoveItem", function(data, cb)
 
         local response = exports["em_fw"]:move_item(left_storage_id, data.storage_item_id, left_storage_id, data.item_slot_to, data.item_id, data.amount)
         if not response.response.success then
-
             exports['swt_notifications']:Negative("Storage", response.response.message, "top", 2000, true)
-
         end
 
     elseif data.inventory_from == "main" and data.inventory_to == "other" then
 
         local response = exports["em_fw"]:move_item(left_storage_id, data.storage_item_id, right_storage_id, data.item_slot_to, data.item_id, data.amount)
         if not response.response.success then
-
             exports['swt_notifications']:Negative("Storage", response.response.message, "top", 2000, true)
-
         end
         
     else
-        Citizen.Trace("Unable to move\n")
+        exports['swt_notifications']:Negative("Storage", "Unable to move item", "top", 2000, true)
     end
     reload_inventories()
     cb("ok")
