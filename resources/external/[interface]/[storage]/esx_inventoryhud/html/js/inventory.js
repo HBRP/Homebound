@@ -101,7 +101,12 @@ window.addEventListener("message", function (event) {
 
             var other_item_id = event.target.id
             var inventory_to = other_item_id.includes("Other") ? "other" : "main";
-            var amount = shift_enabled == true ? Math.ceil(itemData.amount/2) : parseInt($("#count").val());
+            var amount = shift_enabled == true ? Math.ceil(itemData.count/2) : parseInt($("#count").val());
+            if (amount == 0) {
+
+                amount = itemData.count;
+
+            }
             $.post("http://esx_inventoryhud/MoveItem", JSON.stringify({
 
                 item_slot_from: itemData.slot,
@@ -180,7 +185,10 @@ window.addEventListener("message", function (event) {
 
             var other_item_id = event.target.id
             var inventory_to = other_item_id.includes("Other") ? "other" : "main";
-            var amount = shift_enabled == true ? Math.ceil(itemData.amount/2) : parseInt($("#count").val());
+            var amount = shift_enabled == true ? Math.ceil(itemData.count/2) : parseInt($("#count").val());
+            if (amount == 0) {
+                amount = itemData.count;
+            }
             $.post("http://esx_inventoryhud/MoveItem", JSON.stringify({
 
                 item_slot_from: itemData.slot,
@@ -467,10 +475,14 @@ $(document).ready(function () {
             }
 
             if (itemData.canRemove) {
+                var amount = parseInt($("#count").val())
+                if (amount == 0) {
+                   amount = itemData.count 
+                }
                 disableInventory(300);
                 $.post("http://esx_inventoryhud/DropItem", JSON.stringify({
                     item: itemData,
-                    number: parseInt($("#count").val())
+                    number: amount
                 }));
             }
         }
