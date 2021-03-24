@@ -28,6 +28,7 @@ local function nearby_drop_loop()
             if exports["cd_drawtextui"]:is_in_queue(text_id) then
                 exports["cd_drawtextui"]:hide_text(text_id)
             end
+            Citizen.Wait(1000)
         end
     end
 

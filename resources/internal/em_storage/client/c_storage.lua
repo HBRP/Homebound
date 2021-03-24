@@ -21,10 +21,12 @@ local function stash_loop()
                 if not exports["cd_drawtextui"]:is_in_queue(ui_id) then
                     ui_id = exports["cd_drawtextui"]:show_text("Press [E] to access stash")
                 end
-
                 nearby_a_stash = true
                 if IsControlJustReleased(0, 38) then
                     TriggerEvent("esx_inventoryhud:open_secondary_inventory", nearby_stashes[i].storage_id, "Stash")
+                    exports["cd_drawtextui"]:hide_text(ui_id)
+                    running_stash_loop = false
+                    return
                 end
             end
         end
@@ -32,7 +34,7 @@ local function stash_loop()
             if exports["cd_drawtextui"]:is_in_queue(ui_id) then
                 exports["cd_drawtextui"]:hide_text(ui_id)
             end
-            Citizen.Wait(500)
+            Citizen.Wait(1000)
         end
     end
 
@@ -48,6 +50,12 @@ local function stash_refresh_loop()
     end
 
 end
+
+AddEventHandler("closed_inventory", function() 
+
+    Citizen.CreateThread(stash_loop)
+
+end)
 
 Citizen.CreateThread(stash_loop)
 Citizen.CreateThread(stash_refresh_loop)
