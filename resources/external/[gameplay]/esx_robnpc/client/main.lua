@@ -7,7 +7,10 @@ Citizen.CreateThread(function()
         local aiming, targetPed = GetEntityPlayerIsFreeAimingAt(PlayerId(-1))
         if aiming then
 
-            TaskSetBlockingOfNonTemporaryEvents(targetPed)
+            if GetVehiclePedIsIn(targetPed, false) == 0 then
+                TaskSetBlockingOfNonTemporaryEvents(targetPed)
+            end
+            
             if IsControlJustPressed(0, 38) then
                 local playerPed = GetPlayerPed(-1)
                 local pCoords = GetEntityCoords(playerPed, true)
