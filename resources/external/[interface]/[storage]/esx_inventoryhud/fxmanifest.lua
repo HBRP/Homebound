@@ -16,7 +16,6 @@ client_scripts {
   "client/player.lua",
   "client/shops.lua",
   "client/storage.lua",
-  "locales/*.lua",
   "config.lua"
 }
 
