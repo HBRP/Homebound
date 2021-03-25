@@ -113,6 +113,11 @@ pub struct GetStorageIdResponse {
 
 }
 
+pub struct PartiallyEmptySlots {
+    storage_item_id: i32,
+    amount_left_to_give: i32
+}
+
 fn get_storage(storage_request: GetStorageRequest) -> String {
 
       let mut client = db_postgres::get_connection().unwrap();
@@ -243,6 +248,37 @@ fn get_available_space_for_item(storage_id: i32, item_id: i32, client: &mut post
         } 
 
     }
+
+}
+
+fn get_partially_empty_space_for_item(storage_id: i32, item_id: i32, client: &mut postgres::Client) -> Vec<PartiallyEmptySlots> {
+
+    let mut slots: Vec<PartiallyEmptySlots> = Vec::new();
+
+    for row in client.query(
+        "
+            SELECT 
+                SI.StorageItemId, SI.Slot, (II.ItemMaxStack - SI.Amount) as AmountLeft
+            FROM 
+                Storage.Items SI
+            INNER JOIN Item.Items II ON II.ItemId = SI.ItemId
+            WHERE 
+                    SI.StorageId = $1
+                AND SI.ItemId    = $2
+                AND SI.Empty     = 'f'
+                AND SI.Amount < II.ItemMaxStack
+        ", &[&storage_id, &item_id]).unwrap() 
+    {
+
+        slots.push(PartiallyEmptySlots {
+
+            storage_item_id: row.get("StorageItemId"),
+            amount_left_to_give: row.get("AmountLeft")
+
+        });
+
+    }
+    return slots;
 
 }
 
@@ -437,7 +473,6 @@ pub fn give_storage_item(item_give_request: Json<ItemGiveRequest>) -> String {
     let item_give_request = item_give_request.into_inner();
     let mut client = db_postgres::get_connection().unwrap();
 
-    let slot;
     let mut give_response = ItemGiveResponse {
         response: Response {
             success: false,
@@ -446,40 +481,60 @@ pub fn give_storage_item(item_give_request: Json<ItemGiveRequest>) -> String {
         storage_item_id: -1
     };
 
-    if !get_available_space_for_item(item_give_request.storage_id, item_give_request.item_id, &mut client) < item_give_request.amount {
+    if get_available_space_for_item(item_give_request.storage_id, item_give_request.item_id, &mut client) < item_give_request.amount {
 
         give_response.response.message = "Not enough space for transfer".to_string();
         return serde_json::to_string(&give_response).unwrap();
 
     }
 
-    if item_give_request.slot == -1 || !can_give_item_in_slot(&item_give_request, &mut client) {
+    let mut amount_left_to_give = item_give_request.amount;
+    let partially_empty_slots = get_partially_empty_space_for_item(item_give_request.storage_id, item_give_request.item_id, &mut client);
 
-        slot = get_empty_slot(item_give_request.storage_id, &mut client);
-        if slot == -1 {
+    for partial_slot in partially_empty_slots {
 
-            give_response.response.message = "Could not find empty slot".to_string();
-            return serde_json::to_string(&give_response).unwrap();
-            
+        if amount_left_to_give == 0 {
+            break;
         }
 
-    } else {
-
-        slot = item_give_request.slot;
+        if partial_slot.amount_left_to_give > amount_left_to_give {
+            change_item_amount(partial_slot.storage_item_id, amount_left_to_give, &mut client);
+            amount_left_to_give = 0;
+        } else {
+            change_item_amount(partial_slot.storage_item_id, partial_slot.amount_left_to_give, &mut client);
+            amount_left_to_give -= partial_slot.amount_left_to_give;
+        }
 
     }
+    let max_stack = get_item_max_stack(item_give_request.item_id, &mut client);
 
-    if !does_slot_exist(item_give_request.storage_id, slot, &mut client) {
-        create_slot(item_give_request.storage_id, slot, &mut client);
+    while amount_left_to_give > 0 {
+
+        let slot = get_empty_slot(item_give_request.storage_id, &mut client);
+        if !does_slot_exist(item_give_request.storage_id, slot, &mut client) {
+            create_slot(item_give_request.storage_id, slot, &mut client);
+        }
+        let storage_item_id = get_existing_storage_item_id(item_give_request.storage_id, slot, &mut client);
+        if amount_left_to_give > max_stack {
+
+            set_storage_item(storage_item_id, item_give_request.item_id, max_stack,  &mut client);
+            amount_left_to_give -= max_stack;
+
+        } else {
+
+            set_storage_item(storage_item_id, item_give_request.item_id, amount_left_to_give,  &mut client);
+            amount_left_to_give = 0;
+
+        }
+        give_response.storage_item_id = storage_item_id;
+
     }
-
-    let storage_item_id = get_existing_storage_item_id(item_give_request.storage_id, slot, &mut client);
-    set_storage_item(storage_item_id, item_give_request.item_id, item_give_request.amount,  &mut client);
-    give_response.storage_item_id = storage_item_id;
 
     if item_give_request.storage_item_id != -1 {
+
         change_item_amount(item_give_request.storage_item_id, -item_give_request.amount, &mut client);
         transfer_metadata(give_response.storage_item_id, item_give_request.storage_item_id, &mut client);
+
     }
 
     give_response.response.success = true;
