@@ -98,8 +98,8 @@ local function remove_ammo(ammo_item_id, amount, storage_items)
                 exports["em_fw"]:remove_item(storage_items[i].storage_item_id, amount_left_to_remove)
                 break
             else
+                exports["em_fw"]:remove_item(storage_items[i].storage_item_id, amount_left_to_remove - storage_items[i].amount)
                 amount_left_to_remove = amount_left_to_remove - storage_items[i].amount
-                exports["em_fw"]:remove_item(storage_items[i].storage_item_id, amount)
             end
 
         end
