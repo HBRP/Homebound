@@ -168,6 +168,9 @@ AddEventHandler('em_fw:inventory_change', function()
 
     local ped = PlayerPedId()
     if equiped_weapon_hash ~= nil and equiped_weapon_hash == GetSelectedPedWeapon(ped) then
+        local storage_items = (exports["em_fw"]:get_character_storage())["storage_items"]
+        local ammo_amount   = get_ammo_for_weapon(get_weapon_ammo_item_id(equiped_weapon_item_id), storage_items)
+        SetPedAmmo(ped, equiped_weapon_hash, ammo_amount)
         return
     end
 
