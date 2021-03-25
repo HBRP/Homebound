@@ -42,8 +42,8 @@ VALUES
 INSERT INTO
     Item.Weapons (ItemId, ItemWeaponModel, ItemWeaponHash, ItemUsesAmmo, ItemAlertsCops, AmmoItemId)
 VALUES
-    (3, 'WEAPON_BAT', CAST(x'958A4A8F' as INT), '0', '0', 0),
-    (4, 'WEAPON_PISTOL', CAST(x'1B06D571' as INT), '1', '1', 4),
+    (3, 'WEAPON_BAT', CAST(x'958A4A8F' as INT), 'f', 'f', 0),
+    (4, 'WEAPON_PISTOL', CAST(x'1B06D571' as INT), 't', 'f', 4),
     (8, 'WEAPON_FLASHBANG', CAST(x'FBA1FB98' as INT), 't', 'f', 8);
 
 INSERT INTO
