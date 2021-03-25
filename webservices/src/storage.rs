@@ -210,6 +210,42 @@ fn change_item_amount(storage_item_id: i32, amount: i32, client: &mut postgres::
 
 }
 
+fn get_empty_slot(storage_id: i32, client: &mut postgres::Client) -> i32 {
+
+    let row = client.query_one("select storage.get_empty_slot($1) as Slot;", &[&storage_id]);
+
+    match row {
+        Ok(row) => {
+            if row.is_empty() {
+                return -1;
+            }
+            return row.get("Slot");
+        },
+        Err(err) => { println!("{:?}", err); return -1; }
+    };
+
+}
+
+fn get_available_space_for_item(storage_id: i32, item_id: i32, client: &mut postgres::Client) -> i32 {
+
+    let row = client.query_one("select storage.get_available_space_for_item($1, $2) as AvailableSpace;", &[&storage_id, &item_id]);
+    match row {
+
+        Ok(row) => {
+            if row.is_empty() {
+                return -1;
+            }
+            return row.get("AvailableSpace");
+        },
+        Err(err) => {
+            println!("{:?}", err);
+            return -1;
+        } 
+
+    }
+
+}
+
 fn get_storage_max_slots(storage_id: i32,  client: &mut postgres::Client) -> i32 {
 
     let row = client.query_one(
@@ -360,22 +396,6 @@ pub fn move_storage_item(storage_move_request: Json<ItemMoveRequest>) -> String 
 
 }
 
-fn get_empty_slot(storage_id: i32, client: &mut postgres::Client) -> i32 {
-
-    let row = client.query_one("select storage.get_empty_slot($1) as Slot;", &[&storage_id]);
-
-    match row {
-        Ok(row) => {
-            if row.is_empty() {
-                return -1;
-            }
-            return row.get("Slot");
-        },
-        Err(err) => { println!("{:?}", err); return -1; }
-    };
-
-}
-
 fn can_give_item_in_slot(item_give_request: &ItemGiveRequest, client: &mut postgres::Client) -> bool {
 
     let row = client.query_one("SELECT Amount, ItemId, Empty FROM Storage.Items WHERE StorageId = $1 AND Slot = $2", &[&item_give_request.storage_id, &item_give_request.slot]);
@@ -426,12 +446,21 @@ pub fn give_storage_item(item_give_request: Json<ItemGiveRequest>) -> String {
         storage_item_id: -1
     };
 
+    if !get_available_space_for_item(item_give_request.storage_id, item_give_request.item_id, &mut client) < item_give_request.amount {
+
+        give_response.response.message = "Not enough space for transfer".to_string();
+        return serde_json::to_string(&give_response).unwrap();
+
+    }
+
     if item_give_request.slot == -1 || !can_give_item_in_slot(&item_give_request, &mut client) {
 
         slot = get_empty_slot(item_give_request.storage_id, &mut client);
         if slot == -1 {
+
             give_response.response.message = "Could not find empty slot".to_string();
             return serde_json::to_string(&give_response).unwrap();
+            
         }
 
     } else {
