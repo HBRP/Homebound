@@ -19,6 +19,9 @@ register_server_callback("em_fw:give_item", function(source, callback, storage_i
     HttpPost("/Storage/Give", data, function(error_code, result_data, result_headers)
 
         local temp = json.decode(result_data)
+        if not temp.response.success then
+            Citizen.Trace(temp.response.message .. "\n")
+        end
         callback(temp)
 
     end)
@@ -45,6 +48,9 @@ register_server_callback("em_fw:move_item", function(source, callback, old_stora
     HttpPost("/Storage/Move", data, function(error_code, result_data, result_headers)
 
         local temp = json.decode(result_data)
+        if not temp.response.success then
+            Citizen.Trace(temp.response.message .. "\n")
+        end
         callback(temp)
 
     end)
