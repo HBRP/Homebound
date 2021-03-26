@@ -140,7 +140,9 @@ VALUES
     (1, 'Clothing Store', 1190.6, 2713.4, 37.2),
     (1, 'Clothing Store', -1193.4, -772.3, 16.3),
     (1, 'Clothing Store', -3172.5, 1048.1, 19.9),
-    (1, 'Clothing Store', -1108.4, 2708.9, 18.1);
+    (1, 'Clothing Store', -1108.4, 2708.9, 18.1),
+    (1, 'Clothing Picker', 300.246, -598.77, 43.27), -- pillbox
+    (1, 'Clothing Picker', 455.41, -990.875, 30.689); --mrpd
 
 INSERT INTO 
     Store.Types (StoreTypeName)
