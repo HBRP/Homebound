@@ -13,6 +13,7 @@ mod blips;
 mod commands;
 mod items;
 mod store;
+mod customization;
 
 #[post("/Player/Create", format = "json", data = "<player_credentials>")]
 fn player_create(player_credentials: Json<player::PlayerCredentials>) -> String {
@@ -149,6 +150,7 @@ fn main() {
         storage::move_storage_item, storage::give_storage_item, storage::remove_storage_item, storage::get_storage_request, storage::get_nearby_stashes, storage::get_vehicle_storage, storage::get_vehicle_storage_id, storage::reset_temporary_storage,
         storage::get_nearby_drops, storage::get_free_drop_zone, storage::set_drop_zone_to_inactive,
         items::get_item_modifiers, items::get_weapons, items::get_items,
-        store::get_all_stores, store::get_nearby_stores]).launch();
+        store::get_all_stores, store::get_nearby_stores,
+        customization::get_all_customization_points, customization::get_nearby_customization_points]).launch();
 
 }

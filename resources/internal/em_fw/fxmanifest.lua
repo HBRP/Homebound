@@ -20,7 +20,8 @@ client_scripts {
     'client/items/c_items.lua',
     'client/enumerator/c_enumerator.lua',
     'client/vehicle/c_vehicle.lua',
-    'client/store/c_store.lua'
+    'client/store/c_store.lua',
+    'client/customization/c_customization.lua'
     
 }
 
@@ -40,7 +41,8 @@ server_scripts {
     'server/storage/s_vehicle_storage.lua',
     'server/storage/s_drop.lua',
     'server/items/s_items.lua',
-    'server/store/s_store.lua'
+    'server/store/s_store.lua',
+    'server/customization/s_customization.lua'
 
 }
 
@@ -116,6 +118,9 @@ export 'get_nearest_vehicle'
 
 -- c_store.lua
 export 'get_nearby_stores_async'
+
+-- c_customization.lua
+export 'get_nearby_customization_points_async'
 
 -- c_server_callback.lua
 export 'trigger_server_callback'

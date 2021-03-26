@@ -5,20 +5,13 @@ local store_type_ids = {
 
     CONVENIENCE  = 1,
     BLACK_MARKET = 2,
-    PAWN_SHOP    = 3,
-    CLOTHING     = 4,
-    BARBER       = 5,
-    SURGEON      = 6
+    PAWN_SHOP    = 3
 
 }
 
 local function open_selected_store(store)
 
-    if store.store_type_id == store_type_ids.CLOTHING then
-
-        open_clothing_store()  
-
-    end
+    Citizen.Trace("open_selected_store : STUB")
 
 end
 
