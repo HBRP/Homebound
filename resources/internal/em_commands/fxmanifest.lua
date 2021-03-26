@@ -13,6 +13,7 @@ export 'register_command_no_perms'
 dependencies {
 
     'em_fw',
-    'swt_notifications'
+    'swt_notifications',
+    'fivem-appearance'
     
 }

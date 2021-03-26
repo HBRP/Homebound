@@ -70,27 +70,25 @@ RegisterNUICallback('close', function(data, cb)
 end)
 
 RegisterNUICallback('save', function(data, cb)
-    data['clothes'] = nil
 
-    TriggerEvent('cui_character:getCurrentClothes', function(currentClothes)
-        data['clothes'] = currentClothes
-    end)
-
-    while not data['clothes'] do
-        Wait(100)
-    end
+    local outfit = {
+        ped_components = exports["fivem-appearance"]:getPedComponents(),
+        props = exports["fivem-appearance"]:getPedProps()
+    }
 
     if outfits[tonumber(data['slot'])] == nil then
-        exports["em_fw"]:create_outfit(data['name'], json.encode(data['clothes']))
+
+        exports["em_fw"]:create_outfit(data['name'], json.encode(outfit))
         local active_outfit = exports["em_fw"]:get_active_outfit()
 
         outfits[tonumber(data['slot'])] = {}
         outfits[tonumber(data['slot'])].outfit_name         = active_outfit["outfit_name"]
         outfits[tonumber(data['slot'])].character_outfit_id = active_outfit["character_outfit_id"]
 
-        TriggerEvent('cui_character:change_active_outfit', active_outfit["character_outfit_id"], active_outfit["outfit_name"])
     else
-        exports["em_fw"]:update_outfit(outfits[tonumber(data['slot'])].character_outfit_id, data['name'], json.encode(data['clothes']))
+
+        exports["em_fw"]:update_outfit(outfits[tonumber(data['slot'])].character_outfit_id, data['name'], json.encode(outfit))
+
     end
 
     
@@ -116,7 +114,9 @@ RegisterNUICallback('load', function(data, cb)
     if not isLoading then
         local player_data = exports["em_fw"]:get_outfit(outfits[tonumber(data['slot'])].character_outfit_id)
         local outfit_data = json.decode(player_data['outfit'])
-        TriggerEvent('cui_character:updateClothes', json.decode(outfit_data), true, true, function() isLoading = false end)
+        local outfit      = json.decode(outfit_data)
+        exports["fivem-appearance"]:setPedComponents(outfit.ped_components)
+        exports["fivem-appearance"]:setPedProps(outfit.props)
     end
 end)
 

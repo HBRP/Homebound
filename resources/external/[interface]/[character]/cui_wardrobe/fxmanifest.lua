@@ -26,12 +26,7 @@ files {
 }
 
 dependencies {
-    'cui_character'
-}
-
-dependencies {
-
     'em_fw',
-    'em_commands'
-
+    'em_commands',
+    'fivem-appearance'
 }
