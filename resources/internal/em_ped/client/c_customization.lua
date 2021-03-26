@@ -41,7 +41,7 @@ AddEventHandler("esx_kashacters:spawned_character", function()
 end)
 
 
-RegisterCommand('customize', function()
+exports["em_fw"]:register_command('customize', function()
 
       local config = {
         ped = true,
@@ -59,5 +59,5 @@ RegisterCommand('customize', function()
           print('Canceled')
         end
       end, config)
-      
-end, false)
+
+end, "Customize your character")
