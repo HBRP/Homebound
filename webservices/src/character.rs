@@ -131,8 +131,6 @@ pub struct OutfitMetaData {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CharacterSkin {
 
-    character_outfit_id: i32,
-    outfit_name: String,
     character_skin: String,
 
 }
@@ -349,16 +347,13 @@ pub fn get_skin(character: CharacterId) -> String {
     let mut client = db_postgres::get_connection().unwrap();
     let row = client.query_one("
         SELECT 
-            CO.CharacterOutfitId, CO.OutfitName, CAST(CS.Skin AS Text) as Skin
+            CAST(CS.Skin AS Text) as Skin
         FROM 
             Character.Skin CS
-            INNER JOIN Character.Outfits CO ON CO.CharacterId = CS.CharacterId
         WHERE
-            CS.CharacterId = $1 AND CO.ActiveOutfit = 't'
+            CS.CharacterId = $1 
         ", &[&character.character_id]).unwrap();
     let character_skin = CharacterSkin {
-        outfit_name : row.get("OutfitName"),
-        character_outfit_id : row.get("CharacterOutfitId"),
         character_skin : row.get("Skin")
     };
     serde_json::to_string(&character_skin).unwrap()
