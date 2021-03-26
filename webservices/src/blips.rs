@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use serde_json::{json};
 use crate::db_postgres;
 
 #[derive(Serialize, Deserialize, Debug)]
