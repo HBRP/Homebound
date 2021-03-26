@@ -32,6 +32,14 @@ AddEventHandler("esx_kashacters:spawned_character", function()
 
     local skin = exports["em_fw"]:get_skin()
     if skin == nil then
+
+        local hash = GetHashKey("mp_m_freemode_01")
+        RequestModel(hash)
+        while not HasModelLoaded(hash) do
+            Citizen.Wait(10)
+        end
+        
+        SetPlayerModel(PlayerId(), hash)
         open_full_customization()
     else
         local temp = json.decode(skin["character_skin"])
@@ -41,7 +49,7 @@ AddEventHandler("esx_kashacters:spawned_character", function()
 end)
 
 
-exports["em_fw"]:register_command('customize', function()
+exports["em_commands"]:register_command('customize', function()
 
       local config = {
         ped = true,
