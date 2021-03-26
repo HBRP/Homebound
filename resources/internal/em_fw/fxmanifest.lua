@@ -105,6 +105,7 @@ export 'get_vehicle_storage_id'
 
 -- c_drop.lua
 export 'get_nearby_drops'
+export 'get_nearby_drops_async'
 export 'get_free_drop_zone'
 export 'set_drop_zone_inactive'
 

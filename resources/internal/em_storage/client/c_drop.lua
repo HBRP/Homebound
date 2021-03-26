@@ -87,13 +87,17 @@ end
 
 local function refresh()
 
-    nearby_drops = exports["em_fw"]:get_nearby_drops()
-    if nearby_drops == nil then
-        nearby_drops = {}
-    end
+    exports["em_fw"]:get_nearby_drops_async(function(result)
 
-    remove_existing_bags()
-    add_new_bags()
+        nearby_drops = result
+        if nearby_drops == nil then
+            nearby_drops = {}
+        end
+
+        remove_existing_bags()
+        add_new_bags()
+        
+    end)
 
 end
 

@@ -14,6 +14,13 @@ function get_nearby_drops()
 
 end
 
+function get_nearby_drops_async(callback)
+
+    local coords = GetEntityCoords(PlayerPedId())
+    trigger_server_callback_async("em_fw:get_nearby_drops", callback, coords.x, coords.y, coords.z)
+
+end
+
 function get_free_drop_zone()
 
     local coords = GetEntityCoords(PlayerPedId())
