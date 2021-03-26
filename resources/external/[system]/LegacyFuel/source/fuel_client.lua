@@ -84,14 +84,8 @@ Citizen.CreateThread(function()
 					exports["cd_drawtextui"]:hide_text(text_id)
 				end
 			end
-			if Config.UseESX then
-				local playerData = ESX.GetPlayerData()
-				for i=1, #playerData.accounts, 1 do
-					if playerData.accounts[i].name == 'money' then
-						currentCash = playerData.accounts[i].money
-						break
-					end
-				end
+			if Config.UseMoney then
+				currentCash = exports["em_transactions"]:get_cash_on_hand()
 			end
 		else
 			if exports["cd_drawtextui"]:is_in_queue(text_id) then
@@ -140,7 +134,7 @@ AddEventHandler('fuel:startFuelUpTick', function(pumpObject, ped, vehicle)
 	end
 
 	if pumpObject then
-		TriggerServerEvent('fuel:pay', currentCost)
+		exports["em_transactions"]:remove_cash(currentCost)
 	end
 
 	currentCost = 0.0
@@ -166,7 +160,7 @@ AddEventHandler('fuel:refuelFromPump', function(pumpObject, ped, vehicle)
 			local stringCoords = GetEntityCoords(pumpObject)
 			local extraString = ""
 
-			if Config.UseESX then
+			if Config.UseMoney then
 				extraString = "\n" .. Config.Strings.TotalCost .. ": ~g~$" .. Round(currentCost, 1)
 			end
 
@@ -250,13 +244,12 @@ Citizen.CreateThread(function()
 
 							if IsControlJustReleased(0, 38) then
 								GiveWeaponToPed(ped, 883325847, 4500, false, true)
+								exports["em_transactions"]:remove_cash(Config.JerryCanCost)
 
-								TriggerServerEvent('fuel:pay', Config.JerryCanCost)
-
-								currentCash = ESX.GetPlayerData().money
+								currentCash = exports["em_transactions"]:get_cash_on_hand()
 							end
 						else
-							if Config.UseESX then
+							if Config.UseMoney then
 								local refillCost = Round(Config.RefillCost * (1 - GetAmmoInPedWeapon(ped, 883325847) / 4500))
 
 								if refillCost > 0 then
@@ -264,7 +257,7 @@ Citizen.CreateThread(function()
 										DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Config.Strings.RefillJerryCan .. refillCost)
 
 										if IsControlJustReleased(0, 38) then
-											TriggerServerEvent('fuel:pay', refillCost)
+											exports["em_transactions"]:remove_cash(refillCost)
 
 											SetPedAmmo(ped, 883325847, 4500)
 										end

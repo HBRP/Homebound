@@ -24,6 +24,7 @@ exports {
 
 dependencies {
 
-    'cd_drawtextui'
+    'cd_drawtextui',
+    'em_transactions'
 
 }
