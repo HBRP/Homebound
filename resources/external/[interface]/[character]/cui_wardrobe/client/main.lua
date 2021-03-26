@@ -41,6 +41,7 @@ end
 RegisterNetEvent('cui_wardrobe:open')
 AddEventHandler('cui_wardrobe:open', function()
     if not isOpening then
+        TriggerEvent("cd_drawtextui:temp_hide_text")
         isOpening = true
         RequestStreamedTextureDict('shared')
 
@@ -63,6 +64,7 @@ RegisterNetEvent('cui_wardrobe:close')
 AddEventHandler('cui_wardrobe:close', function()
     SetStreamedTextureDictAsNoLongerNeeded('shared')
     setVisible(false)
+    TriggerEvent("cd_drawtextui:temp_show_text")
 end)
 
 RegisterNUICallback('close', function(data, cb)
