@@ -34,7 +34,7 @@ function apply_weapon_damage(out_bone, weapon)
     end
 
 	if bone == nil then
-		print("Unknown bone " .. out_bone)
+		print("Unknown bone " .. json.encode(out_bone))
         return -1
 	end
 	

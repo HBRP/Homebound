@@ -7,3 +7,7 @@ client_scripts {
     'client/c_ped.lua'
 
 }
+
+exports {
+    'em_medical'
+}

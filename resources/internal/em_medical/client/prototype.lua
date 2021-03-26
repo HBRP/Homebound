@@ -28,9 +28,9 @@ local function check_all_damage()
 
     end
 
-    if #temp_table > 0 then
-        print("All damage :" .. json.encode(damage_types))
-    end
+    --if #temp_table > 0 then
+    --    print("All damage :" .. json.encode(damage_types))
+    --end
 
     return temp_table
 

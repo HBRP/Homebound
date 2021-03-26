@@ -64,6 +64,7 @@ register_effect_function(EFFECTS.SHOCK, "intro", function()
 
     start_unconscious_loop()
     SetPedToRagdollWithFall(ped, 3000, 3000, 1, GetEntityForwardVector(ped), 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+    TriggerEvent("em_medical:is_unconscious")
 
 end)
 
@@ -73,12 +74,19 @@ register_effect_function(EFFECTS.SHOCK, "loop", function()
     if not DoesEntityExist(GetVehiclePedIsIn(ped, false)) and not IsEntityPlayingAnim(ped, "missarmenian2", "corpse_search_exit_ped", 2) then
         TaskPlayAnim(ped, "missarmenian2", "corpse_search_exit_ped", 100.0, -100.0, -1, 2, 1.0, false, false, false)
     end
+    local vehicle = GetVehiclePedIsIn(ped, false)
+    GetPedInVehicleSeat(vehicle, -1)
+
+    if vehicle ~= 0 and GetPedInVehicleSeat(vehicle, -1) == ped then
+        SetVehicleEngineOn(vehicle, false, true, true)
+    end
 
 end)
 
 register_effect_function(EFFECTS.SHOCK, "outro", function() 
 
     ClearPedTasksImmediately(ped)
+    TriggerEvent("em_medical:is_conscious")
 
 end)
 

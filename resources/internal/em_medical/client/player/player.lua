@@ -258,5 +258,6 @@ function heal_player()
     ClearPedBloodDamage(ped)
 
     check_to_run_player_resurrect()
+    TriggerEvent("em_medical:is_conscious")
 
 end
