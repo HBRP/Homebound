@@ -87,21 +87,45 @@ Citizen.CreateThread(function()
 
 end)
 
+local function temp_hide_text()
 
-AddEventHandler("closed_inventory", function() 
+    inventory_open = true
+    SendNUIMessage({
+        action = 'hide'
+    })
+
+end
+
+local function temp_show_text()
 
     inventory_open = false
     if #active_ids > 0 then
         show_next_text_in_queue()
     end
 
+end
+
+
+AddEventHandler("closed_inventory", function() 
+
+    temp_show_text()
+
 end)
 
 AddEventHandler("opened_inventory", function() 
 
-    inventory_open = true
-    SendNUIMessage({
-        action = 'hide'
-    })
+    temp_hide_text()
+    
+end)
+
+AddEventHandler("cd_drawtextui:temp_hide_text", function() 
+
+    temp_hide_text()
+
+end)
+
+AddEventHandler("cd_drawtextui:temp_show_text", function() 
+
+    temp_show_text()
     
 end)
