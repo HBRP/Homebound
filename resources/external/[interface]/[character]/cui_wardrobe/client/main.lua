@@ -71,9 +71,10 @@ end)
 
 RegisterNUICallback('save', function(data, cb)
 
+    local ped_appearance = exports["fivem-appearance"]:getPedAppearance(PlayerPedId())
     local outfit = {
-        ped_components = exports["fivem-appearance"]:getPedComponents(),
-        props = exports["fivem-appearance"]:getPedProps()
+        ped_components = ped_appearance["components"],
+        props = ped_appearance["props"]
     }
 
     if outfits[tonumber(data['slot'])] == nil then
@@ -115,8 +116,8 @@ RegisterNUICallback('load', function(data, cb)
         local player_data = exports["em_fw"]:get_outfit(outfits[tonumber(data['slot'])].character_outfit_id)
         local outfit_data = json.decode(player_data['outfit'])
         local outfit      = json.decode(outfit_data)
-        exports["fivem-appearance"]:setPedComponents(outfit.ped_components)
-        exports["fivem-appearance"]:setPedProps(outfit.props)
+        exports["fivem-appearance"]:setPedComponents(PlayerPedId(), outfit.ped_components)
+        exports["fivem-appearance"]:setPedProps(PlayerPedId(), outfit.props)
     end
 end)
 

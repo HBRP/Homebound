@@ -8,7 +8,7 @@ function open_clothing_store()
         faceFeatures = false,
         headOverlays = false,
         components = true,
-        props = true,
+        props = true
     }
 
     TriggerEvent("cd_drawtextui:temp_hide_text")
@@ -32,7 +32,7 @@ function open_barber_store()
         faceFeatures = false,
         headOverlays = true,
         components = false,
-        props = false,
+        props = false
     }
 
     TriggerEvent("cd_drawtextui:temp_hide_text")
@@ -55,7 +55,7 @@ function open_surgery_store()
         faceFeatures = true,
         headOverlays = false,
         components = false,
-        props = false,
+        props = false
     }
 
     TriggerEvent("cd_drawtextui:temp_hide_text")
