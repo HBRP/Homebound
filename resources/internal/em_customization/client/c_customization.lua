@@ -11,7 +11,7 @@ local customization_type_ids = {
 
 local function open_selected_customization(customization_point)
 
-    if customization_point.customization_type_id == CLOTHING_SHOP then
+    if customization_point.customization_type_id == customization_type_ids.CLOTHING_SHOP then
         open_clothing_store()
     end
 
