@@ -112,6 +112,9 @@ export 'get_items'
 -- c_vehicle.lua
 export 'get_nearest_vehicle'
 
+-- c_store.lua
+export 'get_nearby_stores_async'
+
 -- c_server_callback.lua
 export 'trigger_server_callback'
 export 'trigger_server_callback_async'
