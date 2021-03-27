@@ -91,11 +91,13 @@ end)
 local left_storage_id  = nil
 local right_storage_id = nil
 local right_inventory_name = nil
+local in_store = false
 
 function openInventory()
 
     left_storage_id  = nil
     right_storage_id = nil
+    in_store = false
 
     loadPlayerInventory()
     isInInventory = true
@@ -346,6 +348,50 @@ AddEventHandler("esx_inventoryhud:open_secondary_inventory", function(other_stor
 
 end)
 
+AddEventHandler("esx_inventoryhud:open_store", function(store_items)
+
+    SendNUIMessage(
+        {
+            action = "setType",
+            type = "shop"
+        }
+    )
+    local temp_items = {}
+    for i = 1, #store_items do
+
+        local name = store_items[i].item_name
+        if exports["em_items"]:is_item_type_a_weapon(store_items[i].item_type_id) then
+            name = exports["em_items"]:get_item_weapon_model(store_items[i].item_id)
+        end
+
+        table.insert(temp_items, {
+            label           = string.upper(name),
+            name            = name,
+            count           = -1,
+            item_id         = store_items[i].item_id,
+            storage_item_id = 0,
+            item_type_id    = store_items[i].item_type_id,
+            rare            = false,
+            type            = "item_standard",
+            canRemove       = false,
+            usable          = false,
+            limit           = -1,
+            slot            = i,
+            price           = store_items[i].item_price
+        })
+
+    end
+
+    SendNUIMessage(
+    {
+        action   = "setSecondInventoryItems",
+        itemList = temp_items
+    })
+    openInventory()
+    in_store = true
+
+end)
+
 local function reload_inventories()
 
     loadPlayerInventory()
@@ -357,7 +403,12 @@ end
 
 RegisterNUICallback("MoveItem", function(data, cb)
 
-    if data.inventory_from == "main" and data.inventory_to == "main" then
+
+    if in_store then
+
+        Citizen.Trace(json.encode(data) .. "\n")
+
+    elseif data.inventory_from == "main" and data.inventory_to == "main" then
 
         local response = exports["em_fw"]:move_item(left_storage_id, data.storage_item_id, left_storage_id, data.item_slot_to, data.item_id, data.amount)
         if not response.response.success then
