@@ -1,5 +1,5 @@
 
-local _scanDelay = 0
+local _scanDelay = 100
 
 Citizen.CreateThread(function()
     while true do
