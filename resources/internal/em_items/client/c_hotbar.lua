@@ -31,6 +31,7 @@ local function check_for_hotkeys()
     end
     if IsDisabledControlJustReleased(0, key_tab) then
         SetPedCurrentWeaponVisible(PlayerPedId(), false, true, false, false)
+        SetCurrentPedWeapon(PlayerPedId(), 0xA2719263, true)
     end
 
 end
