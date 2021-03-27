@@ -23,7 +23,8 @@ VALUES
     (6, 'Backpack', 0.250, 1),
     (8, 'Bulletproof vest', 1.0, 1),
     (3, 'Flashbang', 0.5, 1),
-    (7, 'cash', 0.001, 500000);
+    (7, 'cash', 0.001, 500000),
+    (7, '9mm ammo box', 0.8436, 5);
 
 INSERT INTO
     Item.ModifierTypes (ItemModifierTypeName)
@@ -149,18 +150,24 @@ INSERT INTO
 VALUES
     ('Convenience Store'),
     ('Black Market'),
-    ('Pawn Shop');
+    ('Pawn Shop'),
+    ('Ammunation');
 
 INSERT INTO
     store.stores (StoreTypeId, StoreName, X, Y, Z)
 VALUES
-    (1, 'Convenience Store', 26.16, -1347.36, 29.49);
+    (1, 'Convenience Store', 26.16, -1347.36, 29.49),
+    (4, 'Ammunation', 21.75, -1107.114, 29.79);
 
 INSERT INTO
     Store.SellItems (StoreTypeId, ItemId, ItemSellPrice)
 VALUES
     (1, 1, 2),
-    (1, 2, 2);
+    (1, 2, 2),
+    (4, 3, 15),
+    (4, 4, 250),
+    (4, 7, 100),
+    (4, 10, 20);
 
 INSERT INTO Blip.Blips
     (BlipType, BlipColor, BlipName, X, Y, Z, Static)
