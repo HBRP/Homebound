@@ -151,11 +151,16 @@ VALUES
     ('Black Market'),
     ('Pawn Shop');
 
-/*
-insert into 
+INSERT INTO
     store.stores (StoreTypeId, StoreName, X, Y, Z)
 VALUES
-*/
+    (1, 'Convenience Store', 26.16, -1347.36, 29.49);
+
+INSERT INTO
+    Store.SellItems (StoreTypeId, ItemId, ItemSellPrice)
+VALUES
+    (1, 1, 2),
+    (1, 2, 2);
 
 INSERT INTO Blip.Blips
     (BlipType, BlipColor, BlipName, X, Y, Z, Static)
