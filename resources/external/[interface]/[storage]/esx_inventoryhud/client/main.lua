@@ -371,8 +371,8 @@ AddEventHandler("esx_inventoryhud:open_store", function(store, store_items)
         end
 
         table.insert(temp_items, {
-            label           = string.upper(name),
-            name            = name,
+            label           = string.upper(store_items[i].item_name),
+            name            = name:gsub(" ", "_"),
             count           = -1,
             item_id         = store_items[i].item_id,
             storage_item_id = 0,
