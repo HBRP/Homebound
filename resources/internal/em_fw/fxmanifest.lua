@@ -46,15 +46,6 @@ server_scripts {
 
 }
 
-ui_page 'ui/index.html'
-
-files {
-
-    'ui/index.html',
-    'ui/libs/jquery.js'
-
-}
-
 -- c_character.lua
 export 'create_character'
 export 'delete_character'

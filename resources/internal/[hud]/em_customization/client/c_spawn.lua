@@ -40,8 +40,7 @@ AddEventHandler("esx_kashacters:spawned_character", function()
 
 end)
 
-
-exports["em_commands"]:register_command('customize', function()
+exports["em_commands"]:register_command('f_appearance', function()
 
       local config = {
         ped = true,
@@ -49,15 +48,15 @@ exports["em_commands"]:register_command('customize', function()
         faceFeatures = true,
         headOverlays = true,
         components = true,
-        props = true,
+        props = true
       }
 
-      exports['fivem-appearance']:startPlayerCustomization(function (appearance)
+      exports['fivem-appearance']:startPlayerCustomization(function(appearance)
         if (appearance) then
           print('Saved')
         else
           print('Canceled')
         end
-      end, config)
+      end, config) 
 
 end, "Customize your character")
