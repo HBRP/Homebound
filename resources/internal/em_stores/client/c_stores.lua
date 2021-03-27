@@ -13,7 +13,7 @@ local function open_selected_store(store)
 
     exports["em_fw"]:get_store_items_async(function(store_items)
 
-        TriggerEvent("esx_inventoryhud:open_store", store_items)
+        TriggerEvent("esx_inventoryhud:open_store", store, store_items)
 
     end, store.store_type_id)
 

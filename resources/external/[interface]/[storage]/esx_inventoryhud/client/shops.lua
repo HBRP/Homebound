@@ -51,6 +51,7 @@ end
 RegisterNUICallback(
     "BuyItem",
     function(data, cb)
+        Citizen.Trace("Buying Item\n")
         if type(data.number) == "number" and math.floor(data.number) == data.number then
             local count = tonumber(data.number)
 

@@ -348,12 +348,18 @@ AddEventHandler("esx_inventoryhud:open_secondary_inventory", function(other_stor
 
 end)
 
-AddEventHandler("esx_inventoryhud:open_store", function(store_items)
+AddEventHandler("esx_inventoryhud:open_store", function(store, store_items)
 
     SendNUIMessage(
         {
             action = "setType",
             type = "shop"
+        }
+    )
+    SendNUIMessage(
+        {
+            action = "setInfoText",
+            text   = store.store_name
         }
     )
     local temp_items = {}
@@ -387,7 +393,15 @@ AddEventHandler("esx_inventoryhud:open_store", function(store_items)
         action   = "setSecondInventoryItems",
         itemList = temp_items
     })
-    openInventory()
+    loadPlayerInventory()
+    SendNUIMessage(
+        {
+            action = "display",
+            type = "shop"
+        }
+    )
+    SetNuiFocus(true, true)
+
     in_store = true
 
 end)

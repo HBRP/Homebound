@@ -9,6 +9,7 @@ window.addEventListener("message", function (event) {
         type = event.data.type;
         disabled = false;
 
+        console.log(type)
         if (type === "normal") {
             $(".info-div").hide();
         } else if (type === "trunk") {
@@ -505,6 +506,7 @@ $(document).ready(function () {
                 }));
             } else if (type === "shop" && itemInventory === "second") {
                 disableInventory(500);
+                console.log(itemData)
                 $.post("http://esx_inventoryhud/BuyItem", JSON.stringify({
                     item: itemData,
                     number: parseInt($("#count").val())

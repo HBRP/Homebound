@@ -142,7 +142,7 @@ input[type=number] {
 
 .info-div {
     text-align: center;
-    color: black;
+    color: white;
     padding: 5px;
     background-color: rgba(128, 128, 128, 0.6);
     width: 80%;
