@@ -16,11 +16,14 @@ end
 
 function give_item(storage_id, item_id, amount, storage_item_id, slot)
 
+    local response = nil
     trigger_server_callback("em_fw:give_item", function(result)
 
+        response = result
         TriggerEvent('em_fw:inventory_change')
 
     end, storage_id, item_id, amount, storage_item_id, slot)
+    return response
 
 end
 

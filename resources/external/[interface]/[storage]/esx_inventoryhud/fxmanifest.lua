@@ -39,6 +39,7 @@ dependencies {
   "em_fw",
   "em_items",
   "em_storage",
+  "em_transactions",
   "swt_notifications"
 
 }
