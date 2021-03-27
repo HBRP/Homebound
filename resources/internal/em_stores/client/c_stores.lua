@@ -11,7 +11,13 @@ local store_type_ids = {
 
 local function open_selected_store(store)
 
-    Citizen.Trace("open_selected_store : STUB")
+    Citizen.Trace(json.encode(store) .. "\n")
+    exports["em_fw"]:get_store_items_async(function(store_items)
+
+        Citizen.Trace(json.encode(store_items) .. "\n")
+        TriggerEvent("esx_inventoryhud:open_store", store_items)
+
+    end, store.store_type_id)
 
 end
 
@@ -52,6 +58,9 @@ end
 local function refresh_nearby_stores(result)
 
     nearby_stores = result
+    if nearby_stores == nil then
+        nearby_stores = {}
+    end
 
 end
 

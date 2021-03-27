@@ -110,6 +110,7 @@ export 'get_nearest_vehicle'
 
 -- c_store.lua
 export 'get_nearby_stores_async'
+export 'get_store_items_async'
 
 -- c_customization.lua
 export 'get_nearby_customization_points_async'
