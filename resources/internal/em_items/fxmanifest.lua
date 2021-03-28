@@ -29,6 +29,7 @@ dependencies {
 
     'em_fw',
     'em_medical',
-    'rprogress'
+    'rprogress',
+    'swt_notifications'
 
 }
