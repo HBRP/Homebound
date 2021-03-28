@@ -215,6 +215,16 @@ fn change_item_amount(storage_item_id: i32, amount: i32, client: &mut postgres::
 
 }
 
+pub fn is_item_id_in_storage(storage_id: i32, item_id: i32, client: &mut postgres::Client) -> bool {
+
+    let row = client.query_one("SELECT * FROM Storage.Items WHERE StorageId = $1 AND ItemId = $2 AND Empty = 'f' LIMIT 1", &[&storage_id, &item_id]);
+    match row {
+        Ok(row) => return !row.is_empty(),
+        Err(_) => return false
+    }
+
+}
+
 fn get_empty_slot(storage_id: i32, client: &mut postgres::Client) -> i32 {
 
     let row = client.query_one("select storage.get_empty_slot($1) as Slot;", &[&storage_id]);

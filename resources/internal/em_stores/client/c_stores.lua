@@ -73,5 +73,10 @@ local function refresh_nearby_stores_loop()
 
 end
 
-Citizen.CreateThread(refresh_nearby_stores_loop)
-Citizen.CreateThread(store_loop)
+AddEventHandler("em_fw:character_loaded", function()
+
+    Citizen.CreateThread(refresh_nearby_stores_loop)
+    Citizen.CreateThread(store_loop)
+    
+end)
+

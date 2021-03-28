@@ -411,3 +411,10 @@ pub fn get_all_outfit_meta_data(character: CharacterId) -> String {
     serde_json::to_string(&all_outfits).unwrap()
 
 }
+
+pub fn get_character_storage_id(character_id: i32, client: &mut postgres::Client) -> i32 {
+
+    let row = client.query_one("SELECT StorageId FROM Character.Inventory WHERE CharacterId = $1", &[&character_id]).unwrap();
+    return row.get("StorageId");
+
+}

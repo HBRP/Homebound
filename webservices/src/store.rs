@@ -2,6 +2,9 @@
 use serde::{Deserialize, Serialize};
 use crate::db_postgres;
 
+use crate::storage::is_item_id_in_storage;
+use crate::character::get_character_storage_id;
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Store {
 
@@ -50,8 +53,8 @@ pub fn get_all_stores() -> String {
 
 }
 
-#[get("/Stores/Nearby/<x>/<y>/<z>")]
-pub fn get_nearby_stores(x: f32, y: f32, z: f32) -> String {
+#[get("/Stores/Nearby/<character_id>/<x>/<y>/<z>")]
+pub fn get_nearby_stores(character_id: i32, x: f32, y: f32, z: f32) -> String {
 
     let mut client = db_postgres::get_connection().unwrap();
     let mut stores: Vec<Store> = Vec::new();
@@ -75,20 +78,25 @@ pub fn get_nearby_stores(x: f32, y: f32, z: f32) -> String {
 
 }
 
-#[get("/Stores/Items/<store_type_id>")]
-pub fn get_items_for_store_type(store_type_id: i32) -> String {
+#[get("/Stores/Items/<character_id>/<store_type_id>")]
+pub fn get_items_for_store_type(character_id: i32, store_type_id: i32) -> String {
 
     let mut client = db_postgres::get_connection().unwrap();
     let mut store_items: Vec<StoreItem> = Vec::new();
+
+    println!("{:?}", character_id);
+    let storage_id = get_character_storage_id(character_id, &mut client);
 
     for row in client.query("
         SELECT 
             SSI.ItemId, SSI.ItemSellPrice, II.ItemName, II.ItemTypeId 
         FROM Store.SellItems SSI
         INNER JOIN Item.Items II ON II.ItemId = SSI.ItemId
+        LEFT JOIN storage.Items SI ON SI.ItemId = SSI.RequiredItemId and SI.EMPTY = 'f'
         WHERE 
-            SSI.StoreTypeId = $1
-        ", &[&store_type_id]).unwrap() {
+                SSI.StoreTypeId = $1
+            AND SSI.RequiredItemId = 0 or (SI.StorageId = $2)
+        ", &[&store_type_id, &storage_id]).unwrap() {
 
         store_items.push(StoreItem {
 
