@@ -9,6 +9,11 @@ function get_storage(storage_id)
 
     end, storage_id)
 
+    local storage_items = storage["storage_items"]
+    for i = 1, #storage_items do
+        storage_items[i].item_metadata = json.decode(storage_items[i].item_metadata)
+    end
+
     return storage
 
 end
