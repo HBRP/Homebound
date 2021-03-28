@@ -1,3 +1,4 @@
+use crate::items::metadata;
 use serde::{Deserialize, Serialize};
 use crate::db_postgres;
 
@@ -56,6 +57,7 @@ pub struct ItemMoveRequest {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ItemGiveRequest {
 
+    character_id: i32,
     storage_id: i32,
     item_id: i32,
     slot: i32,
@@ -407,6 +409,7 @@ pub fn move_storage_item(storage_move_request: Json<ItemMoveRequest>) -> String 
             if empty {
 
                 set_storage_item(other_storage_item_id, storage_move_request.item_id, storage_move_request.amount, &mut client);
+                transfer_metadata(other_storage_item_id, storage_move_request.old_storage_item_id, &mut client);
                 change_item_amount(storage_move_request.old_storage_item_id, -storage_move_request.amount, &mut client);
 
             } else if other_item_id == storage_move_request.item_id {
@@ -544,6 +547,10 @@ pub fn give_storage_item(item_give_request: Json<ItemGiveRequest>) -> String {
 
         change_item_amount(item_give_request.storage_item_id, -item_give_request.amount, &mut client);
         transfer_metadata(give_response.storage_item_id, item_give_request.storage_item_id, &mut client);
+
+    } else {
+
+        metadata::create_metadata(item_give_request.character_id, item_give_request.item_id, give_response.storage_item_id, &mut client);
 
     }
 

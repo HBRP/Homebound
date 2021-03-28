@@ -33,6 +33,8 @@ struct Item {
 
 }
 
+pub mod metadata;
+pub mod weapon_metadata;
 
 #[get("/Item/Modifiers/<item_id>")]
 pub fn get_item_modifiers(item_id: i32) -> String {
