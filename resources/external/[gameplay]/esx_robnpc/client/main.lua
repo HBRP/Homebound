@@ -1,11 +1,23 @@
 local robbedRecently = false
 
+local function is_player(ped)
+
+    for _, id in ipairs(GetActivePlayers()) do
+        if id == ped then
+            return true
+        end
+    end
+
+    return false
+
+end
+
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(5)
 
         local aiming, targetPed = GetEntityPlayerIsFreeAimingAt(PlayerId(-1))
-        if aiming then
+        if aiming and not is_player(targetPed) then
 
             if GetVehiclePedIsIn(targetPed, false) == 0 then
                 TaskSetBlockingOfNonTemporaryEvents(targetPed)
