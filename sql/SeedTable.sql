@@ -157,7 +157,13 @@ INSERT INTO
     store.stores (StoreTypeId, StoreName, X, Y, Z)
 VALUES
     (1, 'Convenience Store', 26.16, -1347.36, 29.49),
-    (4, 'Ammunation', 21.75, -1107.114, 29.79);
+    (4, 'Ammunation', 21.75, -1107.114, 29.79),
+    (4, 'Ammunation', -662.458, -935.63, 21.829),
+    (4, 'Ammunation', -330.25, 6083.488, 32.45),
+    (4, 'Ammunation', 1693.82, 3759.56, 34.705),
+    (4, 'Ammunation', -1305.838, -393.817, 36.69),
+    (4, 'Ammunation', 810.158, -2157.616, 29.619);
+
 
 INSERT INTO
     Store.SellItems (StoreTypeId, ItemId, ItemSellPrice)
