@@ -118,7 +118,8 @@ VALUES
     ('Trunk', 120),
     ('Glovebox', 40),
     ('Bag', 30),
-    ('Drop', 20);
+    ('Drop', 20),
+    ('Weapon', 3);
 
 
 INSERT INTO Customization.Types (CustomizationTypeName)
