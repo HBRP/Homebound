@@ -22,7 +22,7 @@ function give_item(storage_id, item_id, amount, storage_item_id, slot)
         response = result
         TriggerEvent('em_fw:inventory_change')
 
-    end, storage_id, item_id, amount, storage_item_id, slot)
+    end, get_character_id(), storage_id, item_id, amount, storage_item_id, slot)
     return response
 
 end
