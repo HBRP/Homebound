@@ -21,7 +21,8 @@ pub struct StorageItems {
     storage_item_id: i32,
     item_name: String,
     slot: i32,
-    amount: i32
+    amount: i32,
+    item_metadata: String
 
 }
 
@@ -136,9 +137,12 @@ fn get_storage(storage_request: GetStorageRequest) -> String {
     };
     for row in client.query(
         "
-            SELECT SI.ItemId, II.ItemTypeId, SI.StorageItemId, II.ItemName, SI.Slot, SI.Amount 
+            SELECT 
+                SI.ItemId, II.ItemTypeId, SI.StorageItemId, II.ItemName, SI.Slot, SI.Amount, 
+                (CASE WHEN SIMD.StorageItemMetaData IS NULL THEN '{}' ELSE SIMD.StorageItemMetaData::TEXT END) as StorageItemMetaData
             FROM Storage.Items SI 
             INNER JOIN Item.Items II ON II.ItemId = SI.ItemId
+            LEFT JOIN Storage.ItemMetaData SIMD ON SIMD.StorageItemId = SI.StorageItemId
             WHERE 
                 SI.StorageId = $1 AND SI.Empty = 'f'
         ", &[&storage_request.storage_id]).unwrap() {
@@ -150,7 +154,8 @@ fn get_storage(storage_request: GetStorageRequest) -> String {
             storage_item_id: row.get("StorageItemId"),
             item_name: row.get("ItemName"),
             slot: row.get("Slot"),
-            amount: row.get("Amount")
+            amount: row.get("Amount"),
+            item_metadata: row.get("StorageItemMetaData")
 
         });
 
