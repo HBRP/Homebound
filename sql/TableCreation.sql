@@ -376,7 +376,7 @@ CREATE TABLE IF NOT EXISTS Store.SellItems
     StoreTypeId INTEGER NOT NULL,
     ItemId INTEGER NOT NULL,
     ItemSellPrice INTEGER NOT NULL,
-    RequiredItemId INTEGER NOT NULL default(0)
+    RequiredItemId INTEGER NOT NULL DEFAULT(0)
 );
 
 CREATE TABLE IF NOT EXISTS Store.BuyItems

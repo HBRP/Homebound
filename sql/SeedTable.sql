@@ -24,7 +24,8 @@ VALUES
     (8, 'Bulletproof vest', 1.0, 1),
     (3, 'Flashbang', 0.5, 1),
     (7, 'cash', 0.001, 500000),
-    (7, '9mm ammo box', 0.8436, 5);
+    (7, '9mm ammo box', 0.8436, 5),
+    (7, 'Class 1 License', 0, 1);
 
 INSERT INTO
     Item.ModifierTypes (ItemModifierTypeName)
