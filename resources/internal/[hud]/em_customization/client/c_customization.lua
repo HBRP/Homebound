@@ -55,6 +55,9 @@ end
 local function refresh_nearby_customization(result)
 
     nearby_customization = result
+    if nearby_customization == nil then
+        nearby_customization = {}
+    end
 
 end
 

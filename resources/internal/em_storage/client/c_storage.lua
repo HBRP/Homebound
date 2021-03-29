@@ -43,6 +43,9 @@ local function stash_refresh_loop()
     while true do
 
         nearby_stashes = exports["em_fw"]:get_nearby_stashes()
+        if nearby_stashes == nil then
+            nearby_stashes = {}
+        end
         Citizen.Wait(10000)
 
     end
