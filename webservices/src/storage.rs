@@ -142,9 +142,10 @@ fn get_storage(storage_request: GetStorageRequest) -> String {
                 (CASE WHEN SIMD.StorageItemMetaData IS NULL THEN '{}' ELSE SIMD.StorageItemMetaData::TEXT END) as StorageItemMetaData
             FROM Storage.Items SI 
             INNER JOIN Item.Items II ON II.ItemId = SI.ItemId
-            LEFT JOIN Storage.ItemMetaData SIMD ON SIMD.StorageItemId = SI.StorageItemId
+            LEFT JOIN Storage.ItemMetaData SIMD ON SIMD.StorageItemId = SI.StorageItemId AND SIMD.Deleted = 'f'
             WHERE 
-                SI.StorageId = $1 AND SI.Empty = 'f'
+                    SI.StorageId = $1 
+                AND SI.Empty = 'f'
         ", &[&storage_request.storage_id]).unwrap() {
 
         storage_response.storage_items.push(StorageItems {
@@ -173,26 +174,26 @@ pub fn get_storage_request(storage_request: Json<GetStorageRequest>) -> String {
 
 fn transfer_metadata(created_storage_item_id: i32, storage_item_id: i32, client: &mut postgres::Client) {
 
-    client.execute("UPDATE Storage.ItemMetaData SET StorageItemId = $1 WHERE StorageItemId = $2", &[&created_storage_item_id, &storage_item_id]).unwrap();
+    client.execute("UPDATE Storage.ItemMetaData SET StorageItemId = $1 WHERE StorageItemId = $2 AND Deleted = 'f'", &[&created_storage_item_id, &storage_item_id]).unwrap();
 
 }
 
 fn swap_metadata(other_storage_item_id: i32, storage_item_id: i32, client: &mut postgres::Client) {
 
-    let row = client.query_one("SELECT StorageItemMetadataId FROM Storage.ItemMetaData WHERE StorageItemId = $1", &[&other_storage_item_id]);
+    let row = client.query_one("SELECT StorageItemMetadataId FROM Storage.ItemMetaData WHERE StorageItemId = $1 AND Deleted = 'f'", &[&other_storage_item_id]);
 
     match row {
         Ok(row) => {
 
             if !row.is_empty() {
                 let temp_storage_item_metadata_id: i32 = row.get("StorageItemMetadataId");
-                client.execute("UPDATE Storage.ItemMetaData SET StorageItemId = $1 WHERE StorageItemId = $2", &[&other_storage_item_id, &storage_item_id]).unwrap();
-                client.execute("UPDATE Storage.ItemMetaData SET StorageItemId = $1 WHERE StorageItemMetadataId = $2", &[&storage_item_id, &temp_storage_item_metadata_id]).unwrap();
+                client.execute("UPDATE Storage.ItemMetaData SET StorageItemId = $1 WHERE StorageItemId = $2 AND Deleted = 'f'", &[&other_storage_item_id, &storage_item_id]).unwrap();
+                client.execute("UPDATE Storage.ItemMetaData SET StorageItemId = $1 WHERE StorageItemMetadataId = $2 AND Deleted = 'f'", &[&storage_item_id, &temp_storage_item_metadata_id]).unwrap();
             }
 
         },
         Err(_) => {
-            client.execute("UPDATE Storage.ItemMetaData SET StorageItemId = $1 WHERE StorageItemId = $2", &[&other_storage_item_id, &storage_item_id]).unwrap();
+            client.execute("UPDATE Storage.ItemMetaData SET StorageItemId = $1 WHERE StorageItemId = $2 AND Deleted = 'f'", &[&other_storage_item_id, &storage_item_id]).unwrap();
         }
     }
 
@@ -240,6 +241,12 @@ fn change_item_amount(storage_item_id: i32, amount: i32, client: &mut postgres::
 
     client.execute("UPDATE Storage.Items SET amount = amount + $1 WHERE StorageItemId = $2", &[&amount, &storage_item_id]).unwrap();
     client.execute("UPDATE Storage.Items SET Empty = 't' WHERE StorageItemId = $1 AND Amount = 0", &[&storage_item_id]).unwrap();
+
+}
+
+fn disable_metadata(storage_item_id: i32, client: &mut postgres::Client) {
+
+    client.execute("UPDATE Storage.ItemMetaData SET Deleted = 't' WHERE StorageItemId = $1", &[&storage_item_id]).unwrap();
 
 }
 
@@ -592,6 +599,7 @@ pub fn remove_storage_item(item_remove_request: Json<ItemRemoveRequest>) -> Stri
     let item_remove_request = item_remove_request.into_inner();
     let mut client = db_postgres::get_connection().unwrap();
     change_item_amount(item_remove_request.storage_item_id, -item_remove_request.amount, &mut client);
+    disable_metadata(item_remove_request.storage_item_id, &mut client);
 
     return serde_json::to_string(&StorageResponse {
         response: Response {
