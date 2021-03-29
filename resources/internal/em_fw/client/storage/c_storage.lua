@@ -67,3 +67,15 @@ function move_item_async(callback, old_storage_id, old_storage_item_id, new_stor
     end, old_storage_id, old_storage_item_id, new_storage_id, new_slot_id, item_id, amount)
 
 end
+
+function give_item_to_other_character(character_id, item_id, amount, storage_item_id)
+
+    local response = nil
+    trigger_server_callback("em_fw:give_item_to_other_character", function(result)
+
+        response = result
+
+    end, character_id, item_id, amount, storage_item_id)
+    return response
+
+end

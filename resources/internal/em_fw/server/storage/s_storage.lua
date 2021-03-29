@@ -12,7 +12,7 @@ register_server_callback("em_fw:get_storage", function(source, callback, storage
 
 end)
 
-register_server_callback("em_fw:give_item", function(source, callback, character_id, storage_id, item_id, amount, storage_item_id, slot)
+local function give_item(source, callback, character_id, storage_id, item_id, amount, storage_item_id, slot)
 
     local data = { character_id = character_id, storage_id = storage_id, item_id = item_id, amount = amount, storage_item_id = storage_item_id, slot = slot}
     HttpPost("/Storage/Give", data, function(error_code, result_data, result_headers)
@@ -24,6 +24,12 @@ register_server_callback("em_fw:give_item", function(source, callback, character
         callback(temp)
 
     end)
+
+end
+
+register_server_callback("em_fw:give_item", function(source, callback, character_id, storage_id, item_id, amount, storage_item_id, slot)
+
+    give_item(source, callback, character_id, storage_id, item_id, amount, storage_item_id, slot)
 
 end)
 
@@ -53,6 +59,23 @@ register_server_callback("em_fw:move_item", function(source, callback, old_stora
         callback(temp)
 
     end)
+
+end)
+
+register_server_callback("em_fw:give_item_to_other_character", function(source, callback, character_id, item_id, amount, storage_item_id)
+
+    local player_notification = function(result)
+
+        if result.response.success then
+            local server_id = get_server_id_from_character_id(character_id)
+            TriggerClientEvent("em_fw:inventory_change", server_id)
+            TriggerClientEvent("em_fw:successful_give", server_id, item_id, amount)
+        end
+        callback(result)
+
+    end
+
+    give_item(source, player_notification, character_id, get_character_storage_id_from_character_id(character_id), item_id, amount, storage_item_id, -1)
 
 end)
 

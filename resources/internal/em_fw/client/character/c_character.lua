@@ -167,6 +167,7 @@ function get_character_gender()
 end
 
 
+RegisterNetEvent("em_fw:inventory_change")
 AddEventHandler('em_fw:inventory_change', function()
 
     character_storage = nil

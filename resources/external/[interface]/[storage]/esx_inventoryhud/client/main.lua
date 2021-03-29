@@ -187,39 +187,29 @@ RegisterNUICallback("DropItem", function(data, cb)
 end)
 
 RegisterNUICallback("GiveItem", function(data, cb)
-    local playerPed = PlayerPedId()
-    local players, nearbyPlayer = ESX.Game.GetPlayersInArea(GetEntityCoords(playerPed), 3.0)
-    local foundPlayer = false
-    for i = 1, #players, 1 do
-        if players[i] ~= PlayerId() then
-            if GetPlayerServerId(players[i]) == data.player then
-                foundPlayer = true
-            end
-        end
+
+    local amount_to_give = data.number
+    if amount_to_give == 0 then
+        amount_to_give = data.item.count
     end
 
-    if foundPlayer then
-        local count = tonumber(data.number)
-
-        if data.item.type == "item_weapon" then
-            count = GetAmmoInPedWeapon(PlayerPedId(), GetHashKey(data.item.name))
-        end
-
-        --TriggerServerEvent("esx:giveInventoryItem", data.player, data.item.type, data.item.name, count)
-        Wait(250)
-        loadPlayerInventory()
+    local result = exports["em_fw"]:give_item_to_other_character(data.player, data.item.item_id, amount_to_give, data.item.storage_item_id)
+    if result.response.success then
+        exports['swt_notifications']:Success("Storage", "Gave item to character", "top", 3000, true)
+        exports["em_fw"]:remove_item(data.item.storage_item_id, amount_to_give)
     else
-        exports.pNotify:SendNotification(
-            {
-                text = _U("player_nearby"),
-                type = "error",
-                timeout = 3000,
-                layout = "bottomCenter",
-                queue = "inventoryhud"
-            }
-        )
+        exports['swt_notifications']:Negative("Storage", "Cannot give item to character.", "top", 3000, true)
     end
+    loadPlayerInventory()
+
     cb("ok")
+end)
+
+RegisterNetEvent("em_fw:successful_give")
+AddEventHandler("em_fw:successful_give", function(item_id, amount)
+
+    exports['swt_notifications']:Success("Storage", "Received an item", "top", 3000, true)
+
 end)
 
 local function get_items_from_storage(storage_container)

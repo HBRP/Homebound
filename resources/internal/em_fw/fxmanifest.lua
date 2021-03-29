@@ -87,6 +87,7 @@ export 'get_storage'
 export 'remove_item'
 export 'move_item'
 export 'move_item_async'
+export 'give_item_to_other_character'
 
 -- c_stashes.lua
 export 'get_nearby_stashes'
