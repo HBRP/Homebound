@@ -314,8 +314,9 @@ CREATE TABLE IF NOT EXISTS Item.Weapons
     ItemWeaponModel VARCHAR(32) NOT NULL,
     ItemWeaponHash INTEGER NOT NULL,
     AmmoItemId INTEGER NOT NULL DEFAULT(0),
-    ItemUsesAmmo BOOLEAN NOT NULL DEFAULT('1'),
-    ItemAlertsCops BOOLEAN NOT NULL DEFAULT('1')
+    ItemUsesAmmo BOOLEAN NOT NULL DEFAULT('f'),
+    ItemAlertsCops BOOLEAN NOT NULL DEFAULT('f'),
+    GenerateMetaData BOOLEAN NOT NULL DEFAULT('f')
 );
 
 CREATE SCHEMA Weapon;
