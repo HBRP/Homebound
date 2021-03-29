@@ -41,6 +41,7 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(50)
         remove_vehicles_from_areas()
+        clear_local_area_of_cops()
     end
 
 end)
@@ -49,7 +50,6 @@ Citizen.CreateThread(function()
 
     while true do
         Citizen.Wait(5)
-        clear_local_area_of_cops()
         never_wanted()
     end
 
