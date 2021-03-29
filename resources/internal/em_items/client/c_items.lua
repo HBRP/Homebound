@@ -24,6 +24,17 @@ function get_item_id_from_name(item_name)
 
 end
 
+function get_item_name_from_item_id(item_id)
+
+    for i = 1, #items_cache do
+        if items_cache[i].item_id == item_id then
+            return items_cache[i].item_name
+        end
+    end
+    return 0
+
+end
+
 function register_item_use(item_name, callback)
 
     Citizen.CreateThread(function() 

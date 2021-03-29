@@ -17,6 +17,7 @@ exports {
 
     'use_item',
     'get_item_id_from_name',
+    'get_item_name_from_item_id',
     'get_item_weapon_model',
     'is_item_type_a_weapon',
     'is_item_type_ammo',

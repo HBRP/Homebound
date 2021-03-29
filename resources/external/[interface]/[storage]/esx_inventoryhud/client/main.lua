@@ -208,7 +208,7 @@ end)
 RegisterNetEvent("em_fw:successful_give")
 AddEventHandler("em_fw:successful_give", function(item_id, amount)
 
-    exports['swt_notifications']:Success("Storage", string.format("Received %d %s", amount, ""), "top", 3000, true)
+    exports['swt_notifications']:Success("Storage", string.format("Received %d %s", amount, exports["em_items"]:get_item_name_from_item_id(item_id)), "top", 3000, true)
 
 end)
 
