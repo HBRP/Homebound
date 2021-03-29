@@ -251,3 +251,10 @@ VALUES
     (3, 'apparel'),
     (3, 'wardrobe'),
     (5, 'give_item');
+
+
+INSERT INTO 
+    Licensing.LicenseTypes (LicenseTypeName)
+VALUES
+    ('Class 1 License'),
+    ('Class 2 License');
