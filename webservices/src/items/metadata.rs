@@ -13,7 +13,7 @@ pub fn create_metadata(character_id: i32, item_id:i32, storage_item_id: i32, cli
 
     if item_type_id == weapon_type_id {
 
-        weapon_metadata::create_weapon_metadata(character_id, storage_item_id, client);
+        weapon_metadata::create_weapon_metadata(character_id, item_id, storage_item_id, client);
 
     }
 
