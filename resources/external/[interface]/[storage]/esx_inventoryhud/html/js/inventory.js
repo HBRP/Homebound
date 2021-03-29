@@ -3,6 +3,37 @@ var disabled = false;
 var disabledFunction = null;
 
 var shift_enabled = false
+var metadata_tooltip = null
+
+function set_up_metadata() {
+
+    $(".item").mouseenter(function() {
+        itemData = $(this).data("item");
+
+        if (itemData.item_metadata != null) {
+
+            var tooltip = document.querySelector('#tooltip')
+            metadata_tooltip = Popper.createPopper(this, tooltip, {
+                placement: 'bottom',
+            });
+            tooltip.innerHTML = "";
+            for (const [key, value] of Object.entries(itemData.item_metadata.visible)) {
+
+                var key_formatted = key.replace("_", " ").toUpperCase();
+                tooltip.innerHTML += "{key_formatted}: {value}<br>".replace("{key_formatted}", key_formatted).replace("{value}", value)
+
+            }
+
+            tooltip.setAttribute('data-show', '');
+        }
+    });
+
+    $(".item").mouseleave(function() {
+        document.querySelector('#tooltip').removeAttribute('data-show');
+        metadata_tooltip = null
+    });
+
+}
 
 window.addEventListener("message", function (event) {
     if (event.data.action == "display") {
@@ -30,10 +61,14 @@ window.addEventListener("message", function (event) {
         $(".item").remove();
         $("#otherInventory").html("<div id=\"noSecondInventoryMessage\"></div>");
         $("#noSecondInventoryMessage").html(invLocale.secondInventoryNotAvailable);
+        document.querySelector('#tooltip').removeAttribute('data-show');
+        metadata_tooltip = null
     } else if (event.data.action == "setType") {
         type = event.data.type;
     } else if (event.data.action == "setItems") {
         inventorySetup(event.data.itemList);
+
+        set_up_metadata();
 
         $('.item').draggable({
             helper: 'clone',
@@ -123,6 +158,7 @@ window.addEventListener("message", function (event) {
     } else if (event.data.action == "setSecondInventoryItems") {
         secondInventorySetup(event.data.itemList);
 
+        set_up_metadata();
         $('.item').draggable({
             helper: 'clone',
             appendTo: 'body',
@@ -361,7 +397,6 @@ function formatMoney(n, c, d, t) {
 };
 
 $(document).ready(function () {
-
 
     $("#count").focus(function () {
         $(this).val("")

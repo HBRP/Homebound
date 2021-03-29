@@ -270,6 +270,7 @@ local function get_items_from_storage(storage_container)
                 storage_item_id = item_in_slot.storage_item_id,
                 rare            = false,
                 type            = "item_standard",
+                item_metadata   = item_in_slot.item_metadata,
                 canRemove       = true,
                 usable          = true,
                 limit           = -1,
@@ -288,6 +289,7 @@ local function get_items_from_storage(storage_container)
                 type            = "item_standard",
                 canRemove       = false,
                 usable          = false,
+                item_metadata   = nil,
                 limit           = -1,
                 slot            = i
             })
