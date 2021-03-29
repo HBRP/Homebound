@@ -2,10 +2,10 @@ local robbedRecently = false
 
 local function is_player(ped)
 
-    for _, id in ipairs(GetActivePlayers()) do
-        if id == ped then
-            return true
-        end
+    if GetEntityModel(ped) == GetHashKey("mp_f_freemode_01") then
+        return true
+    elseif GetEntityModel(ped) == GetHashKey("mp_m_freemode_01") then
+        return true
     end
 
     return false
