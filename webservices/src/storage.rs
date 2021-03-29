@@ -177,6 +177,27 @@ fn transfer_metadata(created_storage_item_id: i32, storage_item_id: i32, client:
 
 }
 
+fn swap_metadata(other_storage_item_id: i32, storage_item_id: i32, client: &mut postgres::Client) {
+
+    let row = client.query_one("SELECT StorageItemMetadataId FROM Storage.ItemMetaData WHERE StorageItemId = $1", &[&other_storage_item_id]);
+
+    match row {
+        Ok(row) => {
+
+            if !row.is_empty() {
+                let temp_storage_item_metadata_id: i32 = row.get("StorageItemMetadataId");
+                client.execute("UPDATE Storage.ItemMetaData SET StorageItemId = $1 WHERE StorageItemId = $2", &[&other_storage_item_id, &storage_item_id]).unwrap();
+                client.execute("UPDATE Storage.ItemMetaData SET StorageItemId = $1 WHERE StorageItemMetadataId = $2", &[&storage_item_id, &temp_storage_item_metadata_id]).unwrap();
+            }
+
+        },
+        Err(_) => {
+            client.execute("UPDATE Storage.ItemMetaData SET StorageItemId = $1 WHERE StorageItemId = $2", &[&other_storage_item_id, &storage_item_id]).unwrap();
+        }
+    }
+
+}
+
 fn get_item_max_stack(item_id: i32, client: &mut postgres::Client) -> i32 {
 
     let row = client.query_one("SELECT ItemMaxStack FROM Item.Items WHERE ItemId = $1", &[&item_id]).unwrap();
@@ -337,8 +358,9 @@ fn switch_storage_spots(storage_move_request: &ItemMoveRequest, other_storage_it
         set_storage_item(other_storage_item_id, storage_move_request.item_id, storage_move_request.amount, client);
         set_storage_item(storage_move_request.old_storage_item_id, other_item_id, other_amount, client);
 
-        transfer_metadata(other_storage_item_id, storage_move_request.old_storage_item_id, client);
-        transfer_metadata(storage_move_request.old_storage_item_id, other_storage_item_id, client);
+        swap_metadata(other_storage_item_id, storage_move_request.old_storage_item_id, client);
+        //transfer_metadata(other_storage_item_id, storage_move_request.old_storage_item_id, client);
+        //transfer_metadata(storage_move_request.old_storage_item_id, other_storage_item_id, client);
 
     } else {
 
