@@ -1,6 +1,6 @@
 
 local area_locations = {
-    {x = 448.445, y = -994.68, z = 29.38, radius = 50.0} -- mission row
+    {x = 448.445, y = -994.68, z = 29.38, radius = 40.0} -- mission row
 }
 
 local function clear_area_of_peds()

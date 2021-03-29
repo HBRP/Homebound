@@ -63,6 +63,27 @@ function get_server_id_from_character_id(character_id)
 
 end
 
+function get_nearby_character_ids(radius_around_player)
+
+    local ped = PlayerPedId()
+    local player_coords = GetEntityCoords(ped)
+
+    local server_ids = {}
+    for _, id in ipairs(GetActivePlayers()) do
+
+        local target_ped = GetPlayerPed(id)
+        local distance = #(player_coords - GetEntityCoords(target_ped))
+        if distance <= radius_around_player and target_ped ~= ped then
+            local server_id = GetPlayerServerId(id)
+            table.insert(server_ids, server_id)
+        end
+
+    end
+
+    return get_target_character_id_batch(server_ids)
+
+end
+
 function get_character_name()
 
     return loaded_character["character"]["first_name"] .. " " .. loaded_character["character"]["last_name"]

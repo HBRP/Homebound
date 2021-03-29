@@ -131,52 +131,29 @@ RegisterNUICallback(
     end
 )
 
-RegisterNUICallback(
-    "GetNearPlayers",
-    function(data, cb)
-        local playerPed = PlayerPedId()
-        local players, nearbyPlayer = ESX.Game.GetPlayersInArea(GetEntityCoords(playerPed), 3.0)
-        local foundPlayers = false
-        local elements = {}
+RegisterNUICallback("GetNearPlayers", function(data, cb)
 
-        for i = 1, #players, 1 do
-            if players[i] ~= PlayerId() then
-                foundPlayers = true
+    local elements = {}
+    local characters = exports["em_fw"]:get_nearby_character_ids(3.0)
 
-                table.insert(
-                    elements,
-                    {
-                        label = GetPlayerName(players[i]),
-                        player = GetPlayerServerId(players[i])
-                    }
-                )
-            end
-        end
-
-        if not foundPlayers then
-            exports.pNotify:SendNotification(
-                {
-                    text = _U("players_nearby"),
-                    type = "error",
-                    timeout = 3000,
-                    layout = "bottomCenter",
-                    queue = "inventoryhud"
-                }
-            )
-        else
-            SendNUIMessage(
-                {
-                    action = "nearPlayers",
-                    foundAny = foundPlayers,
-                    players = elements,
-                    item = data.item
-                }
-            )
-        end
-
-        cb("ok")
+    for i = 1, #characters do
+        table.insert(elements, { label = "", player = characters[i].character_id})
     end
-)
+
+    if #characters == 0 then
+        exports['swt_notifications']:Negative("Storage", "No players nearby", "top", 3000, true)
+    else
+        SendNUIMessage(
+        {
+            action = "nearPlayers",
+            foundAny = true,
+            players = elements,
+            item = data.item
+        })
+    end
+
+    cb("ok")
+end)
 
 RegisterNUICallback("UseItem", function(data, cb)
 
