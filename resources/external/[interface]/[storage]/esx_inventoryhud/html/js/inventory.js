@@ -10,7 +10,7 @@ function set_up_metadata() {
     $(".item").mouseenter(function() {
         itemData = $(this).data("item");
 
-        if (itemData.item_metadata != null || itemData.item_metadata.visible == null) {
+        if (itemData.item_metadata != null && itemData.item_metadata.visible != null) {
 
             var tooltip = document.querySelector('#tooltip')
             metadata_tooltip = Popper.createPopper(this, tooltip, {
