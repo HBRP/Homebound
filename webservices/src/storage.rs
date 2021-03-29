@@ -737,6 +737,18 @@ pub fn reset_temporary_storage() {
         "
         , &[]).unwrap();
 
+    client.execute(
+        "
+            UPDATE Storage.ItemMetaData SIMD Set Deleted = 't' 
+            FROM 
+                Storage.Drop as SD
+            INNER JOIN Storage.Items SI ON SI.StorageId = SD.StorageId
+            INNER JOIN Storage.ItemMetaData SIMD2 ON SIMD2.StorageItemId = SI.StorageItemId
+            where 
+                SIMD.StorageItemId = SIMD2.StorageItemId
+        "
+        , &[]).unwrap();
+
     client.execute("UPDATE Storage.Drop SET Active = 'f'", &[]).unwrap();
 
     client.execute(
@@ -745,6 +757,18 @@ pub fn reset_temporary_storage() {
             FROM Storage.Vehicle SV
             where SV.StorageId = SI.StorageId;
         ", &[]).unwrap();
+
+    client.execute(
+        "
+            UPDATE Storage.ItemMetaData SIMD Set Deleted = 't' 
+            FROM 
+                Storage.Vehicle SV
+            INNER JOIN Storage.Items SI ON SI.StorageId = SV.StorageId
+            INNER JOIN Storage.ItemMetaData SIMD2 ON SIMD2.StorageItemId = SI.StorageItemId
+            WHERE 
+                SIMD.StorageItemId = SIMD2.StorageItemId;
+        "
+        , &[]).unwrap();
 
 }
 
