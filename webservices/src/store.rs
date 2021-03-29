@@ -84,18 +84,20 @@ pub fn get_items_for_store_type(character_id: i32, store_type_id: i32) -> String
     let mut client = db_postgres::get_connection().unwrap();
     let mut store_items: Vec<StoreItem> = Vec::new();
 
-    println!("{:?}", character_id);
     let storage_id = get_character_storage_id(character_id, &mut client);
 
     for row in client.query("
         SELECT 
             SSI.ItemId, SSI.ItemSellPrice, II.ItemName, II.ItemTypeId 
-        FROM Store.SellItems SSI
+        FROM 
+            Store.SellItems SSI
         INNER JOIN Item.Items II ON II.ItemId = SSI.ItemId
-        LEFT JOIN storage.Items SI ON SI.ItemId = SSI.RequiredItemId and SI.EMPTY = 'f'
+        LEFT JOIN storage.Items SI ON SI.ItemId = SSI.RequiredItemId AND SI.EMPTY = 'f'
+        LEFT JOIN Character.Licenses CL ON CL.LicenseTypeId = SSI.RequiredLicenseTypeId AND CL.Active = 't'
         WHERE 
                 SSI.StoreTypeId = $1
-            AND SSI.RequiredItemId = 0 or (SI.StorageId = $2)
+            AND (SSI.RequiredItemId = 0 or SI.StorageId = $2)
+            AND (SSI.RequiredLicenseTypeId = 0 or CL.LicenseTypeId IS NOT NULL)
         ", &[&store_type_id, &storage_id]).unwrap() {
 
         store_items.push(StoreItem {
