@@ -97,8 +97,8 @@ pub fn get_items_for_store_type(character_id: i32, store_type_id: i32) -> String
         WHERE 
                 SSI.StoreTypeId = $1
             AND (SSI.RequiredItemId = 0 or SI.StorageId = $2)
-            AND (SSI.RequiredLicenseTypeId = 0 or CL.LicenseTypeId IS NOT NULL)
-        ", &[&store_type_id, &storage_id]).unwrap() {
+            AND (SSI.RequiredLicenseTypeId = 0 or CL.CharacterId = $3)
+        ", &[&store_type_id, &storage_id, &character_id]).unwrap() {
 
         store_items.push(StoreItem {
 
