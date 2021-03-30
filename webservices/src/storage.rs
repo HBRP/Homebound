@@ -366,8 +366,6 @@ fn switch_storage_spots(storage_move_request: &ItemMoveRequest, other_storage_it
         set_storage_item(storage_move_request.old_storage_item_id, other_item_id, other_amount, client);
 
         swap_metadata(other_storage_item_id, storage_move_request.old_storage_item_id, client);
-        //transfer_metadata(other_storage_item_id, storage_move_request.old_storage_item_id, client);
-        //transfer_metadata(storage_move_request.old_storage_item_id, other_storage_item_id, client);
 
     } else {
 
@@ -412,11 +410,46 @@ fn get_amount_in_storage_item_id(storage_item_id: i32, client: &mut postgres::Cl
 
 }
 
+fn can_place_item_in_storage(item_id: i32, storage_id: i32, client: &mut postgres::Client) -> bool {
+
+    let row = client.query_one(
+        "
+            SELECT 
+                * 
+            FROM Storage.Containers SC
+            INNER JOIN Storage.StorableItemTypes SSIT ON SSIT.StorageTypeId = SC.StorageTypeId
+            INNER JOIN Item.Items II ON II.ItemTypeId = SSIT.ItemTypeId
+            WHERE
+                    II.ItemId    = $1
+                AND SC.StorageId = $2
+        ", &[&item_id, &storage_id]);
+
+    match row {
+
+        Ok(row) => return !row.is_empty(),
+        Err(_) => return false
+
+    }
+
+}
+
 #[post("/Storage/Move", format = "json", data = "<storage_move_request>")]
 pub fn move_storage_item(storage_move_request: Json<ItemMoveRequest>) -> String {
 
     let storage_move_request = storage_move_request.into_inner();
     let mut client = db_postgres::get_connection().unwrap();
+
+    if !can_place_item_in_storage(storage_move_request.item_id, storage_move_request.new_storage_id, &mut client) {
+
+        let response = StorageResponse {
+            response: Response {
+                success: false,
+                message: "Cannot move that there".to_string()
+            }
+        };
+        return serde_json::to_string(&response).unwrap();
+
+    }
 
     let real_amount_in_slot = get_amount_in_storage_item_id(storage_move_request.old_storage_item_id, &mut client);
     if real_amount_in_slot < storage_move_request.amount {
