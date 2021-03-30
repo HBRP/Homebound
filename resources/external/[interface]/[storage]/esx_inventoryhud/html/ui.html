@@ -32,6 +32,7 @@
                 <div class="controls-div">
                     <input type="number" class="control" id="count" value="0">
                     <div class="control" id="use"></div>
+                    <div class="control" id="open"></div>
                     <div class="control" id="give"></div>
                     <div class="control" id="drop"></div>
                 </div>
@@ -54,6 +55,7 @@
 <script>
     $(document).ready(function () {
         $("#use").html(invLocale.useItem);
+        $("#open").html("open");
         $("#give").html(invLocale.giveItem);
         $("#drop").html(invLocale.dropItem);
         $("#noSecondInventoryMessage").html(invLocale.secondInventoryNotAvailable);

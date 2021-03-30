@@ -211,7 +211,7 @@ AddEventHandler("em_fw:successful_give", function(item_id, amount)
     if isInInventory then
         loadPlayerInventory()
     end
-    
+
     exports['swt_notifications']:Success("Storage", string.format("Received %d %s", amount, exports["em_items"]:get_item_name_from_item_id(item_id)), "top", 3000, true)
 
 end)
@@ -307,7 +307,7 @@ local function load_secondary_inventory(storage_id)
 
 end
 
-AddEventHandler("esx_inventoryhud:open_secondary_inventory", function(other_storage_id, name)
+local function open_secondary_inventory(other_storage_id, name)
 
     openInventory()
     right_storage_id     = other_storage_id
@@ -318,6 +318,12 @@ AddEventHandler("esx_inventoryhud:open_secondary_inventory", function(other_stor
         action = "setInfoText",
         text   = name
     })
+
+end
+
+AddEventHandler("esx_inventoryhud:open_secondary_inventory", function(other_storage_id, name)
+
+    open_secondary_inventory(other_storage_id, name)
 
 end)
 
@@ -413,6 +419,18 @@ RegisterNUICallback("MoveItem", function(data, cb)
         exports['swt_notifications']:Negative("Storage", "Unable to move item", "top", 2000, true)
     end
     reload_inventories()
+    cb("ok")
+
+end)
+
+RegisterNUICallback("OpenItem", function(data, cb)
+
+    local metadata = data.item.item_metadata
+    if metadata.hidden ~= nil then
+        if metadata.hidden.storage_id ~= nil then
+            open_secondary_inventory(metadata.hidden.storage_id, "Other Inventory")
+        end
+    end
     cb("ok")
 
 end)

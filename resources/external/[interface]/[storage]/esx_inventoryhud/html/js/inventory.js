@@ -91,6 +91,7 @@ window.addEventListener("message", function (event) {
 
                     $("#drop").addClass("disabled");
                     $("#give").addClass("disabled");
+                    $("#open").addClass("disabled");
 
                 }
 
@@ -109,6 +110,7 @@ window.addEventListener("message", function (event) {
                     $(this).css('background-image', 'url(\'img/items/' + itemData.name + '.png\'');
                     $("#drop").removeClass("disabled");
                     $("#use").removeClass("disabled");
+                    $("#open").removeClass("disabled");
                     $("#give").removeClass("disabled");
 
                 }
@@ -180,6 +182,7 @@ window.addEventListener("message", function (event) {
 
                     $("#drop").addClass("disabled");
                     $("#give").addClass("disabled");
+                    $("#open").addClass("disabled");
 
                 }
 
@@ -199,6 +202,7 @@ window.addEventListener("message", function (event) {
                     $("#drop").removeClass("disabled");
                     $("#use").removeClass("disabled");
                     $("#give").removeClass("disabled");
+                    $("#open").removeClass("disabled");
 
                 }
             }
@@ -443,6 +447,30 @@ $(document).ready(function () {
             if (itemData.usable) {
                 disableInventory(300);
                 $.post("http://esx_inventoryhud/UseItem", JSON.stringify({
+                    item: itemData
+                }));
+            }
+        }
+    });
+
+    $('#open').droppable({
+        hoverClass: 'hoverControl',
+        drop: function (event, ui) {
+            itemData = ui.draggable.data("item");
+
+            if (itemData == undefined || itemData.usable == undefined) {
+                return;
+            }
+
+            itemInventory = ui.draggable.data("inventory");
+
+            if (itemInventory == undefined || itemInventory == "second") {
+                return;
+            }
+
+            if (itemData.usable) {
+                disableInventory(300);
+                $.post("http://esx_inventoryhud/OpenItem", JSON.stringify({
                     item: itemData
                 }));
             }
