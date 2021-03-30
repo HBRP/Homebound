@@ -10,7 +10,8 @@ VALUES
     ('Attachment'),
     ('Bag'),
     ('Misc'),
-    ('Armour');
+    ('Armour'),
+    ('Attachment');
 
 INSERT INTO 
     Item.Items (ItemTypeId, ItemName, ItemWeight, ItemMaxStack)
@@ -25,7 +26,15 @@ VALUES
     (3, 'Flashbang', 0.5, 1),
     (7, 'cash', 0.001, 500000),
     (7, '9mm ammo box', 0.8436, 5),
-    (7, 'Class 1 License', 0, 1);
+    (7, 'Class 1 License', 0, 1),
+    (9, 'Suppressor', 2.0, 1),
+    (9, 'Weapon Flashlight', 1.0, 1);
+
+INSERT INTO
+    Item.Attachments (ItemId, WeaponItemId, ItemAttachmentHash)
+VALUES
+    (12, 3, CAST(x'65EA7EBB' as INT)),
+    (13, 3, CAST(x'359B7AAE' as INT));
 
 INSERT INTO
     Item.ModifierTypes (ItemModifierTypeName)
