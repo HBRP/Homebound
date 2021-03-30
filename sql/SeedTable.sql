@@ -33,8 +33,8 @@ VALUES
 INSERT INTO
     Item.Attachments (ItemId, WeaponItemId, ItemAttachmentHash)
 VALUES
-    (12, 3, CAST(x'65EA7EBB' as INT)),
-    (13, 3, CAST(x'359B7AAE' as INT));
+    (12, 4, CAST(x'65EA7EBB' as INT)),
+    (13, 4, CAST(x'359B7AAE' as INT));
 
 INSERT INTO
     Item.ModifierTypes (ItemModifierTypeName)
