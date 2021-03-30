@@ -34,3 +34,14 @@ register_server_callback("em_fw:get_items", function(soure, callback, item_name)
     end)
 
 end)
+
+register_server_callback("em_fw:get_attachments", function(source, callback)
+
+    HttpGet("/Item/Attachments", data, function(error_code, result_data, result_headers)
+
+        local temp = json.decode(result_data)
+        callback(temp)
+
+    end)
+
+end)

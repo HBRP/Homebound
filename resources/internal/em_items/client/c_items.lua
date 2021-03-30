@@ -72,7 +72,7 @@ local function apply_item_modifiers(item_id)
 
 end
 
-function use_item(item_id, item_type_id, storage_item_id)
+function use_item(item_id, item_type_id, storage_item_id, item_metadata)
 
     if item_type_id == item_type_ids.FOOD then
 
@@ -94,7 +94,7 @@ function use_item(item_id, item_type_id, storage_item_id)
 
     elseif item_type_id == item_type_ids.WEAPON then
 
-        equip_weapon(item_id)
+        equip_weapon(item_id, item_metadata)
 
     end
     fire_item_callback(item_id, storage_item_id)

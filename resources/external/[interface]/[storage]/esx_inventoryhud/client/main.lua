@@ -157,7 +157,7 @@ end)
 
 RegisterNUICallback("UseItem", function(data, cb)
 
-    exports["em_items"]:use_item(data["item"].item_id, data["item"].item_type_id, data["item"].storage_item_id)
+    exports["em_items"]:use_item(data["item"].item_id, data["item"].item_type_id, data["item"].storage_item_id, data["item"].item_metadata)
     closeInventory()
     cb("ok")
 

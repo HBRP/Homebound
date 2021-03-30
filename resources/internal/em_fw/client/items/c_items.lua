@@ -23,6 +23,18 @@ function get_weapons()
 
 end
 
+function get_attachments()
+
+    local attachments = nil
+    trigger_server_callback("em_fw:get_attachments", function(result)
+
+        attachments = result
+
+    end)
+    return attachments
+
+end
+
 function get_items()
 
     local items = nil

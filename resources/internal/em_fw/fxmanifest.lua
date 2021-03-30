@@ -84,6 +84,7 @@ export 'get_player_id'
 -- c_storage.lua
 export 'give_item'
 export 'get_storage'
+export 'get_storage_async'
 export 'remove_item'
 export 'move_item'
 export 'move_item_async'
@@ -106,6 +107,7 @@ export 'set_drop_zone_inactive'
 export 'get_item_modifiers'
 export 'get_weapons'
 export 'get_items'
+export 'get_attachments'
 
 -- c_vehicle.lua
 export 'get_nearest_vehicle'

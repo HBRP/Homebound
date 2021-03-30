@@ -1,5 +1,6 @@
 
 local weapons = nil
+local attachments = nil
 
 function is_item_type_a_weapon(item_type_id)
 
@@ -133,7 +134,39 @@ local function shooting_loop()
 
 end
 
-function equip_weapon(item_id)
+local function get_attachment_hash(weapon_item_id, attachment_item_id)
+
+    for i = 1, #attachments do
+        if attachments[i].weapon_item_id == weapon_item_id and attachments[i].item_id == attachment_item_id then
+            return attachments[i].item_attachment_hash
+        end
+    end
+    return nil
+
+end
+
+local function set_attachments(item_id, item_metadata)
+
+    if item_metadata.hidden == nil or item_metadata.hidden.storage_id == nil then
+        return
+    end
+
+    exports["em_fw"]:get_storage_async(function(result)
+
+        local storage_items = result["storage_items"]
+
+        for i = 1, #storage_items do
+            local hash = get_attachment_hash(item_id, storage_items[i].item_id)
+            if hash ~= nil then
+                GiveWeaponComponentToPed(PlayerPedId(), equiped_weapon_hash, hash)
+            end
+        end
+
+    end, item_metadata.hidden.storage_id)
+
+end
+
+function equip_weapon(item_id, item_metadata)
 
     local hash = get_item_weapon_hash(item_id)
     local ped  = PlayerPedId()
@@ -154,13 +187,15 @@ function equip_weapon(item_id)
     if not running_shooting_loop then
         Citizen.CreateThread(shooting_loop)
     end
+    set_attachments(item_id, item_metadata)
 
 end
 
 Citizen.CreateThread(function()
 
     Citizen.Wait(0)
-    weapons = exports["em_fw"]:get_weapons()
+    weapons     = exports["em_fw"]:get_weapons()
+    attachments = exports["em_fw"]:get_attachments()
 
 end)
 

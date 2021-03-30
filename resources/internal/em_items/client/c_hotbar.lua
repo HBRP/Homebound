@@ -17,7 +17,7 @@ local function use_item_in_slot(slot)
     if item_in_slot == nil then
         return
     end
-    use_item(item_in_slot.item_id, item_in_slot.item_type_id, item_in_slot.storage_item_id)
+    use_item(item_in_slot.item_id, item_in_slot.item_type_id, item_in_slot.storage_item_id, item_in_slot.item_metadata)
 
 end
 

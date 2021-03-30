@@ -18,6 +18,21 @@ function get_storage(storage_id)
 
 end
 
+function get_storage_async(callback, storage_id)
+
+    local storage = nil
+    trigger_server_callback("em_fw:get_storage", function(result)
+
+        local storage_items = result["storage_items"]
+        for i = 1, #storage_items do
+            storage_items[i].item_metadata = json.decode(storage_items[i].item_metadata)
+        end
+        callback(result)
+
+    end, storage_id)
+
+end
+
 
 function give_item(storage_id, item_id, amount, storage_item_id, slot)
 
