@@ -18,13 +18,6 @@ if Config.nogrip then
     end)
 end
 
-if Config.pvp then
-    AddEventHandler("playerSpawned", function()
-        NetworkSetFriendlyFireOption(true)
-        SetCanAttackFriendly(PlayerPedId(), true, true)
-    end)
-end
-
 if Config.crouch then
     local crouched = false
     
