@@ -33,6 +33,16 @@ struct Item {
 
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+struct Attachment {
+
+    item_id: i32,
+    weapon_item_id: i32,
+    item_attachment_hash: i32
+
+}
+
+
 pub mod metadata;
 pub mod weapon_metadata;
 
@@ -101,5 +111,26 @@ pub fn get_items() -> String {
 
     }
     serde_json::to_string(&items).unwrap()
+
+}
+
+#[get("/Item/Attachments")]
+pub fn get_attachments() -> String {
+
+    let mut client = db_postgres::get_connection().unwrap();
+    let mut attachments: Vec<Attachment> = Vec::new();
+
+    for row in client.query("SELECT ItemId, WeaponItemId, ItemAttachmentHash FROM Item.Attachments;", &[]).unwrap() {
+
+        attachments.push(Attachment {
+
+            item_id: row.get("ItemId"),
+            weapon_item_id: row.get("WeaponItemId"),
+            item_attachment_hash: row.get("ItemAttachmentHash")
+
+        });
+
+    }
+    serde_json::to_string(&attachments).unwrap()
 
 }
