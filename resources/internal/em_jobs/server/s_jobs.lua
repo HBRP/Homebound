@@ -1,5 +1,5 @@
 
-local time_between_each_paychecks = 60 * 1000
+local time_between_each_paychecks = 30 * 60 * 1000
 
 local function send_paychecks()
 
