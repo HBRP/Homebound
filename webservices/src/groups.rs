@@ -120,10 +120,11 @@ pub fn clock_in(character_id: i32, group_id: i32) -> String {
 
 }
 
-#[put("/Groups/ClockOut/<character_id>")]
-pub fn clock_out(character_id: i32){
+#[post("/Groups/ClockOut/<character_id>")]
+pub fn clock_out(character_id: i32) -> String {
 
     let mut client = db_postgres::get_connection().unwrap();
     client.execute("UPDATE Character.Jobs SET ClockedOn = 'f' WHERE CharacterId = $1", &[&character_id]).unwrap();
-
+    return get_clocked_on_job(character_id);
+    
 }

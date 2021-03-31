@@ -5,7 +5,6 @@ local nearby_job_clock_in = {}
 local function set_job_result(result)
 
     job = result
-    print(json.encode(job))
 
 end
 
@@ -48,10 +47,10 @@ local function nearby_clock_in_loop()
 
                         end, nearby_job_clock_in[i].group_id)
                     else
-                        exports["em_fw"]:clock_out_async(function()
+                        exports["em_fw"]:clock_out_async(function(result)
 
+                            set_job_result(result)
                             exports["cd_drawtextui"]:hide_text(draw_text_id)
-                            exports["em_fw"]:get_clocked_on_job_async(set_job_result)
 
                         end)
                     end
