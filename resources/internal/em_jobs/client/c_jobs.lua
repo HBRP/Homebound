@@ -88,6 +88,3 @@ AddEventHandler("em_fw:character_loaded", function()
     Citizen.CreateThread(nearby_clock_in_loop)
 
 end)
-
-Citizen.CreateThread(refresh_nearby_clock_in_loop)
-Citizen.CreateThread(nearby_clock_in_loop)
