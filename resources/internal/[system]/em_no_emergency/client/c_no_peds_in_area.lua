@@ -1,6 +1,6 @@
 
 local area_locations = {
-    {x = 448.445, y = -994.68, z = 29.38, radius = 40.0}, -- mission row
+    {x = 448.445, y = -994.68, z = 29.38, radius = 30.0}, -- mission row
     {x = -1190.178, y = -888.69, z = 13.9953, radius = 10.0} -- burgershot
 }
 
