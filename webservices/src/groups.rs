@@ -14,6 +14,7 @@ struct ClockInPoint {
 struct ClockedIn {
 
     clocked_in: bool,
+    group_id: i32,
     group_rank_id: i32,
     group_rank: String,
     pay: i32
@@ -63,6 +64,7 @@ pub fn get_clocked_on_job(character_id: i32) -> String {
     let mut clocked_on =  ClockedIn {
 
         clocked_in: false,
+        group_id: 0,
         group_rank_id: 0,
         group_rank: "".to_string(),
         pay: 5
@@ -74,11 +76,13 @@ pub fn get_clocked_on_job(character_id: i32) -> String {
             SELECT 
                 CJ.GroupRankId,
                 GR.Rank,
+                GG.GroupId,
                 GJP.Pay
             FROM 
                 Character.Jobs CJ
             INNER JOIN Groups.Rank GR ON GR.GroupRankId = CJ.GroupRankId
-            INNER JOIN Group.JobPay GJP ON GJP.GroupRankId = GR.GroupRankId
+            INNER JOIN Groups.Groups GG ON GG.GroupId = GR.GroupId
+            INNER JOIN Groups.JobPay GJP ON GJP.GroupRankId = GR.GroupRankId
             WHERE 
                 CJ.CharacterId = $1 AND CJ.ClockedOn = 't'
         ", &[&character_id]);
@@ -88,6 +92,7 @@ pub fn get_clocked_on_job(character_id: i32) -> String {
         Ok(row) => {
             if !row.is_empty() {
                 clocked_on.clocked_in = true;
+                clocked_on.group_id = row.get("GroupId");
                 clocked_on.group_rank_id = row.get("GroupRankId");
                 clocked_on.group_rank = row.get("Rank");
                 clocked_on.pay = row.get("Pay")

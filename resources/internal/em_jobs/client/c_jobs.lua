@@ -18,7 +18,7 @@ local function nearby_clock_in_loop()
 
                 nearby_point = true
                 if not exports["cd_drawtextui"]:is_in_queue(draw_text_id) then
-                    draw_text_id = exports["cd_drawtextui"]:show_text(string.format("Press [E] to open %s", nearby_job_clock_in[i].group_name))
+                    draw_text_id = exports["cd_drawtextui"]:show_text(string.format("Press [E] to clock in at the %s", nearby_job_clock_in[i].group_name))
                 end
                 if IsControlJustReleased(0, 38) then
                     print("Help me")
@@ -68,3 +68,6 @@ AddEventHandler("em_fw:character_loaded", function()
     Citizen.CreateThread(nearby_clock_in_loop)
 
 end)
+
+--Citizen.CreateThread(refresh_nearby_clock_in_loop)
+--Citizen.CreateThread(nearby_clock_in_loop)
