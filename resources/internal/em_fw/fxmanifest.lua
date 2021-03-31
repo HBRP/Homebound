@@ -119,6 +119,12 @@ export 'get_store_items_async'
 -- c_customization.lua
 export 'get_nearby_customization_points_async'
 
+--c_groups.lua
+export 'get_nearby_job_clock_in_async'
+export 'get_clocked_on_job_async'
+export 'clock_in_async'
+export 'clock_out_async'
+
 -- c_server_callback.lua
 export 'trigger_server_callback'
 export 'trigger_server_callback_async'
