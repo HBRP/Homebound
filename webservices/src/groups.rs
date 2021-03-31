@@ -56,7 +56,7 @@ pub fn get_nearby_job_clock_in(character_id: i32, x: i32, y: i32, z: i32) -> Str
 }
 
 #[get("/Groups/GetClockedOnJob/<character_id>")]
-pub fn get_clockedon_job(character_id: i32) -> String {
+pub fn get_clocked_on_job(character_id: i32) -> String {
 
     let mut client = db_postgres::get_connection().unwrap();
     let mut clocked_on =  ClockedIn {
@@ -110,7 +110,7 @@ pub fn clock_in(character_id: i32, group_id: i32) -> String {
     client.execute("UPDATE Character.Jobs SET ClockedOn = 'f' WHERE CharacterId = $1", &[&character_id]).unwrap();
     client.execute("UPDATE Character.Jobs CJ Set ClockedOn = 't' FROM Groups.Rank GJ WHERE CJ.CharacterId = $1 AND CJ.GroupRankId = GJ.GroupRankId AND GJ.GroupId = $2", &[&character_id, &group_id]).unwrap();
 
-    return get_clockedon_job(character_id);
+    return get_clocked_on_job(character_id);
 
 }
 
