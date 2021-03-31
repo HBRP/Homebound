@@ -4,9 +4,9 @@ use crate::db_postgres;
 #[derive(Serialize, Deserialize, Debug)]
 struct ClockInPoint {
     group_id: i32,
-    x: i32,
-    y: i32,
-    z: i32,
+    x: f32,
+    y: f32,
+    z: f32,
     group_name: String
 }
 
@@ -21,7 +21,7 @@ struct ClockedIn {
 }
 
 #[get("/Groups/GetNeabyJobClockIn/<character_id>/<x>/<y>/<z>")]
-pub fn get_nearby_job_clock_in(character_id: i32, x: i32, y: i32, z: i32) -> String {
+pub fn get_nearby_job_clock_in(character_id: i32, x: f32, y: f32, z: f32) -> String {
 
     let mut client = db_postgres::get_connection().unwrap();
 
@@ -33,9 +33,10 @@ pub fn get_nearby_job_clock_in(character_id: i32, x: i32, y: i32, z: i32) -> Str
             GJC.GroupId, X, Y, Z, GG.GroupName
         FROM Groups.JobClockin GJC
         INNER JOIN Groups.Groups GG ON GG.GroupId = GJC.GroupId
-        INNER JOIN Character.Jobs CJ ON CJ.GroupRankId = GG.GroupRankId
+        INNER JOIN Groups.Rank GR ON GR.GroupId = GG.GroupId
+        INNER JOIN Character.Jobs CJ ON CJ.GroupRankId = GR.GroupRankId
         WHERE
-                CJ.CharacterId = $1,
+                CJ.CharacterId = $1
             AND SQRT(POW(X - $2, 2) + POW(Y - $3, 2) + POW(Z - $4, 2)) < 200
     ";
     for row in client.query(query, &[&character_id, &x, &y, &z]).unwrap() {
