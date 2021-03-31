@@ -9,6 +9,12 @@ client_scripts {
 
 }
 
+server_scripts {
+
+    'server/s_jobs.lua'
+
+}
+
 dependencies {
 
     'em_fw'

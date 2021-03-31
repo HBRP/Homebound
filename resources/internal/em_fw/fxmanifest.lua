@@ -132,3 +132,6 @@ export 'trigger_server_callback'
 export 'trigger_server_callback_async'
 -- s_server_callback.lua
 server_export 'register_server_callback'
+
+--s_groups.lua
+server_export 'get_current_character_jobs'

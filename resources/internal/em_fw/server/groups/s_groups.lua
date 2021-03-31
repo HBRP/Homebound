@@ -21,6 +21,12 @@ local function register_character_job(source, character_id, job)
 
 end
 
+function get_current_character_jobs()
+
+    return character_jobs
+
+end
+
 register_server_callback("em_fw:get_nearby_job_clock_in", function(source, callback, character_id, x, y, z)
 
     local endpoint = string.format("/Groups/GetNeabyJobClockIn/%d/%f/%f/%f", character_id, x, y, z)
@@ -70,4 +76,10 @@ register_server_callback("em_fw:clock_out", function(source, callback, character
 
     end)  
 
+end)
+
+AddEventHandler('playerDropped', function (reason)
+
+    clear_previous_entry(source, 0)
+    
 end)
