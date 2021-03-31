@@ -21,7 +21,8 @@ client_scripts {
     'client/enumerator/c_enumerator.lua',
     'client/vehicle/c_vehicle.lua',
     'client/store/c_store.lua',
-    'client/customization/c_customization.lua'
+    'client/customization/c_customization.lua',
+    'client/groups/c_groups.lua'
     
 }
 
@@ -42,7 +43,8 @@ server_scripts {
     'server/storage/s_drop.lua',
     'server/items/s_items.lua',
     'server/store/s_store.lua',
-    'server/customization/s_customization.lua'
+    'server/customization/s_customization.lua',
+    'server/groups/s_groups.lua'
 
 }
 

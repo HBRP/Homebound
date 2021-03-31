@@ -27,7 +27,7 @@ local function store_loop()
     while is_there_nearby_stores do
 
         Citizen.Wait(5)
-        ped_coords = GetEntityCoords(PlayerPedId())
+        local ped_coords = GetEntityCoords(PlayerPedId())
 
         for i = 1, #nearby_stores do
 

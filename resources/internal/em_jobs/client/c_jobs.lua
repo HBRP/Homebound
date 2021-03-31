@@ -5,9 +5,35 @@ local nearby_job_clock_in = {}
 
 local function nearby_clock_in_loop()
 
+    local nearby_point = false
+    local draw_text_id = -1
     while true do
 
         Citizen.Wait(5)
+        local ped_coords = GetEntityCoords(PlayerPedId())
+
+        for i = 1, #nearby_job_clock_in do
+
+            if GetDistanceBetweenCoords(ped_coords.x, ped_coords.y, ped_coords.z, nearby_job_clock_in[i].x, nearby_job_clock_in[i].y, nearby_job_clock_in[i].z, true) < 2 then
+
+                nearby_point = true
+                if not exports["cd_drawtextui"]:is_in_queue(draw_text_id) then
+                    draw_text_id = exports["cd_drawtextui"]:show_text(string.format("Press [E] to open %s", nearby_job_clock_in[i].group_name))
+                end
+                if IsControlJustReleased(0, 38) then
+                    print("Help me")
+                end
+
+            end
+
+        end
+
+        if not nearby_point then
+            exports["cd_drawtextui"]:hide_text(draw_text_id)
+            Citizen.Wait(500)
+        end
+        nearby_point = false
+
 
     end
 

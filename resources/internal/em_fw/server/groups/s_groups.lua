@@ -2,7 +2,7 @@
 
 register_server_callback("em_fw:get_nearby_job_clock_in", function(source, callback, character_id, x, y, z)
 
-    local endpoint = string.format("/Groups/GetNeabyJobClockIn/%d/%d/%d/%d", character_id, x, y, z)
+    local endpoint = string.format("/Groups/GetNeabyJobClockIn/%d/%f/%f/%f", character_id, x, y, z)
     HttpGet(endpoint, nil, function(error_code, result_data, result_headers)
 
         local temp = json.decode(result_data)
