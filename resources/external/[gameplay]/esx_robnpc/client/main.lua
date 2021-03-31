@@ -19,14 +19,19 @@ Citizen.CreateThread(function()
         local aiming, targetPed = GetEntityPlayerIsFreeAimingAt(PlayerId(-1))
         if aiming and not is_player(targetPed) then
 
+            local playerPed = GetPlayerPed(-1)
+            local pCoords   = GetEntityCoords(playerPed, true)
+            local tCoords   = GetEntityCoords(targetPed, true)
+
+            if #(pCoords - tCoords) > Config.RobDistance * 2 then
+                goto continue
+            end
+
             if GetVehiclePedIsIn(targetPed, false) == 0 then
                 TaskSetBlockingOfNonTemporaryEvents(targetPed)
             end
             
             if IsControlJustPressed(0, 38) then
-                local playerPed = GetPlayerPed(-1)
-                local pCoords = GetEntityCoords(playerPed, true)
-                local tCoords = GetEntityCoords(targetPed, true)
 
                 if DoesEntityExist(targetPed) and IsEntityAPed(targetPed) then
                     if robbedRecently then
@@ -40,8 +45,10 @@ Citizen.CreateThread(function()
                     end
                 end
             end
+        else
+            Citizen.Wait(100)
         end
-
+        ::continue::
     end
 end)
 
