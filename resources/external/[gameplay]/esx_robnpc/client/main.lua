@@ -1,23 +1,11 @@
 local robbedRecently = false
 
-local function is_player(ped)
-
-    if GetEntityModel(ped) == GetHashKey("mp_f_freemode_01") then
-        return true
-    elseif GetEntityModel(ped) == GetHashKey("mp_m_freemode_01") then
-        return true
-    end
-
-    return false
-
-end
-
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(5)
 
         local aiming, targetPed = GetEntityPlayerIsFreeAimingAt(PlayerId(-1))
-        if aiming and not is_player(targetPed) then
+        if aiming and not IsPedAPlayer(targetPed) then
 
             local playerPed = GetPlayerPed(-1)
             local pCoords   = GetEntityCoords(playerPed, true)
