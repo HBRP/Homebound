@@ -11,7 +11,8 @@ client_scripts {
 
 server_scripts {
 
-    'server/s_jobs.lua'
+    'server/s_jobs.lua',
+    's_characters_online.lua'
 
 }
 
