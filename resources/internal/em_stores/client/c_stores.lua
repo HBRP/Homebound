@@ -1,4 +1,5 @@
 
+local is_there_nearby_stores = false
 local nearby_stores = {}
 
 local store_type_ids = {
@@ -23,7 +24,7 @@ local function store_loop()
 
     local nearby_point = false
     local draw_text_id = -1
-    while true do
+    while is_there_nearby_stores do
 
         Citizen.Wait(5)
         ped_coords = GetEntityCoords(PlayerPedId())
@@ -55,10 +56,11 @@ end
 
 local function refresh_nearby_stores(result)
 
-    nearby_stores = result
-    if nearby_stores == nil then
-        nearby_stores = {}
+    nearby_stores = result or {}
+    if not is_there_nearby_stores and #nearby_stores > 0 then
+        Citizen.CreateThread(store_loop)
     end
+    is_there_nearby_stores = #nearby_stores > 0
 
 end
 
@@ -76,7 +78,6 @@ end
 AddEventHandler("em_fw:character_loaded", function()
 
     Citizen.CreateThread(refresh_nearby_stores_loop)
-    Citizen.CreateThread(store_loop)
     
 end)
 
