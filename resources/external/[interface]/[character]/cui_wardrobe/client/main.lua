@@ -4,6 +4,16 @@ local isOpening = false
 local isLoading = false
 local outfits = {}
 
+local function disble_controls_loop()
+
+    while isVisible do
+        DisableControlAction(0, 1, true)
+        DisableControlAction(0, 2, true)
+        Citizen.Wait(5)
+    end
+
+end
+
 function setVisible(visible)
     SetNuiFocus(visible, visible)
     SendNUIMessage({
@@ -11,6 +21,10 @@ function setVisible(visible)
         value = visible
     })
     isVisible = visible
+
+    if isVisible then
+        Citizen.CreateThread(disble_controls_loop)
+    end
 
     if Config.HideMinimapOnOpen then
         DisplayRadar(not visible)
@@ -133,17 +147,6 @@ RegisterNUICallback('playSound', function(data, cb)
         PlaySoundFrontend(-1, 'Reset_Prop_Position', 'DLC_Dmod_Prop_Editor_Sounds', 0)
     elseif sound == 'error' then
         PlaySoundFrontend(-1, 'ERROR', 'HUD_FRONTEND_DEFAULT_SOUNDSET', 1)
-    end
-end)
-
--- Default controls
-Citizen.CreateThread(function()
-    while true do
-        if isVisible then
-            DisableControlAction(0, 1, true)
-            DisableControlAction(0, 2, true)
-        end
-        Citizen.Wait(0)
     end
 end)
 
