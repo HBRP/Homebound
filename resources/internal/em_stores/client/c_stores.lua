@@ -45,7 +45,7 @@ local function store_loop()
         end
         if not nearby_point then
             exports["cd_drawtextui"]:hide_text(draw_text_id)
-            Citizen.Wait(100)
+            Citizen.Wait(500)
         end
         nearby_point = false
 
