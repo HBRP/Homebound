@@ -2,6 +2,18 @@
 local job = {}
 local nearby_job_clock_in = {}
 
+local function set_job_result(result)
+
+    job = result
+    print(json.encode(job))
+
+end
+
+local function set_nearby_job_clock_in(result)
+
+    nearby_job_clock_in = result or {}
+
+end
 
 local function nearby_clock_in_loop()
 
@@ -18,10 +30,32 @@ local function nearby_clock_in_loop()
 
                 nearby_point = true
                 if not exports["cd_drawtextui"]:is_in_queue(draw_text_id) then
-                    draw_text_id = exports["cd_drawtextui"]:show_text(string.format("Press [E] to clock in at the %s", nearby_job_clock_in[i].group_name))
+
+                    local clock_in_text = "clock in to"
+                    if nearby_job_clock_in[i].group_id == job.group_id then
+                        clock_in_text = "clock out of"
+                    end
+                    draw_text_id = exports["cd_drawtextui"]:show_text(string.format("Press [E] to %s the %s", clock_in_text, nearby_job_clock_in[i].group_name))
+
                 end
                 if IsControlJustReleased(0, 38) then
-                    print("Help me")
+
+                    if not job.clocked_in then
+                        exports["em_fw"]:clock_in_async(function(result) 
+
+                            set_job_result(result)
+                            exports["cd_drawtextui"]:hide_text(draw_text_id)
+
+                        end, nearby_job_clock_in[i].group_id)
+                    else
+                        exports["em_fw"]:clock_out_async(function()
+
+                            exports["cd_drawtextui"]:hide_text(draw_text_id)
+                            exports["em_fw"]:get_clocked_on_job_async(set_job_result)
+
+                        end)
+                    end
+
                 end
 
             end
@@ -36,19 +70,6 @@ local function nearby_clock_in_loop()
 
 
     end
-
-end
-
-
-local function set_job_result(result)
-
-    job = result
-
-end
-
-local function set_nearby_job_clock_in(result)
-
-    nearby_job_clock_in = result or {}
 
 end
 
@@ -69,5 +90,5 @@ AddEventHandler("em_fw:character_loaded", function()
 
 end)
 
---Citizen.CreateThread(refresh_nearby_clock_in_loop)
---Citizen.CreateThread(nearby_clock_in_loop)
+Citizen.CreateThread(refresh_nearby_clock_in_loop)
+Citizen.CreateThread(nearby_clock_in_loop)
