@@ -44,7 +44,8 @@ server_scripts {
     'server/items/s_items.lua',
     'server/store/s_store.lua',
     'server/customization/s_customization.lua',
-    'server/groups/s_groups.lua'
+    'server/groups/s_groups.lua',
+    'server/bank/s_bank.lua'
 
 }
 
@@ -135,3 +136,6 @@ server_export 'register_server_callback'
 
 --s_groups.lua
 server_export 'get_current_character_jobs'
+
+--s_bank.lua
+server_export 'direct_deposit'

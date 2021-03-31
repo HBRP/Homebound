@@ -7,6 +7,7 @@ local function send_paychecks()
     for i = 1, #current_jobs do
 
         TriggerClientEvent("swt_notifications:Success", current_jobs[i].source, "Payroll", string.format('Paid $%d', current_jobs[i].job.pay), "top", 2000, true)
+        exports["em_fw"]:direct_deposit(current_jobs[i].character_id, current_jobs[i].job.pay)
 
     end
 
