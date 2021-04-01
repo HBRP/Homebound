@@ -62,7 +62,7 @@ local function blip_group_loop()
 
     while true do
 
-        Citizen.Wait(1000)
+        Citizen.Wait(500)
         send_character_blip_groups()
 
     end
