@@ -22,6 +22,6 @@ dependencies {
 
     'em_fw',
     'em_commands',
-    't-notify'
+    'swt_notifications'
 
 }
