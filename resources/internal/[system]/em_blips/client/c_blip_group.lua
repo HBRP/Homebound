@@ -19,7 +19,7 @@ local function setup_blips(new_blips)
         SetBlipSprite(blip, 57)
         SetBlipColour(blip, new_blips[i].blip_color)
         SetBlipAsShortRange(blip, false)
-        SetBlipScale(blip, 0.9)
+        SetBlipScale(blip, 0.8)
 
         BeginTextCommandSetBlipName('STRING')
         AddTextComponentString(new_blips[i].callsign)

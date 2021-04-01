@@ -46,7 +46,7 @@ local function send_character_blip_groups()
             if other_blip_group_id == blip_group_id then
 
                 local coords = GetEntityCoords(GetPlayerPed(character_jobs[j].source))
-                table.insert(other_characters, {blip_color = get_blip_color(other_blip_group_id), x = coords.x, y = coords.y, z = coords.z, callsign = character_jobs[j].job.callsign})
+                table.insert(other_characters, {blip_color = get_blip_color(character_jobs[j].job.group_id), x = coords.x, y = coords.y, z = coords.z, callsign = character_jobs[j].job.callsign})
 
             end
 
