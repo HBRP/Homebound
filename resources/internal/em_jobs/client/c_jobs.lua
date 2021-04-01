@@ -44,6 +44,7 @@ local function nearby_clock_in_loop()
 
                             set_job_result(result)
                             exports["cd_drawtextui"]:hide_text(draw_text_id)
+                            TriggerEvent("em_jobs:clocked_in", result.group_id)
 
                         end, nearby_job_clock_in[i].group_id)
                     else
@@ -51,6 +52,7 @@ local function nearby_clock_in_loop()
 
                             set_job_result(result)
                             exports["cd_drawtextui"]:hide_text(draw_text_id)
+                            TriggerEvent("em_jobs:clocked_out")
 
                         end)
                     end
