@@ -134,6 +134,10 @@ RegisterNUICallback('load', function(data, cb)
         local outfit      = json.decode(outfit_data)
         exports["fivem-appearance"]:setPedComponents(PlayerPedId(), outfit.ped_components)
         exports["fivem-appearance"]:setPedProps(PlayerPedId(), outfit.props)
+
+        local appearance = exports["fivem-appearance"]:getPedAppearance(PlayerPedId())
+        exports["em_fw"]:update_skin(json.encode(appearance))
+
     end
 end)
 

@@ -18,7 +18,6 @@ local function open_full_customization()
                 ped_components = exports["fivem-appearance"]:getPedComponents(),
                 props = exports["fivem-appearance"]:getPedProps()
             }
-            exports["em_fw"]:create_outfit("First Outfit", json.encode(outfit))
 
         else
             open_full_customization()
