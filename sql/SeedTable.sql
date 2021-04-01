@@ -326,3 +326,15 @@ INSERT INTO
 VALUES
     ('Class 1 License'),
     ('Class 2 License');
+
+INSERT INTO
+    Blip.Groups (BlipGroupName)
+VALUES
+    ('Emergency Services'),
+    ('USMS');
+
+INSERT INTO
+    Groups.BlipSubscription (GroupId, BlipColor, BlipGroupId)
+VALUES
+    (3, 38, 1),
+    (3, 28, 1);
