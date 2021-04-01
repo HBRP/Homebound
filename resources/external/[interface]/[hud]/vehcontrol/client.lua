@@ -6,9 +6,9 @@ local windowState4 = true
 
 Citizen.CreateThread(function()
     while true do
-		Citizen.Wait(0)
+		Citizen.Wait(5)
 		if IsPedInAnyVehicle(PlayerPedId(), false) then
-			if ( IsControlJustReleased( 0, 40 ) or IsDisabledControlJustReleased( 0, 40 ) ) and GetLastInputMethod( 0 ) then -- Key to open NUI https://docs.fivem.net/docs/game-references/controls/
+			if (IsControlJustReleased(0, 58) or IsDisabledControlJustReleased(0, 58)) then -- Key to open NUI https://docs.fivem.net/docs/game-references/controls/
 				openVehControl()
 			end
 		end
