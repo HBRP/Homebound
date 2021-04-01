@@ -1,11 +1,5 @@
-fx_version "adamant"
+fx_version 'bodacious'
 game "gta5"
-
-author "Trsak"
-
-description "ESX Inventory HUD"
-
-version "2.4.0"
 
 ui_page "html/ui.html"
 
@@ -40,6 +34,6 @@ dependencies {
   "em_items",
   "em_storage",
   "em_transactions",
-  "swt_notifications"
+  "t-notify"
 
 }

@@ -141,7 +141,7 @@ RegisterNUICallback("GetNearPlayers", function(data, cb)
     end
 
     if #characters == 0 then
-        exports['swt_notifications']:Negative("Storage", "No players nearby", "top", 3000, true)
+        exports['t-notify']:Alert({style = 'info', message = "No players nearby"})
     else
         SendNUIMessage(
         {
@@ -172,7 +172,7 @@ RegisterNUICallback("DropItem", function(data, cb)
     item = data["item"]
 
     if data["number"] > item.count then
-        exports['swt_notifications']:Negative("Storage", "Cannot drop more items than available in slot", "top", 3000, true)
+        exports['t-notify']:Alert({style = 'info', message = "Cannot drop more items than available in slot"})
         return
     end
 
@@ -195,10 +195,10 @@ RegisterNUICallback("GiveItem", function(data, cb)
 
     local result = exports["em_fw"]:give_item_to_other_character(data.player, data.item.item_id, amount_to_give, data.item.storage_item_id)
     if result.response.success then
-        exports['swt_notifications']:Success("Storage", "Gave item to character", "top", 3000, true)
+        exports['t-notify']:Alert({style = 'success', message = "Gave item to character"})
         exports["em_fw"]:remove_item(data.item.storage_item_id, amount_to_give)
     else
-        exports['swt_notifications']:Negative("Storage", "Cannot give item to character.", "top", 3000, true)
+        exports['t-notify']:Alert({style = 'error', message = "Cannot give item to character"})
     end
     loadPlayerInventory()
 
@@ -212,7 +212,7 @@ AddEventHandler("em_fw:successful_give", function(item_id, amount)
         loadPlayerInventory()
     end
 
-    exports['swt_notifications']:Success("Storage", string.format("Received %d %s", amount, exports["em_items"]:get_item_name_from_item_id(item_id)), "top", 3000, true)
+    exports['t-notify']:Alert({style = 'success', message = string.format("Received %d %s", amount, exports["em_items"]:get_item_name_from_item_id(item_id))})
 
 end)
 
@@ -405,18 +405,18 @@ RegisterNUICallback("MoveItem", function(data, cb)
 
         local response = exports["em_fw"]:move_item(left_storage_id, data.storage_item_id, left_storage_id, data.item_slot_to, data.item_id, data.amount)
         if not response.response.success then
-            exports['swt_notifications']:Negative("Storage", response.response.message, "top", 2000, true)
+            exports['t-notify']:Alert({style = 'error', message = response.response.message})
         end
 
     elseif data.inventory_from == "main" and data.inventory_to == "other" then
 
         local response = exports["em_fw"]:move_item(left_storage_id, data.storage_item_id, right_storage_id, data.item_slot_to, data.item_id, data.amount)
         if not response.response.success then
-            exports['swt_notifications']:Negative("Storage", response.response.message, "top", 2000, true)
+            exports['t-notify']:Alert({style = 'error', message = response.response.message})
         end
         
     else
-        exports['swt_notifications']:Negative("Storage", "Unable to move item", "top", 2000, true)
+        exports['t-notify']:Alert({style = 'error', message = "Unable to move item"})
     end
     reload_inventories()
     cb("ok")

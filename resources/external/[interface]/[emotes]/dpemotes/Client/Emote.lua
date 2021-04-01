@@ -209,7 +209,7 @@ function EmoteCommandStart(source, args, raw)
         if IsInAnimation then
             EmoteCancel()
         else
-            exports['swt_notifications']:Negative("emotes", Config.Languages[lang]['nocancel'], "top", 2000, true)
+          exports['t-notify']:Alert({style = 'error', message = Config.Languages[lang]['nocancel']})
         end
       return
     elseif name == "help" then
@@ -223,7 +223,7 @@ function EmoteCommandStart(source, args, raw)
     elseif DP.PropEmotes[name] ~= nil then
       if OnEmotePlay(DP.PropEmotes[name]) then end return
     else
-      exports['swt_notifications']:Negative("emotes", string.format("%s is not a valid emote", name), "top", 2000, true)
+      exports['t-notify']:Alert({style = 'error', message = string.format("%s is not a valid emote", name)})
     end
   end
 end

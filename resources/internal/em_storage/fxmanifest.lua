@@ -21,6 +21,6 @@ dependencies {
     'em_fw',
     'em_commands',
     'cd_drawtextui',
-    'swt_notifications'
+    't-notify'
 
 }

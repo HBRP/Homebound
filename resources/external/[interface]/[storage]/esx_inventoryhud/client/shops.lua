@@ -56,10 +56,10 @@ local function begin_transaction(data)
         if response.response.success then
             exports["em_transactions"]:remove_cash(data.number * data.item.price)
         else
-            exports['swt_notifications']:Negative("Shop", "Cannot buy that many items", "top", 2000, true)
+            exports['t-notify']:Alert({style = 'error', message = "Cannot buy that many items"})
         end
     else
-        exports['swt_notifications']:Negative("Shop", "Not enough cash on hand.", "top", 2000, true)
+        exports['t-notify']:Alert({style = 'error', message = "Not enough cash on hand"})
     end
 
 end
@@ -71,7 +71,7 @@ RegisterNUICallback(
         if data.number > 0 then
             begin_transaction(data)
         else
-            exports['swt_notifications']:Negative("Shop", "Must specify a number greater than 0 to purchase an item", "top", 2000, true)
+            exports['t-notify']:Alert({style = 'error', message = "Must specify a number greater than 0 to purchase an item"})
         end
         loadPlayerInventory()
         cb("ok")

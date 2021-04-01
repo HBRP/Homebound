@@ -106,7 +106,7 @@ exports["em_commands"]:register_command_no_perms("push_car", function(source, ar
 
     set_vehicle()
     if Vehicle.Vehicle == nil and not pushing_vehicle then
-        exports['swt_notifications']:Negative("Push Car", 'No car nearby', "top", 2000, true)
+        exports['t-notify']:Alert({style = 'error', message = 'No car nearby'})
         return
     end
 

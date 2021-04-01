@@ -14,7 +14,7 @@ client_scripts {
 
 dependencies {
     'em_fw',
-    'swt_notifications',
+    't-notify',
     'em_commands',
     'rprogress'
 }

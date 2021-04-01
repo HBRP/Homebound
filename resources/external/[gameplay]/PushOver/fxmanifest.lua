@@ -17,5 +17,5 @@ client_script "client.lua"
 
 dependencies {
     'em_commands',
-    'swt_notifications'
+    't-notify'
 }

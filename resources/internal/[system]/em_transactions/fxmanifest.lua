@@ -18,6 +18,6 @@ dependencies {
 
     'em_fw',
     'em_items',
-    'swt_notifications'
+    't-notify'
 
 }

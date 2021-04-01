@@ -87,7 +87,7 @@ function sit(object, modelName, data)
 
 	exports["em_fw"]:trigger_server_callback('esx_sit:getPlace', function(occupied)
 		if occupied then
-			exports['swt_notifications']:Negative("Sit Chair", 'Chair already occupied', "top", 2000, true)
+			exports['t-notify']:Alert({style = 'error', message = 'Chair already occupied'})
 		else
 			local playerPed = PlayerPedId()
 			lastPos, currentSitCoords = GetEntityCoords(playerPed), objectCoords

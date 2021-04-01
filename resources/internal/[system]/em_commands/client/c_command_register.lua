@@ -7,7 +7,7 @@ function register_command(command, callback, ...)
         if exports["em_fw"]:can_use_command(command) then
             callback(source, args, raw)
         else
-            exports['swt_notifications']:Negative("Command", 'Cannot use command', "top", 2000, true)
+            exports['t-notify']:Alert({style = 'error', message = "Cannot use command"})
         end
 
     end)

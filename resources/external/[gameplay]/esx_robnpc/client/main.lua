@@ -23,11 +23,11 @@ Citizen.CreateThread(function()
 
                 if DoesEntityExist(targetPed) and IsEntityAPed(targetPed) then
                     if robbedRecently then
-                        exports['swt_notifications']:Negative("Robbing", 'Cannot rob another person yet', "top", 2000, true)
+                        exports['t-notify']:Alert({style = 'error', message = 'Cannot rob another person yet'})
                     elseif IsPedDeadOrDying(targetPed, true) then
-                        exports['swt_notifications']:Negative("Robbing", 'Target dead', "top", 2000, true)
+                        exports['t-notify']:Alert({style = 'error', message = 'Target dead'})
                     elseif GetDistanceBetweenCoords(pCoords.x, pCoords.y, pCoords.z, tCoords.x, tCoords.y, tCoords.z, true) >= Config.RobDistance then
-                        exports['swt_notifications']:Negative("Robbing", 'Target too far away', "top", 2000, true)
+                        exports['t-notify']:Alert({style = 'error', message = 'Target too far away'})
                     else
                         robNpc(targetPed)
                     end
@@ -63,11 +63,11 @@ function robNpc(targetPed)
         local amount = math.random(Config.MinMoney, Config.MaxMoney)
         exports["em_fw"]:give_item(exports["em_fw"]:get_character_storage_id(), exports["em_items"]:get_item_id_from_name("cash"), amount , -1, -1)
         FreezeEntityPosition(targetPed, false)
-        exports['swt_notifications']:Success("Robbing", string.format("Stole $%d", amount), "top", 2000, true)
+        exports['t-notify']:Alert({style = 'success', message = string.format("Stole $%d", amount)})
 
         if Config.ShouldWaitBetweenRobbing then
             Citizen.Wait(math.random(Config.MinWaitSeconds, Config.MaxWaitSeconds) * 1000)
-            exports['swt_notifications']:Info("Robbing", 'Can rob again', "top", 2000, true)
+            exports['t-notify']:Alert({style = 'info', message = "Can rob again"})
         end
         ClearPedTasksImmediately(targetPed)
 

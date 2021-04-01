@@ -26,9 +26,9 @@ register_command("give_item", function(source, args, raw)
     local response = exports["em_fw"]:give_item(storage_id, tonumber(args[1]), tonumber(args[2]), -1, -1)
 
     if response.response.success then
-        exports['swt_notifications']:Success("Command", "Gave Item", "top", 2000, true)
+        exports['t-notify']:Alert({style = 'success', message = "Gave Item"})
     else
-        exports['swt_notifications']:Negative("Command", "Could not give item", "top", 2000, true)
+        exports['t-notify']:Alert({style = 'error', message = "Could not give item"})
     end
 
 end, "Give item by item id", {{ name = "id", help = "item id"}, {name = "amount", help = "amount to give"}})

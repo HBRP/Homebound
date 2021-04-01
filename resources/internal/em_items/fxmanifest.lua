@@ -31,6 +31,6 @@ dependencies {
     'em_fw',
     'em_medical',
     'rprogress',
-    'swt_notifications'
+    't-notify'
 
 }

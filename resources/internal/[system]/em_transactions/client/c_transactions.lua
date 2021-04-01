@@ -22,7 +22,7 @@ function remove_cash(amount)
     local storage_items = exports["em_fw"]:get_character_storage()["storage_items"]
 
     if get_cash_on_hand(storage_items) < amount then
-        exports['swt_notifications']:Negative("Transaction", 'You do not have enough cash on hand', "top", 2000, true)
+        exports['t-notify']:Alert({style = 'error', message = "You do not have enough cash on hand"})
         return false
     end
 
@@ -37,7 +37,7 @@ function remove_cash(amount)
             end
         end
     end
-    exports['swt_notifications']:Success("Transaction", string.format("Spent $%d", math.ceil(amount)), "top", 2000, true)
+    exports['t-notify']:Alert({style = 'success', message = string.format("Spent $%d", math.ceil(amount))})
 
     return true
 
