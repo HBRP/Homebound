@@ -62,7 +62,7 @@ local function blip_group_loop()
 
     while true do
 
-        Citizen.Wait(500)
+        Citizen.Wait(125)
         send_character_blip_groups()
 
     end
@@ -74,7 +74,7 @@ Citizen.CreateThread(function()
     Citizen.Wait(0)
     exports["em_fw"]:get_blip_group_subscription(function(result)
 
-        blip_subscriptions = result
+        blip_subscriptions = result or {}
         Citizen.CreateThread(blip_group_loop)
 
     end)
