@@ -17,6 +17,7 @@ struct ClockedIn {
     group_id: i32,
     group_rank_id: i32,
     group_rank: String,
+    callsign: String,
     pay: i32
 
 }
@@ -67,6 +68,7 @@ pub fn get_clocked_on_job(character_id: i32) -> String {
         group_id: 0,
         group_rank_id: 0,
         group_rank: "".to_string(),
+        callsign: "".to_string(),
         pay: 5
 
     };
@@ -77,12 +79,14 @@ pub fn get_clocked_on_job(character_id: i32) -> String {
                 CJ.GroupRankId,
                 GR.Rank,
                 GG.GroupId,
-                GJP.Pay
+                GJP.Pay,
+                (CASE WHEN CC.Callsign IS NULL THEN '' ELSE CC.CallSign END)
             FROM 
                 Character.Jobs CJ
             INNER JOIN Groups.Rank GR ON GR.GroupRankId = CJ.GroupRankId
             INNER JOIN Groups.Groups GG ON GG.GroupId = GR.GroupId
             INNER JOIN Groups.JobPay GJP ON GJP.GroupRankId = GR.GroupRankId
+            LEFT JOIN Character.Callsign CC ON CC.CharacterId = CJ.CharacterId
             WHERE 
                 CJ.CharacterId = $1 AND CJ.ClockedOn = 't'
         ", &[&character_id]);
@@ -95,6 +99,7 @@ pub fn get_clocked_on_job(character_id: i32) -> String {
                 clocked_on.group_id = row.get("GroupId");
                 clocked_on.group_rank_id = row.get("GroupRankId");
                 clocked_on.group_rank = row.get("Rank");
+                clocked_on.callsign = row.get("CallSign");
                 clocked_on.pay = row.get("Pay")
             }
         },
