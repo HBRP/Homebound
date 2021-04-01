@@ -1,8 +1,7 @@
 
 register_server_callback("em_fw:get_blips", function(source, callback)
 
-    local data = nil
-    HttpGet("/Blip/Get", data, function(error_code, result_data, result_headers)
+    HttpGet("/Blip/Get", nil, function(error_code, result_data, result_headers)
 
         local temp = json.decode(result_data)
         callback(temp)
@@ -10,3 +9,14 @@ register_server_callback("em_fw:get_blips", function(source, callback)
     end)
 
 end)
+
+function get_blip_group_subscription(callback)
+
+    HttpGet("/Blip/GroupSubscriptions", nil, function(error_code, result_data, result_headers)
+
+        blips = json.decode(result_data)
+        callback(blips)
+
+    end)
+
+end

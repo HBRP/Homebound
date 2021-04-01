@@ -131,6 +131,10 @@ export 'clock_out_async'
 -- c_server_callback.lua
 export 'trigger_server_callback'
 export 'trigger_server_callback_async'
+
+-- s_blips.lua
+server_export 'get_blip_group_subscription'
+
 -- s_server_callback.lua
 server_export 'register_server_callback'
 

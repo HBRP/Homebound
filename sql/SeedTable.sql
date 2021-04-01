@@ -337,4 +337,4 @@ INSERT INTO
     Groups.BlipSubscription (GroupId, BlipColor, BlipGroupId)
 VALUES
     (3, 38, 1),
-    (3, 28, 1);
+    (4, 28, 1);
