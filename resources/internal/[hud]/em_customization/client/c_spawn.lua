@@ -1,6 +1,8 @@
 
 local function open_full_customization()
 
+    exports['fivem-appearance']:setPlayerModel("mp_m_freemode_01")
+    Citizen.Wait(500)
     local config = {
         ped = true,
         headBlend = true,
