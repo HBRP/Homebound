@@ -90,7 +90,9 @@ VALUES
     (5, 'US Marshal'),
     (5, 'Chief Deputy US Marshal'),
     (5, 'Supervisory US Marshal'),
-    (5, 'Deputy US Marshal');
+    (5, 'Deputy US Marshal'),
+    (3, 'Chief'),
+    (4, 'Sheriff');
 
 INSERT INTO
     Groups.JobPay (GroupRankId, Pay)
@@ -108,7 +110,9 @@ VALUES
     (12, 80),
     (13, 70),
     (14, 60),
-    (15, 50);
+    (15, 50),
+    (16, 75),
+    (17, 75);
 
 INSERT INTO
     Player.Types (PlayerType)

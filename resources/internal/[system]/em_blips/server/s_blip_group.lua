@@ -12,10 +12,10 @@ local function get_blip_group_id(group_id)
 
 end
 
-local function get_blip_color(blip_group_id)
+local function get_blip_color(group_id)
 
     for i = 1, #blip_subscriptions do
-        if blip_subscriptions[i].blip_group_id == blip_group_id then
+        if blip_subscriptions[i].group_id == group_id then
             return blip_subscriptions[i].blip_color
         end
     end
@@ -31,7 +31,7 @@ local function send_character_blip_groups()
     for i = 1, #character_jobs do
 
         local other_characters = {}
-        if character_jobs[i].job.clocked_in then
+        if not character_jobs[i].job.clocked_in then
             goto continue
         end
 
@@ -46,7 +46,7 @@ local function send_character_blip_groups()
             if other_blip_group_id == blip_group_id then
 
                 local coords = GetEntityCoords(GetPlayerPed(character_jobs[j].source))
-                table.insert(other_characters, {blip_color = get_blip_color(other_blip_group_id), x = coords.x, y = coords.y, z = coords.z, callsign = character_jobs[j].job.callsign})
+                table.insert(other_characters, {blip_color = get_blip_color(character_jobs[j].job.group_id), x = coords.x, y = coords.y, z = coords.z, callsign = character_jobs[j].job.callsign})
 
             end
 

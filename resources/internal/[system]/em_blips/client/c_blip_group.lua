@@ -19,9 +19,10 @@ local function setup_blips(new_blips)
         SetBlipSprite(blip, 57)
         SetBlipColour(blip, new_blips[i].blip_color)
         SetBlipAsShortRange(blip, false)
+        SetBlipScale(blip, 0.9)
 
         BeginTextCommandSetBlipName('STRING')
-        AddTextComponentString(blips[i].callsign)
+        AddTextComponentString(new_blips[i].callsign)
         EndTextCommandSetBlipName(blip)
         table.insert(blips, blip)
 
@@ -32,7 +33,6 @@ end
 RegisterNetEvent("em_blips:set_blips")
 AddEventHandler("em_blips:set_blips", function(new_blips)
 
-    print("setting blips")
     delete_local_blips()
     setup_blips(new_blips)
 
