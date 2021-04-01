@@ -5,25 +5,20 @@ local cam = nil
 local cam2 = nil
 local function setup_character_ui()
 
-    Citizen.CreateThread(function()
-
-        exports.spawnmanager:setAutoSpawn(false)
-        SetEntityCoords(GetPlayerPed(-1), -1047.87, -2768.70, 4.63)
-        SetTimecycleModifier('hud_def_blur')
-        FreezeEntityPosition(GetPlayerPed(-1), true)
-        cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", -1355.93,-1487.78,520.75, 300.00,0.00,0.00, 100.00, false, 0)
-        SetCamActive(cam, true)
-        RenderScriptCams(true, false, 1, true, true)
-        SetNetworkIdExistsOnAllMachines(NetworkGetNetworkIdFromEntity(PlayerPedId()), true)
-        NetworkFadeOutEntity(PlayerPedId(), true, false)
-        SetNuiFocus(true, true)
-        
-        SendNUIMessage({
-            action = "openui",
-            characters = exports["em_fw"]:get_all_characters()
-        })
-
-    end)
+    exports.spawnmanager:setAutoSpawn(false)
+    SetEntityCoords(GetPlayerPed(-1), -1047.87, -2768.70, 4.63)
+    FreezeEntityPosition(GetPlayerPed(-1), true)
+    cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", -1355.93,-1487.78,520.75, 300.00,0.00,0.00, 100.00, false, 0)
+    SetCamActive(cam, true)
+    RenderScriptCams(true, false, 1, true, true)
+    SetNetworkIdExistsOnAllMachines(NetworkGetNetworkIdFromEntity(PlayerPedId()), true)
+    NetworkFadeOutEntity(PlayerPedId(), true, false)
+    
+    SendNUIMessage({
+        action = "openui",
+        characters = exports["em_fw"]:get_all_characters()
+    })
+    SetNuiFocus(true, true)
 
 end
 
@@ -66,22 +61,18 @@ end
 
 RegisterNUICallback("CharacterChosen", function(data, cb)
 
-    Citizen.CreateThread(function()
-        SetNuiFocus(false,false)
-        local character = exports["em_fw"]:load_character(data["character_id"])
-        spawn_character(character)
-    end)
+    SetNuiFocus(false,false)
+    local character = exports["em_fw"]:load_character(data["character_id"])
+    spawn_character(character)
 
 end)
 
 RegisterNUICallback("CreateCharacter", function(data, cb)
 
-    Citizen.CreateThread(function()
-        SetNuiFocus(false, false)
-        local character_id = exports["em_fw"]:create_character(data)
-        local character = exports["em_fw"]:load_character(character_id)
-        spawn_character(character)
-    end)
+    SetNuiFocus(false, false)
+    local character_id = exports["em_fw"]:create_character(data)
+    local character = exports["em_fw"]:load_character(character_id)
+    spawn_character(character)
 
 end)
 
@@ -97,11 +88,7 @@ end)
 RegisterNetEvent("em_fw:player_loaded")
 AddEventHandler("em_fw:player_loaded", function()
 
-    Citizen.CreateThread(function()
-
-        Citizen.Wait(0)
-        setup_character_ui()
-
-    end)
+    Citizen.Wait(1000)
+    setup_character_ui()
 
 end)
