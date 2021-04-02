@@ -95,7 +95,7 @@ img {
 
 .character-info-new {
     position: absolute;
-    bottom: 10vh;
+    bottom: -10vh;
     width: 20vh;
 }
 
@@ -175,6 +175,12 @@ img {
     font-family: 'La Belle Aurore', cursive;
 }
 
+/*
+.modal-backdrop {
+  z-index: -1;
+}
+*/
+
 .character-issued {
     position: absolute;
     top: 5vh;
@@ -203,4 +209,24 @@ img {
     overflow: hidden;
     font-weight: bold;
     font-size: 1.5vh;
+}
+
+.delete-button {
+
+    width: 1vh;
+    height: 1vh;
+
+}
+
+.modal {
+
+    background-color: rgba(0,0,0, 0.60);
+    width:30%; 
+    height: 10%;
+    margin-left: 35%;
+    margin-top: 20%;
+    border-radius: 4px;
+    color: white;
+    text-align: center;
+
 }
