@@ -65,13 +65,10 @@ end, "Give your position")
 
 register_command_no_perms("camera_rotation", function(source, args, raw_command)
 
-    exports["em_fw"]:trigger_server_callback("em_commands:camera_rotation", function(result)
-
-        TriggerEvent('chat:addMessage', {
-                template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(140, 140, 140, 0.6); border-radius: 3px; font-size:18px;"> (POS) X: {0}, Y: {1}, Z: {2} </div>',
-                args = { result.x, result.y, result.z }
-        })
-
-    end)
+    local result = GetGameplayCamRot()
+    TriggerEvent('chat:addMessage', {
+            template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(140, 140, 140, 0.6); border-radius: 3px; font-size:18px;"> (POS) X: {0}, Y: {1}, Z: {2} </div>',
+            args = { result.x, result.y, result.z }
+    })
 
 end, "Show the camera rotation")
