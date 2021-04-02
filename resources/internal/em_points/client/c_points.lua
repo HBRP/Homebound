@@ -2,7 +2,7 @@
 local unique_id = 1
 local controls  = {}
 
-function register_points(refresh_loop, text_func, control_pressed_func)
+function register_points(refresh_loop, text_func, control_pressed_func, loop_time)
 
     local nearby_points = {}
     local is_nearby_points = false
@@ -60,7 +60,7 @@ function register_points(refresh_loop, text_func, control_pressed_func)
 
         while true do
             refresh_loop(refresh_nearby_points)
-            Citizen.Wait(5000)
+            Citizen.Wait(loop_time or 5000)
         end
 
     end)

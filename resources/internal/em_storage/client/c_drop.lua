@@ -1,38 +1,6 @@
 
-
-
 local nearby_drops = {}
 local bags = {}
-
-local function nearby_drop_loop()
-
-    local nearby_a_drop   = false
-    local text_id = 0
-    while true do
-
-        Citizen.Wait(5)
-        nearby_a_drop   = false
-        local ped_coords = GetEntityCoords(PlayerPedId())
-        for i = 1, #nearby_drops do
-            if GetDistanceBetweenCoords(ped_coords.x, ped_coords.y, ped_coords.z, nearby_drops[i].x, nearby_drops[i].y, nearby_drops[i].z, true) < 2 then
-                if not exports["cd_drawtextui"]:is_in_queue(text_id) then
-                    text_id = exports["cd_drawtextui"]:show_text("Press [E] to open bag")
-                end
-                nearby_a_drop = true
-                if IsControlJustReleased(0, 38) then
-                    TriggerEvent("esx_inventoryhud:open_secondary_inventory", nearby_drops[i].storage_id, "Drop")
-                end
-            end
-        end
-        if not nearby_a_drop then
-            if exports["cd_drawtextui"]:is_in_queue(text_id) then
-                exports["cd_drawtextui"]:hide_text(text_id)
-            end
-            Citizen.Wait(1000)
-        end
-    end
-
-end
 
 function get_nearby_drop_storage_id()
 
@@ -85,35 +53,29 @@ local function add_new_bags()
 
 end
 
-local function refresh()
 
+local function open_drop(drop)
+    TriggerEvent("esx_inventoryhud:open_secondary_inventory", drop.storage_id, "Drop")
+end
+
+local function refresh_loop(refresh_check)
+    
     exports["em_fw"]:get_nearby_drops_async(function(result)
 
         nearby_drops = result
         if nearby_drops == nil then
             nearby_drops = {}
         end
-
         remove_existing_bags()
         add_new_bags()
+        refresh_check(nearby_drops)
         
     end)
 
 end
 
-local function nearby_drop_refresh_loop()
-
-    Citizen.Wait(0)
-    while true do
-
-        refresh()
-        Citizen.Wait(5000)
-
-    end
-
+local function text(stash)
+    return "Press [E] to open bag"
 end
 
-AddEventHandler("em_storage:manual_drop_refresh", refresh)
-
-Citizen.CreateThread(nearby_drop_refresh_loop)
-Citizen.CreateThread(nearby_drop_loop)
+exports["em_points"]:register_points(refresh_loop, text, open_drop, 1000)
