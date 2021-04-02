@@ -19,6 +19,7 @@ exports {
 dependencies {
 
     'em_fw',
+    'em_points',
     'em_commands',
     'cd_drawtextui',
     't-notify'
