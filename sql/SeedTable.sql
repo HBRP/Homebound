@@ -342,3 +342,14 @@ INSERT INTO
 VALUES
     (3, 38, 1),
     (4, 28, 1);
+
+INSERT INTO 
+    Groups.Alerts (GroupAlertName)
+VALUES
+    ("Law Enforcement");
+
+INSERT INTO
+    Groups.AlertSubscriptions (GroupAlertId, GroupId)
+VALUES
+    (1, 3),
+    (1, 4);
