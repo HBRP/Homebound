@@ -11,6 +11,7 @@ client_scripts {
 dependencies {
 
     'em_fw',
+    'em_points',
     'cd_drawtextui',
     'fivem-appearance'
 
