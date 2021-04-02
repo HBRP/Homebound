@@ -12,3 +12,9 @@ AddEventHandler("em_commands:propagate_to_nearby_clients", function(content, pro
     TriggerClientEvent('em_commands:propagate_to_nearby_clients:response', -1, source, content, proximity)
 
 end)
+
+exports["em_fw"]:register_server_callback("em_commands:camera_rotation", function(source, callback)
+
+    callback(GetPlayerCameraRotation(source))
+
+end)
