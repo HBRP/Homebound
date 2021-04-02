@@ -10,14 +10,10 @@ $(".wake-up").click(function (e) {
     $("#debug").html( $(e.target).attr("char") );
     Kashacter.CloseUI();
 
-    $('body').fadeOut(1000, "swing", function() {
-
+    $('img').fadeOut(3000, "swing", function() {
         $.post("https://esx_kashacters/CharacterChosen", JSON.stringify({
-
             character_id: characters[$(e.target).attr("char") - 1].character_id
-
         }));
-
     })
 
 

@@ -25,8 +25,9 @@ html {
     overflow: hidden;
 }
 
-body {
-    background-image: url(https://upload.wikimedia.org/wikipedia/commons/6/69/7-78049_small-memory-8k-wallpaper-forest-minimalist-wallpaper-4k.jpg);
+img {
+    position:absolute;
+    z-index:-1;
 }
 
 .main-container {
