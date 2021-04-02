@@ -1,9 +1,14 @@
 
+local unique_id = 1
+local controls  = {}
 
 function register_points(refresh_loop, text_func, control_pressed_func)
 
     local nearby_points = {}
     local is_nearby_points = false
+
+    local point_id = unique_id
+    unique_id = unique_id + 1
 
     local nearby_loop = function()
 
@@ -11,7 +16,7 @@ function register_points(refresh_loop, text_func, control_pressed_func)
         local draw_text_id = -1
         while is_nearby_points do
 
-            Citizen.Wait(5)
+            Citizen.Wait(500)
             local ped_coords = GetEntityCoords(PlayerPedId())
             for i = 1, #nearby_points do
 
@@ -22,16 +27,15 @@ function register_points(refresh_loop, text_func, control_pressed_func)
                     if not exports["cd_drawtextui"]:is_in_queue(draw_text_id) then
                         draw_text_id = exports["cd_drawtextui"]:show_text(text_func(nearby_points[i]))
                     end
-                    if IsControlJustReleased(0, 38) then
-                        control_pressed_func(nearby_points[i])
-                    end
+                    controls[point_id] = {func = control_pressed_func, point = nearby_points[i]}
 
                 end
 
             end
             if not nearby_point then
+                controls[point_id] = nil
                 exports["cd_drawtextui"]:hide_text(draw_text_id)
-                Citizen.Wait(500)
+                Citizen.Wait(1000)
             end
             nearby_point = false
 
@@ -54,9 +58,21 @@ function register_points(refresh_loop, text_func, control_pressed_func)
 
     Citizen.CreateThread(function()
 
-        Citizen.Wait(5000)
-        refresh_loop(refresh_nearby_points)
+        while true do
+            refresh_loop(refresh_nearby_points)
+            Citizen.Wait(5000)
+        end
 
     end)
 
 end
+
+RegisterCommand('interact', function()
+
+    for k, v in pairs(controls) do
+        v.func(v.point)
+    end
+
+end, false)
+
+RegisterKeyMapping('interact', 'Tnteract with point', 'keyboard', 'e')
