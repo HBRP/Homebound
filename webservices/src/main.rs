@@ -155,7 +155,7 @@ fn main() {
         storage::get_nearby_drops, storage::get_free_drop_zone, storage::set_drop_zone_to_inactive,
         items::get_item_modifiers, items::get_weapons, items::get_items, items::get_attachments,
         store::get_all_stores, store::get_nearby_stores, store::get_items_for_store_type,
-        groups::get_clocked_on_job, groups::get_nearby_job_clock_in, groups::clock_in, groups::clock_out,
+        groups::get_clocked_on_job, groups::get_nearby_job_clock_in, groups::clock_in, groups::clock_out, groups::get_group_alerts, groups::get_group_alert_subscriptions,
         customization::get_all_customization_points, customization::get_nearby_customization_points,
         bank::direct_deposit]).launch();
 

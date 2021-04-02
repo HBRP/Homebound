@@ -22,6 +22,22 @@ struct ClockedIn {
 
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+struct GroupAlert {
+
+    group_alert_id: i32,
+    group_alert_name: String
+
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct AlertSubscription {
+
+    group_alert_id: i32,
+    group_id: i32
+
+}
+
 #[get("/Groups/GetNeabyJobClockIn/<character_id>/<x>/<y>/<z>")]
 pub fn get_nearby_job_clock_in(character_id: i32, x: f32, y: f32, z: f32) -> String {
 
@@ -132,4 +148,45 @@ pub fn clock_out(character_id: i32) -> String {
     client.execute("UPDATE Character.Jobs SET ClockedOn = 'f' WHERE CharacterId = $1", &[&character_id]).unwrap();
     return get_clocked_on_job(character_id);
     
+}
+
+#[get("/Groups/GroupAlerts")]
+pub fn get_group_alerts() -> String {
+
+    let mut client = db_postgres::get_connection().unwrap();
+    let mut group_alerts: Vec<GroupAlert> = Vec::new();
+
+    for row in client.query("SELECT GroupAlertId, GroupAlertName FROM Groups.Alerts", &[]).unwrap() {
+
+        group_alerts.push(GroupAlert {
+
+            group_alert_id: row.get("GroupAlertId"),
+            group_alert_name: row.get("GroupAlertName")
+
+        });
+
+    }
+
+    serde_json::to_string(&group_alerts).unwrap()
+
+}
+
+#[get("/Groups/GroupAlertSubscriptions")]
+pub fn get_group_alert_subscriptions() -> String {
+
+    let mut client = db_postgres::get_connection().unwrap();
+    let mut alert_subscriptions: Vec<AlertSubscription> = Vec::new();
+    for row in client.query("SELECT GroupAlertId, GroupId FROM Groups.AlertSubscriptions;", &[]).unwrap() {
+
+        alert_subscriptions.push(AlertSubscription {
+
+            group_alert_id: row.get("GroupAlertId"),
+            group_id: row.get("GroupId")
+
+        });
+
+    }
+
+    serde_json::to_string(&alert_subscriptions).unwrap()
+
 }
