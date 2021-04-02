@@ -329,6 +329,7 @@ end)
 
 AddEventHandler("esx_inventoryhud:open_store", function(store, store_items)
 
+    TriggerEvent("opened_inventory")
     SendNUIMessage(
         {
             action = "setType",
