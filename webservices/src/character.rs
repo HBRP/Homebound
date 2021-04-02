@@ -291,7 +291,7 @@ pub fn set_character_health(health: CharacterHealth) {
 pub fn delete_character(character: CharacterId) {
 
     let mut client = db_postgres::get_connection().unwrap();
-    client.execute("UPDATE Character.Health SET Deleted = 't' WHERE CharacterId = $1", &[&character.character_id]).unwrap();
+    client.execute("UPDATE Player.Characters SET Deleted = 't' WHERE CharacterId = $1", &[&character.character_id]).unwrap();
 
 }
 

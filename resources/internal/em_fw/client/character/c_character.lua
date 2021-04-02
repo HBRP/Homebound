@@ -108,20 +108,9 @@ end
 
 function delete_character(character_id)
     
-    deleted_character = false
-    TriggerServerEvent("em_fw:delete_character", character_id)
-    while not deleted_character do
-        Citizen.Wait(100)
-    end
+    trigger_server_callback("em_fw:delete_character", function() end, character_id)
 
 end
-
-RegisterNetEvent("em_fw:delete_character:response")
-AddEventHandler("em_fw:delete_character:response", function()
-
-    deleted_character = true
-
-end)
 
 function get_all_characters()
 

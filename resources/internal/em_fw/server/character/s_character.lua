@@ -97,7 +97,7 @@ end)
 register_server_callback("em_fw:delete_character", function(source, callback, character_id)
 
     local data = {character_id = character_id}
-    HttpGet("/Character/Delete", data, function(error_code, result_data, result_headers)
+    HttpPut("/Character/Delete", data, function(error_code, result_data, result_headers)
 
         callback({})
 

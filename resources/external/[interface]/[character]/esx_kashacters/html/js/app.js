@@ -51,16 +51,40 @@ $("#create_character_button").click(function (e) {
         return;
         
     }
-    $.post("https://esx_kashacters/CreateCharacter", JSON.stringify({
-        first_name: first_name,
-        last_name: last_name,
-        dob: birthday,
-        gender: gender
-    }));
 
     Kashacter.CloseUI();
+    $('img').fadeOut(3000, "swing", function() {
+        $.post("https://esx_kashacters/CreateCharacter", JSON.stringify({
+            first_name: first_name,
+            last_name: last_name,
+            dob: birthday,
+            gender: gender
+        }));
+    })
 
 });
+
+function reset_cards() {
+
+    for (var i = 1; i < 9;i++) {
+
+        $('[data-charid=' + i + '] .character-firstname').html("");
+        $('[data-charid=' + i + '] .character-lastname').html("");
+        $('[data-charid=' + i + '] .character-signature').html("");
+        $('[data-charid=' + i + '] .character-job').html("");
+        $('[data-charid=' + i + '] .character-dob').html("");
+        $('[data-charid=' + i + '] .character-sex').html("");
+        $('[data-charid=' + i + '] .character-height').html("");
+        $('[data-charid=' + i + '] .character-issued').html("");
+        $('[data-charid=' + i + ']').attr("data-ischar", "false");
+        $('[data-charid=' + i + '] .character-info-new').show();
+        $('[data-charid=' + i + '] .character-select').hide();
+        $('[data-charid=' + i + ']').addClass('character-container');
+        $('[data-charid=' + i + ']').removeClass('character-container-ischar');
+
+    }
+
+}
 
 $(".deletechar").click(function (e) {
     $.post("https://esx_kashacters/DeleteCharacter", JSON.stringify({
@@ -78,6 +102,7 @@ $(".deletechar").click(function (e) {
         if(data.characters == null) {
             return;
         }
+        reset_cards();
         characters = data.characters
          $.each(characters, function (i, char) {
                 var fake_char_id = i + 1
