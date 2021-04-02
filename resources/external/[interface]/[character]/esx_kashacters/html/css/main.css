@@ -25,6 +25,10 @@ html {
     overflow: hidden;
 }
 
+body {
+    background-image: url(https://upload.wikimedia.org/wikipedia/commons/6/69/7-78049_small-memory-8k-wallpaper-forest-minimalist-wallpaper-4k.jpg);
+}
+
 .main-container {
     display:none;
     width: 90vw;
@@ -57,33 +61,34 @@ html {
 }
 
 .character-container-ischar {
-    background-image: url(../img/idbg.png);
+    /*background-image: url(../img/idbg.png);*/
     background-size: cover;
-    border: 1px solid #aaa;
-    border-radius: 14px;
+    border-radius: 6px;
     width: 20vh;
-    height: 30vh;
+    height: 20vh;
     margin: 1vh;
     padding: 0;
     position: relative;
     text-transform: uppercase;
-    color: #2e157a;
+    color: white;
     text-shadow: 1px 1px 1px #000000;
     -webkit-box-shadow: 10px 10px 5px -4px rgba(0,0,0,0.75);
     -moz-box-shadow: 10px 10px 5px -4px rgba(0,0,0,0.75);
-    box-shadow: 10px 10px 5px -4px rgba(0,0,0,0.75);
+    box-shadow: 0px 2px 5px -4px rgba(0,0,0,0.75);
+    background-color: rgba(0, 0, 0, 0.70);
 }
 
 .character-container {
-    background-color: rgba( 0,0,0, 0.1 );
-    border-radius: 14px;
+    background-color: rgba(0, 0, 0, 0.70);
+    box-shadow: 0px 2px 5px -4px rgba(0,0,0,0.75);
+    border-radius: 6px;
     width: 20vh;
-    height: 30vh;
+    height: 20vh;
     margin: 1vh;
     padding: 0;
     position: relative;
     text-transform: uppercase;
-    color: #e8e7eb;
+    color: white;
     text-shadow: 2px 2px 2px #000000;
 }
 
@@ -102,9 +107,9 @@ html {
 
 .character-select p.wake-up {
     font-size: 1.5vh;
-    -webkit-box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
-    -moz-box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
-    box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.75);
 }
 
 .character-select p {
@@ -113,8 +118,8 @@ html {
 
 .character-firstname {
     position: absolute;
-    top: 14.5vh;
-    left: 3vh;
+    top: 2vh;
+    left: 4vh;
     width: 15vh;
     overflow: hidden;
     font-weight: bold;
@@ -123,8 +128,8 @@ html {
 
 .character-lastname {
     position: absolute;
-    top: 16.5vh;
-    left: 3vh;
+    top: 4vh;
+    left: 8vh;
     width: 15vh;
     overflow: hidden;
     font-weight: bold;
@@ -136,9 +141,9 @@ html {
     font-size: 1.5vh;
     font-weight: bold;
     position: absolute;
-    top: 13vh;
-    left: 1vh;
-    color: #000;
+    top: 5vh;
+    left: 5vh;
+    color: white;
     text-shadow: 0px 0px 0px #000000;
     text-transform: none;
 }
@@ -172,7 +177,7 @@ html {
 .character-issued {
     position: absolute;
     top: 5vh;
-    left: 10vh;
+    left: 3vh;
     width: 10vh;
     overflow: hidden;
     font-weight: bold;
@@ -182,39 +187,19 @@ html {
 .character-dob {
     position: absolute;
     top: 7vh;
-    left: 10vh;
+    left: 4vh;
     width: 10vh;
     overflow: hidden;
     font-weight: bold;
-    font-size: 1vh;
+    font-size: 1.5vh;
 }
 
 .character-sex {
     position: absolute;
     top: 9vh;
-    left: 10vh;
+    left: 8vh;
     width: 10vh;
     overflow: hidden;
     font-weight: bold;
-    font-size: 1vh;
-}
-
-.character-height {
-    position: absolute;
-    top: 11vh;
-    left: 10vh;
-    width: 10vh;
-    overflow: hidden;
-    font-weight: bold;
-    font-size: 1vh;
-}
-
-.character-job {
-    position: absolute;
-    top: 19.5vh;
-    left: 4vh;
-    width: 15vh;
-    overflow: hidden;
-    font-weight: bold;
-    font-size: 0.7vh;
+    font-size: 1.5vh;
 }

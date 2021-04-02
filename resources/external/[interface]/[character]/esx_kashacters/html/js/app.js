@@ -8,15 +8,23 @@ $(function (){
 
 $(".wake-up").click(function (e) {
     $("#debug").html( $(e.target).attr("char") );
-    $.post("https://esx_kashacters/CharacterChosen", JSON.stringify({
-        character_id: characters[$(e.target).attr("char") - 1].character_id
-    }));
     Kashacter.CloseUI();
+
+    $('body').fadeOut(1000, "swing", function() {
+
+        $.post("https://esx_kashacters/CharacterChosen", JSON.stringify({
+
+            character_id: characters[$(e.target).attr("char") - 1].character_id
+
+        }));
+
+    })
+
+
 });
 
 $(".character-info-new").click(function (e) {
 
-    Kashacter.CloseUI();
     Kashacter.OpenForm();
 
 });
@@ -98,6 +106,7 @@ $(".deletechar").click(function (e) {
         $("#form").css({"display":"none"});
     };
     Kashacter.OpenForm = function() {
+        $('.main-container').css({"display":"none"});
         $("#form").show()
     };
     window.onload = function(e) {

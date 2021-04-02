@@ -8,7 +8,7 @@ local function setup_character_ui()
     exports.spawnmanager:setAutoSpawn(false)
     SetEntityCoords(GetPlayerPed(-1), -1047.87, -2768.70, 4.63)
     FreezeEntityPosition(GetPlayerPed(-1), true)
-    cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", -1355.93,-1487.78,520.75, 300.00,0.00,0.00, 100.00, false, 0)
+    cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", -416.47, 5916.21, 250.0, 1.229*57.0, 0.0, 2.98*57.0, 100.00, false, 0)
     SetCamActive(cam, true)
     RenderScriptCams(true, false, 1, true, true)
     SetNetworkIdExistsOnAllMachines(NetworkGetNetworkIdFromEntity(PlayerPedId()), true)
@@ -24,16 +24,15 @@ end
 
 local function spawn_character(character)
 
-    SetTimecycleModifier('default')
     local pos = character["position"];
     SetEntityCoords(GetPlayerPed(-1), pos.x, pos.y, pos.z)
     Citizen.Wait(500)
-    cam2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", -1355.93,-1487.78,520.75, 300.00,0.00,0.00, 100.00, false, 0)
+    cam2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA",  -416.47, 5916.21, 250.0, 1.229*57.0, 0.0, 2.98*57.0, 100.00, false, 0)
     PointCamAtCoord(cam2, pos.x,pos.y,pos.z+200)
     SetCamActiveWithInterp(cam2, cam, 900, true, true)
     Citizen.Wait(900)
 
-    cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", pos.x,pos.y,pos.z+200, 300.00,0.00,0.00, 100.00, false, 0)
+    cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", pos.x,pos.y,pos.z+200.0, 1.229*57.0, 0.0, 2.98*57.0, 100.00, false, 0)
     PointCamAtCoord(cam, pos.x,pos.y,pos.z+2)
     SetCamActiveWithInterp(cam, cam2, 3700, true, true)
     SetEntityCoords(GetPlayerPed(-1), pos.x, pos.y, pos.z)
@@ -92,3 +91,5 @@ AddEventHandler("em_fw:player_loaded", function()
     setup_character_ui()
 
 end)
+
+SetNuiFocus(true, true)
