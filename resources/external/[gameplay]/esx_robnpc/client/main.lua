@@ -59,6 +59,7 @@ function robNpc(targetPed)
             Duration = Config.RobAnimationSeconds * 1000,
             Label = "Robbing"
         })
+        TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", "10-31b", "Local was robbed", 2)
 
         local amount = math.random(Config.MinMoney, Config.MaxMoney)
         exports["em_fw"]:give_item(exports["em_fw"]:get_character_storage_id(), exports["em_items"]:get_item_id_from_name("cash"), amount , -1, -1)
