@@ -4,6 +4,8 @@ use serde_json::{json};
 use crate::db_postgres;
 use crate::player;
 
+use rocket_contrib::json::Json;
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CreateCharacter {
 
@@ -148,6 +150,14 @@ pub struct CharacterUpdateSkin {
 
     character_id: i32,
     character_skin: String
+
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct CharacterTattoo {
+
+    character_id: i32,
+    tattoos: String
 
 }
 
@@ -416,5 +426,36 @@ pub fn get_character_storage_id(character_id: i32, client: &mut postgres::Client
 
     let row = client.query_one("SELECT StorageId FROM Character.Inventory WHERE CharacterId = $1", &[&character_id]).unwrap();
     return row.get("StorageId");
+
+}
+
+#[get("/Character/Tattoos/<character_id>")]
+pub fn get_character_tattoos(character_id: i32) -> String {
+
+    let mut client = db_postgres::get_connection().unwrap();
+    let row  = client.query_one("SELECT Tattoos::TEXT FROM Character.Tattoos WHERE CharacterId = $1", &[&character_id]);
+
+    match row {
+
+        Ok(row) => {
+            return row.get("Tattoos");
+        },
+        Err(_) => {
+
+            client.execute("INSERT INTO Character.Tattoos (CharacterId, Tattoos) VALUES ($1, '{}')", &[&character_id]).unwrap();
+            return "{}".to_string();
+
+        }
+
+    }
+
+}
+
+#[put("/Character/UpdateTattoos", format = "json", data = "<character_tattoo>")]
+pub fn update_character_tattoos(character_tattoo: Json<CharacterTattoo>) {
+
+    let character_tattoo = character_tattoo.into_inner();
+    let mut client = db_postgres::get_connection().unwrap();
+    client.execute("Update Character.Tattoos Set Tattoos = $1 WHERE CharacterId = $2", &[&character_tattoo.tattoos, &character_tattoo.character_id]).unwrap();
 
 }

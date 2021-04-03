@@ -148,7 +148,7 @@ fn main() {
 
     rocket::ignite().mount("/", routes![player_create, character_create,get_character_info, update_character_position, get_characters, get_player_id, 
         delete_character, get_skin, create_skin, update_skin, create_outfit, 
-        update_outfit, delete_outfit, get_active_outfit, get_outfit, get_all_outfit_meta_data, 
+        update_outfit, delete_outfit, get_active_outfit, get_outfit, get_all_outfit_meta_data, character::get_character_tattoos, character::update_character_tattoos,
         blips::get_blips, blips::get_blip_group_subscriptions,
         commands::can_use_command,
         storage::move_storage_item, storage::give_storage_item, storage::remove_storage_item, storage::get_storage_request, storage::get_nearby_stashes, storage::get_vehicle_storage, storage::get_vehicle_storage_id, storage::reset_temporary_storage,
