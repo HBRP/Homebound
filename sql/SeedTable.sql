@@ -346,7 +346,7 @@ VALUES
 INSERT INTO 
     Groups.Alerts (GroupAlertName)
 VALUES
-    ("Law Enforcement");
+    ('Law Enforcement');
 
 INSERT INTO
     Groups.AlertSubscriptions (GroupAlertId, GroupId)
