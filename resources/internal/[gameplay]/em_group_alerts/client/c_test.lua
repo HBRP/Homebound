@@ -4,6 +4,8 @@ exports["em_commands"]:register_command("test_dispatch", function(source, args, 
     local coords = GetEntityCoords(PlayerPedId())
     local street_name, crossing_road = GetStreetNameAtCoord(coords.x, coords.y, coords.z)
 
+    print(street_name)
+    print(crossing_road)
 
     local test_data = {
         code = "10-40",
