@@ -140,6 +140,8 @@ server_export 'register_server_callback'
 
 --s_groups.lua
 server_export 'get_current_character_jobs'
+server_export 'get_group_alerts'
+server_export 'get_group_alert_subscriptions'
 
 --s_bank.lua
 server_export 'direct_deposit'

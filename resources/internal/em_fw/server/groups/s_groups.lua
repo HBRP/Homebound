@@ -83,3 +83,25 @@ AddEventHandler('playerDropped', function (reason)
     clear_previous_entry(source, 0)
     
 end)
+
+function get_group_alerts(callback)
+
+    HttpGet("/Groups/GroupAlerts", nil, function(error_code, result_data, result_headers)
+
+        local temp = json.decode(result_data)
+        callback(temp)
+
+    end)
+
+end
+
+function get_group_alert_subscriptions(callback)
+
+    HttpGet("/Groups/GroupAlertSubscriptions", nil, function(error_code, result_data, result_headers)
+
+        local temp = json.decode(result_data)
+        callback(temp)
+
+    end)
+
+end
