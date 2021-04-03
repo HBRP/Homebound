@@ -11,6 +11,7 @@ client_scripts {
     'client/character/c_character_health.lua',
     'client/character/c_character_position.lua',
     'client/character/c_character_outfit.lua',
+    'client/character/c_character_tattoos.lua',
     'client/commands/c_commands.lua',
     'client/blips/c_blips.lua',
     'client/storage/c_storage.lua',
@@ -35,6 +36,7 @@ server_scripts {
     'server/player/s_player.lua',
     'server/character/s_character.lua',
     'server/character/s_character_outfit.lua',
+    'server/character/s_character_tattoos.lua',
     'server/commands/s_commands.lua',
     'server/blips/s_blips.lua',
     'server/storage/s_storage.lua',
@@ -71,10 +73,14 @@ export 'get_outfit'
 export 'get_active_outfit'
 export 'delete_outfit'
 export 'get_all_outfit_meta_data'
-
 export 'create_skin'
 export 'get_skin'
 export 'update_skin'
+
+-- c_character_tattoos
+export 'get_tattoos'
+export 'get_tattoos_async'
+export 'update_tattoos'
 
 export 'can_use_command'
 

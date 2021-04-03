@@ -456,6 +456,7 @@ pub fn update_character_tattoos(character_tattoo: Json<CharacterTattoo>) {
 
     let character_tattoo = character_tattoo.into_inner();
     let mut client = db_postgres::get_connection().unwrap();
-    client.execute("Update Character.Tattoos Set Tattoos = $1 WHERE CharacterId = $2", &[&character_tattoo.tattoos, &character_tattoo.character_id]).unwrap();
+    let tattoos_blob = json!(character_tattoo.tattoos);
+    client.execute("Update Character.Tattoos Set Tattoos = $1 WHERE CharacterId = $2", &[&tattoos_blob, &character_tattoo.character_id]).unwrap();
 
 }

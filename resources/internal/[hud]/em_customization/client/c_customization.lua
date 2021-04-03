@@ -72,5 +72,24 @@ local function refresh_nearby_customization_loop()
 
 end
 
+function get_character_appearance()
+
+    local skin = exports["em_fw"]:get_skin()
+
+    assert(skin ~= nil, "Skin was not null")
+
+    local temp = json.decode(skin["character_skin"])
+    temp = json.decode(temp)
+    return temp
+
+end
+
+function refresh_character_appearance()
+
+    local appearance = get_character_appearance()
+    exports['fivem-appearance']:setPlayerAppearance(appearance)
+
+end
+
 Citizen.CreateThread(refresh_nearby_customization_loop)
 Citizen.CreateThread(customization_loop)

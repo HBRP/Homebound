@@ -10,6 +10,13 @@ client_scripts {
 
 }
 
+exports {
+
+    'get_character_appearance',
+    'refresh_character_appearance'
+
+}
+
 dependencies {
 
     'em_fw',
