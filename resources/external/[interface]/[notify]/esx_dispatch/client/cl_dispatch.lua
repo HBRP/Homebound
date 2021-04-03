@@ -1,27 +1,14 @@
-ESX = nil
-
 local disableNotifications = false
 local blips = {}
 local cachedBlips = {}
 
 Citizen.CreateThread(function()
-	while ESX == nil do
-        ESX = exports["es_extended"]:getSharedObject()
-		Citizen.Wait(100)
-	end
 
     SendNUIMessage({
         type = "sendResourceName",
         resource = GetCurrentResourceName()
     })
 end)
-
-RegisterNetEvent("esx:playerLoaded")
-AddEventHandler("esx:playerLoaded", function(xPlayer) ESX.PlayerData = xPlayer end)
-
-RegisterNetEvent("esx:setJob")
-AddEventHandler("esx:setJob", function(job) ESX.PlayerData.job = job end)
-
 
 ----------------------------------
 ----------- MAIN EVENT -----------
@@ -53,13 +40,11 @@ AddEventHandler('dispatch:clNotify', function(data)
         end
     end
 
-    if ESX.PlayerData.job.name == 'police' then
-        if not disableNotifications then
-            SendNUIMessage({
-                type = "addNewNotification",
-                notification = data
-            })
-        end
+    if not disableNotifications then
+        SendNUIMessage({
+            type = "addNewNotification",
+            notification = data
+        })
     end
 end)
 
@@ -68,14 +53,12 @@ end)
 ----------------------------------------
 
 Citizen.CreateThread(function()
-    while ESX.GetPlayerData().job == nil do Citizen.Wait(1000) end
-    ESX.PlayerData = ESX.GetPlayerData()
     
     while true do
         Citizen.Wait(0)
         
         if not showDispatchLog then
-            if IsControlJustReleased(0, 256) and ESX.PlayerData.job.name == 'police' then
+            if IsControlJustReleased(0, 256) then
                 showDispatchLog = true
                 -- SetPauseMenuActive(not showDispatchLog)
                 SetNuiFocus(showDispatchLog, showDispatchLog)
