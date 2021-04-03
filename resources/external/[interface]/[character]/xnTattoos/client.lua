@@ -34,14 +34,19 @@ local function set_tattoos()
         end
         currentTattoos = result
     end
+
+end
+
+AddEventHandler("em_customization:loaded_appearance", function()
+
+    set_tattoos()
     Citizen.CreateThread(function()
         Citizen.Wait(100)
         GetNaked()
         ResetSkin()
     end)
-end
-
-AddEventHandler("em_customization:loaded_appearance", set_tattoos)
+    
+end)
 
 Citizen.CreateThread(function()
 	while true do
