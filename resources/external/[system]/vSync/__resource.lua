@@ -7,3 +7,11 @@ client_scripts {
 server_scripts {
     'vs_server.lua',
 }
+
+
+dependencies {
+
+    'em_fw',
+    'em_commands'
+
+}

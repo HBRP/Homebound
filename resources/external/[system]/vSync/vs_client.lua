@@ -67,18 +67,6 @@ AddEventHandler('playerSpawned', function()
     TriggerServerEvent('vSync:requestSync')
 end)
 
-Citizen.CreateThread(function()
-    TriggerEvent('chat:addSuggestion', '/weather', 'Change the weather.', {{ name="weatherType", help="Available types: extrasunny, clear, neutral, smog, foggy, overcast, clouds, clearing, rain, thunder, snow, blizzard, snowlight, xmas & halloween"}})
-    TriggerEvent('chat:addSuggestion', '/time', 'Change the time.', {{ name="hours", help="A number between 0 - 23"}, { name="minutes", help="A number between 0 - 59"}})
-    TriggerEvent('chat:addSuggestion', '/freezetime', 'Freeze / unfreeze time.')
-    TriggerEvent('chat:addSuggestion', '/freezeweather', 'Enable/disable dynamic weather changes.')
-    TriggerEvent('chat:addSuggestion', '/morning', 'Set the time to 09:00')
-    TriggerEvent('chat:addSuggestion', '/noon', 'Set the time to 12:00')
-    TriggerEvent('chat:addSuggestion', '/evening', 'Set the time to 18:00')
-    TriggerEvent('chat:addSuggestion', '/night', 'Set the time to 23:00')
-    TriggerEvent('chat:addSuggestion', '/blackout', 'Toggle blackout mode.')
-end)
-
 -- Display a notification above the minimap.
 function ShowNotification(text, blink)
     if blink == nil then blink = false end
@@ -91,3 +79,57 @@ RegisterNetEvent('vSync:notify')
 AddEventHandler('vSync:notify', function(message, blink)
     ShowNotification(message, blink)
 end)
+
+exports["em_commands"]:register_command("freezetime", function(source, args, raw_command)
+
+    TriggerServerEvent("vsync:freezetime")
+
+end, 'Freeze / unfreeze time.')
+
+exports["em_commands"]:register_command("freezeweather", function(source, args, raw_command)
+
+    TriggerServerEvent("vsync:freezeweather")
+
+end, 'Enable/disable dynamic weather changes.')
+
+exports["em_commands"]:register_command("weather", function(source, args, raw_command)
+
+    TriggerServerEvent("vsync:weather", args)
+
+end, 'Change the weather.', {{ name="weatherType", help="Available types: extrasunny, clear, neutral, smog, foggy, overcast, clouds, clearing, rain, thunder, snow, blizzard, snowlight, xmas & halloween"}})
+
+exports["em_commands"]:register_command("blackout", function(source, args, raw_command)
+
+    TriggerServerEvent("vsync:blackout")
+
+end, 'Toggle blackout mode.')
+
+exports["em_commands"]:register_command("morning", function(source, args, raw_command)
+
+    TriggerServerEvent("vsync:morning")
+
+end, 'Set the time to 09:00')
+
+exports["em_commands"]:register_command("noon", function(source, args, raw_command)
+
+    TriggerServerEvent("vsync:noon")
+
+end, 'Set the time to 12:00')
+
+exports["em_commands"]:register_command("evening", function(source, args, raw_command)
+
+    TriggerServerEvent("vsync:evening")
+
+end, 'Set the time to 18:00')
+
+exports["em_commands"]:register_command("night", function(source, args, raw_command)
+
+    TriggerServerEvent("vsync:night")
+
+end, 'Set the time to 23:00')
+
+exports["em_commands"]:register_command("time", function(source, args, raw_command)
+
+    TriggerServerEvent("vsync:time", args)
+
+end, 'Change the time.', {{ name="hours", help="A number between 0 - 23"}, { name="minutes", help="A number between 0 - 59"}})

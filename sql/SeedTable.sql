@@ -311,10 +311,6 @@ VALUES
 INSERT INTO 
     Command.PlayerTypePermissions (PlayerTypeId, Permission)
 VALUES
-    (1, 'me'),
-    (1, 'looc'),
-    (1, 'ad'),
-    (1, 'pos'),
     (3, 'dv'),
     (3, 'tpm'),
     (3, 'character'),
@@ -322,7 +318,17 @@ VALUES
     (3, 'style'),
     (3, 'apparel'),
     (3, 'wardrobe'),
-    (5, 'give_item');
+    (5, 'give_item'),
+    (3, 'test_dispatch'),
+    (4, 'morning'),
+    (4, 'night'),
+    (4, 'freezetime'),
+    (4, 'freezeweather'),
+    (4, 'weather'),
+    (4, 'blackout'),
+    (4, 'noon'),
+    (4, 'evening'),
+    (4, 'time');
 
 
 INSERT INTO 
