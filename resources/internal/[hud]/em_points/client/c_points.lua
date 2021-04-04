@@ -75,4 +75,4 @@ RegisterCommand('interact', function()
 
 end, false)
 
-RegisterKeyMapping('interact', 'Tnteract with point', 'keyboard', 'e')
+RegisterKeyMapping('interact', 'Interact with point', 'keyboard', 'e')
