@@ -4,23 +4,15 @@ local windowState2 = true
 local windowState3 = true
 local windowState4 = true
 
-Citizen.CreateThread(function()
-    while true do
-		Citizen.Wait(5)
-		if IsPedInAnyVehicle(PlayerPedId(), false) then
-			if (IsControlJustReleased(0, 58) or IsDisabledControlJustReleased(0, 58)) then -- Key to open NUI https://docs.fivem.net/docs/game-references/controls/
-				openVehControl()
-			end
-		end
-		if IsPedInAnyVehicle(GetPlayerPed(-1), false) and DisableSeatShuffle then
-			if GetPedInVehicleSeat(GetVehiclePedIsIn(GetPlayerPed(-1), false), 0) == GetPlayerPed(-1) then
-				if GetIsTaskActive(GetPlayerPed(-1), 165) then
-					SetPedIntoVehicle(GetPlayerPed(-1), GetVehiclePedIsIn(GetPlayerPed(-1), false), 0)
-				end
-			end
-		end
-    end
-end)
+RegisterCommand('open_vehicle_control', function()
+
+	if IsPedInAnyVehicle(PlayerPedId(), false) then
+		openVehControl()
+	end
+
+end, false)
+
+RegisterKeyMapping('open_vehicle_control', 'Open Vehicle Panel', 'keyboard', 'g')
 
 -----------------------------------------------------------------------------
 -- NUI OPEN/CLOSE FUNCTIONS
