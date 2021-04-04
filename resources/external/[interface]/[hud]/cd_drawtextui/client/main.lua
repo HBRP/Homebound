@@ -17,12 +17,12 @@ local unique_id  = 0
 local active_id  = 0
 local active_ids = {}
 
-local inventory_open = false
+local hide_interface = false
 
 function show_text(text)
 
     unique_id = unique_id + 1
-    table.insert(active_ids, {id = unique_id, text = text})
+    table.insert(active_ids, {id = unique_id, text = text, hide_time = GetGameTimer() + 3000})
     return unique_id 
 
 end
@@ -60,36 +60,45 @@ end
 
 local function show_next_text_in_queue()
 
-    SendNUIMessage({
-        action = "show",
-        text = active_ids[1].text,
-    })
-    active_id = active_ids[1].id
+    local timer = GetGameTimer()
+    for i = 1, #active_ids do
+
+        if timer < active_ids[i].hide_time then
+
+            SendNUIMessage({action = "show", text = active_ids[i].text})
+            active_id = active_ids[i].id
+            return
+
+        end
+
+    end
+    hide_everything()
 
 end
 
 Citizen.CreateThread(function()
 
     while true do
-        Citizen.Wait(100)
 
-        if inventory_open then
+        Citizen.Wait(100)
+        if hide_interface then
             goto continue
         end
 
         if #active_ids == 0 and active_id ~= 0 then
             hide_everything()
-        elseif #active_ids > 0 and active_id ~= active_ids[1].id then
+        elseif #active_ids > 0 then
             show_next_text_in_queue()
         end
         ::continue::
+
     end
 
 end)
 
 local function temp_hide_text()
 
-    inventory_open = true
+    hide_interface = true
     SendNUIMessage({
         action = 'hide'
     })
@@ -98,34 +107,14 @@ end
 
 local function temp_show_text()
 
-    inventory_open = false
+    hide_interface = false
     if #active_ids > 0 then
         show_next_text_in_queue()
     end
 
 end
 
-
-AddEventHandler("closed_inventory", function() 
-
-    temp_show_text()
-
-end)
-
-AddEventHandler("opened_inventory", function() 
-
-    temp_hide_text()
-    
-end)
-
-AddEventHandler("cd_drawtextui:temp_hide_text", function() 
-
-    temp_hide_text()
-
-end)
-
-AddEventHandler("cd_drawtextui:temp_show_text", function() 
-
-    temp_show_text()
-    
-end)
+AddEventHandler("closed_inventory", temp_show_text)
+AddEventHandler("opened_inventory", temp_hide_text)
+AddEventHandler("cd_drawtextui:temp_hide_text", temp_hide_text)
+AddEventHandler("cd_drawtextui:temp_show_text", temp_show_text)
