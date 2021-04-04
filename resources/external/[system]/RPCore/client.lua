@@ -53,29 +53,31 @@ if Config.crouch then
     end)
 end
 
-if Config.handsup then
-    Citizen.CreateThread(function()
-        local dict = "missminuteman_1ig_2"
-        
-        RequestAnimDict(dict)
-        while not HasAnimDictLoaded(dict) do
-            Citizen.Wait(100)
-        end
-        local handsup = false
-        while true do
-            Citizen.Wait(5)
-            if IsControlJustPressed(1, 323) then --Start holding X
-                if not handsup then
-                    TaskPlayAnim(PlayerPedId(), dict, "handsup_enter", 8.0, 8.0, -1, 50, 0, false, false, false)
-                    handsup = true
-                else
-                    handsup = false
-                    ClearPedTasks(PlayerPedId())
-                end
-            end
-        end
-    end)
-end
+local handsup = false
+local handsup_dict = "missminuteman_1ig_2"
+Citizen.CreateThread(function()
+
+    Citizen.Wait(0)
+    RequestAnimDict(handsup_dict)
+    while not HasAnimDictLoaded(handsup_dict) do
+        Citizen.Wait(100)
+    end
+
+end)
+
+RegisterCommand('handsup_command', function()
+
+    if not handsup then
+        TaskPlayAnim(PlayerPedId(), handsup_dict, "handsup_enter", 8.0, 8.0, -1, 50, 0, false, false, false)
+        handsup = true
+    else
+        handsup = false
+        ClearPedTasks(PlayerPedId())
+    end
+
+end, false)
+
+RegisterKeyMapping('handsup_command', 'Put your hands up', 'keyboard', 'x')
 
 if Config.fingerpoint then
 
