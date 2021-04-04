@@ -5,19 +5,6 @@ local opacity = 1
 local scaleType = nil
 local scaleString = ""
 
-Citizen.CreateThread(function()
-	AddTextEntry("ParaTattoos", "Tattoo Shop")
-	for k, v in pairs(Config.Shops) do
-		local blip = AddBlipForCoord(v)
-		SetBlipSprite(blip, 75)
-		SetBlipColour(blip, 1)
-		SetBlipScale(blip, 0.8)
-		SetBlipAsShortRange(blip, true)
-		BeginTextCommandSetBlipName("ParaTattoos")
-		EndTextCommandSetBlipName(blip)
-	end
-end)
-
 local function set_tattoos()
 
 	local result = exports["em_fw"]:get_tattoos()
@@ -156,6 +143,7 @@ function CloseTattooShop()
 	back = 1
 	opacity = 1
 	ResetSkin()
+    TriggerEvent("cd_drawtextui:temp_show_text")
 	return true
 
 end
@@ -178,6 +166,13 @@ function BuyTattoo(collection, name, label, price)
 	end
 
 end
+
+AddEventHandler("tattoos:open_shop", function()
+
+    TriggerEvent("cd_drawtextui:temp_hide_text")
+    OpenTattooShop()
+
+end)
 
 function RemoveTattoo(name, label)
 	for k, v in pairs(currentTattoos) do
@@ -210,22 +205,8 @@ Citizen.CreateThread(function()
 	end
 
     while true do 
-        Citizen.Wait(0)
+        Citizen.Wait(5)
 		local CanSleep = true
-		if not IsMenuOpen() then
-			for _,interiorId in ipairs(Config.interiorIds) do
-				if GetInteriorFromEntity(PlayerPedId()) == interiorId then
-					CanSleep = false
-					if not IsPedInAnyVehicle(PlayerPedId(), false) then
-						CreateScale("OpenShop")
-						DrawScaleformMovieFullscreen(scaleType, 255, 255, 255, 255, 0)
-						if IsControlJustPressed(0, 38) then
-							OpenTattooShop()
-						end
-					end
-				end
-			end
-		end
 
 		if IsMenuOpen() then
 			DisableAllControlActions(0)
