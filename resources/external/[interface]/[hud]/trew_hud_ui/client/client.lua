@@ -210,75 +210,100 @@ Citizen.CreateThread(function()
 	end
 end)
 
+RegisterCommand('seatbelt_command', function()
 
--- Everything that neededs to be at WAIT 0
-Citizen.CreateThread(function()
-	while true do
-		Citizen.Wait(5)
-		local player = GetPlayerPed(-1)
-		local vehicle = GetVehiclePedIsIn(player, false)
-		local vehicleClass = GetVehicleClass(vehicle)
+	local ped = PlayerPedId()
+	local vehicle = GetVehiclePedIsIn(ped, false)
+	local vehicle_class = GetVehicleClass(ped)
 
-		if not IsPedInAnyVehicle(player, false) then
-			Citizen.Wait(1000)
-			goto vehicle_goto
+	if IsPedInAnyVehicle(ped, false) and GetIsVehicleEngineRunning(vehicle) then
+		if has_value(vehiclesCars, vehicle_class) and vehicle_class ~= 8 then
+			seatbeltIsOn = not seatbeltIsOn
 		end
-
-		-- Vehicle Seatbelt
-		if IsPedInAnyVehicle(player, false) and GetIsVehicleEngineRunning(vehicle) then
-			if IsControlJustReleased(0, Keys[Config.vehicle.keys.seatbelt]) and (has_value(vehiclesCars, vehicleClass) == true and vehicleClass ~= 8) then
-				seatbeltIsOn = not seatbeltIsOn
-			end
-		end
-
-		-- Vehicle Cruiser
-		if IsControlJustPressed(1, Keys[Config.vehicle.keys.cruiser]) and GetPedInVehicleSeat(vehicle, -1) == player and (has_value(vehiclesCars, vehicleClass) == true) then
-			
-			local vehicleSpeedSource = GetEntitySpeed(vehicle)
-
-			if vehicleCruiser == 'on' then
-				vehicleCruiser = 'off'
-				SetEntityMaxSpeed(vehicle, GetVehicleHandlingFloat(vehicle,"CHandlingData","fInitialDriveMaxFlatVel"))
-				
-			else
-				vehicleCruiser = 'on'
-				SetEntityMaxSpeed(vehicle, vehicleSpeedSource)
-			end
-		end
-
-		-- Vehicle Signal Lights
-		if IsControlJustPressed(1, Keys[Config.vehicle.keys.signalLeft]) and (has_value(vehiclesCars, vehicleClass) == true) then
-			if vehicleSignalIndicator == 'off' then
-				vehicleSignalIndicator = 'left'
-			else
-				vehicleSignalIndicator = 'off'
-			end
-
-			TriggerEvent('trew_hud_ui:setCarSignalLights', vehicleSignalIndicator)
-		end
-
-		if IsControlJustPressed(1, Keys[Config.vehicle.keys.signalRight]) and (has_value(vehiclesCars, vehicleClass) == true) then
-			if vehicleSignalIndicator == 'off' then
-				vehicleSignalIndicator = 'right'
-			else
-				vehicleSignalIndicator = 'off'
-			end
-
-			TriggerEvent('trew_hud_ui:setCarSignalLights', vehicleSignalIndicator)
-		end
-
-		if IsControlJustPressed(1, Keys[Config.vehicle.keys.signalBoth]) and (has_value(vehiclesCars, vehicleClass) == true) then
-			if vehicleSignalIndicator == 'off' then
-				vehicleSignalIndicator = 'both'
-			else
-				vehicleSignalIndicator = 'off'
-			end
-
-			TriggerEvent('trew_hud_ui:setCarSignalLights', vehicleSignalIndicator)
-		end
-		::vehicle_goto::
 	end
-end)
+
+end, false)
+
+RegisterCommand('cruise_control_command', function()
+
+	print("first here")
+	local ped = PlayerPedId()
+	local vehicle = GetVehiclePedIsIn(ped, false)
+	local vehicle_class = GetVehicleClass(ped)
+
+	if GetPedInVehicleSeat(vehicle, -1) == ped and has_value(vehiclesCars, vehicle_class) then
+		
+		local vehicleSpeedSource = GetEntitySpeed(vehicle)
+		if vehicleCruiser == 'on' then
+			vehicleCruiser = 'off'
+			SetEntityMaxSpeed(vehicle, GetVehicleHandlingFloat(vehicle, "CHandlingData", "fInitialDriveMaxFlatVel"))
+		else
+			print("here")
+			vehicleCruiser = 'on'
+			SetEntityMaxSpeed(vehicle, vehicleSpeedSource)
+		end
+
+	end
+
+end, false)
+
+RegisterCommand('signal_left_command', function()
+
+	local ped = PlayerPedId()
+	local vehicle = GetVehiclePedIsIn(ped, false)
+	local vehicle_class = GetVehicleClass(ped)
+
+	if has_value(vehiclesCars, vehicle_class) then
+		if vehicleSignalIndicator == 'off' then
+			vehicleSignalIndicator = 'left'
+		else
+			vehicleSignalIndicator = 'off'
+		end
+		TriggerEvent('trew_hud_ui:setCarSignalLights', vehicleSignalIndicator)
+	end
+
+end, false)
+
+RegisterCommand('signal_right_command', function()
+
+	local ped = PlayerPedId()
+	local vehicle = GetVehiclePedIsIn(ped, false)
+	local vehicle_class = GetVehicleClass(ped)
+
+	if has_value(vehiclesCars, vehicle_class) then
+		if vehicleSignalIndicator == 'off' then
+			vehicleSignalIndicator = 'right'
+		else
+			vehicleSignalIndicator = 'off'
+		end
+		TriggerEvent('trew_hud_ui:setCarSignalLights', vehicleSignalIndicator)
+	end
+
+end, false)
+
+RegisterCommand('signal_both_command', function()
+
+	local ped = PlayerPedId()
+	local vehicle = GetVehiclePedIsIn(ped, false)
+	local vehicle_class = GetVehicleClass(ped)
+
+	if has_value(vehiclesCars, vehicle_class) then
+		if vehicleSignalIndicator == 'off' then
+			vehicleSignalIndicator = 'both'
+		else
+			vehicleSignalIndicator = 'off'
+		end
+		TriggerEvent('trew_hud_ui:setCarSignalLights', vehicleSignalIndicator)
+	end
+
+end, false)
+
+
+RegisterKeyMapping('seatbelt_command', 'Put Seatbelt on', 'keyboard', Config.vehicle.keys.seatbelt)
+RegisterKeyMapping('cruise_control_command', 'Put on cruise control', 'keyboard', Config.vehicle.keys.cruiser)
+RegisterKeyMapping('signal_left_command', 'Signal Left', 'keyboard', Config.vehicle.keys.signalLeft)
+RegisterKeyMapping('signal_right_command', 'Signal Right', 'keyboard', Config.vehicle.keys.signalRight)
+RegisterKeyMapping('signal_both_command', 'Signal Both', 'keyboard', Config.vehicle.keys.signalBoth)
 
 AddEventHandler('playerSpawned', function()
 	if Config.ui.showVoice == true then
