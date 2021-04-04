@@ -27,8 +27,9 @@ end)
 local lungs = 0.0
 
 Citizen.CreateThread(function()
+
     while true do
-        Citizen.Wait(150)
+        Citizen.Wait(1000)
         local player = PlayerPedId()
         local health = (GetEntityHealth(player) - 100)
         local armor = GetPedArmour(player)
@@ -54,4 +55,5 @@ Citizen.CreateThread(function()
 			voice = playerTalking
         })
     end
+    
 end)
