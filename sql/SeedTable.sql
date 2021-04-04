@@ -225,7 +225,8 @@ VALUES
     ('Convenience Store'),
     ('Black Market'),
     ('Pawn Shop'),
-    ('Ammunation');
+    ('Ammunation'),
+    ('Tattoo Shop');
 
 INSERT INTO
     store.stores (StoreTypeId, StoreName, X, Y, Z)
@@ -236,7 +237,13 @@ VALUES
     (4, 'Ammunation', -330.25, 6083.488, 32.45),
     (4, 'Ammunation', 1693.82, 3759.56, 34.705),
     (4, 'Ammunation', -1305.838, -393.817, 36.69),
-    (4, 'Ammunation', 810.158, -2157.616, 29.619);
+    (4, 'Ammunation', 810.158, -2157.616, 29.619),
+    (5, 'Tattoo Shop', 1322.6, -1651.9, 51.2),
+    (5, 'Tattoo Shop', -1153.6, -1425.6, 4.9),
+    (5, 'Tattoo Shop', 322.1, 180.4, 103.5),
+    (5, 'Tattoo Shop', -3170.0, 1075.0, 20.8),
+    (5, 'Tattoo Shop', 1864.6, 3747.7, 33.0),
+    (5, 'Tattoo Shop', -293.7, 6200.0, 31.4);
 
 
 INSERT INTO
