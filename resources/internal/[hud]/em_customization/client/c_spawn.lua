@@ -35,8 +35,7 @@ AddEventHandler("esx_kashacters:spawned_character", function()
     if skin == nil then
         open_full_customization()
     else
-        local temp = json.decode(skin["character_skin"])
-        exports['fivem-appearance']:setPlayerAppearance(json.decode(temp))
+        exports['fivem-appearance']:setPlayerAppearance(skin["character_skin"])
         TriggerEvent("em_customization:loaded_appearance")
     end
 

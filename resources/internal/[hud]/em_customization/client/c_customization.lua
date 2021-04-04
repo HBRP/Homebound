@@ -75,12 +75,8 @@ end
 function get_character_appearance()
 
     local skin = exports["em_fw"]:get_skin()
-
     assert(skin ~= nil, "Skin was not null")
-
-    local temp = json.decode(skin["character_skin"])
-    temp = json.decode(temp)
-    return temp
+    return skin["character_skin"]
 
 end
 

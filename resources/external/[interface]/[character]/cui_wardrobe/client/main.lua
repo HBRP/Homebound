@@ -130,8 +130,7 @@ end)
 RegisterNUICallback('load', function(data, cb)
     if not isLoading then
         local player_data = exports["em_fw"]:get_outfit(outfits[tonumber(data['slot'])].character_outfit_id)
-        local outfit_data = json.decode(player_data['outfit'])
-        local outfit      = json.decode(outfit_data)
+        local outfit = player_data['outfit']
         exports["fivem-appearance"]:setPedComponents(PlayerPedId(), outfit.ped_components)
         exports["fivem-appearance"]:setPedProps(PlayerPedId(), outfit.props)
 

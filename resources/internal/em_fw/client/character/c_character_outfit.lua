@@ -23,6 +23,7 @@ function get_outfit(character_outfit_id)
     trigger_server_callback("em_fw:get_outfit", function(outfit)
 
         current_outfit = outfit
+        current_outfit["outfit"] = json.decode(current_outfit["outfit"])
         
     end, character_outfit_id)
 
@@ -85,6 +86,7 @@ function get_skin()
     trigger_server_callback("em_fw:get_skin", function(character_skin)
 
         skin = character_skin
+        skin["character_skin"] = json.decode(skin["character_skin"])
 
     end, get_character_id())
 
