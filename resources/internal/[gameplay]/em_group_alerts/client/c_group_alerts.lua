@@ -1,11 +1,11 @@
 
 local sprites = {
-    ["10-31b"] = {color = 39, sprite = 156}
+    ["10-31b"] = {color = 39, sprite = 156},
+    ["10-71"]  = {color = 39, sprite = 119}
 }
 
-AddEventHandler("em_group_alerts:send_dispatch", function(group_alert_name, code, title, priority, requesting_officer)
+function send_dispatch(group_alert_name, code, title, priority, requesting_officer)
 
-    print("here")
     local coords = GetEntityCoords(PlayerPedId())
     local street_name, crossing_road = GetStreetNameAtCoord(coords.x, coords.y, coords.z)
 
@@ -34,4 +34,6 @@ AddEventHandler("em_group_alerts:send_dispatch", function(group_alert_name, code
     }
     TriggerServerEvent("em_group_alerts:send_alert", "Law Enforcement", data)
 
-end)
+end
+
+AddEventHandler("em_group_alerts:send_dispatch", send_dispatch)

@@ -22,7 +22,8 @@ exports {
     'is_item_type_a_weapon',
     'is_item_type_ammo',
     'get_item_in_slot',
-    'register_item_use'
+    'register_item_use',
+    'does_weapon_hash_alert_cops'
 
 }
 

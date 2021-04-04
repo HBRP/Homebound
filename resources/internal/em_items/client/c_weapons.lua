@@ -66,6 +66,20 @@ function does_weapon_use_ammo(item_id)
 
 end
 
+function does_weapon_hash_alert_cops(weapon_hash)
+
+    for i = 1, #weapons do
+
+        if weapons[i].item_weapon_hash == weapon_hash then
+            return weapons[i].item_alerts_cops
+        end
+        
+    end
+
+    return false
+
+end
+
 function get_ammo_for_weapon(ammo_item_id, storage_items)
 
     local ammo_count = 0
