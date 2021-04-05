@@ -23,7 +23,8 @@ client_scripts {
     'client/vehicle/c_vehicle.lua',
     'client/store/c_store.lua',
     'client/customization/c_customization.lua',
-    'client/groups/c_groups.lua'
+    'client/groups/c_groups.lua',
+    'client/teleporter/c_teleporter.lua'
     
 }
 
@@ -47,7 +48,8 @@ server_scripts {
     'server/store/s_store.lua',
     'server/customization/s_customization.lua',
     'server/groups/s_groups.lua',
-    'server/bank/s_bank.lua'
+    'server/bank/s_bank.lua',
+    'server/teleporter/s_teleporter.lua'
 
 }
 
@@ -133,6 +135,10 @@ export 'get_nearby_job_clock_in_async'
 export 'get_clocked_on_job_async'
 export 'clock_in_async'
 export 'clock_out_async'
+
+--c_teleporter.lua
+export 'get_nearby_teleporter_points_async'
+export 'get_teleporter_options_async'
 
 -- c_server_callback.lua
 export 'trigger_server_callback'
