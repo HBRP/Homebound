@@ -14,7 +14,12 @@ end
 
 function get_tattoos_async(callback)
 
-    trigger_server_callback_async("em_fw:get_tattoos", callback, get_character_id())
+    trigger_server_callback_async("em_fw:get_tattoos", function(result) 
+
+        local temp = json.decode(result)
+        callback(temp)
+
+    end, get_character_id())
 
 end
 

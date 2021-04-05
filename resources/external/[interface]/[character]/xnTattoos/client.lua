@@ -5,34 +5,40 @@ local opacity = 1
 local scaleType = nil
 local scaleString = ""
 
-local function set_tattoos()
+local function set_tattoos(callback)
 
-	local result = exports["em_fw"]:get_tattoos()
-    if result then
-        ClearPedDecorations(PlayerPedId())
-        for k, v in pairs(result) do
-            if v.Count ~= nil then
-                for i = 1, v.Count do
+	exports["em_fw"]:get_tattoos_async(function(result)
+        if result then
+            ClearPedDecorations(PlayerPedId())
+            for k, v in pairs(result) do
+                if v.Count ~= nil then
+                    for i = 1, v.Count do
+                        SetPedDecoration(PlayerPedId(), v.collection, v.nameHash)
+                    end
+                else
                     SetPedDecoration(PlayerPedId(), v.collection, v.nameHash)
                 end
-            else
-                SetPedDecoration(PlayerPedId(), v.collection, v.nameHash)
             end
+            currentTattoos = result
         end
-        currentTattoos = result
-    end
+        if callback ~= nil then
+            callback()
+        end
+    end)
+
 
 end
 
 AddEventHandler("em_customization:loaded_appearance", function()
 
-    set_tattoos()
-    Citizen.CreateThread(function()
-        Citizen.Wait(100)
-        GetNaked()
-        ResetSkin()
+    set_tattoos(function()
+        Citizen.CreateThread(function()
+            Citizen.Wait(100)
+            GetNaked()
+            ResetSkin()
+        end)
     end)
-    
+
 end)
 
 Citizen.CreateThread(function()
