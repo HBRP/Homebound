@@ -12,9 +12,7 @@ Citizen.CreateThread(function()
             DrawLine(position.x, position.y, position.z, coords.x, coords.y, coords.z, 255, 0, 0, 255)
         end
 
---[[
         if entity ~= 0 then
-            print(entity)
             local successful, return_value = pcall(GetEntityModel, entity)
             if successful then
                 local object_name = exports["ObjectNameFromHash"]:get_object_name(return_value)
@@ -23,7 +21,6 @@ Citizen.CreateThread(function()
                 end
             end
         end
-]]
-
+        
     end
 end)

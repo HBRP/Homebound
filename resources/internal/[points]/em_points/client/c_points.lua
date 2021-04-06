@@ -1,22 +1,40 @@
 
+local interaction_type = {
+
+    OBJECT = 1,
+    POINT  = 2
+
+}
+
 local unique_id = 1
 local controls  = {}
 
-function register_points(refresh_loop, text_func, control_pressed_func, loop_time)
+local function set_registers(refresh_loop, text_func, control_pressed_func, loop_time, interaction)
 
     local nearby_points = {}
     local is_nearby_points = false
+    local draw_text_id = -1
+    local nearby_point = false
 
     local point_id = unique_id
     unique_id = unique_id + 1
 
-    local nearby_loop = function()
+    local interaction_function = nil
+    if interaction == interaction_type.OBJECT then
 
-        local nearby_point = false
-        local draw_text_id = -1
-        while is_nearby_points do
+        interaction_function = function()
 
-            Citizen.Wait(500)
+            local hit, coords, entity = table.unpack(exports["em_fw"]:ray_cast_game_play_camera(10.0))
+            for i = 1, #nearby_points do
+
+            end
+
+        end
+
+    else
+
+        interaction_function = function()
+
             local ped_coords = GetEntityCoords(PlayerPedId())
             for i = 1, #nearby_points do
 
@@ -32,13 +50,22 @@ function register_points(refresh_loop, text_func, control_pressed_func, loop_tim
                 end
 
             end
+
+        end
+
+    end
+
+    local nearby_loop = function()
+
+        while is_nearby_points do
+            Citizen.Wait(500)
+            interaction_function()
             if not nearby_point then
                 controls[point_id] = nil
                 exports["cd_drawtextui"]:hide_text(draw_text_id)
                 Citizen.Wait(1000)
             end
             nearby_point = false
-
         end
 
     end
@@ -60,10 +87,22 @@ function register_points(refresh_loop, text_func, control_pressed_func, loop_tim
 
         while true do
             refresh_loop(refresh_nearby_points)
-            Citizen.Wait(loop_time or 5000)
+            Citizen.Wait(loop_time)
         end
 
     end)
+
+end
+
+function register_raycast_points(refresh_loop, text_func, control_pressed_func, loop_time)
+
+    set_registers(refresh_loop, text_func, control_pressed_func, loop_time or 5000, interaction_type.OBJECT)
+
+end
+
+function register_points(refresh_loop, text_func, control_pressed_func, loop_time)
+
+    set_registers(refresh_loop, text_func, control_pressed_func, loop_time or 5000, interaction_type.POINT)
 
 end
 

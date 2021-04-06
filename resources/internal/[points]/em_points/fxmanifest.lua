@@ -9,4 +9,14 @@ client_scripts {
 
 }
 
-export 'register_points'
+exports {
+
+    'register_points',
+    'register_raycast_points'
+}
+
+dependencies {
+
+    'em_fw'
+
+}
