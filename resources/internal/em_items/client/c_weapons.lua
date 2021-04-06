@@ -197,21 +197,37 @@ end
 
 local function animate_normal_pullout()
 
+    local dict = "reaction@intimidation@1h"
+
+    RequestAnimDict(dict)
+    while not HasAnimDictLoaded(dict) do
+        Citizen.Wait(100)
+    end
+
+    if intro then
+        TaskPlayAnimAdvanced(GetPlayerPed(-1), dict, "intro", GetEntityCoords(PlayerPedId(), true), 0, 0, GetEntityHeading(PlayerPedId()), 8.0, 3.0, -1, 50, 0, 0, 0)
+    else
+        TaskPlayAnimAdvanced(GetPlayerPed(-1), dict, "outro", GetEntityCoords(PlayerPedId(), true), 0, 0, GetEntityHeading(PlayerPedId()), 8.0, 3.0, -1, 50, 0, 0, 0)
+    end
+
+    Citizen.Wait(2000)
+    ClearPedTasks(PlayerPedId())
+
 end
 
-local function animate_weapon_pullout()
+function animate_weapon_pullout(intro)
 
     if exports["em_jobs"]:can_fast_draw() then
-        animate_fast_pullout()
+        animate_fast_pullout(intro)
     else
-        animate_normal_pullout()
+        animate_normal_pullout(intro)
     end
 
 end
 
 function equip_weapon(item_id, item_metadata)
 
-    animate_weapon_pullout()
+    animate_weapon_pullout(true)
 
     local hash = get_item_weapon_hash(item_id)
     local ped  = PlayerPedId()

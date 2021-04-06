@@ -30,6 +30,7 @@ local function check_for_hotkeys()
         end
     end
     if IsDisabledControlJustReleased(0, key_tab) then
+        animate_weapon_pullout()
         SetPedCurrentWeaponVisible(PlayerPedId(), false, true, false, false)
         SetCurrentPedWeapon(PlayerPedId(), 0xA2719263, true)
     end
