@@ -226,7 +226,6 @@ end, false)
 
 RegisterCommand('cruise_control_command', function()
 
-	print("first here")
 	local ped = PlayerPedId()
 	local vehicle = GetVehiclePedIsIn(ped, false)
 	local vehicle_class = GetVehicleClass(ped)
@@ -238,7 +237,6 @@ RegisterCommand('cruise_control_command', function()
 			vehicleCruiser = 'off'
 			SetEntityMaxSpeed(vehicle, GetVehicleHandlingFloat(vehicle, "CHandlingData", "fInitialDriveMaxFlatVel"))
 		else
-			print("here")
 			vehicleCruiser = 'on'
 			SetEntityMaxSpeed(vehicle, vehicleSpeedSource)
 		end
