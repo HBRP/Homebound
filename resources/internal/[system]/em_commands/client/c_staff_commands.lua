@@ -20,6 +20,15 @@ register_command("tpm", function(source, args, raw)
     
 end, "Teleport to marker")
 
+register_command("tpto", function(source, args, raw)
+
+    if #args < 3 then
+        return
+    end
+    SetEntityCoords(PlayerPedId(), tonumber(args[1]), tonumber(args[2]), tonumber(args[3]) + 0.25)
+    
+end, "Teleport to coordinates", {{name = 'x', help = 'float'}, {name = 'y', help = 'float'}, {name = 'z', help = 'float'}})
+
 register_command("give_item", function(source, args, raw)
 
     local storage_id = exports["em_fw"]:get_character_storage_id()
