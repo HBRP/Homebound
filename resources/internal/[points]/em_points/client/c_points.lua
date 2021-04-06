@@ -25,9 +25,29 @@ local function set_registers(refresh_loop, text_func, control_pressed_func, loop
         interaction_function = function()
 
             local hit, coords, entity = table.unpack(exports["em_fw"]:ray_cast_game_play_camera(10.0))
+            if not hit then
+                goto object_continue
+            end
+            
+            local successful, return_value = pcall(GetEntityModel, entity)
+            if not successful then
+                goto object_continue
+            end
+
             for i = 1, #nearby_points do
 
+                if nearby_points[i].prop_hash == return_value then
+
+                    nearby_point = true
+                    if not exports["cd_drawtextui"]:is_in_queue(draw_text_id) then
+                        draw_text_id = exports["cd_drawtextui"]:show_text(text_func(nearby_points[i]))
+                    end
+                    controls[point_id] = {func = control_pressed_func, point = nearby_points[i]}
+
+                end
+
             end
+            ::object_continue::
 
         end
 
