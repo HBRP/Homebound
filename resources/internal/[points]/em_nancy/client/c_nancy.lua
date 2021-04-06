@@ -3,12 +3,6 @@ local anim_dict      = "missfam4"
 local clipboard_prop = GetHashKey("p_amb_clipboard_01")
 local prop = nil
 
-local function handle_healing(idx)
-
-    SetEntityCoords(PlayerPedId(), beds[idx])
-
-end
-
 local function load_prop()
 
     RequestModel(clipboard_prop)
@@ -45,7 +39,6 @@ end
 local function handle_animations()
 
     load_animation()
-    Citizen.Wait(10)
     load_prop()
 
     exports["rprogress"]:Custom({
@@ -55,6 +48,29 @@ local function handle_animations()
     })
     
     clean_up()
+
+end
+
+local function handle_healing(idx)
+
+    local laying_down_dict = "anim@gangops@morgue@table@"
+    RequestAnimDict(laying_down_dict)
+
+    while not HasAnimDictLoaded(laying_down_dict) do
+        Citizen.Wait(25)
+    end
+
+    SetEntityCoords(PlayerPedId(), beds[idx].coords)
+    SetEntityHeading(PlayerPedId(), beds[idx].heading - 180.0)
+    TaskPlayAnim(PlayerPedId(), laying_down_dict, "body_search", 8.0, 8.0, 10000, 2, 1.0, 0, 0, 0)
+
+    exports["rprogress"]:Custom({
+        Async    = false,
+        Duration = 30000,
+        Label = "Receiving Medical Care"
+    })
+    ClearPedTasksImmediately(PlayerPedId())
+    exports["em_fw"]:trigger_server_callback_async("em_nancy:free_bed", function() end, idx)
 
 end
 
