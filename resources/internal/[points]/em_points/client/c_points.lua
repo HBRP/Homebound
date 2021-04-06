@@ -28,15 +28,15 @@ local function set_registers(refresh_loop, text_func, control_pressed_func, loop
             if not hit then
                 goto object_continue
             end
-            
-            local successful, return_value = pcall(GetEntityModel, entity)
+
+            local successful, hash = pcall(GetEntityModel, entity)
             if not successful then
                 goto object_continue
             end
 
             for i = 1, #nearby_points do
 
-                if nearby_points[i].prop_hash == return_value then
+                if nearby_points[i].prop_hash == hash then
 
                     nearby_point = true
                     if not exports["cd_drawtextui"]:is_in_queue(draw_text_id) then
@@ -81,9 +81,12 @@ local function set_registers(refresh_loop, text_func, control_pressed_func, loop
             Citizen.Wait(500)
             interaction_function()
             if not nearby_point then
+
                 controls[point_id] = nil
                 exports["cd_drawtextui"]:hide_text(draw_text_id)
+                draw_text_id = -1
                 Citizen.Wait(1000)
+
             end
             nearby_point = false
         end
