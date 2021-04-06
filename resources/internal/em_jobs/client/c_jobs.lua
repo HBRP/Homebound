@@ -84,6 +84,12 @@ local function refresh_nearby_clock_in_loop()
 
 end
 
+function get_current_job()
+
+    return job
+    
+end
+
 AddEventHandler("em_fw:character_loaded", function()
 
     Citizen.CreateThread(refresh_nearby_clock_in_loop)

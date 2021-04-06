@@ -180,7 +180,38 @@ local function set_attachments(item_id, item_metadata)
 
 end
 
+local function animate_fast_pullout()
+
+    local dict = "move_m@intimidation@cop@unarmed"
+
+    RequestAnimDict(dict)
+    while not HasAnimDictLoaded(dict) do
+        Citizen.Wait(100)
+    end
+
+    TaskPlayAnim(PlayerPedId(), dict, "idle", 8.0, 8.0, 750, 2 + 16 + 32, 1.0, 0, 0, 0)
+    Citizen.Wait(750)
+    TaskPlayAnim(PlayerPedId(), dict, "idle", 8.0, 8.0, 0, 16 + 32, 1.0, 0, 0, 0)
+
+end
+
+local function animate_normal_pullout()
+
+end
+
+local function animate_weapon_pullout()
+
+    if exports["em_jobs"]:can_fast_draw() then
+        animate_fast_pullout()
+    else
+        animate_normal_pullout()
+    end
+
+end
+
 function equip_weapon(item_id, item_metadata)
+
+    animate_weapon_pullout()
 
     local hash = get_item_weapon_hash(item_id)
     local ped  = PlayerPedId()
