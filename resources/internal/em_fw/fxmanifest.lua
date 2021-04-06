@@ -25,7 +25,8 @@ client_scripts {
     'client/store/c_store.lua',
     'client/customization/c_customization.lua',
     'client/groups/c_groups.lua',
-    'client/teleporter/c_teleporter.lua'
+    'client/teleporter/c_teleporter.lua',
+    'client/interaction/c_interaction.lua'
     
 }
 
@@ -50,7 +51,8 @@ server_scripts {
     'server/customization/s_customization.lua',
     'server/groups/s_groups.lua',
     'server/bank/s_bank.lua',
-    'server/teleporter/s_teleporter.lua'
+    'server/teleporter/s_teleporter.lua',
+    'server/interaction/s_interaction.lua'
 
 }
 
@@ -151,6 +153,10 @@ export 'enumerate_objects'
 export 'enumerate_peds'
 export 'enumerate_vehicles'
 export 'enumerate_pickups'
+
+-- c_interaction.lua
+export 'get_nearby_interaction_points_async'
+export 'get_all_interaction_props_async'
 
 -- s_blips.lua
 server_export 'get_blip_group_subscription'
