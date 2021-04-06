@@ -19,7 +19,8 @@ client_scripts {
     'client/storage/c_vehicle_storage.lua',
     'client/storage/c_drop.lua',
     'client/items/c_items.lua',
-    'client/enumerator/c_enumerator.lua',
+    'client/utils/c_enumerator.lua',
+    'client/utils/c_raycast.lua',
     'client/vehicle/c_vehicle.lua',
     'client/store/c_store.lua',
     'client/customization/c_customization.lua',
@@ -143,6 +144,13 @@ export 'get_teleporter_options_async'
 -- c_server_callback.lua
 export 'trigger_server_callback'
 export 'trigger_server_callback_async'
+
+-- utils
+export 'ray_cast_game_play_camera'
+export 'enumerate_objects'
+export 'enumerate_peds'
+export 'enumerate_vehicles'
+export 'enumerate_pickups'
 
 -- s_blips.lua
 server_export 'get_blip_group_subscription'
