@@ -8,7 +8,7 @@ exports["em_fw"]:register_server_callback("em_nancy:get_empty_bed", function(sou
         if not used_beds[i] then
             used_beds[i] = true
             callback(i)
-            break
+            return
         end
     end
     callback(0)

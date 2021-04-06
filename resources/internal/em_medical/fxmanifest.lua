@@ -28,5 +28,6 @@ exports {
     "reset_stat_maxes",
     "reset_stat",
     "add_stat",
-    "is_player_unconscious"
+    "is_player_unconscious",
+    'heal_player'
 }

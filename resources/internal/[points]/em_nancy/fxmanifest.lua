@@ -21,6 +21,7 @@ server_scripts {
 dependencies {
 
     'em_fw',
+    'em_medical',
     't-notify',
     'rprogress'
 

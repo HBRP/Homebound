@@ -62,8 +62,10 @@ local function handle_healing(idx)
 
     SetEntityCoords(PlayerPedId(), beds[idx].coords)
     SetEntityHeading(PlayerPedId(), beds[idx].heading - 180.0)
-    TaskPlayAnim(PlayerPedId(), laying_down_dict, "body_search", 8.0, 8.0, 10000, 2, 1.0, 0, 0, 0)
+    TaskPlayAnim(PlayerPedId(), laying_down_dict, "body_search", 8.0, 8.0, 30000, 2, 1.0, 0, 0, 0)
 
+    Citizen.Wait(1000)
+    FreezeEntityPosition(PlayerPedId(), true)
     exports["rprogress"]:Custom({
         Async    = false,
         Duration = 30000,
@@ -71,6 +73,8 @@ local function handle_healing(idx)
     })
     ClearPedTasksImmediately(PlayerPedId())
     exports["em_fw"]:trigger_server_callback_async("em_nancy:free_bed", function() end, idx)
+    exports["em_medical"]:heal_player()
+    FreezeEntityPosition(PlayerPedId(), false)
 
 end
 
