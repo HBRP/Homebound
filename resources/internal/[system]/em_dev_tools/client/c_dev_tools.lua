@@ -17,10 +17,9 @@ Citizen.CreateThread(function()
             if successful then
                 local object_name = exports["ObjectNameFromHash"]:get_object_name(return_value)
                 if object_name ~= nil then
-                    print(object_name)
+                    Citizen.Trace(string.format("hash: %d, name: %s\n", return_value, object_name))
                 end
             end
         end
-        
     end
 end)
