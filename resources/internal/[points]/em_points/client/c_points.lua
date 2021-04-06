@@ -22,6 +22,7 @@ local function set_registers(refresh_loop, text_func, control_pressed_func, loop
     local interaction_function = nil
     if interaction == interaction_type.OBJECT then
 
+        local last_hash = nil
         interaction_function = function()
 
             local hit, coords, entity = table.unpack(exports["em_fw"]:ray_cast_game_play_camera(10.0))
@@ -38,11 +39,12 @@ local function set_registers(refresh_loop, text_func, control_pressed_func, loop
 
                 if nearby_points[i].prop_hash == hash then
 
-                    nearby_point = true
                     if not exports["cd_drawtextui"]:is_in_queue(draw_text_id) then
                         draw_text_id = exports["cd_drawtextui"]:show_text(text_func(nearby_points[i]))
                     end
                     controls[point_id] = {func = control_pressed_func, point = nearby_points[i]}
+                    nearby_point = hash == last_hash
+                    last_hash = hash
 
                 end
 
