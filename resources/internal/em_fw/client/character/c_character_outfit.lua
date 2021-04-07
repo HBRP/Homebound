@@ -82,7 +82,6 @@ end
 
 function get_skin()
 
-    print("getting_skin")
     local skin = nil
     trigger_server_callback("em_fw:get_skin", function(character_skin)
 
