@@ -49,6 +49,16 @@ function is_in_queue(id)
 
 end
 
+function clear_queue()
+
+    active_ids = {}
+    active_id  = 0
+    SendNUIMessage({
+        action = 'hide'
+    })
+
+end
+
 local function hide_everything()
 
     SendNUIMessage({

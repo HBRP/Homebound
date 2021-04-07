@@ -23,6 +23,7 @@ exports {
 
     'show_text',
     'hide_text',
-    'is_in_queue'
+    'is_in_queue',
+    'clear_queue'
 
 }

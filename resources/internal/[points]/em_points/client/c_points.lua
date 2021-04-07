@@ -5,7 +5,7 @@ local controls  = {}
 local Point = {}
 Point.__index = Point
 
-function Point:new(refresh_loop, interaction_func, text_func, control_pressed_func, loop_time)
+function Point:new(refresh_loop, interaction_func, text_func, control_pressed_func, loop_time, delay)
 
     local obj = {}
     setmetatable(obj, Point)
@@ -15,6 +15,7 @@ function Point:new(refresh_loop, interaction_func, text_func, control_pressed_fu
     obj.text_func            = text_func
     obj.control_pressed_func = control_pressed_func
     obj.loop_time            = loop_time or 5000
+    obj.delay = delay or 500
 
     obj.nearby_points = {}
     obj.is_nearby_points = false
@@ -32,14 +33,14 @@ function Point:nearby_loop()
 
     while self.is_nearby_points do
 
-        Citizen.Wait(500)
+        Citizen.Wait(self.delay)
         self.interaction_func(self)
         if not self.nearby_point then
 
             controls[self.point_id] = nil
             exports["cd_drawtextui"]:hide_text(self.draw_text_id)
             self.draw_text_id = -1
-            Citizen.Wait(1000)
+            Citizen.Wait(self.delay * 2)
 
         end
         self.nearby_point = false
@@ -122,7 +123,6 @@ function register_raycast_door(refresh_loop, text_func, control_pressed_func, lo
     local last_hash = nil
     local interaction_func = function(obj)
 
-        
         local hit, coords, entity = table.unpack(exports["em_fw"]:ray_cast_game_play_camera(100.0))
         if not hit then
             goto door_continue
@@ -160,7 +160,7 @@ function register_raycast_door(refresh_loop, text_func, control_pressed_func, lo
 
     end
 
-    local obj = Point:new(refresh_loop, interaction_func, text_func, control_pressed_func, loop_time)
+    local obj = Point:new(refresh_loop, interaction_func, text_func, control_pressed_func, loop_time, 100)
     obj:start_loop()
 
 end

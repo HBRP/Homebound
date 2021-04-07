@@ -11,6 +11,8 @@ client_scripts {
 dependencies {
 
     'em_fw',
-    'em_doors'
+    'em_points',
+    'cd_drawtextui',
+    't-notify'
     
 }
