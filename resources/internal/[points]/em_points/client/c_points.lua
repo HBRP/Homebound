@@ -1,133 +1,194 @@
 
-local interaction_type = {
-
-    OBJECT = 1,
-    POINT  = 2
-
-}
-
 local unique_id = 1
 local controls  = {}
 
-local function set_registers(refresh_loop, text_func, control_pressed_func, loop_time, interaction)
+local Point = {}
+Point.__index = Point
 
-    local nearby_points = {}
-    local is_nearby_points = false
-    local draw_text_id = -1
-    local nearby_point = false
+function Point:new(refresh_loop, interaction_func, text_func, control_pressed_func, loop_time)
 
-    local point_id = unique_id
+    local obj = {}
+    setmetatable(obj, Point)
+
+    obj.refresh_loop         = refresh_loop
+    obj.interaction_func     = interaction_func
+    obj.text_func            = text_func
+    obj.control_pressed_func = control_pressed_func
+    obj.loop_time            = loop_time or 5000
+
+    obj.nearby_points = {}
+    obj.is_nearby_points = false
+    obj.draw_text_id = -1
+    obj.nearby_point = false
+
+    obj.point_id = unique_id
     unique_id = unique_id + 1
 
-    local interaction_function = nil
-    if interaction == interaction_type.OBJECT then
+    return obj
 
-        local last_hash = nil
-        interaction_function = function()
+end
 
-            local hit, coords, entity = table.unpack(exports["em_fw"]:ray_cast_game_play_camera(10.0))
-            if not hit then
-                goto object_continue
-            end
+function Point:nearby_loop()
 
-            local successful, hash = pcall(GetEntityModel, entity)
-            if not successful then
-                goto object_continue
-            end
+    while self.is_nearby_points do
 
-            for i = 1, #nearby_points do
+        Citizen.Wait(500)
+        self.interaction_func(self)
+        if not self.nearby_point then
 
-                if nearby_points[i].prop_hash == hash then
-
-                    if not exports["cd_drawtextui"]:is_in_queue(draw_text_id) then
-                        draw_text_id = exports["cd_drawtextui"]:show_text(text_func(nearby_points[i]))
-                    end
-                    controls[point_id] = {func = control_pressed_func, point = nearby_points[i]}
-                    nearby_point = hash == last_hash
-                    last_hash = hash
-
-                end
-
-            end
-            ::object_continue::
+            controls[self.point_id] = nil
+            exports["cd_drawtextui"]:hide_text(self.draw_text_id)
+            self.draw_text_id = -1
+            Citizen.Wait(1000)
 
         end
-
-    else
-
-        interaction_function = function()
-
-            local ped_coords = GetEntityCoords(PlayerPedId())
-            for i = 1, #nearby_points do
-
-                local nearby_coords = vector3(nearby_points[i].x, nearby_points[i].y, nearby_points[i].z)
-                if #(ped_coords - nearby_coords) < 2 then
-
-                    nearby_point = true
-                    if not exports["cd_drawtextui"]:is_in_queue(draw_text_id) then
-                        draw_text_id = exports["cd_drawtextui"]:show_text(text_func(nearby_points[i]))
-                    end
-                    controls[point_id] = {func = control_pressed_func, point = nearby_points[i]}
-
-                end
-
-            end
-
-        end
+        self.nearby_point = false
 
     end
 
-    local nearby_loop = function()
+end
 
-        while is_nearby_points do
-            Citizen.Wait(500)
-            interaction_function()
-            if not nearby_point then
+function Point:refresh_points(points)
 
-                controls[point_id] = nil
-                exports["cd_drawtextui"]:hide_text(draw_text_id)
-                draw_text_id = -1
-                Citizen.Wait(1000)
+    self.nearby_points = points or {}
+    local old_is_nearby_points = self.is_nearby_points
 
-            end
-            nearby_point = false
-        end
+    self.is_nearby_points = #self.nearby_points > 0
+
+    if not old_is_nearby_points and self.is_nearby_points then
+
+        Citizen.CreateThread(function() self:nearby_loop() end)
 
     end
 
-    local refresh_nearby_points = function(points)
+end
 
-        nearby_points = points or {}
-        local old_is_nearby_points = is_nearby_points
-
-        is_nearby_points = #nearby_points > 0
-
-        if not old_is_nearby_points and is_nearby_points then
-            Citizen.CreateThread(nearby_loop)
-        end
-        
-    end
+function Point:start_loop()
 
     Citizen.CreateThread(function()
 
         while true do
-            refresh_loop(refresh_nearby_points)
-            Citizen.Wait(loop_time)
+
+            self.refresh_loop(function(points) self:refresh_points(points) end)
+            Citizen.Wait(self.loop_time)
+
         end
 
     end)
 
 end
 
+
 function register_raycast_points(refresh_loop, text_func, control_pressed_func, loop_time)
 
-    set_registers(refresh_loop, text_func, control_pressed_func, loop_time or 5000, interaction_type.OBJECT)
+    local last_hash = nil
+    local interaction_func = function(obj)
+
+        local hit, coords, entity = table.unpack(exports["em_fw"]:ray_cast_game_play_camera(10.0))
+        if not hit then
+            goto object_continue
+        end
+
+        local successful, hash = pcall(GetEntityModel, entity)
+        if not successful then
+            goto object_continue
+        end
+
+        for i = 1, #obj.nearby_points do
+
+            if obj.nearby_points[i].prop_hash == hash then
+
+                if not exports["cd_drawtextui"]:is_in_queue(obj.draw_text_id) then
+                    obj.draw_text_id = exports["cd_drawtextui"]:show_text(obj.text_func(obj.nearby_points[i]))
+                end
+                controls[obj.point_id] = {func = obj.control_pressed_func, point = obj.nearby_points[i]}
+                obj.nearby_point = hash == last_hash
+                last_hash = hash
+
+            end
+
+        end
+        ::object_continue::
+
+    end
+
+    local obj = Point:new(refresh_loop, interaction_func, text_func, control_pressed_func, loop_time)
+    obj:start_loop()
+
+end
+
+function register_raycast_door(refresh_loop, text_func, control_pressed_func, loop_time)
+
+    local last_hash = nil
+    local interaction_func = function(obj)
+
+        
+        local hit, coords, entity = table.unpack(exports["em_fw"]:ray_cast_game_play_camera(100.0))
+        if not hit then
+            goto door_continue
+        end
+
+        local successful, hash = pcall(GetEntityModel, entity)
+        if not successful then
+            goto door_continue
+        end
+
+        local player_coords = GetEntityCoords(PlayerPedId())
+        for i = 1, #obj.nearby_points do
+
+            local doors = obj.nearby_points[i].doors
+            for j = 1, #doors do
+                
+                local object = GetClosestObjectOfType(vector3(table.unpack(doors[j].coords)), 1.0, doors[j].prop_hash, false, false, false)
+                local object_coords = GetEntityCoords(object)
+
+                if doors[j].prop_hash == hash and object ~= 0 and #(player_coords - object_coords) <= obj.nearby_points[i].max_unlock_distance then
+
+                    if not exports["cd_drawtextui"]:is_in_queue(obj.draw_text_id) then
+                        obj.draw_text_id = exports["cd_drawtextui"]:show_text(obj.text_func(obj.nearby_points[i]))
+                    end
+                    controls[obj.point_id] = {func = obj.control_pressed_func, point = obj.nearby_points[i]}
+                    obj.nearby_point = hash == last_hash
+                    last_hash = hash
+
+                end
+
+            end
+
+        end
+        ::door_continue::
+
+    end
+
+    local obj = Point:new(refresh_loop, interaction_func, text_func, control_pressed_func, loop_time)
+    obj:start_loop()
 
 end
 
 function register_points(refresh_loop, text_func, control_pressed_func, loop_time)
 
-    set_registers(refresh_loop, text_func, control_pressed_func, loop_time or 5000, interaction_type.POINT)
+    local interaction_func = function(obj)
+
+        local ped_coords = GetEntityCoords(PlayerPedId())
+        for i = 1, #obj.nearby_points do
+
+            local nearby_coords = vector3(obj.nearby_points[i].x, obj.nearby_points[i].y, obj.nearby_points[i].z)
+            if #(ped_coords - nearby_coords) < 2 then
+
+                obj.nearby_point = true
+                if not exports["cd_drawtextui"]:is_in_queue(obj.draw_text_id) then
+                    obj.draw_text_id = exports["cd_drawtextui"]:show_text(obj.text_func(obj.nearby_points[i]))
+                end
+                controls[obj.point_id] = {func = obj.control_pressed_func, point = obj.nearby_points[i]}
+            end
+
+        end
+
+    end
+
+    local obj = Point:new(refresh_loop, interaction_func, text_func, control_pressed_func, loop_time)
+    obj:start_loop()
+
 
 end
 

@@ -12,6 +12,7 @@ client_scripts {
 exports {
 
     'register_points',
+    'register_raycast_door',
     'register_raycast_points'
 }
 
