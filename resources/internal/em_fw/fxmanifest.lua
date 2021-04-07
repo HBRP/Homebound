@@ -26,7 +26,8 @@ client_scripts {
     'client/customization/c_customization.lua',
     'client/groups/c_groups.lua',
     'client/teleporter/c_teleporter.lua',
-    'client/interaction/c_interaction.lua'
+    'client/interaction/c_interaction.lua',
+    'client/door/c_doors.lua'
     
 }
 
@@ -52,7 +53,8 @@ server_scripts {
     'server/groups/s_groups.lua',
     'server/bank/s_bank.lua',
     'server/teleporter/s_teleporter.lua',
-    'server/interaction/s_interaction.lua'
+    'server/interaction/s_interaction.lua',
+    'server/door/s_doors.lua'
 
 }
 
@@ -157,6 +159,10 @@ export 'enumerate_pickups'
 -- c_interaction.lua
 export 'get_nearby_interaction_points_async'
 export 'get_all_interaction_props_async'
+
+-- c_doors.lua
+export 'get_nearby_doors_async'
+export 'toggle_door'
 
 -- s_blips.lua
 server_export 'get_blip_group_subscription'
