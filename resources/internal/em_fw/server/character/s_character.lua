@@ -64,6 +64,15 @@ function get_server_id_from_character_id(character_id)
 
 end
 
+
+RegisterNetEvent("em_fw:trigger_event_for_character")
+AddEventHandler("em_fw:trigger_event_for_character", function(event, character_id, args) 
+
+    TriggerClientEvent(event, get_server_id_from_character_id(character_id), args)
+
+end)
+
+
 register_server_callback("em_fw:get_player_character_id", function(source, callback, target)
 
     callback(get_character_id_from_source(target))
