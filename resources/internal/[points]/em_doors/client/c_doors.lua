@@ -7,13 +7,6 @@ local function interact_with_door(door)
 
     exports["em_fw"]:toggle_door(door.door_location_id)
 
-    local notify_message = string.format("%s door unlocked", door.door_location_text)
-    if not door.locked then
-        notify_message = string.format("%s door locked", door.door_location_text)
-    end
-
-    exports["t-notify"]:Alert({style = "info", message = notify_message})
-
     door.locked = not door.locked
     exports["em_fw"]:trigger_proximity_event("em_doors:proximity_change", 100.0, door)
     Citizen.Wait(500)
