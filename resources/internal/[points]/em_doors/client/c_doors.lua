@@ -1,4 +1,8 @@
 
+local local_doors = {}
+local last_coords = vector3(0.0, 0.0, 0.0)
+local next_refresh_time = 0
+
 local function interact_with_door(door)
 
     exports["em_fw"]:toggle_door(door.door_location_id)
@@ -8,10 +12,11 @@ local function interact_with_door(door)
         notify_message = string.format("%s door locked", door.door_location_text)
     end
 
-    Citizen.Wait(500)
     exports["t-notify"]:Alert({style = "info", message = notify_message})
 
-    TriggerServerEvent("em_fw:trigger_proximity_event", door.door_location_id)
+    door.locked = not door.locked
+    exports["em_fw"]:trigger_proximity_event("em_doors:proximity_change", 100.0, door)
+    Citizen.Wait(500)
     exports["cd_drawtextui"]:clear_queue()
 
 end
@@ -49,23 +54,38 @@ end
 
 local function refresh_loop(refresh_func)
 
-    exports["em_fw"]:get_nearby_doors_async(function(doors)
+    local current_coords = GetEntityCoords(PlayerPedId())
+    if #(current_coords - last_coords) > 25.0 or GetGameTimer() > next_refresh_time then
 
-        set_prop_hashes(doors)
-        freeze_doors(doors)
-        refresh_func(doors)
+        exports["em_fw"]:get_nearby_doors_async(function(doors)
 
-    end)
+            set_prop_hashes(doors)
+            freeze_doors(doors)
+
+            local_doors = doors
+            refresh_func(doors)
+
+        end)
+        last_coords = current_coords
+        next_refresh_time = GetGameTimer() + 10000
+
+    else
+
+        set_prop_hashes(local_doors)
+        freeze_doors(local_doors)
+        refresh_func(local_doors)
+
+    end
 
 end
 
 local function text(door)
 
-    local locked_text = "open"
+    local locked_text = "unlock"
     if not door.locked then
         locked_text = "lock"
     end
-    return string.format("Press [E] to %s %s", locked_text, door.door_location_text)
+    return string.format("[E] to %s %s", locked_text, door.door_location_text)
 
 end
 
@@ -77,6 +97,12 @@ end)
 
 
 RegisterNetEvent("em_doors:proximity_change")
-AddEventHandler("em_doors:proximity_change", function(door_location_id)
+AddEventHandler("em_doors:proximity_change", function(door)
+
+    for i = 1, #local_doors do
+        if local_doors[i].door_location_id == door.door_location_id then
+            local_doors[i] = door
+        end
+    end
 
 end)
