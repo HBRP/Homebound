@@ -5,7 +5,7 @@ exports["em_commands"]:register_command("heal", function(source, args, command)
         exports["t-notify"]:Alert({style = "error", message = "No character specified"})
     end
 
-    TriggerServerEvent("em_fw:trigger_event_for_character", "em_ems_commands:heal_event", tonumber(args[1]))
+    exports["em_fw"]:trigger_event_for_character("em_ems_commands:heal_event", tonumber(args[1]))
 
 end, "Heal another character", {{name = "character_id", help = "try /ids to find a character_id"}})
 

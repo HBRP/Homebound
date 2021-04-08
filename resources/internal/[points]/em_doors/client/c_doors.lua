@@ -10,6 +10,8 @@ local function interact_with_door(door)
 
     Citizen.Wait(500)
     exports["t-notify"]:Alert({style = "info", message = notify_message})
+
+    TriggerServerEvent("em_fw:trigger_proximity_event", door.door_location_id)
     exports["cd_drawtextui"]:clear_queue()
 
 end
@@ -71,4 +73,10 @@ AddEventHandler("em_fw:character_loaded", function()
 
     exports["em_points"]:register_raycast_door(refresh_loop, text, interact_with_door, 500)
     
+end)
+
+
+RegisterNetEvent("em_doors:proximity_change")
+AddEventHandler("em_doors:proximity_change", function(door_location_id)
+
 end)

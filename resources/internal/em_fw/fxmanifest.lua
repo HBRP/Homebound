@@ -27,7 +27,8 @@ client_scripts {
     'client/groups/c_groups.lua',
     'client/teleporter/c_teleporter.lua',
     'client/interaction/c_interaction.lua',
-    'client/door/c_doors.lua'
+    'client/door/c_doors.lua',
+    'client/events/c_trigger_events.lua'
     
 }
 
@@ -54,7 +55,8 @@ server_scripts {
     'server/bank/s_bank.lua',
     'server/teleporter/s_teleporter.lua',
     'server/interaction/s_interaction.lua',
-    'server/door/s_doors.lua'
+    'server/door/s_doors.lua',
+    'server/events/s_trigger_events.lua'
 
 }
 
@@ -163,6 +165,10 @@ export 'get_all_interaction_props_async'
 -- c_doors.lua
 export 'get_nearby_doors_async'
 export 'toggle_door'
+
+-- c_trigger_events.lua
+export 'trigger_event_for_character'
+export 'trigger_proximity_event'
 
 -- s_blips.lua
 server_export 'get_blip_group_subscription'

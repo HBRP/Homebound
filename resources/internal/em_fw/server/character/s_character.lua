@@ -64,12 +64,56 @@ function get_server_id_from_character_id(character_id)
 
 end
 
+function remove_stale_source(source)
+
+    for i = 1, #character_ids do
+
+        if character_ids[i].source == source then
+
+            table.remove(character_ids, i)
+            break
+
+        end
+
+    end
+
+end
+
+function get_current_character_ids()
+
+    return character_ids
+    
+end
+
 
 RegisterNetEvent("em_fw:trigger_event_for_character")
 AddEventHandler("em_fw:trigger_event_for_character", function(event, character_id, args) 
 
     TriggerClientEvent(event, get_server_id_from_character_id(character_id), args)
 
+end)
+
+RegisterNetEvent("em_fw:trigger_proximity_event")
+AddEventHandler("em_fw:trigger_proximity_event", function(event, distance, args) 
+
+    local source_coords = GetEntityCoords(source_coords)
+    for i = 1, #character_ids do
+
+        local ped = GetPlayerPed(character_ids[i].source)
+        if #(source_coords - GetEntityCoords(ped)) <= distance then
+
+            TriggerClientEvent(event, character_ids[i].source, args)
+
+        end
+
+    end
+
+end)
+
+AddEventHandler('playerDropped', function(reason)
+
+    remove_stale_source(source)
+    
 end)
 
 
