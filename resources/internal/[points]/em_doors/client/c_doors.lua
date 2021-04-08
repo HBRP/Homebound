@@ -9,6 +9,7 @@ local function interact_with_door(door)
 
     door.locked = not door.locked
     exports["em_fw"]:trigger_proximity_event("em_doors:proximity_change", 100.0, door)
+    PlaySound(-1, "Take_Picture", "MUGSHOT_CHARACTER_CREATION_SOUNDS", 0, 0, 1)
     Citizen.Wait(500)
     exports["cd_drawtextui"]:clear_queue()
 

@@ -160,7 +160,7 @@ function register_raycast_door(refresh_loop, text_func, control_pressed_func, lo
 
     end
 
-    local obj = Point:new(refresh_loop, interaction_func, text_func, control_pressed_func, loop_time, 100)
+    local obj = Point:new(refresh_loop, interaction_func, text_func, control_pressed_func, loop_time, 50)
     obj:start_loop()
 
 end
