@@ -139,7 +139,7 @@ function register_raycast_door(refresh_loop, text_func, control_pressed_func, lo
             local doors = obj.nearby_points[i].doors
             for j = 1, #doors do
                 
-                local object = GetClosestObjectOfType(vector3(table.unpack(doors[j].coords)), 1.0, doors[j].prop_hash, false, false, false)
+                local object = GetClosestObjectOfType(vector3(table.unpack(doors[j].coords)), 0.15, doors[j].prop_hash, false, false, false)
                 local object_coords = GetEntityCoords(object)
 
                 if doors[j].prop_hash == hash and object ~= 0 and #(player_coords - object_coords) <= obj.nearby_points[i].max_unlock_distance then
