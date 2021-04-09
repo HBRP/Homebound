@@ -13,6 +13,8 @@ local animal_skinning = {
 
 }
 
+local entities = {}
+
 local function give_items(prop)
 
 
@@ -21,22 +23,38 @@ end
 
 local function animate_skinning(prop)
 
-    exports["em_animations"]:play_animation("rcmextreme3", "idle", 2500, 2 + 32)
-    Citizen.Wait(5000)
+    exports["em_animations"]:play_animation_sync("rcmextreme3", "idle", 2500, 2 + 32)
+
+end
+
+local function can_skin(entity)
+
+    for i = 1, #entities do
+        if entities[i] == entity then
+            return false
+        end
+    end
+    return true
 
 end
 
 AddEventHandler("animal_cutting", function(prop, entity)
+
+    if not IsEntityDead(entity) then
+        exports["t-notify"]:Alert({style="error", message="Animal isn't dead!"})
+        return
+    end
+
+    if not can_skin(entity) then
+        exports["t-notify"]:Alert({style="error", message="Animal is already being skinned"})
+    end
 
     if not exports["em_items"]:does_character_have_knife() then
         exports["t-notify"]:Alert({style="error", message="You need to have a knife"})
         return
     end
 
-    if not IsEntityDead(entity) then
-        exports["t-notify"]:Alert({style="error", message="Animal isn't dead!"})
-        return
-    end
+    exports["em_fw"]:trigger_proximity_event("em_hunting:skinning_animal", 100.0, NetworkGetNetworkIdFromEntity(entity))
 
     animate_skinning(prop)
     give_items(prop)
@@ -50,6 +68,24 @@ RegisterNetEvent("em_hunting:delete_entity")
 AddEventHandler("em_hunting:delete_entity", function(entity_network_id)
 
     local entity = NetworkGetEntityFromNetworkId(entity_network_id)
+
+    for i = 1, #entities do
+
+        if entities[i] == entity then
+            table.remove(entities, i)
+            break
+        end
+        
+    end
+
     DeleteEntity(entity)
+
+end)
+
+RegisterNetEvent("em_hunting:skinning_animal")
+AddEventHandler("em_hunting:skinning_animal", function(entity_network_id)
+
+    local entity = NetworkGetEntityFromNetworkId(entity_network_id)
+    table.insert(entities, entity)
 
 end)

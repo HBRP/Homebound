@@ -11,8 +11,9 @@ local animation_flags = {
 }
 
 
-function play_animation(dict, anim, duration, enum_flags)
+function play_animation_sync(dict, anim, duration, enum_flags)
 
+    ClearPedTasks(ped)
     RequestAnimDict(dict)
     while not HasAnimDictLoaded(dict) do
         Citizen.Wait(5)
@@ -20,11 +21,7 @@ function play_animation(dict, anim, duration, enum_flags)
 
     TaskPlayAnim(PlayerPedId(), dict, anim, 8.0, 8.0, duration, enum_flags, 1.0, false, false, false)
 
-    Citizen.CreateThread(function()
-
-        Citizen.Wait(duration)
-        ClearPedTasks(ped)
-
-    end)
+    Citizen.Wait(duration)
+    ClearPedTasks(ped)
 
 end
