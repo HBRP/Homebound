@@ -118,20 +118,10 @@ function register_raycast_points(refresh_loop, text_func, control_pressed_func, 
 
 end
 
-function register_raycast_door(refresh_loop, text_func, control_pressed_func, loop_time)
+function register_door_points(refresh_loop, text_func, control_pressed_func, loop_time)
 
     local last_hash = nil
     local interaction_func = function(obj)
-
-        local hit, coords, entity = table.unpack(exports["em_fw"]:ray_cast_game_play_camera(100.0))
-        if not hit then
-            goto door_continue
-        end
-
-        local successful, hash = pcall(GetEntityModel, entity)
-        if not successful then
-            goto door_continue
-        end
 
         local player_coords = GetEntityCoords(PlayerPedId())
         for i = 1, #obj.nearby_points do
@@ -142,25 +132,25 @@ function register_raycast_door(refresh_loop, text_func, control_pressed_func, lo
                 local object = GetClosestObjectOfType(vector3(table.unpack(doors[j].coords)), 0.15, doors[j].prop_hash, false, false, false)
                 local object_coords = GetEntityCoords(object)
 
-                if doors[j].prop_hash == hash and object ~= 0 and #(player_coords - object_coords) <= obj.nearby_points[i].max_unlock_distance then
+                if object ~= 0 and #(player_coords - object_coords) <= obj.nearby_points[i].max_unlock_distance then
 
                     if not exports["cd_drawtextui"]:is_in_queue(obj.draw_text_id) then
                         obj.draw_text_id = exports["cd_drawtextui"]:show_text(obj.text_func(obj.nearby_points[i]))
                     end
                     controls[obj.point_id] = {func = obj.control_pressed_func, point = obj.nearby_points[i]}
-                    obj.nearby_point = hash == last_hash
-                    last_hash = hash
+                    obj.nearby_point = doors[j].prop_hash == last_hash
+                    last_hash = doors[j].prop_hash
+                    return
 
                 end
 
             end
 
         end
-        ::door_continue::
 
     end
 
-    local obj = Point:new(refresh_loop, interaction_func, text_func, control_pressed_func, loop_time, 50)
+    local obj = Point:new(refresh_loop, interaction_func, text_func, control_pressed_func, loop_time)
     obj:start_loop()
 
 end

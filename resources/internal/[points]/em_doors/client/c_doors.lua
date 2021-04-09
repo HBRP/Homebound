@@ -85,7 +85,7 @@ end
 
 AddEventHandler("em_fw:character_loaded", function()
 
-    exports["em_points"]:register_raycast_door(refresh_loop, text, interact_with_door, 500)
+    exports["em_points"]:register_door_points(refresh_loop, text, interact_with_door, 250)
     
 end)
 

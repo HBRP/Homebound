@@ -13,6 +13,7 @@ exports {
 
     'register_points',
     'register_raycast_door',
+    'register_door_points',
     'register_raycast_points'
 }
 
