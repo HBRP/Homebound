@@ -101,35 +101,28 @@ function openInventory()
 
     loadPlayerInventory()
     isInInventory = true
-    SendNUIMessage(
-        {
-            action = "display",
-            type = "normal"
-        }
-    )
+    SendNUIMessage({action = "display", type = "normal"})
     SetNuiFocus(true, true)
     TriggerEvent("opened_inventory")
+
 end
 
 function closeInventory()
+
     isInInventory = false
-    SendNUIMessage(
-        {
-            action = "hide"
-        }
-    )
+    SendNUIMessage({action = "hide"})
     SetNuiFocus(false, false)
     TriggerEvent("closed_inventory")
+
 end
 
-RegisterNUICallback(
-    "NUIFocusOff",
-    function(data, cb)
-        closeInventory()
-        TriggerEvent("esx_inventoryhud:onClosedInventory", data.type)
-        cb("ok")
-    end
-)
+RegisterNUICallback("NUIFocusOff", function(data, cb)
+
+    closeInventory()
+    TriggerEvent("esx_inventoryhud:onClosedInventory", data.type)
+    cb("ok")
+
+end)
 
 RegisterNUICallback("GetNearPlayers", function(data, cb)
 
@@ -437,74 +430,66 @@ RegisterNUICallback("OpenItem", function(data, cb)
 end)
 
 
-Citizen.CreateThread(
-    function()
-        while true do
-            Citizen.Wait(5)
-            if isInInventory then
-                local playerPed = PlayerPedId()
-                DisableControlAction(0, 1, true) -- Disable pan
-                DisableControlAction(0, 2, true) -- Disable tilt
-                DisableControlAction(0, 24, true) -- Attack
-                DisableControlAction(0, 257, true) -- Attack 2
-                DisableControlAction(0, 25, true) -- Aim
-                DisableControlAction(0, 263, true) -- Melee Attack 1
-                DisableControlAction(0, Keys["W"], true) -- W
-                DisableControlAction(0, Keys["U"], true) -- U
-                DisableControlAction(0, Keys["A"], true) -- A
-                DisableControlAction(0, 31, true) -- S (fault in Keys table!)
-                DisableControlAction(0, 30, true) -- D (fault in Keys table!)
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(5)
+        if isInInventory then
+            local playerPed = PlayerPedId()
+            DisableControlAction(0, 1, true) -- Disable pan
+            DisableControlAction(0, 2, true) -- Disable tilt
+            DisableControlAction(0, 24, true) -- Attack
+            DisableControlAction(0, 257, true) -- Attack 2
+            DisableControlAction(0, 25, true) -- Aim
+            DisableControlAction(0, 263, true) -- Melee Attack 1
+            DisableControlAction(0, Keys["W"], true) -- W
+            DisableControlAction(0, Keys["U"], true) -- U
+            DisableControlAction(0, Keys["A"], true) -- A
+            DisableControlAction(0, 31, true) -- S (fault in Keys table!)
+            DisableControlAction(0, 30, true) -- D (fault in Keys table!)
 
-                DisableControlAction(0, Keys["R"], true) -- Reload
-                DisableControlAction(0, Keys["SPACE"], true) -- Jump
-                DisableControlAction(0, Keys["Q"], true) -- Cover
-                DisableControlAction(0, Keys["TAB"], true) -- Select Weapon
-                DisableControlAction(0, Keys["F"], true) -- Also 'enter'?
+            DisableControlAction(0, Keys["R"], true) -- Reload
+            DisableControlAction(0, Keys["SPACE"], true) -- Jump
+            DisableControlAction(0, Keys["Q"], true) -- Cover
+            DisableControlAction(0, Keys["TAB"], true) -- Select Weapon
+            DisableControlAction(0, Keys["F"], true) -- Also 'enter'?
 
-                DisableControlAction(0, Keys["F1"], true) -- Disable phone
-                DisableControlAction(0, Keys["F2"], true) -- Inventory
-                DisableControlAction(0, Keys["F3"], true) -- Animations
-                DisableControlAction(0, Keys["F6"], true) -- Job
+            DisableControlAction(0, Keys["F1"], true) -- Disable phone
+            DisableControlAction(0, Keys["F2"], true) -- Inventory
+            DisableControlAction(0, Keys["F3"], true) -- Animations
+            DisableControlAction(0, Keys["F6"], true) -- Job
 
-                DisableControlAction(0, Keys["V"], true) -- Disable changing view
-                DisableControlAction(0, Keys["C"], true) -- Disable looking behind
-                DisableControlAction(0, Keys["X"], true) -- Disable clearing animation
-                DisableControlAction(2, Keys["P"], true) -- Disable pause screen
+            DisableControlAction(0, Keys["V"], true) -- Disable changing view
+            DisableControlAction(0, Keys["C"], true) -- Disable looking behind
+            DisableControlAction(0, Keys["X"], true) -- Disable clearing animation
+            DisableControlAction(2, Keys["P"], true) -- Disable pause screen
 
-                DisableControlAction(0, 59, true) -- Disable steering in vehicle
-                DisableControlAction(0, 71, true) -- Disable driving forward in vehicle
-                DisableControlAction(0, 72, true) -- Disable reversing in vehicle
+            DisableControlAction(0, 59, true) -- Disable steering in vehicle
+            DisableControlAction(0, 71, true) -- Disable driving forward in vehicle
+            DisableControlAction(0, 72, true) -- Disable reversing in vehicle
 
-                DisableControlAction(2, Keys["LEFTCTRL"], true) -- Disable going stealth
+            DisableControlAction(2, Keys["LEFTCTRL"], true) -- Disable going stealth
 
-                DisableControlAction(0, 47, true) -- Disable weapon
-                DisableControlAction(0, 264, true) -- Disable melee
-                DisableControlAction(0, 257, true) -- Disable melee
-                DisableControlAction(0, 140, true) -- Disable melee
-                DisableControlAction(0, 141, true) -- Disable melee
-                DisableControlAction(0, 142, true) -- Disable melee
-                DisableControlAction(0, 143, true) -- Disable melee
-                DisableControlAction(0, 75, true) -- Disable exit vehicle
-                DisableControlAction(27, 75, true) -- Disable exit vehicle
-            end
+            DisableControlAction(0, 47, true) -- Disable weapon
+            DisableControlAction(0, 264, true) -- Disable melee
+            DisableControlAction(0, 257, true) -- Disable melee
+            DisableControlAction(0, 140, true) -- Disable melee
+            DisableControlAction(0, 141, true) -- Disable melee
+            DisableControlAction(0, 142, true) -- Disable melee
+            DisableControlAction(0, 143, true) -- Disable melee
+            DisableControlAction(0, 75, true) -- Disable exit vehicle
+            DisableControlAction(27, 75, true) -- Disable exit vehicle
         end
     end
-)
+end)
 
 RegisterNetEvent("esx_inventoryhud:closeInventory")
-AddEventHandler(
-    "esx_inventoryhud:closeInventory",
-    function()
-        closeInventory()
-    end
-)
+AddEventHandler("esx_inventoryhud:closeInventory", function()
+    closeInventory()
+end)
 
 RegisterNetEvent("esx_inventoryhud:reloadPlayerInventory")
-AddEventHandler(
-    "esx_inventoryhud:reloadPlayerInventory",
-    function()
-        if isInInventory then
-            loadPlayerInventory()
-        end
+AddEventHandler("esx_inventoryhud:reloadPlayerInventory", function()
+    if isInInventory then
+        loadPlayerInventory()
     end
-)
+end)
