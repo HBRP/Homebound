@@ -2,6 +2,20 @@
 local weapons = nil
 local attachments = nil
 
+local item_weapon_type_ids = {
+
+    BLUNT = 1,
+    KNIFE = 2,
+    HANDGUN = 3,
+    SHOTGUN = 4,
+    SMG = 5,
+    ASSAULT_RIFLE = 6,
+    RIFLE = 7,
+    SNIPER_RIFLE = 8,
+    THROWABLE = 9
+
+}
+
 function is_item_type_a_weapon(item_type_id)
 
     return item_type_ids.WEAPON == item_type_id
@@ -91,6 +105,35 @@ function get_ammo_for_weapon(ammo_item_id, storage_items)
 
     end
     return ammo_count
+
+end
+
+function get_weapon_type(item_id)
+
+    for i = 1, #weapons do
+
+        if weapons[i].item_id == item_id then
+            return weapons[i].item_weapon_type_id
+        end
+        
+    end
+
+    return 0
+
+end
+
+function does_character_have_knife()
+
+    local storage_items = (exports["em_fw"]:get_character_storage())["storage_items"]
+    for i = 1, #storage_items do
+
+        if get_weapon_type(storage_items[i].item_id) == item_weapon_type_ids.KNIFE then
+            return true
+        end
+
+    end
+    
+    return false
 
 end
 
