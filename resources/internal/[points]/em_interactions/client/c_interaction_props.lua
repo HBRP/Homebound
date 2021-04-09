@@ -1,9 +1,9 @@
 
 local props = {}
 
-local function interact_with_prop(prop)
+local function interact_with_prop(prop, entity)
 
-    TriggerEvent(prop.interaction_event, prop)
+    TriggerEvent(prop.interaction_event, prop, entity)
 
 end
 

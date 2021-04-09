@@ -102,7 +102,7 @@ function register_raycast_points(refresh_loop, text_func, control_pressed_func, 
                 if not exports["cd_drawtextui"]:is_in_queue(obj.draw_text_id) then
                     obj.draw_text_id = exports["cd_drawtextui"]:show_text(obj.text_func(obj.nearby_points[i]))
                 end
-                controls[obj.point_id] = {func = obj.control_pressed_func, point = obj.nearby_points[i]}
+                controls[obj.point_id] = {func = obj.control_pressed_func, point = obj.nearby_points[i], entity = entity}
                 obj.nearby_point = hash == last_hash
                 last_hash = hash
 
@@ -185,7 +185,8 @@ end
 RegisterCommand('interact', function()
 
     for k, v in pairs(controls) do
-        v.func(v.point)
+        print(json.encode(v))
+        v.func(v.point, v.entity)
     end
 
 end, false)
