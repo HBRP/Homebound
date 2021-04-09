@@ -7,6 +7,7 @@ client_scripts {
     'config.lua',
     'client/c_consumable_animations.lua',
     'client/c_hotbar.lua',
+    'client/c_weapon_animations.lua',
     'client/c_weapons.lua',
     'client/c_items.lua',
     'client/item_registers/c_ammo_boxes.lua'
