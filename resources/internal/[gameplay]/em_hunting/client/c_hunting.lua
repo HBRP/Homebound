@@ -6,7 +6,7 @@ local animal_skinning = {
     ['a_c_deer']   = {{item_name = 'deer meat', amount = 3},{item_name = 'deer pelt', amount = 1}},
     ['a_c_coyote'] = {{item_name = 'coyote meat', amount = 2}, {item_name = 'coyote pelt', amount = 1}},
     ['a_c_rabbit_01'] = {{item_name = 'rabbit meat', amount = 1}, {item_name = 'rabbit pelt', amount = 1}},
-    ['a_c_seagull'] = {{item_name = 'beach pidgeon', amount = 1}, {item_name = 'feathers', amount = 20}},
+    ['a_c_seagull'] = {{item_name = 'beach pigeon', amount = 1}, {item_name = 'feathers', amount = 20}},
     ['a_c_crow'] = {{item_name = 'crow meat', amount = 1}, {item_name = 'feathers', amount = 10}},
     ['a_c_cormorant'] = {{item_name = 'cormorant meat', amount = 1}, {item_name = 'feathers', amount = 20}},
     ['a_c_chickenhawk'] = {{item_name = 'chicken hawk meat', amount = 1}, {item_name = 'feathers', amount = 20}}
@@ -17,7 +17,13 @@ local entities = {}
 
 local function give_items(prop)
 
+    local items = animal_skinning[prop.prop_name]
+    for i = 1, #items do
 
+        local item_id = exports["em_items"]:get_item_id_from_name(items[i].item_name)
+        exports["em_fw"]:give_item(exports["em_fw"]:get_character_storage_id(), item_id, items[i].amount, -1, -1)
+
+    end
 
 end
 
@@ -75,7 +81,7 @@ AddEventHandler("em_hunting:delete_entity", function(entity_network_id)
             table.remove(entities, i)
             break
         end
-        
+
     end
 
     DeleteEntity(entity)
