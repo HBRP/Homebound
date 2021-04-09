@@ -30,9 +30,17 @@ local function check_for_hotkeys()
         end
     end
     if IsDisabledControlJustReleased(0, key_tab) then
-        animate_weapon_pullout()
+
+        local weapon_hash = GetSelectedPedWeapon(PlayerPedId())
+
+        if weapon_hash == 0xA2719263 then
+            return
+        end
+
+        animate_weapon_pullout(get_weapon_item_id_from_hash(weapon_hash), false)
         SetPedCurrentWeaponVisible(PlayerPedId(), false, true, false, false)
         SetCurrentPedWeapon(PlayerPedId(), 0xA2719263, true)
+
     end
 
 end
