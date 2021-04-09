@@ -33,7 +33,7 @@ local function check_for_hotkeys()
 
         local weapon_hash = GetSelectedPedWeapon(PlayerPedId())
 
-        if weapon_hash == 0xA2719263 then
+        if weapon_hash == -1569615261 or weapon_hash == 0 then
             return
         end
 
