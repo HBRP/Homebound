@@ -9,7 +9,11 @@ local animal_skinning = {
     ['a_c_seagull'] = {{item_name = 'beach pigeon', amount = 1}, {item_name = 'feathers', amount = 20}},
     ['a_c_crow'] = {{item_name = 'crow meat', amount = 1}, {item_name = 'feathers', amount = 10}},
     ['a_c_cormorant'] = {{item_name = 'cormorant meat', amount = 1}, {item_name = 'feathers', amount = 20}},
-    ['a_c_chickenhawk'] = {{item_name = 'chicken hawk meat', amount = 1}, {item_name = 'feathers', amount = 20}}
+    ['a_c_chickenhawk'] = {{item_name = 'chicken hawk meat', amount = 1}, {item_name = 'feathers', amount = 20}},
+    ['a_c_husky'] = {{item_name = 'dog meat', amount = 1}, {item_name = 'dog pelt', amount = 1}},
+    ['a_c_poodle'] = {{item_name = 'dog meat', amount = 1}, {item_name = 'dog pelt', amount = 1}},
+    ['a_c_cat_01'] = {{item_name = 'cat meat', amount = 1}, {item_name = 'cat pelt', amount = 1}},
+    ['a_c_pug'] = {{item_name = 'dog meat', amount = 1}, {item_name = 'dog pelt', amount = 1}}
 
 }
 

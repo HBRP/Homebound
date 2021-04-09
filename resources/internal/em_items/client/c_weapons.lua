@@ -176,7 +176,6 @@ local function shooting_loop()
         Citizen.Wait(10)
         if IsPedShooting(ped) then
 
-            assert(equiped_weapon_hash == GetSelectedPedWeapon(ped))
             Citizen.Wait(1000)
             local current_ammo_in_gun = GetAmmoInPedWeapon(ped, equiped_weapon_hash)
             local ammo_item_id        = get_weapon_ammo_item_id(equiped_weapon_item_id)
