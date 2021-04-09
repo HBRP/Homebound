@@ -12,6 +12,7 @@ dependencies {
 
     'em_fw',
     'em_items',
+    'em_animations',
     't-notify'
 
 }
