@@ -185,7 +185,6 @@ end
 RegisterCommand('interact', function()
 
     for k, v in pairs(controls) do
-        print(json.encode(v))
         v.func(v.point, v.entity)
     end
 
