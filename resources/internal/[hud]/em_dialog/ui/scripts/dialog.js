@@ -58,7 +58,8 @@ function option_clicked(id) {
 function show_title(title) {
 
     $(".dialog-title").empty();
-    $(".dialog-title").append('<center><p>{title}</p></center>'.replace("{title}", title));
+    //$(".dialog-title").append('<center><p>{title}</p></center>'.replace("{title}", title));
+    $(".dialog-title").append('<p>{title}</p>'.replace("{title}", title));
 
 }
 
@@ -97,6 +98,11 @@ $(function() {
         }
 
     })
+    $("body").on("keyup", function (key) {
+        if (key.which == 27) {
+            $.post("http://em_dialog/hide", JSON.stringify({}));
+        }
+    });
     //test_function()
 
 })

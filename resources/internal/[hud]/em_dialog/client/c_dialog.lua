@@ -39,3 +39,10 @@ RegisterNUICallback('callback_option', function(data, cb)
     cb("ok")
 
 end)
+
+RegisterNUICallback('hide', function(data, cb)
+
+    hide_dialog()
+    cb("ok")
+
+end)
