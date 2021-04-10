@@ -6,5 +6,6 @@ ui_page "ui/index.html"
 
 files {
     "ui/index.html",
-    "ui/css/dialog.css"
+    "ui/css/dialog.css",
+    "ui/scripts/dialog.js"
 }

@@ -24,11 +24,24 @@
     margin-top: 10px;
     margin-left: 2%;
     width: 95%;
+    height: 25%;
     font-family: 'Source Sans Pro', sans-serif;
 }
 
 p {
     margin-left: 1%;
+}
+
+button {
+    color: #FFF;
+    border-color: transparent;
+    background-color: transparent;
+    font-size: 26px;
+    margin-top: 10px;
+    margin-left: 2%;
+    text-align: left;
+    width: 95%;
+    font-family: 'Source Sans Pro', sans-serif;
 }
 
 .dialog-response {
