@@ -13,12 +13,13 @@ ui_page "ui/index.html"
 files {
     "ui/index.html",
     "ui/css/dialog.css",
-    "ui/scripts/dialog.js"
+    "ui/scripts/dialog.js",
+    'ui/images/Splash-PNG-Download-Image.png'
 }
 
 exports {
 
     'show_dialog',
     'hide_dialog'
-    
+
 }

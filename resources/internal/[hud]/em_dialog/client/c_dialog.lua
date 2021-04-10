@@ -4,7 +4,6 @@ local callbacks = {}
 
 function show_dialog(title, dialog)
 
-    print("showing dialog")
     callbacks = {}
     for i = 1, #dialog do
 
