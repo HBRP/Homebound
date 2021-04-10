@@ -4,9 +4,10 @@ var current_dialog_options = null
 
 function show_dialog(dialog_options) {
 
+    $(".dialog-response").hide();
     $(".dialog-container").show();
-    $(".dialog-options").empty();
     $(".dialog-options").show();
+    $(".dialog-options").empty();
     
     current_dialog_options = dialog_options
     for (var i = 0; i < dialog_options.length; i++) {
