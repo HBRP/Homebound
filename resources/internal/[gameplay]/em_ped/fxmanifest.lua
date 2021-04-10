@@ -15,5 +15,6 @@ exports {
     'em_items',
     'em_dialog',
     'em_medical',
+    'em_animations',
     't-notify'
 }

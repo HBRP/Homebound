@@ -2,9 +2,12 @@
 local unique_id = 0
 local callbacks = {}
 
-function show_dialog(title, dialog)
+local cleanup_callback = nil
+
+function show_dialog(title, dialog, cleanup_cb)
 
     callbacks = {}
+    cleanup_callback = cleanup_cb
     for i = 1, #dialog do
 
         dialog[i].callback_id = unique_id
@@ -19,6 +22,10 @@ end
 
 function hide_dialog()
 
+    if cleanup_callback ~= nil then
+        cleanup_callback()
+    end
+    
     SendNUIMessage({display = "hide"})
     SetNuiFocus(false, false)
 
