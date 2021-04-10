@@ -1,0 +1,64 @@
+
+.dialog-container {
+
+    position: absolute;
+    width: 35%;
+    height: 22%;
+    margin-left: 30%;
+    margin-top: 30%;
+    background-color: rgba(0, 0, 0, .60);
+    border-radius: 6px;
+
+}
+
+.dialog-scroll {
+    overflow-y: scroll;
+    direction:ltr;
+}
+
+.dialog-option {
+
+    color: #FFF;
+    border-color: #FFF;
+    font-size: 26px;
+    margin-top: 10px;
+    margin-left: 2%;
+    width: 95%;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+p {
+    margin-left: 1%;
+}
+
+.dialog-response {
+
+    color: #FFF;
+    border-color: #FFF;
+    font-size: 26px;
+    margin-top: 10px;
+    margin-left: 15%;
+    width: 70%;
+    font-family: 'Source Sans Pro', sans-serif;
+
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #FFF;
+  border-radius: 4px; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
