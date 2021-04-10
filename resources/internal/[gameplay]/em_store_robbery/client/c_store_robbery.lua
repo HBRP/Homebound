@@ -19,16 +19,8 @@ local function dispatch_loop()
 
 end
 
-AddEventHandler("convenience_store_safe", function(point)
+local function start_safe_cracking(point)
 
-    successful_crack = nil
-
-    if GetGameTimer() < next_try_time then
-        exports['t-notify']:Alert({style = 'error', message = "Slow down! You're feeling nervous."})
-        return
-    end
-
-    --check if they have permission to use a safe
     exports["em_fw"]:trigger_server_callback_async("em_store_robbery:start_robbing_safe", function(can_rob) 
 
         if not can_rob then
@@ -64,5 +56,19 @@ AddEventHandler("convenience_store_safe", function(point)
         end, point, successful_crack)
 
     end, point)
+
+end
+
+AddEventHandler("convenience_store_safe", function(point)
+
+    successful_crack = nil
+
+    if GetGameTimer() < next_try_time then
+        exports['t-notify']:Alert({style = 'error', message = "Slow down! You're feeling nervous."})
+        return
+    end
+
+    --check if they have permission to use a safe
+    start_safe_cracking(point)
 
 end)
