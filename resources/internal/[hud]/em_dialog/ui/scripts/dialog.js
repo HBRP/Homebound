@@ -4,6 +4,8 @@ var current_dialog_options = null
 
 function show_dialog(dialog_options) {
 
+    $(".dialog-container").show();
+
     current_dialog_options = dialog_options
 
     $(".dialog-options").empty();
@@ -17,13 +19,43 @@ function show_dialog(dialog_options) {
 
 }
 
-function dialog_listener() {
+function hide_elements() {
+
+    $(".dialog_options").hide();
+    $(".dialog-response").hide();
+    $(".dialog-container").hide();
 
 }
 
 function option_clicked(id) {
 
-    console.log(id)
+    if (current_dialog_options[id].response != null) {
+
+        $(".dialog-options").empty();
+        $(".dialog_options").hide();
+
+        $(".dialog-response").empty();
+        $(".dialog-response").append('<p>{response}</p>'.replace("{response}", current_dialog_options[id].response))
+        $(".dialog-response").show();
+
+        var split = current_dialog_options[id].response.split(" ");
+        var time_to_wait = split.length * 250
+
+        setTimeout(function() { 
+
+            $.post("http://em_dialog/callback_option", JSON.stringify({
+                callback_id: current_dialog_options[id].callback_id
+            }));
+
+        }, time_to_wait);
+
+    } else {
+
+        $.post("http://em_dialog/callback_option", JSON.stringify({
+            callback_id: current_dialog_options[id].callback_id
+        }));
+
+    }
 
 }
 
@@ -49,12 +81,20 @@ function test_function() {
 $(function() {
 
     window.addEventListener("message", function (event) {
+
         if (event.data.display == "show_dialog") {
 
+            show_dialog(event.data.dialog);
+
+        } else if (event.data.display == "hide") {
+
+            hide_elements()
+
         }
+
     })
     dialog_listener()
-    test_function()
+    //test_function()
 
 })
 
