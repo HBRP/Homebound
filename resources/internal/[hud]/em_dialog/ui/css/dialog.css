@@ -78,7 +78,12 @@ button {
     text-align: left;
     width: 95%;
     border: 0px;
+    border-radius: 4px;
     font-family: 'Source Sans Pro', sans-serif;
+}
+
+button:hover {
+  background-color: rgba(32, 32, 32, .60);
 }
 
 .dialog-response {
