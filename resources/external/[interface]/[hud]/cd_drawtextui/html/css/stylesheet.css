@@ -31,7 +31,7 @@ html, body{
 }
 #box{
     width:100%;
-    background: linear-gradient(180deg, rgb(0, 153, 255) 0%, rgb(50, 173, 255) 100%);
+    background: linear-gradient(180deg, rgb(0, 76, 145) 0%, rgb(55, 76, 145) 100%);
     border-radius:5px;
     
 }
@@ -43,7 +43,7 @@ html, body{
 	width: 0;
 	height: 0;
 	border: 8px solid transparent;
-	border-right-color: rgb(20, 143, 225);
+	border-right-color: rgb(55, 76, 145);
 	border-left: 0;
 	margin-top: -8px;
 	margin-left: -8px;
