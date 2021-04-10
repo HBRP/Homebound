@@ -29,7 +29,6 @@ AddEventHandler("buy_coffee", function(prop)
     play_pay_animation()
     purchase_item("coffee", 2)
 
-
 end)
 
 AddEventHandler("buy_sludgie", function(prop)
@@ -41,7 +40,30 @@ end)
 
 AddEventHandler("buy_sprunk", function(prop)
 
-    play_pay_animation()
-    purchase_item("sprunk", 2)
+    local sprunk = {
+        {
+            dialog = "Buy sprunk ($2)", 
+            callback = function()
+
+                exports["em_dialog"]:hide_dialog()
+                play_pay_animation()
+                purchase_item("sprunk", 2)
+
+            end
+        },
+        {
+            dialog = "Kick machine",
+            callback = function()
+                if math.random(0, 99) > 85 then
+                    local item_id = exports["em_items"]:get_item_id_from_name(item_name)
+                    exports["em_fw"]:give_item(exports["em_fw"]:get_character_storage_id(), item_id, 1, -1, -1)
+                    exports['t-notify']:Alert({style = "success", message = "A sprunk fell out!"})
+                else
+                    exports['t-notify']:Alert({style = "error", message = "You kicked the machine, but nothing happened"})
+                end
+            end
+        }
+    }
+    exports["em_dialog"]:show_dialog("Sprunk Machine", sprunk)
 
 end)

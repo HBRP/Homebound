@@ -5,23 +5,19 @@ var current_dialog_options = null
 function show_dialog(dialog_options) {
 
     $(".dialog-container").show();
-
-    current_dialog_options = dialog_options
-
     $(".dialog-options").empty();
-    $(".dialog_options").show();
+    $(".dialog-options").show();
+    
+    current_dialog_options = dialog_options
     for (var i = 0; i < dialog_options.length; i++) {
-
         $(".dialog-options").append('<div class="dialog-option"><button onclick="option_clicked({id})"><p>{dialog}</p></button></div>'.replace("{id}", i).replace("{dialog}", dialog_options[i].dialog));
-
-
     }
 
 }
 
 function hide_elements() {
 
-    $(".dialog_options").hide();
+    $(".dialog-options").hide();
     $(".dialog-response").hide();
     $(".dialog-container").hide();
 
@@ -32,7 +28,7 @@ function option_clicked(id) {
     if (current_dialog_options[id].response != null) {
 
         $(".dialog-options").empty();
-        $(".dialog_options").hide();
+        $(".dialog-options").hide();
 
         $(".dialog-response").empty();
         $(".dialog-response").append('<p>{response}</p>'.replace("{response}", current_dialog_options[id].response))
@@ -56,6 +52,13 @@ function option_clicked(id) {
         }));
 
     }
+
+}
+
+function show_title(title) {
+
+    $(".dialog-title").empty();
+    $(".dialog-title").append('<center><p>{title}</p></center>'.replace("{title}", title));
 
 }
 
@@ -84,6 +87,7 @@ $(function() {
 
         if (event.data.display == "show_dialog") {
 
+            show_title(event.data.title)
             show_dialog(event.data.dialog);
 
         } else if (event.data.display == "hide") {
@@ -93,7 +97,6 @@ $(function() {
         }
 
     })
-    dialog_listener()
     //test_function()
 
 })
