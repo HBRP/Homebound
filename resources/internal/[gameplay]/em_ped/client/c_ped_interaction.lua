@@ -158,6 +158,10 @@ end
 local function clean_up(ped)
 
     FreezeEntityPosition(ped.entity, false)
+    local player_coords = GetEntityCoords(PlayerPedId())
+    if not IsAnyHostilePedNearPoint(PlayerPedId(), player_coords.x, player_coords.y, player_coords.z, 10.0) then
+        TaskStandStill(ped.entity, 0)
+    end
 
 end
 
@@ -180,8 +184,7 @@ end
 
 function talk_to_selected_ped(ped, entity, skip_animation)
 
-    print(json.encode(ped))
-    print(entity)
+    TaskStandStill(ped.entity, 1000000)
     FreezeEntityPosition(ped.entity, true)
 
     if not skip_animation then
