@@ -21,7 +21,7 @@ function play_animation_sync(dict, anim, duration, enum_flags)
         Citizen.Wait(5)
     end
 
-    TaskPlayAnim(ped, dict, anim, 8.0, 8.0, duration, enum_flags, 1.0, false, false, false)
+    TaskPlayAnim(ped, dict, anim, 2.0, 2.0, duration, enum_flags, 0, false, false, false)
 
     Citizen.Wait(duration)
     ClearPedTasks(ped)

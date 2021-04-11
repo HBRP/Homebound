@@ -172,18 +172,18 @@ local function get_pleasantries(ped)
         dialog = "Hey, how are you?",
         response = response,
         callback = function()
-            talk_to_selected_ped(ped, true)
+            talk_to_selected_ped(ped, ped.entity, true)
         end
     }
 
 end
 
-function talk_to_selected_ped(ped, skip_animation)
+function talk_to_selected_ped(ped, entity, skip_animation)
 
     FreezeEntityPosition(ped.entity, true)
 
-    if not skip_animation then
-        exports["em_animations"]:play_animation_sync("gestures@m@standing@casual", "gesture_hello", 1000, 1 + 16 + 32)
+    if skip_animation == nil or not skip_animation then
+        exports["em_animations"]:play_animation_sync("gestures@m@standing@casual", "gesture_hello", 1000, 16 + 32)
     end
 
     local ped_dialog = {}
