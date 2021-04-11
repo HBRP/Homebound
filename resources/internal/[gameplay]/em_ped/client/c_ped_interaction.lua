@@ -2,9 +2,19 @@
 
 local function get_beg_response(ped)
 
-    return {
-        dialog = "Could you spare some change? [Beg]",
-        response = "Umm ... lets see.",
+    local response = nil
+    local callback = nil
+
+    if IsEntityDead(ped.entity) then
+
+        response = "[You beg for money, but the local is dead and doesn't respond.]"
+        callback = function()
+            exports["em_dialog"]:hide_dialog()
+            FreezeEntityPosition(ped.entity, false)
+        end
+
+    else
+        response = "Umm ... lets see."
         callback = function()
 
             if math.random(0, 99) > 80 then
@@ -19,6 +29,12 @@ local function get_beg_response(ped)
             FreezeEntityPosition(ped.entity, false)
 
         end
+    end
+
+    return {
+        dialog = "Could you spare some change? [Beg]",
+        response = response,
+        callback = callback
     }
 
 end
@@ -28,7 +44,17 @@ local function fuck_you_up_response(ped)
     local response = nil
     local callback = nil
 
-    if math.random(0, 99) > 50 then
+    if IsEntityDead(ped.entity) then
+
+        response = "[You threaten a corpse. It doesn't respond.]"
+        callback = function()
+
+            exports["em_dialog"]:hide_dialog()
+            FreezeEntityPosition(ped.entity, false)
+
+        end
+
+    elseif math.random(0, 99) > 50 then
 
         response = "Here, just take it!"
         callback = function()
@@ -90,19 +116,39 @@ local function five_minutes(ped)
         "HA, good one. Move on. (the local says, a bit of anger in their tone)",
         "How much do YOU charge? Fucking asshole. (The local shakes their head and looks away)"
     }
+    local dead_responses = 
+    {
+        "[You solicit the corpse. It doesn't respond]",
+        "[The corpse remains a corpse.]",
+        "What is wrong with you? This is a dead body!",
+        "You ... realize this local is dead, right?",
+        "... [They're dead]"
+    }
+
+    local responses = {}
+    local callback = nil
+
+    if IsEntityDead(ped.entity) then
+        responses = dead_responses
+    else
+        response = five_minute_responses
+    end
+
     return {
         dialog = "How much for 5 minutes? [Solicit]",
-        response = five_minute_responses[math.random(#five_minute_responses)],
+        response = responses[math.random(#responses)],
         callback = function()
 
             exports["em_dialog"]:hide_dialog()
             FreezeEntityPosition(ped.entity, false)
-            if math.random(0, 99) > 90 then
-                TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", "10-31b", "Someone solicted me for sex!", 2)
+            if not IsEntityDead(ped.entity) then
+                if math.random(0, 99) > 90 then
+                    TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", "10-31b", "Someone solicted me for sex!", 2)
+                end
+                if math.random(0, 99) > 80 then
+                    TaskCombatPed(ped.entity, PlayerPedId(), 0, 16)
+                end 
             end
-            if math.random(0, 99) > 80 then
-                TaskCombatPed(ped.entity, PlayerPedId(), 0, 16)
-            end 
 
         end
     }
@@ -115,7 +161,24 @@ local function clean_up(ped)
 
 end
 
-local function talk_to_selected_ped(ped, skip_animation)
+local function get_pleasantries(ped)
+
+    response = "Fine ... I guess. How are you doing?"
+    if IsEntityDead(ped.entity) then
+        response = "[The local is dead and doesn't respond]"
+    end
+
+    return {
+        dialog = "Hey, how are you?",
+        response = response,
+        callback = function()
+            talk_to_selected_ped(ped, true)
+        end
+    }
+
+end
+
+function talk_to_selected_ped(ped, skip_animation)
 
     FreezeEntityPosition(ped.entity, true)
 
@@ -123,15 +186,8 @@ local function talk_to_selected_ped(ped, skip_animation)
         exports["em_animations"]:play_animation_sync("gestures@m@standing@casual", "gesture_hello", 1000, 1 + 16 + 32)
     end
 
-    local ped_dialog = {
-        {
-            dialog = "Hey, how are you?",
-            response = "Fine ... I guess. How are you doing?",
-            callback = function()
-                talk_to_selected_ped(ped, true)
-            end
-        }
-    }
+    local ped_dialog = {}
+    table.insert(ped_dialog, get_pleasantries(ped))
     table.insert(ped_dialog, five_minutes(ped))
     table.insert(ped_dialog, get_beg_response(ped))
     table.insert(ped_dialog, fuck_you_up_response(ped))
@@ -155,7 +211,7 @@ local function refresh_loop(refresh_func)
         return
     end
 
-    if not IsEntityAPed(entity) or IsPedAPlayer(entity) or GetPedType(entity) == 28 or IsEntityDead(ped) then
+    if not IsEntityAPed(entity) or IsPedAPlayer(entity) or GetPedType(entity) == 28 then
         refresh_func(peds)
         return
     end
