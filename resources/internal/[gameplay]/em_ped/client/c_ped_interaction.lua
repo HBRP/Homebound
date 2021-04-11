@@ -116,6 +116,7 @@ local function five_minutes(ped)
         "HA, good one. Move on. (the local says, a bit of anger in their tone)",
         "How much do YOU charge? Fucking asshole. (The local shakes their head and looks away)"
     }
+
     local dead_responses = 
     {
         "[You solicit the corpse. It doesn't respond]",
@@ -126,12 +127,11 @@ local function five_minutes(ped)
     }
 
     local responses = {}
-    local callback = nil
 
     if IsEntityDead(ped.entity) then
         responses = dead_responses
     else
-        response = five_minute_responses
+        responses = five_minute_responses
     end
 
     return {
@@ -163,7 +163,7 @@ end
 
 local function get_pleasantries(ped)
 
-    response = "Fine ... I guess. How are you doing?"
+    local response = "Fine ... I guess. How are you doing?"
     if IsEntityDead(ped.entity) then
         response = "[The local is dead and doesn't respond]"
     end
@@ -180,9 +180,11 @@ end
 
 function talk_to_selected_ped(ped, entity, skip_animation)
 
+    print(json.encode(ped))
+    print(entity)
     FreezeEntityPosition(ped.entity, true)
 
-    if skip_animation == nil or not skip_animation then
+    if not skip_animation then
         exports["em_animations"]:play_animation_sync("gestures@m@standing@casual", "gesture_hello", 1000, 16 + 32)
     end
 
@@ -191,6 +193,7 @@ function talk_to_selected_ped(ped, entity, skip_animation)
     table.insert(ped_dialog, five_minutes(ped))
     table.insert(ped_dialog, get_beg_response(ped))
     table.insert(ped_dialog, fuck_you_up_response(ped))
+
     exports["em_dialog"]:show_dialog("Local citizen", ped_dialog, function() clean_up(ped) end)
 
 end
