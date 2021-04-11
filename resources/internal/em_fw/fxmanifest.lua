@@ -161,6 +161,7 @@ export 'enumerate_pickups'
 -- c_interaction.lua
 export 'get_nearby_interaction_points_async'
 export 'get_all_interaction_props_async'
+export 'get_nearby_interaction_peds_async'
 
 -- c_doors.lua
 export 'get_nearby_doors_async'

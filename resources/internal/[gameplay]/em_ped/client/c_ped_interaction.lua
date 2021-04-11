@@ -217,7 +217,7 @@ local function refresh_loop(refresh_func)
         return
     end
 
-    if not IsEntityAPed(entity) or IsPedAPlayer(entity) or GetPedType(entity) == 28 then
+    if not IsEntityAPed(entity) or IsPedAPlayer(entity) or GetPedType(entity) == 28 or exports["em_interactions"]:is_interaction_ped(entity) then
         refresh_func(peds)
         return
     end
