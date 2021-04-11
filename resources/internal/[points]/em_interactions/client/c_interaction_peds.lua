@@ -48,8 +48,8 @@ local function spawn_peds(peds)
                 Citizen.Wait(5)
             end
 
-            local ped = CreatePed(5, peds[i].prop_hash, peds[i].x, peds[i].y, peds[i].z, peds[i].heading, true, true)
-            TaskStandStill(ped, 10000000)
+            local ped = CreatePed(5, peds[i].prop_hash, peds[i].x, peds[i].y, peds[i].z, peds[i].heading, true, false)
+            TaskStandStill(ped, 1000000000)
             table.insert(known_interaction_peds, ped)
 
         end
