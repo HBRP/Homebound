@@ -14,6 +14,12 @@ client_scripts {
 
 }
 
+server_scripts {
+
+    'server/s_items.lua'
+
+}
+
 exports {
 
     'use_item',
@@ -35,5 +41,12 @@ dependencies {
     'em_medical',
     'rprogress',
     't-notify'
+
+}
+
+server_exports {
+
+    'get_item_id_from_name',
+    'get_item_name_from_item_id'
 
 }

@@ -171,6 +171,16 @@ export 'toggle_door'
 export 'trigger_event_for_character'
 export 'trigger_proximity_event'
 
+--s_items.lua
+server_export 'get_items'
+
+-- s_character.lua
+server_export 'get_character_id_from_source'
+server_export 'get_character_storage_id_from_character_id'
+
+-- s_storage.lua
+server_export 'give_item'
+
 -- s_blips.lua
 server_export 'get_blip_group_subscription'
 

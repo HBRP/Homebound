@@ -116,6 +116,10 @@ end
 Citizen.CreateThread(function()
 
     Citizen.Wait(0)
-    items_cache = exports["em_fw"]:get_items()
+    exports["em_fw"]:trigger_server_callback("em_items:get_items", function(items)
+
+        items_cache = items or {}
+        
+    end)
 
 end)

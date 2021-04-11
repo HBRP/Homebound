@@ -24,7 +24,7 @@ register_server_callback("em_fw:get_weapons", function(source, callback)
 
 end)
 
-register_server_callback("em_fw:get_items", function(soure, callback, item_name)
+function get_items(callback)
 
     HttpGet("/Item/Items", data, function(error_code, result_data, result_headers)
 
@@ -32,6 +32,12 @@ register_server_callback("em_fw:get_items", function(soure, callback, item_name)
         callback(temp)
 
     end)
+
+end
+
+register_server_callback("em_fw:get_items", function(source, callback)
+
+    get_items(callback)
 
 end)
 

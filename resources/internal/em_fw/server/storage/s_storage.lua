@@ -12,7 +12,7 @@ register_server_callback("em_fw:get_storage", function(source, callback, storage
 
 end)
 
-local function give_item(source, callback, character_id, storage_id, item_id, amount, storage_item_id, slot)
+function give_item(source, callback, character_id, storage_id, item_id, amount, storage_item_id, slot)
 
     local data = { character_id = character_id, storage_id = storage_id, item_id = item_id, amount = amount, storage_item_id = storage_item_id, slot = slot}
     HttpPost("/Storage/Give", data, function(error_code, result_data, result_headers)
