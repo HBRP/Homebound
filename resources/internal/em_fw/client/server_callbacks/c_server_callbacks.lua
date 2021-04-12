@@ -49,7 +49,7 @@ AddEventHandler("em_fw:server_callback:response", function(callback_id, ...)
 
     if callbacks[idx].async then
         callbacks[idx].callback(table.unpack(callbacks[idx].arg))
-        table.remove(callbacks, idx)
+        table.remove(callbacks, find_callbacks_index(callback_id))
     end
 
 end)
