@@ -110,8 +110,12 @@ AddEventHandler("convenience_clerk", function(ped, entity)
 
     local clerk_dialog = {}
     table.insert(clerk_dialog, shop_dialog())
-    table.insert(clerk_dialog, rob_npc_dialog(ped))
 
+    local weapon_hash = GetSelectedPedWeapon(PlayerPedId())
+    if weapon_hash ~= -1569615261 and weapon_hash ~= 0 then
+        table.insert(clerk_dialog, rob_npc_dialog(ped))
+    end
+    
     exports["em_dialog"]:show_dialog(ped.ped_name, clerk_dialog)
 
 end)
