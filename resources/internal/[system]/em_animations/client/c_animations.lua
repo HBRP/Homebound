@@ -27,3 +27,17 @@ function play_animation_sync(dict, anim, duration, enum_flags)
     ClearPedTasks(ped)
 
 end
+
+function play_animation_cont(dict, anim, enum_flags)
+
+    local ped = PlayerPedId()
+
+    ClearPedTasks(ped)
+    RequestAnimDict(dict)
+    while not HasAnimDictLoaded(dict) do
+        Citizen.Wait(5)
+    end
+
+    TaskPlayAnim(ped, dict, anim, 2.0, 2.0, -1, enum_flags, 0, false, false, false)
+
+end

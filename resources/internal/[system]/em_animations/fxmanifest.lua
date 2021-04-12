@@ -9,5 +9,8 @@ client_scripts {
 }
 
 exports {
-    'play_animation_sync'
+
+    'play_animation_sync',
+    'play_animation_cont'
+    
 }

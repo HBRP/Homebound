@@ -55,6 +55,19 @@ exports["em_commands"]:register_command_no_perms("cuff", function(source, args, 
 
 end, "Cuff someone", {{name = "character_id", help = "try /ids to find a character_id"}})
 
+
+local function give_handcuffs_back()
+
+    local item_id = exports["em_items"]:get_item_id_from_name("handcuffs")
+    local storage_id = exports["em_fw"]:get_character_storage_id()
+    local response = exports["em_fw"]:give_item(storage_id, item_id, 1, -1, -1)
+
+    if not response.response.success then
+        print(response)
+    end
+
+end
+
 exports["em_commands"]:register_command_no_perms("uncuff", function(source, args, raw_command)
 
     if #args == 0 then
@@ -81,6 +94,7 @@ exports["em_commands"]:register_command_no_perms("uncuff", function(source, args
 
             exports["em_animations"]:play_animation_sync("mp_arresting", "a_uncuff", 2000, 16)
             exports["em_fw"]:trigger_event_for_character("em_gen_commands:uncuff_request", character_id)
+            give_handcuffs_back()
 
         else
 
@@ -105,8 +119,8 @@ AddEventHandler("em_gen_commands:cuff_request", function()
 
         while cuffed do
 
-            exports["em_animations"]:play_animation_sync("mp_arresting", "idle", 5000, 2 + 16 + 32)
-            Citizen.Wait(1000)
+            exports["em_animations"]:play_animation_cont("mp_arresting", "idle", 2 + 16 + 32)
+            Citizen.Wait(1000 * 30)
 
         end
     end)

@@ -41,7 +41,7 @@ function get_character_storage_item_id(item_id)
     for i = 1, #storage_items do
 
         if storage_items[i].item_id == item_id then
-            return storage_item_id
+            return storage_items[i].storage_item_id
         end
 
     end
