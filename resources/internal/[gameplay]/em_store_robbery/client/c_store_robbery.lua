@@ -47,7 +47,7 @@ end
 
 local function rob_npc_dialog(ped)
 
-    local response = string.format("Woah, slow down ... (%s moves on hand underneath the desk, pressing a button before complying)", ped.ped_name)
+    local response = string.format("Woah, slow down ... (%s moves a hand underneath the desk, pressing a button before complying)", ped.ped_name)
     local callback = function() end
     exports["em_fw"]:trigger_server_callback("em_store_robbery:can_rob_store", function(can_rob)
 
