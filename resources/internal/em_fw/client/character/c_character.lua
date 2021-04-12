@@ -10,11 +10,7 @@ end
 
 function get_character_storage()
 
-    if character_storage == nil then
-        character_storage = get_storage(get_character_storage_id())
-    end
-
-    return character_storage
+    return get_storage(get_character_storage_id())
 
 end
 
@@ -139,7 +135,6 @@ function load_character(character_id)
         TriggerEvent("em_fw:character_loaded")
 
     end, character_id)
-    character_storage = nil
 
     return loaded_character
 
@@ -160,11 +155,3 @@ function get_character_gender()
     return "male"
 
 end
-
-
-RegisterNetEvent("em_fw:inventory_change")
-AddEventHandler('em_fw:inventory_change', function()
-
-    character_storage = nil
-
-end)
