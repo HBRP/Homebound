@@ -64,6 +64,17 @@ function get_server_id_from_character_id(character_id)
 
 end
 
+function get_character_from_source(source)
+
+    for i = 1, #character_ids do
+        if character_ids[i].source == source then
+            return character_ids[i]
+        end
+    end
+    return nil
+
+end
+
 function remove_stale_source(source)
 
     for i = 1, #character_ids do

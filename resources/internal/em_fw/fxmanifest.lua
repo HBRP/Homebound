@@ -177,6 +177,7 @@ server_export 'get_items'
 -- s_character.lua
 server_export 'get_character_id_from_source'
 server_export 'get_character_storage_id_from_character_id'
+server_export 'get_character_from_source'
 
 -- s_storage.lua
 server_export 'give_item'

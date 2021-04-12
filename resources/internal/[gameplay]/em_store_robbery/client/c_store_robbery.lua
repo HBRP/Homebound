@@ -35,7 +35,13 @@ local function robbing_loop(ped)
 
     end
 
-    exports["em_fw"]:trigger_server_callback("em_store_robbery:finished_robbing_store", function() end, ped.interaction_ped_id, true)
+    exports["em_fw"]:trigger_server_callback("em_store_robbery:finished_robbing_store", function(amount) 
+
+        if amount > 0 then
+            TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", "10-31b", string.format("They took $%d from my register!", amount), 1)
+        end
+
+    end, ped.interaction_ped_id, true)
 
 end
 
@@ -46,7 +52,7 @@ local function rob_npc_dialog(ped)
     exports["em_fw"]:trigger_server_callback("em_store_robbery:can_rob_store", function(can_rob)
 
         if not can_rob then
-            response = string.format("Come on man! I just got robbed (%s moves on hand underneath the desk, pressing a button as he speaks)", ped.ped_name)
+            response = string.format("Come on man! I just got robbed (%s moves a hand underneath the desk, pressing a button as he speaks)", ped.ped_name)
             callback = function() 
 
                 TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", "10-31b", "Help! Someone just tried to rob me again!", 1)
@@ -56,11 +62,18 @@ local function rob_npc_dialog(ped)
         else
             callback = function()
 
-                TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", "10-31b", "Help! Someone is robbing the store!", 1)
-                exports["em_fw"]:trigger_server_callback_async("em_store_robbery:begin_robbing_store", function() end, ped.interaction_ped_id)
-                exports["em_dialog"]:hide_dialog()
-                Citizen.CreateThread(function() robbing_loop(ped) end)
+                exports["em_fw"]:trigger_server_callback_async("em_store_robbery:begin_robbing_store", function(can_still_rob_store)
 
+                    exports["em_dialog"]:hide_dialog()
+                    if can_still_rob_store then
+                        TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", "10-31b", "Help! Someone is robbing the store!", 1)                
+                        Citizen.CreateThread(function() robbing_loop(ped) end)
+                    else
+                        exports['t-notify']:Alert({style = "error", message = "Someone else is robbing the store"})
+                    end
+
+                end, ped.interaction_ped_id)
+                
             end
         end
 
