@@ -149,6 +149,12 @@ end)
 register_server_callback("em_fw:is_character_id_in_radius", function(source, callback, character_id, radius)
 
     local other_server_id = get_server_id_from_character_id(character_id)
+
+    if other_server_id == nil then
+        callback(false)
+        return
+    end
+
     local diff = #(GetEntityCoords(GetPlayerPed(source)) - GetEntityCoords(GetPlayerPed(other_server_id)))
     callback(diff <= radius)
 
