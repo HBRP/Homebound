@@ -270,6 +270,7 @@ local function DrawGUI()
 	end
 end
 
+--[[
 local TextureDicts = {"dp_clothing", "dp_wheel"}
 Citizen.CreateThread(function()
 	for k,v in pairs(TextureDicts) do while not HasStreamedTextureDictLoaded(v) do Wait(100) RequestStreamedTextureDict(v, true) end end
@@ -296,3 +297,4 @@ Citizen.CreateThread(function()
 		if Config.Debug then DrawDev() end
 	end
 end)
+]]

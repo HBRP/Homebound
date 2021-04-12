@@ -6,7 +6,7 @@ Config = {
 		Position = {x = 0.65, y = 0.5},	-- 0.5 is the middle!
 		AllowInCars = false,			-- Allow the GUI in cars?
 		AllowWhenRagdolled = false,			-- Allow the GUI when ragdolled?
-		Enabled = true, 				-- You can turn the gui off here, the base commands will still work.
+		Enabled = false, 				-- You can turn the gui off here, the base commands will still work.
 		Key = GetKey("Y"), 				-- Change the GUI key here.
 		Sound = true,					-- You can disable sound in the GUI here.
 		TextColor = {255,255,255},
