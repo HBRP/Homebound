@@ -1,4 +1,21 @@
 local cuffed = false
+local other_player_cuffed = nil
+
+local function is_other_character_cuffed(character_id)
+
+    other_player_cuffed = nil
+    exports["em_fw"]:trigger_event_for_character("em_gen_commands:is_cuffed_request", character_id, exports["em_fw"]:get_character_id())
+
+    while other_player_cuffed == nil do
+        Citizen.Wait(50)
+    end
+
+    local temp = other_player_cuffed
+    other_player_cuffed = nil
+
+    return temp
+
+end
 
 exports["em_commands"]:register_command_no_perms("cuff", function(source, args, raw_command)
 
@@ -11,6 +28,11 @@ exports["em_commands"]:register_command_no_perms("cuff", function(source, args, 
 
         if is_in_range then
 
+            if is_other_character_cuffed(character_id) then
+                exports['t-notify']:Alert({style = "error", message = "Character already cuffed"})
+                return
+            end
+
             local item_id = exports["em_items"]:get_item_id_from_name("handcuffs")
             local storage_item_id = exports["em_items"]:get_character_storage_item_id(item_id)
 
@@ -21,6 +43,7 @@ exports["em_commands"]:register_command_no_perms("cuff", function(source, args, 
 
             exports["em_animations"]:play_animation_sync("mp_arrest_paired", "cop_p2_back_right", 2000, 16)
             exports["em_fw"]:trigger_event_for_character("em_gen_commands:cuff_request", character_id)
+            exports["em_fw"]:remove_item(storage_item_id, 1)
 
         else
 
@@ -32,6 +55,42 @@ exports["em_commands"]:register_command_no_perms("cuff", function(source, args, 
 
 end, "Cuff someone", {{name = "character_id", help = "try /ids to find a character_id"}})
 
+exports["em_commands"]:register_command_no_perms("uncuff", function(source, args, raw_command)
+
+    if #args == 0 then
+        return
+    end
+    local character_id = tonumber(args[1])
+
+    exports["em_fw"]:is_character_id_in_radius_async(function(is_in_range) 
+
+        if is_in_range then
+
+            if not is_other_character_cuffed(character_id) then
+                exports['t-notify']:Alert({style = "error", message = "Character isn't handcuffed"})
+                return
+            end
+
+            local item_id = exports["em_items"]:get_item_id_from_name("handcuff keys")
+            local storage_item_id = exports["em_items"]:get_character_storage_item_id(item_id)
+
+            if storage_item_id == 0 then
+                exports["t-notify"]:Alert({style="error", message = "You don't have handcuff keys"})
+                return
+            end
+
+            exports["em_animations"]:play_animation_sync("mp_arresting", "a_uncuff", 2000, 16)
+            exports["em_fw"]:trigger_event_for_character("em_gen_commands:uncuff_request", character_id)
+
+        else
+
+            exports["t-notify"]:Alert({style="error", message = "character isn't even around you"})
+
+        end
+
+    end, character_id, 5.0)
+
+end,  "Shackle someone", {{name = "character_id", help = "try /ids to find a character_id"}})
 
 RegisterNetEvent("em_gen_commands:cuff_request")
 AddEventHandler("em_gen_commands:cuff_request", function()
@@ -86,6 +145,20 @@ AddEventHandler("em_gen_commands:uncuff_request", function()
     end
 
     cuffed = false
+
+end)
+
+RegisterNetEvent("em_gen_commands:is_cuffed_request")
+AddEventHandler("em_gen_commands:is_cuffed_request", function(other_character_id)
+
+    exports["em_fw"]:trigger_event_for_character("em_gen_commands:is_cuffed_response", other_character_id, cuffed)
+
+end)
+
+RegisterNetEvent("em_gen_commands:is_cuffed_response")
+AddEventHandler("em_gen_commands:is_cuffed_response", function(is_cuffed)
+
+    other_player_cuffed = is_cuffed
 
 end)
 
