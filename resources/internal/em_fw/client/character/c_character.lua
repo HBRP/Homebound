@@ -63,6 +63,12 @@ function get_server_id_from_character_id(character_id)
 
 end
 
+function is_character_id_in_radius_async(callback, character_id, radius)
+
+    trigger_server_callback("em_fw:is_character_id_in_radius", callback, character_id, radius)
+
+end
+
 function get_nearby_character_ids(radius_around_player)
 
     local ped = PlayerPedId()

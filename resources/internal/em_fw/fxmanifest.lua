@@ -74,6 +74,7 @@ export 'get_target_character_id'
 export 'get_target_character_id_batch'
 export 'get_server_id_from_character_id'
 export 'get_nearby_character_ids'
+export 'is_character_id_in_radius_async'
 
 -- c_character_outfit.lua
 export 'create_outfit'
