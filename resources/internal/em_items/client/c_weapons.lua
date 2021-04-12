@@ -137,6 +137,21 @@ function does_character_have_knife()
 
 end
 
+function does_character_have_a_weapon()
+
+    local storage_items = (exports["em_fw"]:get_character_storage())["storage_items"]
+    for i = 1, #storage_items do
+
+        if get_weapon_type(storage_items[i].item_id) ~= 0 then
+            return true
+        end
+
+    end
+    
+    return false
+
+end
+
 local equiped_weapon_hash = nil
 local equiped_weapon_item_id = nil
 local running_shooting_loop = false
