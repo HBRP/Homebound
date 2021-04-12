@@ -22,6 +22,7 @@ dependencies {
     'em_items',
     'em_dialog',
     't-notify',
-    'pd-safe'
+    'pd-safe',
+    'rprogress'
 
 }
