@@ -1,16 +1,4 @@
 
-
-exports["em_commands"]:register_command_no_perms("cuff", function(source, args, raw_command)
-
-
-end, "Cuff someone", {{name = "character_id", help = "try /ids to find a character_id"}})
-
-exports["em_commands"]:register_command_no_perms("shackle", function(source, args, raw_command)
-
-
-end, "Shakle someone's feet", {{name = "character_id", help = "try /ids to find a character_id"}})
-
-
 exports["em_commands"]:register_command("search", function(source, args, raw_command)
 
     if #args == 0 then
