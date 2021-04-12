@@ -12,16 +12,20 @@ local key_tab = 37
 local function use_item_in_slot(slot)
 
     local storage_items = (exports["em_fw"]:get_character_storage())["storage_items"]
-    local item_in_slot = get_item_in_slot(storage_items, slot)
+    local item_in_slot = exports["em_items"]:get_item_in_slot(storage_items, slot)
 
     if item_in_slot == nil then
         return
     end
-    use_item(item_in_slot.item_id, item_in_slot.item_type_id, item_in_slot.storage_item_id, item_in_slot.item_metadata)
+    exports["em_items"]:use_item(item_in_slot.item_id, item_in_slot.item_type_id, item_in_slot.storage_item_id, item_in_slot.item_metadata)
 
 end
 
 local function check_for_hotkeys()
+
+    if exports["em_gen_commands"]:is_handcuffed() then
+        return
+    end
 
     for i = 1, #keys do
         if IsDisabledControlJustReleased(0, keys[i].key) then
@@ -29,6 +33,7 @@ local function check_for_hotkeys()
             break
         end
     end
+
     if IsDisabledControlJustReleased(0, key_tab) then
 
         local weapon_hash = GetSelectedPedWeapon(PlayerPedId())
@@ -37,7 +42,7 @@ local function check_for_hotkeys()
             return
         end
 
-        animate_weapon_pullout(get_weapon_item_id_from_hash(weapon_hash), false)
+        exports["em_items"]:animate_weapon_pullout(exports["em_items"]:get_weapon_item_id_from_hash(weapon_hash), false)
         SetPedCurrentWeaponVisible(PlayerPedId(), false, true, false, false)
         SetCurrentPedWeapon(PlayerPedId(), 0xA2719263, true)
 
@@ -57,7 +62,7 @@ end
 Citizen.CreateThread(function()
 
     while true do
-        Citizen.Wait(0)
+        Citizen.Wait(5)
         disable_hotkeys()
         check_for_hotkeys()
     end

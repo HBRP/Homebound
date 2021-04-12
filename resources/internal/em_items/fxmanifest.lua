@@ -6,7 +6,6 @@ client_scripts {
 
     'config.lua',
     'client/c_consumable_animations.lua',
-    'client/c_hotbar.lua',
     'client/c_weapon_animations.lua',
     'client/c_weapons.lua',
     'client/c_items.lua',
@@ -35,7 +34,9 @@ exports {
     'does_character_have_a_weapon',
     'is_ped_shooting_a_gun',
     'get_character_storage_item_id',
-    'get_character_storage_item_id_by_name'
+    'get_character_storage_item_id_by_name',
+    'animate_weapon_pullout',
+    'get_weapon_item_id_from_hash'
 
 }
 

@@ -8,6 +8,10 @@ client_scripts {
     'client/c_shackle_command.lua'
 }
 
+exports {
+    'is_handcuffed'
+}
+
 dependencies {
 
     'em_fw',
