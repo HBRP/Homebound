@@ -33,7 +33,9 @@ exports {
     'does_character_have_knife',
     'does_weapon_hash_alert_cops',
     'does_character_have_a_weapon',
-    'is_ped_shooting_a_gun'
+    'is_ped_shooting_a_gun',
+    'get_character_storage_item_id',
+    'get_character_storage_item_id_by_name'
 
 }
 

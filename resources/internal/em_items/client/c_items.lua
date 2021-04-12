@@ -35,6 +35,27 @@ function get_item_name_from_item_id(item_id)
 
 end
 
+function get_character_storage_item_id(item_id)
+
+    local storage_items = (exports["em_fw"]:get_character_storage())["storage_items"]
+    for i = 1, #storage_items do
+
+        if storage_items[i].item_id == item_id then
+            return storage_item_id
+        end
+
+    end
+    return 0
+
+end
+
+function get_character_storage_item_id_by_name(item_name)
+
+    local item_id = get_item_id_from_name(item_name)
+    return get_character_storage_item_id(item_id)
+
+end
+
 function register_item_use(item_name, callback)
 
     Citizen.CreateThread(function() 
