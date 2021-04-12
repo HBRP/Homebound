@@ -1,10 +1,10 @@
 
 local keys = {
-    {key = 157, slot = 1},
-    {key = 158, slot = 2},
-    {key = 160, slot = 3},
-    {key = 164, slot = 4},
-    {key = 165, slot = 5}
+    {slot = 1},
+    {slot = 2},
+    {slot = 3},
+    {slot = 4},
+    {slot = 5}
 }
 
 local key_tab = 37
@@ -21,40 +21,20 @@ local function use_item_in_slot(slot)
 
 end
 
-local function check_for_hotkeys()
+local function use_hotkey(idx)
 
     if exports["em_gen_commands"]:is_handcuffed() then
         return
     end
 
-    for i = 1, #keys do
-        if IsDisabledControlJustReleased(0, keys[i].key) then
-            use_item_in_slot(keys[i].slot)
-            break
-        end
-    end
-
-    if IsDisabledControlJustReleased(0, key_tab) then
-
-        local weapon_hash = GetSelectedPedWeapon(PlayerPedId())
-
-        if weapon_hash == -1569615261 or weapon_hash == 0 then
-            return
-        end
-
-        exports["em_items"]:animate_weapon_pullout(exports["em_items"]:get_weapon_item_id_from_hash(weapon_hash), false)
-        SetPedCurrentWeaponVisible(PlayerPedId(), false, true, false, false)
-        SetCurrentPedWeapon(PlayerPedId(), 0xA2719263, true)
-
-    end
+    use_item_in_slot(keys[idx].slot)
 
 end
 
 local function disable_hotkeys()
 
-    for i = 1, #keys do
-        DisableControlAction(0, keys[i].key, true)
-    end
+    HideHudComponentThisFrame(19)
+    HideHudComponentThisFrame(20)
     DisableControlAction(0, key_tab, true)
 
 end
@@ -64,7 +44,33 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
         disable_hotkeys()
-        check_for_hotkeys()
     end
 
 end)
+
+RegisterCommand('hotbar_1', function() use_hotkey(1) end, false)
+RegisterCommand('hotbar_2', function() use_hotkey(2) end, false)
+RegisterCommand('hotbar_3', function() use_hotkey(3) end, false)
+RegisterCommand('hotbar_4', function() use_hotkey(4) end, false)
+RegisterCommand('hotbar_5', function() use_hotkey(5) end, false)
+RegisterCommand('hotbar_tab', function()
+
+    local weapon_hash = GetSelectedPedWeapon(PlayerPedId())
+
+    if weapon_hash == -1569615261 or weapon_hash == 0 then
+        return
+    end
+
+    exports["em_items"]:animate_weapon_pullout(exports["em_items"]:get_weapon_item_id_from_hash(weapon_hash), false)
+    SetPedCurrentWeaponVisible(PlayerPedId(), false, true, false, false)
+    SetCurrentPedWeapon(PlayerPedId(), 0xA2719263, true)
+
+end, false)
+
+
+RegisterKeyMapping('hotbar_1', 'hotbar_1', 'keyboard', '1')
+RegisterKeyMapping('hotbar_2', 'hotbar_2', 'keyboard', '2')
+RegisterKeyMapping('hotbar_3', 'hotbar_3', 'keyboard', '3')
+RegisterKeyMapping('hotbar_4', 'hotbar_4', 'keyboard', '4')
+RegisterKeyMapping('hotbar_5', 'hotbar_5', 'keyboard', '5')
+RegisterKeyMapping('hotbar_tab', 'hotbar_tab', 'keyboard', 'TAB')
