@@ -90,7 +90,7 @@ end
 local function shop_dialog()
 
     return {
-        dialog = "I'd like to buy items",
+        dialog = "I'd like to buy some stuff.",
         response = "Sure thing.",
         callback = function()
 
