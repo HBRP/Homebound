@@ -4,7 +4,8 @@ games { 'gta5' }
 
 client_scripts {
 
-    'client/c_police_commands.lua'
+    'client/c_police_commands.lua',
+    'client/c_police_gsr.lua'
 
 }
 

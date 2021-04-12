@@ -2,6 +2,10 @@
 local weapons = nil
 local attachments = nil
 
+local equiped_weapon_hash = nil
+local equiped_weapon_item_id = nil
+local running_shooting_loop = false
+
 function is_item_type_a_weapon(item_type_id)
 
     return item_type_ids.WEAPON == item_type_id
@@ -122,6 +126,19 @@ function get_weapon_type(item_id)
 
 end
 
+function is_ped_shooting_a_gun()
+
+    if IsPedShooting(PlayerPedId()) then
+
+        local weapon_type = get_weapon_type(equiped_weapon_item_id)
+        return weapon_type > 2 and weapon_type < 9
+
+    end
+
+    return false
+
+end
+
 function does_character_have_knife()
 
     local storage_items = (exports["em_fw"]:get_character_storage())["storage_items"]
@@ -151,10 +168,6 @@ function does_character_have_a_weapon()
     return false
 
 end
-
-local equiped_weapon_hash = nil
-local equiped_weapon_item_id = nil
-local running_shooting_loop = false
 
 local function remove_ammo(ammo_item_id, amount, storage_items)
 

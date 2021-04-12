@@ -81,8 +81,3 @@ AddEventHandler("em_police_commands:frisk_response", function(has_weapon)
     end
 
 end)
-
-exports["em_commands"]:register_command("gsr", function(source, args, raw_command)
-
-
-end, "Check if someone recently shot a gun", {{name = "character_id", help = "try /ids to find a character_id"}})

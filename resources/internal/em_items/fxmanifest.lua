@@ -32,7 +32,8 @@ exports {
     'register_item_use',
     'does_character_have_knife',
     'does_weapon_hash_alert_cops',
-    'does_character_have_a_weapon'
+    'does_character_have_a_weapon',
+    'is_ped_shooting_a_gun'
 
 }
 
