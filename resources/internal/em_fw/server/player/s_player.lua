@@ -25,3 +25,16 @@ AddEventHandler("em_fw:get_player_id", function()
     end)
 
 end)
+
+function get_priority_if_whitelisted(steam_id)
+
+    local endpoint = string.format("/Player/GetPriority/%s", steam_id)
+    local result = nil
+    HttpGet(endpoint, nil, function(error_code, result_data, result_headers)
+        
+        result = json.decode(result_data)
+
+    end)
+    return result
+
+end

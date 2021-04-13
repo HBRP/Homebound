@@ -172,6 +172,9 @@ export 'toggle_door'
 export 'trigger_event_for_character'
 export 'trigger_proximity_event'
 
+-- s_player.lua
+server_export 'get_priority_if_whitelisted'
+
 --s_items.lua
 server_export 'get_items'
 
