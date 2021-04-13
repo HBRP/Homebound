@@ -117,10 +117,13 @@ AddEventHandler("em_gen_commands:cuff_request", function()
     SetEnableHandcuffs(PlayerPedId(), true)
     Citizen.CreateThread(function()
 
+        exports["em_animations"]:play_animation_cont("mp_arresting", "idle", 2 + 16 + 32)
         while cuffed do
 
-            exports["em_animations"]:play_animation_cont("mp_arresting", "idle", 2 + 16 + 32)
-            Citizen.Wait(1000 * 30)
+            if not GetIsTaskActive(PlayerPedId(), 134) and not IsEntityPlayingAnim(PlayerPedId(), "mp_arresting", "idle", 3) then
+                exports["em_animations"]:play_animation_cont("mp_arresting", "idle", 2 + 16 + 32)
+            end
+            Citizen.Wait(5000)
 
         end
     end)
@@ -130,6 +133,8 @@ AddEventHandler("em_gen_commands:cuff_request", function()
 
             Citizen.Wait(5)
 
+            DisableControlAction(0, 23, true)
+            DisableControlAction(0, 75, true)
             DisableControlAction(0, 25, true)
             DisableControlAction(0, 140, true)
             DisableControlAction(0, 141, true)
@@ -138,14 +143,20 @@ AddEventHandler("em_gen_commands:cuff_request", function()
             DisableControlAction(0, 64, true)
 
             DisablePlayerFiring(PlayerId(), true)
-            SetPedPathCanUseLadders(PlayerPedId(), false)
+
+            if GetIsTaskActive(PlayerPedId(), 1) then
+                SetPedRagdollOnCollision(PlayerPedId(), true)
+            end
+
             if IsPedInAnyVehicle(PlayerPedId(), false) then
                 DisableControlAction(0, 59, true)
             end
 
         end
+        SetPedRagdollOnCollision(PlayerPedId(), false)
         SetEnableHandcuffs(PlayerPedId(), false)
         ClearPedTasks(PlayerPedId())
+        SetPedPathCanUseLadders(PlayerPedId(), true)
 
     end)
 
