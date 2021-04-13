@@ -104,7 +104,7 @@ exports["em_commands"]:register_command_no_perms("uncuff", function(source, args
 
     end, character_id, 5.0)
 
-end,  "Shackle someone", {{name = "character_id", help = "try /ids to find a character_id"}})
+end,  "Uncuff someone", {{name = "character_id", help = "try /ids to find a character_id"}})
 
 RegisterNetEvent("em_gen_commands:cuff_request")
 AddEventHandler("em_gen_commands:cuff_request", function()
