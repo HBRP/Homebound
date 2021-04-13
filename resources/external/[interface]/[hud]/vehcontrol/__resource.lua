@@ -29,3 +29,7 @@ client_script {
   'config.lua',
   'client.lua'
 }
+
+dependencies {
+  'em_gen_commands'
+}

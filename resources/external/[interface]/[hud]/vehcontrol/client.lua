@@ -19,6 +19,11 @@ RegisterKeyMapping('open_vehicle_control', 'Open Vehicle Panel', 'keyboard', 'g'
 -----------------------------------------------------------------------------
 
 function openVehControl()
+
+	if exports["em_gen_commands"]:is_handcuffed() then
+		return
+	end
+
 	isInVehControl = true
 	SetNuiFocus(true, true)
 	SendNUIMessage({
@@ -71,6 +76,11 @@ end)
 -----------------------------------------------------------------------------
 
 function EngineControl()
+
+	if exports["em_gen_commands"]:is_handcuffed() then
+		return
+	end
+
     local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
     if vehicle ~= nil and vehicle ~= 0 and GetPedInVehicleSeat(vehicle, 0) then
         SetVehicleEngineOn(vehicle, (not GetIsVehicleEngineRunning(vehicle)), false, true)
@@ -78,6 +88,11 @@ function EngineControl()
 end
 
 function InteriorLightControl()
+
+	if exports["em_gen_commands"]:is_handcuffed() then
+		return
+	end
+
 	local playerPed = GetPlayerPed(-1)
 	if (IsPedSittingInAnyVehicle(playerPed)) then
 		local vehicle = GetVehiclePedIsIn(playerPed, false)
@@ -90,6 +105,11 @@ function InteriorLightControl()
 end
 
 function DoorControl(door)
+
+	if exports["em_gen_commands"]:is_handcuffed() then
+		return
+	end
+
 	local playerPed = GetPlayerPed(-1)
 	if (IsPedSittingInAnyVehicle(playerPed)) then
 		local vehicle = GetVehiclePedIsIn(playerPed, false)
@@ -102,6 +122,11 @@ function DoorControl(door)
 end
 
 function SeatControl(seat)
+
+	if exports["em_gen_commands"]:is_handcuffed() then
+		return
+	end
+
 	local playerPed = GetPlayerPed(-1)
 	if (IsPedSittingInAnyVehicle(playerPed)) then
 		local vehicle = GetVehiclePedIsIn(playerPed, false)
@@ -112,6 +137,11 @@ function SeatControl(seat)
 end
 
 function WindowControl(window, door)
+
+	if exports["em_gen_commands"]:is_handcuffed() then
+		return
+	end
+
 	local playerPed = GetPlayerPed(-1)
 	if (IsPedSittingInAnyVehicle(playerPed)) then
 		local vehicle = GetVehiclePedIsIn(playerPed, false)
@@ -152,6 +182,11 @@ function WindowControl(window, door)
 end
 
 function FrontWindowControl()
+
+	if exports["em_gen_commands"]:is_handcuffed() then
+		return
+	end
+
 	local playerPed = GetPlayerPed(-1)
 	if (IsPedSittingInAnyVehicle(playerPed)) then
 		local vehicle = GetVehiclePedIsIn(playerPed, false)
@@ -170,6 +205,11 @@ function FrontWindowControl()
 end
 
 function BackWindowControl()
+
+	if exports["em_gen_commands"]:is_handcuffed() then
+		return
+	end
+
 	local playerPed = GetPlayerPed(-1)
 	if (IsPedSittingInAnyVehicle(playerPed)) then
 		local vehicle = GetVehiclePedIsIn(playerPed, false)
@@ -188,6 +228,11 @@ function BackWindowControl()
 end
 
 function AllWindowControl()
+
+	if exports["em_gen_commands"]:is_handcuffed() then
+		return
+	end
+	
 	local playerPed = GetPlayerPed(-1)
 	if (IsPedSittingInAnyVehicle(playerPed)) then
 		local vehicle = GetVehiclePedIsIn(playerPed, false)
