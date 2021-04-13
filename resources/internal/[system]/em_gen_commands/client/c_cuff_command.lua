@@ -141,6 +141,7 @@ AddEventHandler("em_gen_commands:cuff_request", function()
             DisableControlAction(0, 142, true)
             DisableControlAction(0, 63, true)
             DisableControlAction(0, 64, true)
+            DisableControlAction(0, 72, true)
 
             DisablePlayerFiring(PlayerId(), true)
 
