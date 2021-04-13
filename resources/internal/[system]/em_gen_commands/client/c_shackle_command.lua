@@ -120,6 +120,9 @@ AddEventHandler("em_gen_commands:shackle_request", function()
         while shackled do
 
             Citizen.Wait(5)
+            if IsPedJumping(PlayerPedId()) or IsPedRunning(PlayerPedId()) then
+                SetPedToRagdoll(PlayerPedId(), 1000, 1000, 0, 0, 0, 0)
+            end
             SetPedMoveRateOverride(PlayerPedId(), 0.5)
 
         end
