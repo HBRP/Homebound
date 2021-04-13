@@ -144,16 +144,22 @@ end
 function Queue:IsPriority(ids)
     local prio = false
     local tempPower, tempEnd = Queue:HasTempPriority(ids)
-    local prioList = Queue:GetPriorityList()
 
     for _, id in ipairs(ids) do
         id = string_lower(id)
 
-        if prioList[id] then prio = prioList[id] break end
-
         if string_sub(id, 1, 5) == "steam" then
-            local steamid = Queue:HexIdToSteamId(id)
-            if prioList[steamid] then prio = prioList[steamid] break end
+
+            _Queue.Priority[id] = nil
+
+            local priority = exports["em_fw"]:get_priority_if_whitelisted(id)
+
+            if priority.queue_priority ~= -1 then
+                _Queue.Priority[id] = priority
+                prio = priority.queue_priority
+            else
+                return false, priority.player_id
+            end
         end
     end
 
@@ -523,7 +529,11 @@ local function playerConnect(name, setKickReason, deferrals)
     while allow == nil do Citizen.Wait(0) end
     if not allow then return end
 
-    if Config.PriorityOnly and not Queue:IsPriority(ids) then done(Config.Language.wlonly) return end
+    local has_prio, player_id = Queue:IsPriority(ids)
+    if Config.PriorityOnly and not has_prio then 
+        done(string.format(Config.Language.wlonly, player_id)) 
+        return 
+    end
 
     local rejoined = false
 
