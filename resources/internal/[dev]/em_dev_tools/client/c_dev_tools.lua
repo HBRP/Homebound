@@ -22,7 +22,7 @@ RegisterCommand("show_object_raycast", function()
                 DrawLine(position.x, position.y, position.z, coords.x, coords.y, coords.z, 255, 0, 0, 255)
             end
 
-            if entity ~= 0 then
+            if entity ~= 0 and GetEntityType(entity) ~= 0 then
                 local successful, return_value = pcall(GetEntityModel, entity)
                 if successful then
                     local object_name = exports["ObjectNameFromHash"]:get_object_name(return_value)
@@ -31,6 +31,10 @@ RegisterCommand("show_object_raycast", function()
                         print(GetEntityHeading(entity))
                         Citizen.Trace(string.format("hash: %d, name: %s\n", return_value, object_name))
                     end
+                else
+                    print(GetEntityType(entity))
+                    print(entity)
+                    print(return_value)
                 end
             end
         end

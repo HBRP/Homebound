@@ -90,6 +90,10 @@ function register_raycast_points(refresh_loop, text_func, control_pressed_func, 
             goto object_continue
         end
 
+        if entity == 0 or GetEntityType(entity) == 0 then
+            goto object_continue
+        end
+
         local successful, hash = pcall(GetEntityModel, entity)
         if not successful then
             goto object_continue
@@ -130,9 +134,8 @@ function register_door_points(refresh_loop, text_func, control_pressed_func, loo
             for j = 1, #doors do
                 
                 local object = GetClosestObjectOfType(vector3(table.unpack(doors[j].coords)), 0.15, doors[j].prop_hash, false, false, false)
-                local object_coords = GetEntityCoords(object)
 
-                if object ~= 0 and #(player_coords - object_coords) <= obj.nearby_points[i].max_unlock_distance then
+                if object ~= 0 and #(player_coords - GetEntityCoords(object)) <= obj.nearby_points[i].max_unlock_distance then
 
                     if not exports["cd_drawtextui"]:is_in_queue(obj.draw_text_id) then
                         obj.draw_text_id = exports["cd_drawtextui"]:show_text(obj.text_func(obj.nearby_points[i]))

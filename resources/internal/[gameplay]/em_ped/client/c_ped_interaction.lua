@@ -211,6 +211,11 @@ local function refresh_loop(refresh_func)
         return
     end
 
+    if entity == 0 or GetEntityType(entity) == 0 then
+        refresh_func(peds)
+        return
+    end
+
     local successful, hash = pcall(GetEntityModel, entity)
     if not successful then
         refresh_func(peds)
