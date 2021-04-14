@@ -28,7 +28,8 @@ client_scripts {
     'client/teleporter/c_teleporter.lua',
     'client/interaction/c_interaction.lua',
     'client/door/c_doors.lua',
-    'client/events/c_trigger_events.lua'
+    'client/events/c_trigger_events.lua',
+    'client/character/c_character_emote_keybinds.lua'
     
 }
 
@@ -56,7 +57,8 @@ server_scripts {
     'server/teleporter/s_teleporter.lua',
     'server/interaction/s_interaction.lua',
     'server/door/s_doors.lua',
-    'server/events/s_trigger_events.lua'
+    'server/events/s_trigger_events.lua',
+    'server/character/s_character_emote_keybinds.lua'
 
 }
 
@@ -91,6 +93,10 @@ export 'update_skin'
 export 'get_tattoos'
 export 'get_tattoos_async'
 export 'update_tattoos'
+
+-- c_character_emote_keybinds.lua
+export 'get_emote_keybinds'
+export 'update_emote_keybinds'
 
 export 'can_use_command'
 
