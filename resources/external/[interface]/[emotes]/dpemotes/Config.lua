@@ -35,11 +35,10 @@ Config = {
     SharedEmotesEnabled = true,
     CheckForUpdates = true,
 -- If you have the SQL imported enable this to turn on keybinding.
-    SqlKeybinding = false,
+    SqlKeybinding = true,
 }
 
 Config.KeybindKeys = {
-    ['num4'] = 108,
     ['num5'] = 110,
     ['num6'] = 109,
     ['num7'] = 117,

@@ -14,7 +14,7 @@ end)
 register_server_callback("em_fw:update_emote_keybinds", function(source, callback, character_id, emote_number, emote)
 
     local data = {character_id = character_id, emote_number = emote_number, emote = emote}
-    HttpPut("/Character/Emote/KeybindUpdate", nil, function(error_code, result_data, result_headers)
+    HttpPut("/Character/Emote/KeybindUpdate", data, function(error_code, result_data, result_headers)
 
         callback()
 

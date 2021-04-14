@@ -10,7 +10,7 @@ client_scripts {
 
 server_scripts {
 	'Config.lua',
-	'Server/*.lua'
+	'Server/Updates.lua'
 }
 
 
