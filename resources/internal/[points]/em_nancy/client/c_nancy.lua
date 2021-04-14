@@ -78,7 +78,7 @@ local function handle_healing(idx)
 
 end
 
-AddEventHandler("pillbox_nancy", function()
+AddEventHandler("pillbox_nancy", function(no_animation)
 
 
     exports["em_fw"]:trigger_server_callback_async("em_nancy:get_empty_bed", function(idx)
@@ -88,7 +88,10 @@ AddEventHandler("pillbox_nancy", function()
             return
         end
 
-        handle_animations()
+        if no_animation ~= true then
+            handle_animations()
+        end
+        
         handle_healing(idx)
 
     end)

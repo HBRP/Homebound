@@ -1,19 +1,9 @@
 
 
-function Respawn(inplace)
+function Respawn()
     
-    SetPlayerInvincible(PlayerId(), false)
-	local oX,oY,oZ = table.unpack(GetEntityCoords(ped))
-	if not inplace then
-        oX, oY, oZ = -259.41, 6319.14, 32.44
-        heal_player()
-        rest_stats()
-    else
-        reset_stats()
-		TriggerEvent("alerts:add", {255, 255, 255}, {40, 183, 40}, "System", "You have been revived! Go forth and do great things!")
-    end
-    SetEntityCoords(ped, oX, oY, oZ)
     ClearPedTasksImmediately(ped)
+    TriggerEvent("pillbox_nancy", true)
 
 end
 
@@ -46,7 +36,7 @@ local function unconscious_loop()
                 if (current_time >= MStillHoldControlAccepted) then
                     
                     ClearPedTasksImmediately(ped)
-                    Respawn(false)
+                    Respawn()
                     break
 
 				end
