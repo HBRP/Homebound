@@ -4,7 +4,7 @@ local function browse_basic_selection()
     exports["em_dialog"]:hide_dialog()
     exports["em_fw"]:get_vehicle_store_stock_async(function(result)
 
-        print(json.encode(result))
+        TriggerEvent("OpenVehicleShop", result)
 
     end, "PDM%20Basic")
 
