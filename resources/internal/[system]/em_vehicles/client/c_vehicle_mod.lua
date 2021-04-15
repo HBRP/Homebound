@@ -29,7 +29,7 @@
 -- state: (optional) vehicle state (client)
 -- position: (optional) {x,y,z}, if not passed the vehicle will be spawned on the player (and will be put inside the vehicle)
 -- rotation: (optional) quaternion {x,y,z,w}, if passed with the position, will be applied to the vehicle entity
-function spawn_vehicle(model, state, position, rotation)
+function spawn_vehicle(model, plate, state, position, rotation)
 
     -- load vehicle model
     local mhash = GetHashKey(model)
@@ -43,13 +43,12 @@ function spawn_vehicle(model, state, position, rotation)
 
     -- spawn car
     if HasModelLoaded(mhash) then
+
         local ped = GetPlayerPed(-1)
 
         local x,y,z
         if position then
             x,y,z = table.unpack(position)
-        else
-            x,y,z = vRP.EXT.Base:getPosition()
         end
 
         local nveh = CreateVehicle(mhash, x,y,z+0.5, 0.0, true, false)
@@ -63,9 +62,12 @@ function spawn_vehicle(model, state, position, rotation)
         SetVehicleOnGroundProperly(nveh)
         SetEntityInvincible(nveh,false)
         if not position then
-            SetPedIntoVehicle(ped,nveh,-1) -- put player inside
+            SetPedIntoVehicle(ped, nveh, -1) -- put player inside
         end
-        SetVehicleNumberPlateText(nveh, "P "..vRP.EXT.Identity.registration)
+
+        if plate then
+            SetVehicleNumberPlateText(nveh, plate)
+        end
         SetEntityAsMissionEntity(nveh, true, true)
         SetVehicleHasBeenOwnedByPlayer(nveh,true)
 
@@ -78,26 +80,25 @@ function spawn_vehicle(model, state, position, rotation)
             self:setVehicleState(nveh, state)
         end
 
-        vRP:triggerEvent("garageVehicleSpawn", model)
     end
 end
 
 -- return true if despawned
-function spawn_vehicle(model)
+function despawn_vehicle(model)
 
-  local veh = self.vehicles[model]
-  if veh then
+    local veh = self.vehicles[model]
+    if veh then
 
-    -- remove vehicle
-    SetVehicleHasBeenOwnedByPlayer(veh,false)
-    SetEntityAsMissionEntity(veh, false, true)
-    SetVehicleAsNoLongerNeeded(Citizen.PointerValueIntInitialized(veh))
-    Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(veh))
-    self.vehicles[model] = nil
+        -- remove vehicle
+        SetVehicleHasBeenOwnedByPlayer(veh,false)
+        SetEntityAsMissionEntity(veh, false, true)
+        SetVehicleAsNoLongerNeeded(Citizen.PointerValueIntInitialized(veh))
+        Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(veh))
+        self.vehicles[model] = nil
 
-    return true
-  end
-  
+        return true
+    end
+
 end
 
 -- VEHICLE STATE
@@ -131,7 +132,7 @@ function get_vehicle_mods(veh)
 end
 
 -- partial update per property
-function Garage:setVehicleCustomization(veh, custom)
+function set_vehicle_mods(veh, custom)
 
     SetVehicleModKit(veh, 0)
 
