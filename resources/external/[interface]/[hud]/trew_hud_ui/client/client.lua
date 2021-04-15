@@ -20,7 +20,7 @@ local prevVelocity = {x = 0.0, y = 0.0, z = 0.0}
 
 Citizen.CreateThread(function()
 	while true do
-		Wait(200)
+		Wait(500)
 		local player = PlayerPedId()
 		local vehicle = GetVehiclePedIsIn(player, false)
 		local position = GetEntityCoords(player)
