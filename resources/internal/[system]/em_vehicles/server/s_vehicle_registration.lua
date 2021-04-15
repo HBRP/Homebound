@@ -44,7 +44,7 @@ exports["em_fw"]:register_server_callback("em_vehicles:is_vehicle_player_owned",
 
 end)
 
-exports["em_fw"]:reigster_server_callback("em_vehicles:has_keys", function(source, callback, character_id, plate)
+exports["em_fw"]:register_server_callback("em_vehicles:has_keys", function(source, callback, character_id, plate)
 
     callback(is_registered_to_player(character_id, plate))
 
@@ -53,16 +53,19 @@ end)
 exports["em_fw"]:register_server_callback("em_vehicles:transfer_keys", function(source, callback, character_id, to_character_id, plate)
 
     for i = 1, #registered_vehicles do
-        
+
         if registered_vehicles[i].plate == plate then
 
             if registered_vehicles[i].character_id == character_id then
                 registered_vehicles[i].character_id = to_character_id
+                callback(true)
+                return
             end
 
         end
 
     end
-    callback()
+    
+    callback(false)
 
 end)
