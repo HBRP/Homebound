@@ -8,6 +8,7 @@ local AllWeapons = json.decode('{"melee":{"dagger":"0x92A27487","bat":"0x958A4A8
 local vehiclesCars = {0,1,2,3,4,5,6,7,8,9,10,11,12,17,18,19,20};
 
 -- Location update
+--[[
 Citizen.CreateThread(function()
 
 	while Config.ui.showLocation do
@@ -33,6 +34,7 @@ Citizen.CreateThread(function()
 		SendNUIMessage({ action = 'setText', id = 'location', value = locationMessage })
 	end
 end)
+]]
 
 
 -- Vehicle Info
