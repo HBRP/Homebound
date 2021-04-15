@@ -7,7 +7,8 @@ client_scripts {
     'client/c_vehicle_registration.lua',
     'client/c_vehicle_commands.lua',
     'client/c_vehicle_mod.lua',
-    'client/c_vehicle_spawn.lua'
+    'client/c_vehicle_spawn.lua',
+    'client/c_vehicle_repair.lua'
 
 }
 
@@ -28,7 +29,8 @@ exports {
     'register_vehicle_as_player_owned',
     'is_vehicle_player_owned',
     'has_keys',
-    'transfer_keys'
+    'transfer_keys',
+    'repair_vehicle'
     
 }
 
