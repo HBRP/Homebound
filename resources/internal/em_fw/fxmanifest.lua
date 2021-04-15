@@ -60,7 +60,7 @@ server_scripts {
     'server/door/s_doors.lua',
     'server/events/s_trigger_events.lua',
     'server/character/s_character_emote_keybinds.lua',
-    'server/vehicle_s_vehicle_store.lua'
+    'server/vehicle/s_vehicle_store.lua'
 
 }
 
