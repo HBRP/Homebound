@@ -8,34 +8,6 @@ local AllWeapons = json.decode('{"melee":{"dagger":"0x92A27487","bat":"0x958A4A8
 local vehiclesCars = {0,1,2,3,4,5,6,7,8,9,10,11,12,17,18,19,20};
 
 -- Location update
---[[
-Citizen.CreateThread(function()
-
-	while Config.ui.showLocation do
-		Citizen.Wait(200)
-		local player = PlayerPedId()
-		local position = GetEntityCoords(player)
-		local zoneNameFull = zones[GetNameOfZone(position.x, position.y, position.z)]
-		local streetName = GetStreetNameFromHashKey(GetStreetNameAtCoord(position.x, position.y, position.z))
-
-		local locationMessage = nil
-
-		if zoneNameFull then 
-			locationMessage = streetName .. ', ' .. zoneNameFull
-		else
-			locationMessage = streetName
-		end
-
-		locationMessage = string.format(
-			'You are on <strong>%s</strong>',
-			locationMessage
-		)
-
-		SendNUIMessage({ action = 'setText', id = 'location', value = locationMessage })
-	end
-end)
-]]
-
 
 -- Vehicle Info
 local vehicleCruiser
