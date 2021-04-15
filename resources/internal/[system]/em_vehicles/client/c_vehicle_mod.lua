@@ -44,12 +44,6 @@ function spawn_vehicle(model, plate, state, position, heading, rotation, place_p
     -- spawn car
     if HasModelLoaded(mhash) then
 
-        print(model)
-        print(plate)
-        print(state)
-        print(position)
-        print(heading)
-        print(rotation)
         local ped = GetPlayerPed(-1)
         local x, y, z = table.unpack(position)
 
