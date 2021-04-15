@@ -27,5 +27,6 @@ exports {
 }
 
 dependencies {
-	'em_vehicles'
+	'em_vehicles',
+	'em_transactions'
 }

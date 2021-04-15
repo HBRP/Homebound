@@ -1,11 +1,31 @@
 
 local IsInShopMenu = false
+local current_vehicles = {}
+
+local function get_vehicle_amount(model)
+
+	for i = 1, #current_vehicles do
+		if current_vehicles[i].vehicle_model == model then
+			return current_vehicles[i].vehicle_price
+		end
+	end
+
+end
 
 RegisterNUICallback('BuyVehicle', function(data, cb)
 
     SetNuiFocus(false, false)
 	IsInShopMenu = false
-	exports["em_vehicles"]:spawn_vehicle(data.model, false, false, {-46.049, -1081.758, 26.70}, 67.98, false, true)
+
+	local amount = get_vehicle_amount(data.model)
+	assert(amount ~= nil, string.format("Unable to find price for %s", data.model))
+	local success = exports["em_transactions"]:remove_cash(amount)
+
+	if success then
+
+		local veh = exports["em_vehicles"]:spawn_vehicle(data.model, false, false, {-46.049, -1081.758, 26.70}, 67.98, false, true)
+
+	end
 
 end)
 
@@ -42,7 +62,7 @@ local categories ={
 
 function OpenShopMenu(vehicles)
 
-	local vehicle = {}
+	current_vehicles = {}
 
 	if IsInShopMenu then
 		return
@@ -58,6 +78,7 @@ function OpenShopMenu(vehicles)
 	for i = 1, #vehicles do
 		vehicles[i].category_name = categories[vehicles[i].vehicle_category_id]
 	end
+	current_vehicles = vehicles
 
 	SendNUIMessage({
         show = true,
