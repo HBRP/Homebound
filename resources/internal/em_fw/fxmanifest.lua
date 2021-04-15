@@ -29,7 +29,8 @@ client_scripts {
     'client/interaction/c_interaction.lua',
     'client/door/c_doors.lua',
     'client/events/c_trigger_events.lua',
-    'client/character/c_character_emote_keybinds.lua'
+    'client/character/c_character_emote_keybinds.lua',
+    'client/vehicle/c_vehicle_store.lua'
     
 }
 
@@ -58,7 +59,8 @@ server_scripts {
     'server/interaction/s_interaction.lua',
     'server/door/s_doors.lua',
     'server/events/s_trigger_events.lua',
-    'server/character/s_character_emote_keybinds.lua'
+    'server/character/s_character_emote_keybinds.lua',
+    'server/vehicle_s_vehicle_store.lua'
 
 }
 
@@ -177,6 +179,9 @@ export 'toggle_door'
 -- c_trigger_events.lua
 export 'trigger_event_for_character'
 export 'trigger_proximity_event'
+
+-- c_vehicle_store.lua
+export 'get_vehicle_store_stock_async'
 
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'
