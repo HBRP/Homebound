@@ -29,7 +29,7 @@
 -- state: (optional) vehicle state (client)
 -- position: (optional) {x,y,z}, if not passed the vehicle will be spawned on the player (and will be put inside the vehicle)
 -- rotation: (optional) quaternion {x,y,z,w}, if passed with the position, will be applied to the vehicle entity
-function spawn_vehicle(model, plate, state, position, rotation)
+function spawn_vehicle(model, plate, state, position, heading, rotation, place_ped_inside)
 
     -- load vehicle model
     local mhash = GetHashKey(model)
@@ -38,30 +38,37 @@ function spawn_vehicle(model, plate, state, position, rotation)
     while not HasModelLoaded(mhash) and i < 10000 do
         RequestModel(mhash)
         Citizen.Wait(10)
-        i = i+1
+        i = i + 1
     end
 
     -- spawn car
     if HasModelLoaded(mhash) then
 
+        print(model)
+        print(plate)
+        print(state)
+        print(position)
+        print(heading)
+        print(rotation)
         local ped = GetPlayerPed(-1)
+        local x, y, z = table.unpack(position)
 
-        local x,y,z
-        if position then
-            x,y,z = table.unpack(position)
-        end
-
-        local nveh = CreateVehicle(mhash, x,y,z+0.5, 0.0, true, false)
+        local nveh = CreateVehicle(mhash, x, y, z + 0.5, 0.0, true, false)
         if position and rotation then
             SetEntityQuaternion(nveh, table.unpack(rotation))
         end
-        if not position then -- set vehicle heading same as player
+
+        if not heading and not position then -- set vehicle heading same as player
             SetEntityHeading(nveh, GetEntityHeading(ped))
+        end
+
+        if heading then
+            SetEntityHeading(nveh, heading)
         end
 
         SetVehicleOnGroundProperly(nveh)
         SetEntityInvincible(nveh,false)
-        if not position then
+        if place_ped_inside then
             SetPedIntoVehicle(ped, nveh, -1) -- put player inside
         end
 
@@ -71,13 +78,11 @@ function spawn_vehicle(model, plate, state, position, rotation)
         SetEntityAsMissionEntity(nveh, true, true)
         SetVehicleHasBeenOwnedByPlayer(nveh,true)
 
-        -- set decorators
-        self.vehicles[model] = nveh -- mark as owned
 
         SetModelAsNoLongerNeeded(mhash)
 
         if state then
-            self:setVehicleState(nveh, state)
+            set_vehicle_state(nveh, state)
         end
 
     end
@@ -86,7 +91,6 @@ end
 -- return true if despawned
 function despawn_vehicle(model)
 
-    local veh = self.vehicles[model]
     if veh then
 
         -- remove vehicle
@@ -94,7 +98,6 @@ function despawn_vehicle(model)
         SetEntityAsMissionEntity(veh, false, true)
         SetVehicleAsNoLongerNeeded(Citizen.PointerValueIntInitialized(veh))
         Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(veh))
-        self.vehicles[model] = nil
 
         return true
     end
@@ -196,7 +199,7 @@ end
 function get_vehicle_state(veh)
 
     local state = {
-    customization = self:getVehicleCustomization(veh),
+    customization = get_vehicle_mods(veh),
     condition = {
         health = GetEntityHealth(veh),
         engine_health = GetVehicleEngineHealth(veh),

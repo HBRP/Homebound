@@ -25,3 +25,7 @@ files {
 exports {
 	'OpenShopMenu'
 }
+
+dependencies {
+	'em_vehicles'
+}

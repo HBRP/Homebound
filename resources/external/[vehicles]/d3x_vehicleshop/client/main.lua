@@ -2,38 +2,11 @@
 local IsInShopMenu = false
 
 RegisterNUICallback('BuyVehicle', function(data, cb)
+
     SetNuiFocus(false, false)
-
-    local model = data.model
-	local playerPed = PlayerPedId()
 	IsInShopMenu = false
-	exports['mythic_notify']:PersistentHudText('START','waiting','vermelho',_U('wait_vehicle'))
+	exports["em_vehicles"]:spawn_vehicle(data.model, false, false, {-46.049, -1081.758, 26.70}, 67.98, false, true)
 
-    ESX.TriggerServerCallback('d3x_vehicleshop:buyVehicle', function(hasEnoughMoney)
-		exports['mythic_notify']:PersistentHudText('END','waiting')
-
-		if hasEnoughMoney then
-
-			ESX.Game.SpawnVehicle(model, Config.Zones.ShopOutside.Pos, Config.Zones.ShopOutside.Heading, function (vehicle)
-				TaskWarpPedIntoVehicle(playerPed, vehicle, -1)
-
-				local newPlate     = GeneratePlate()
-				local vehicleProps = ESX.Game.GetVehicleProperties(vehicle)
-				vehicleProps.plate = newPlate
-				SetVehicleNumberPlateText(vehicle, newPlate)
-
-				if Config.EnableOwnedVehicles then
-					TriggerServerEvent('d3x_vehicleshop:setVehicleOwned', vehicleProps)
-				end
-
-				ESX.ShowNotification(_U('vehicle_purchased'))
-			end)
-
-		else
-			ESX.ShowNotification(_U('not_enough_money'))
-		end
-
-	end, model)
 end)
 
 RegisterNUICallback('CloseMenu', function(data, cb)
