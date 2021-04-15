@@ -10,7 +10,6 @@ Citizen.CreateThread(function()
     SetMapZoomDataLevel(8, 11.0, 0.0, 0.0, 2.0, 3.0) -- ZOOM_LEVEL_GALLERY_MAXIMIZE
 end)
 
--- Map stuff below
 local x = -0.025
 local y = -0.015
 local w = 0.16
@@ -24,7 +23,7 @@ Citizen.CreateThread(function()
     while not HasStreamedTextureDictLoaded("circlemap") do 
        Citizen.Wait(100) 
     end
-    
+
     AddReplaceTexture("platform:/textures/graphics", "radarmasksm", "circlemap",
                       "radarmasksm")
 
