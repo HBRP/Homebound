@@ -17,12 +17,14 @@ local function repair_vehicle()
     end
     exports["em_transactions"]:remove_cash(2000)
 
+    TriggerEvent("PlaySoundForEveryoneInVicinity", "sounds/Repair/repair.mp3")
     exports["rprogress"]:Custom({
         Async    = false,
         Duration = 1000 * 60,
         Label = "Repairing vehicle"
     })
 
+    TriggerEvent("PlaySoundForEveryoneInVicinity", "sounds/Repair/repair.mp3")
     exports["em_vehicles"]:repair_vehicle(veh)
 
 end
