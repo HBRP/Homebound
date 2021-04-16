@@ -48,20 +48,6 @@ if cfg.randomTireBurstInterval ~= 0 then tireBurstLuckyNumber = math.random(tire
 local fixMessagePos = math.random(repairCfg.fixMessageCount)
 local noFixMessagePos = math.random(repairCfg.noFixMessageCount)
 
--- Display blips on map
-Citizen.CreateThread(function()
-	if (cfg.displayBlips == true) then
-		for _, item in pairs(repairCfg.mechanics) do
-			item.blip = AddBlipForCoord(item.x, item.y, item.z)
-			SetBlipSprite(item.blip, item.id)
-			SetBlipAsShortRange(item.blip, true)
-			BeginTextCommandSetBlipName("STRING")
-			AddTextComponentString(item.name)
-			EndTextCommandSetBlipName(item.blip)
-		end
-	end
-end)
-
 local function notification(msg)
 	SetNotificationTextEntry("STRING")
 	AddTextComponentString(msg)
