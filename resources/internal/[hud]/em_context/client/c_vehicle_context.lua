@@ -1,9 +1,26 @@
 
 local function spawn_vehicle(vehicle_id)
 
+    --function spawn_vehicle(model, plate, state, position, heading, rotation, place_ped_inside)
     exports["em_fw"]:takeout_vehicle_async(function(vehicle)
 
-        
+        local player_coords = GetEntityCoords(PlayerPedId())
+        local forward_vec   = GetEntityForwardVector(PlayerPedId())
+
+        local veh_position  = {
+            forward_vec.x * 2.5 + player_coords.x,
+            forward_vec.y * 2.5 + player_coords.y,
+            forward_vec.z * 2.5 + player_coords.z 
+        }
+        local veh_heading = GetEntityHeading(PlayerPedId()) + 90.0
+
+        print(vehicle.vehicle_model)
+        print(vehicle.plate)
+        print(vehicle.vehicle_state)
+
+        local veh = exports["em_vehicles"]:spawn_vehicle(vehicle.vehicle_model, vehicle.plate, vehicle.vehicle_state, veh_position, veh_heading, false, false)
+        --exports["em_vehicles"]:set_vehicle_mods(veh, vehicle.vehicle_mods)
+        SetVehicleNumberPlateText(veh, vehicle.plate)
 
     end, vehicle_id)
 
@@ -25,12 +42,14 @@ local function setup_character_vehicles(nearby_garage)
                 dialog = string.format("[%s is out]", vehicles[i].vehicle_name)
                 callback = function() end
 
-            if vehicles[i].vehicle_garage_id == nearby_garage.vehicle_garage_id then
+            elseif vehicles[i].vehicle_garage_id == nearby_garage.vehicle_garage_id then
 
                 dialog = string.format("[Take out %s]", vehicles[i].vehicle_name)
                 callback = function()
+
                     spawn_vehicle(vehicles[i].vehicle_id)
                     exports["em_dialog"]:hide_dialog()
+
                 end
 
             else
@@ -53,6 +72,10 @@ local function setup_character_vehicles(nearby_garage)
 
 end
 
+local function setup_group_vehicles(nearby_garage)
+
+end
+
 function take_out_vehicle(nearby_garage)
 
     if nearby_garage ~= nil and nearby_garage.any_nearby then
@@ -64,7 +87,7 @@ function take_out_vehicle(nearby_garage)
 
                 exports["em_dialog"]:hide_dialog()
                 if nearby_garage.group_id ~= -1 then
-
+                    setup_group_vehicles(nearby_garage)
                 else
                     setup_character_vehicles(nearby_garage)
                 end 
