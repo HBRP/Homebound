@@ -46,3 +46,11 @@ register_server_callback("/Vehicle/Garage/StoreVehicle", function(source, callba
     end)
     
 end)
+
+
+Citizen.CreateThread(function()
+
+    Citizen.Wait(10)
+    HttpPut("/Vehicle/Reset", nil, function(error_code, result_data, result_headers) end)
+
+end)
