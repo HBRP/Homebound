@@ -97,12 +97,11 @@ end
 function get_vehicle_state(veh)
 
     local state = {
-    customization = get_vehicle_mods(veh),
-    condition = {
-        health = GetEntityHealth(veh),
-        engine_health = GetVehicleEngineHealth(veh),
-        petrol_tank_health = GetVehiclePetrolTankHealth(veh),
-        dirt_level = GetVehicleDirtLevel(veh)
+        condition = {
+            health = GetEntityHealth(veh),
+            engine_health = GetVehicleEngineHealth(veh),
+            petrol_tank_health = GetVehiclePetrolTankHealth(veh),
+            dirt_level = GetVehicleDirtLevel(veh)
         }
     }
 
