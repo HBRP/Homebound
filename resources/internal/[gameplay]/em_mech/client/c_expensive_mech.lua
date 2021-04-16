@@ -2,7 +2,6 @@
 local function repair_vehicle()
 
     exports["em_dialog"]:hide_dialog()
-    exports["em_transactions"]:remove_cash(2000)
 
     local veh = GetVehiclePedIsIn(PlayerPedId(), false)
     if veh == 0 then
@@ -16,6 +15,7 @@ local function repair_vehicle()
         end
 
     end
+    exports["em_transactions"]:remove_cash(2000)
 
     exports["rprogress"]:Custom({
         Async    = false,
