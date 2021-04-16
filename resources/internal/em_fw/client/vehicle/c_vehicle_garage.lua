@@ -26,3 +26,9 @@ function get_nearby_garage()
     return nearby_garage
 
 end
+
+function store_vehicle(plate, vehicle_garage_id, vehicle_mods, vehicle_state, vehicle_gas_level)
+
+    trigger_server_callback_async("/Vehicle/Garage/StoreVehicle", function() end, plate, vehicle_garage_id, vehicle_mods, vehicle_state, vehicle_gas_level)
+
+end

@@ -191,6 +191,7 @@ export 'insert_new_vehicle_async'
 export 'get_character_vehicles_async'
 export 'takeout_vehicle_async'
 export 'get_nearby_garage'
+export 'store_vehicle'
 
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'

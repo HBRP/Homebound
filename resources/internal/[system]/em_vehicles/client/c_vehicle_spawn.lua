@@ -81,7 +81,7 @@ function spawn_vehicle(model, plate, state, position, heading, rotation, place_p
 end
 
 -- return true if despawned
-function despawn_vehicle(model)
+function despawn_vehicle(veh)
 
     if veh then
 

@@ -111,19 +111,28 @@ function return_vehicle(nearby_garage)
         local veh = GetVehiclePedIsIn(PlayerPedId(), false)
         if veh ~= 0 then
 
+            local vehicle_store_callback = function()
+
+                local plate = GetVehicleNumberPlateText(veh)
+                local veh_mods = exports["em_vehicles"]:get_vehicle_mods(veh)
+                local veh_state = exports["em_vehicles"]:get_vehicle_state(veh)
+                local veh_gas_level = exports["LegacyFuel"]:GetFuel(veh)
+
+                exports["em_fw"]:store_vehicle(plate, nearby_garage.vehicle_garage_id, veh_mods, veh_state, veh_gas_level)
+                exports["em_vehicles"]:despawn_vehicle(veh)
+                exports["em_dialog"]:hide_dialog()
+
+            end
+
             if exports["em_vehicles"]:is_vehicle_player_owned(veh) and nearby_garage.group_id == -1 then
 
                 dialog = "[Store vehicle]"
-                callback = function()
-
-                end
+                callback = vehicle_store_callback
 
             elseif  nearby_garage.group_id ~= -1 and exports["em_vehicles"]:is_vehicle_owned_by_group(nearby_garage.group_id, veh) then
 
                 dialog = "[Store vehicle]"
-                callback = function() 
-
-                end
+                callback = vehicle_store_callback
 
             else
                 dialog = "[Cannot store this vehicle here]"

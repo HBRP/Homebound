@@ -35,3 +35,14 @@ register_server_callback("em_fw:get_nearby_garage", function(source, callback, c
     end)
 
 end)
+
+register_server_callback("/Vehicle/Garage/StoreVehicle", function(source, callback, plate, vehicle_garage_id, vehicle_mods, vehicle_state, vehicle_gas_level)
+
+    local data = {plate = plate, vehicle_garage_id = vehicle_garage_id, vehicle_mods = vehicle_mods, vehicle_state = vehicle_state, vehicle_gas_level = vehicle_gas_level}
+    HttpPut("/Vehicle/Garage/StoreVehicle", data, function(error_code, result_data, result_headers)
+
+        callback()
+
+    end)
+    
+end)
