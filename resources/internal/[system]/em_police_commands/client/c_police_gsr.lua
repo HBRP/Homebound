@@ -42,29 +42,9 @@ AddEventHandler("em_police_commands:gsr_response", function(gsr_positive)
 
 end)
 
---[[
-Citizen.CreateThread(function()
-
-    while true do
-
-        Citizen.Wait(25)
-        if exports["em_items"]:is_ped_shooting_a_gun() then
-            has_gsr = true
-            disappear_time = GetGameTimer() + 1000 * 60 * 15
-        end
-        if disappear_time < GetGameTimer() then
-            has_gsr = false
-        end
-
-    end
-
-end)
-]]
-
 local running_gsr_loop = false
 local function gsr_loop()
 
-    print("in loop")
     local end_time = GetGameTimer() + 1000
     while end_time > GetGameTimer() do
 
