@@ -103,7 +103,39 @@ end
 
 function return_vehicle(nearby_garage)
 
-    if nearby_garage ~= nil and nearby_garage.any_nearby  then
+    if nearby_garage ~= nil and nearby_garage.any_nearby then
+
+        local dialog = nil
+        local callback = nil
+
+        local veh = GetVehiclePedIsIn(PlayerPedId(), false)
+        if veh ~= 0 then
+
+            if exports["em_vehicles"]:is_vehicle_player_owned(veh) and nearby_garage.group_id == -1 then
+
+                dialog = "[Store vehicle]"
+                callback = function()
+
+                end
+
+            elseif  nearby_garage.group_id ~= -1 and exports["em_vehicles"]:is_vehicle_owned_by_group(nearby_garage.group_id, veh) then
+
+                dialog = "[Store vehicle]"
+                callback = function() 
+
+                end
+
+            else
+                dialog = "[Cannot store this vehicle here]"
+                callback = function() exports["em_dialog"]:hide_dialog() end
+            end
+
+        end
+
+        return {
+            dialog = dialog,
+            callback = callback
+        }  
 
     end
     return nil

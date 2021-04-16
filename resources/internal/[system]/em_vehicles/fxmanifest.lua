@@ -26,6 +26,8 @@ exports {
     'set_vehicle_mods',
     'get_vehicle_state',
     'set_vehicle_state',
+    'register_vehicle_as_group_owned',
+    'is_vehicle_owned_by_group',
     'register_vehicle_as_player_owned',
     'is_vehicle_player_owned',
     'has_keys',

@@ -1,4 +1,24 @@
 
+function register_vehicle_as_group_owned(group_id, veh)
+
+    local plate = GetVehicleNumberPlateText(veh)
+    local character_id = exports["em_fw"]:get_character_id()
+    exports["em_fw"]:trigger_server_callback_async("em_vehicles:register_plate_as_group_owned", function() end, character_id, group_id, plate)
+
+end
+
+function is_vehicle_owned_by_group(veh, group_id)
+
+    local plate = GetVehicleNumberPlateText(veh)
+    local is_owned = false
+    exports["em_fw"]:trigger_server_callback("em_vehicles:is_vehicle_owned_by_group", function(result)
+        is_owned = result
+    end, group_id, veh)
+
+    return is_owned
+
+end
+
 function register_vehicle_as_player_owned(veh)
 
     local plate = GetVehicleNumberPlateText(veh)
