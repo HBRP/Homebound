@@ -41,15 +41,6 @@ AddEventHandler("em_customization:loaded_appearance", function()
 
 end)
 
-Citizen.CreateThread(function()
-	while true do
-		Citizen.Wait(300000)
-		if not IsMenuOpen() then
-			set_tattoos()
-		end
-	end
-end)
-
 function DrawTattoo(collection, name)
 
 	ClearPedDecorations(PlayerPedId())
