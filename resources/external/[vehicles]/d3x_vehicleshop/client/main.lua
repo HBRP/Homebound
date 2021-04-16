@@ -19,6 +19,13 @@ RegisterNUICallback('BuyVehicle', function(data, cb)
 
 	local amount = get_vehicle_amount(data.model)
 	assert(amount ~= nil, string.format("Unable to find price for %s", data.model))
+
+    local response = exports["em_fw"]:can_purchase_a_vehicle()
+    if not response.can_purchase then
+        exports['t-notify']:Alert({style = "error", message = "You cannot purchase another vehicle. Sell one."})
+        return
+    end
+
 	local success = exports["em_transactions"]:remove_cash(amount)
 
 	if success then
