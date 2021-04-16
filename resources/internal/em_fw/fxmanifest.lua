@@ -182,6 +182,7 @@ export 'trigger_proximity_event'
 
 -- c_vehicle_store.lua
 export 'get_vehicle_store_stock_async'
+export 'can_purchase_a_vehicle'
 
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'

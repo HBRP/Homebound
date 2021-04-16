@@ -10,3 +10,15 @@ register_server_callback("em_fw:get_vehicle_store_stock", function(source, callb
     end)
 
 end)
+
+register_server_callback("em_fw:can_purchase_a_vehicle", function(source, callback, character_id)
+
+    local endpoint = string.format("/Vehicle/CanPurchase/%d", character_id)
+    HttpGet(endpoint, nil, function(error_code, result_data, result_headers)
+
+        local temp = json.decode(result_data)
+        callback(temp)
+
+    end)
+
+end)
