@@ -138,13 +138,12 @@ function return_vehicle(nearby_garage)
                 dialog = "[Cannot store this vehicle here]"
                 callback = function() exports["em_dialog"]:hide_dialog() end
             end
+            return {
+                dialog = dialog,
+                callback = callback
+            }  
 
         end
-
-        return {
-            dialog = dialog,
-            callback = callback
-        }  
 
     end
     return nil
