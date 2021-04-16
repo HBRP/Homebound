@@ -1,31 +1,4 @@
 
-local function take_out_vehicle(nearby_garage)
-
-    if nearby_garage ~= nil and nearby_garage.any_nearby then
-
-        return {
-
-            dialog = "[Take out cars]",
-            callback = function()
-
-            end
-
-        }
-
-    end
-    return nil
-
-end
-
-local function return_vehicle(nearby_garage)
-
-    if nearby_garage ~= nil and nearby_garage.any_nearby  then
-
-    end
-    return nil
-
-end
-
 local function build_context_menu()
 
     local context_dialog = {}
