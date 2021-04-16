@@ -1,7 +1,6 @@
 
 local function spawn_vehicle(vehicle_id)
 
-    --function spawn_vehicle(model, plate, state, position, heading, rotation, place_ped_inside)
     exports["em_fw"]:takeout_vehicle_async(function(vehicle)
 
         local player_coords = GetEntityCoords(PlayerPedId())
@@ -13,13 +12,9 @@ local function spawn_vehicle(vehicle_id)
             forward_vec.z * 2.5 + player_coords.z 
         }
         local veh_heading = GetEntityHeading(PlayerPedId()) + 90.0
-
-        print(vehicle.vehicle_model)
-        print(vehicle.plate)
-        print(vehicle.vehicle_state)
-
         local veh = exports["em_vehicles"]:spawn_vehicle(vehicle.vehicle_model, vehicle.plate, vehicle.vehicle_state, veh_position, veh_heading, false, false)
-        --exports["em_vehicles"]:set_vehicle_mods(veh, vehicle.vehicle_mods)
+        exports["em_vehicles"]:set_vehicle_mods(veh, vehicle.vehicle_mods)
+        exports["LegacyFuel"]:SetFuel(veh, vehicle.vehicle_gas_level)
         SetVehicleNumberPlateText(veh, vehicle.plate)
 
     end, vehicle_id)
