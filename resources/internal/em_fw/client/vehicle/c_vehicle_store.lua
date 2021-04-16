@@ -7,7 +7,7 @@ end
 
 function can_purchase_a_vehicle()
 
-    local can_purchase = false
+    local can_purchase = nil
     trigger_server_callback("em_fw:can_purchase_a_vehicle", function(result)
 
         can_purchase = result
