@@ -30,7 +30,8 @@ client_scripts {
     'client/door/c_doors.lua',
     'client/events/c_trigger_events.lua',
     'client/character/c_character_emote_keybinds.lua',
-    'client/vehicle/c_vehicle_store.lua'
+    'client/vehicle/c_vehicle_store.lua',
+    'client/vehicle/c_vehicle_garage.lua'
     
 }
 
@@ -60,7 +61,8 @@ server_scripts {
     'server/door/s_doors.lua',
     'server/events/s_trigger_events.lua',
     'server/character/s_character_emote_keybinds.lua',
-    'server/vehicle/s_vehicle_store.lua'
+    'server/vehicle/s_vehicle_store.lua',
+    'server/vehicle/s_vehicle_garage.lua'
 
 }
 
@@ -184,6 +186,11 @@ export 'trigger_proximity_event'
 export 'get_vehicle_store_stock_async'
 export 'can_purchase_a_vehicle'
 export 'insert_new_vehicle_async'
+
+-- c_vehicle_garage.lua
+export 'get_character_vehicles_async'
+export 'takeout_vehicle_async'
+export 'get_nearby_garage'
 
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'

@@ -1,0 +1,28 @@
+
+
+function get_character_vehicles_async(callback)
+
+    trigger_server_callback_async("em_fw:get_character_vehicles", callback, get_character_id())
+
+end
+
+function takeout_vehicle_async(callback, vehicle_id)
+
+    trigger_server_callback_async("em_fw:takeout_vehicle", callback, get_character_id(), vehicle_id)
+
+end
+
+function get_nearby_garage()
+
+    local nearby_garage = nil
+    local player_coords = GetEntityCoords(PlayerPedId())
+
+    trigger_server_callback("em_fw:get_nearby_garage", function(result)
+
+        nearby_garage = result
+
+    end, get_character_id(), player_coords.x, player_coords.y, player_coords.z)
+
+    return nearby_garage
+
+end
