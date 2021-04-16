@@ -31,6 +31,14 @@ RegisterNUICallback('BuyVehicle', function(data, cb)
 	if success then
 
 		local veh = exports["em_vehicles"]:spawn_vehicle(data.model, false, false, {-46.049, -1081.758, 26.70}, 67.98, false, true)
+        local veh_mods = exports["em_vehicles"]:get_vehicle_mods()
+        local veh_state = exports["em_vehicles"]:get_vehicle_state()
+
+        exports["em_fw"]:insert_new_vehicle_async(function(result)
+
+            SetVehicleNumberPlateText(veh, result.plate)
+
+        end, data.model, veh_mods, veh_state)
 
 	end
 

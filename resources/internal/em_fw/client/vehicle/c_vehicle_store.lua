@@ -17,3 +17,10 @@ function can_purchase_a_vehicle()
     return can_purchase
 
 end
+
+function insert_new_vehicle_async(callback, vehicle_model, vehicle_mods, vehicle_state)
+
+    trigger_server_callback_async("em_fw:insert_new_vehicle", callback, get_character_id(), vehicle_model, vehicle_mods, vehicle_state)
+
+end
+

@@ -22,3 +22,15 @@ register_server_callback("em_fw:can_purchase_a_vehicle", function(source, callba
     end)
 
 end)
+
+register_server_callback("em_fw:insert_new_vehicle", function(source, callback, character_id, vehicle_model, vehicle_mods, vehicle_state)
+
+    local data = {character_id = character_id, vehicle_model = vehicle_model, vehicle_mods = vehicle_mods, vehicle_state = vehicle_state}
+    HttpPost("/Vehicle/InsertVehicle", data, function(error_code, result_data, result_headers)
+
+        local temp = json.decode(result_data)
+        callback(temp)
+
+    end)
+
+end)
