@@ -29,6 +29,12 @@ end
 
 function store_vehicle(plate, vehicle_garage_id, vehicle_mods, vehicle_state, vehicle_gas_level)
 
-    trigger_server_callback_async("/Vehicle/Garage/StoreVehicle", function() end, plate, vehicle_garage_id, vehicle_mods, vehicle_state, vehicle_gas_level)
+    trigger_server_callback_async("em_fw:store_vehicle", function() end, plate, vehicle_garage_id, vehicle_mods, vehicle_state, vehicle_gas_level)
+
+end
+
+function get_group_vehicles(callback, group_id)
+
+    trigger_server_callback_async("em_fw:get_group_vehicles", callback, group_id)
 
 end
