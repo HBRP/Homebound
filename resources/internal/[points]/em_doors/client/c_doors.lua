@@ -19,7 +19,9 @@ local function set_prop_hashes(doors)
 
     for i = 1, #doors do
         for j = 1, #doors[i].doors do
-            doors[i].doors[j].prop_hash = GetHashKey(doors[i].doors[j].model_name)
+            if doors[i].doors[j].prop_hash == nil then
+                doors[i].doors[j].prop_hash = GetHashKey(doors[i].doors[j].model_name)
+            end
         end
     end
 
