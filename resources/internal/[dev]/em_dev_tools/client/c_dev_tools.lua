@@ -55,3 +55,18 @@ RegisterCommand("create_object", function(source, args, raw_command)
     CreatePed(29, hash, player_coords.x + 1, player_coords.y + 1, player_coords.z + 1, true, true, true)
 
 end, false)
+
+RegisterCommand("veh_data", function(source, args, raw_command)
+
+    local veh = GetVehiclePedIsIn(PlayerPedId(), false)
+    if veh ~= 0 then
+
+        local vehicle_mods  = exports["em_vehicles"]:get_vehicle_mods(veh)
+        local vehicle_state = exports["em_vehicles"]:get_vehicle_state(veh)
+
+        Citizen.Trace("Vehicle mods : " ..json.encode(vehicle_mods) .. "\n")
+        Citizen.Trace("Vehicle state : " .. json.encode(vehicle_state) .. "\n")
+
+    end
+
+end, false)

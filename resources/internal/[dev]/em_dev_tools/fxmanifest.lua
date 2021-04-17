@@ -10,6 +10,7 @@ client_scripts {
 
 dependencies {
 
-    'ObjectNameFromHash'
+    'ObjectNameFromHash',
+    'em_vehicles'
 
 }
