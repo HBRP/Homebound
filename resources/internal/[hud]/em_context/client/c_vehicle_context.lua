@@ -1,5 +1,5 @@
 
-local function spawn_vehicle(vehicle_id)
+local function spawn_vehicle(group_id, vehicle_id)
 
     exports["em_fw"]:takeout_vehicle_async(function(vehicle)
 
@@ -13,6 +13,13 @@ local function spawn_vehicle(vehicle_id)
         }
         local veh_heading = GetEntityHeading(PlayerPedId()) + 90.0
         local veh = exports["em_vehicles"]:spawn_vehicle(vehicle.vehicle_model, vehicle.plate, vehicle.vehicle_state, veh_position, veh_heading, false, false)
+
+        if group_id == -1 then
+            exports["em_vehicles"]:register_vehicle_as_player_owned(veh)
+        else
+            exports["em_vehicles"]:register_vehicle_as_group_owned(group_id, veh)
+        end
+
         exports["em_vehicles"]:set_vehicle_mods(veh, vehicle.vehicle_mods)
         exports["LegacyFuel"]:SetFuel(veh, vehicle.vehicle_gas_level)
         SetVehicleNumberPlateText(veh, vehicle.plate)
@@ -22,7 +29,7 @@ local function spawn_vehicle(vehicle_id)
 end
 
 local function setup_vehicles(nearby_garage, vehicles)
-    
+
     local dialog_options = {}
 
     for i = 1, #vehicles do
@@ -40,7 +47,7 @@ local function setup_vehicles(nearby_garage, vehicles)
             dialog = string.format("[Take out %s]", vehicles[i].vehicle_name)
             callback = function()
 
-                spawn_vehicle(vehicles[i].vehicle_id)
+                spawn_vehicle(nearby_garage.group_id, vehicles[i].vehicle_id)
                 exports["em_dialog"]:hide_dialog()
 
             end
@@ -128,7 +135,7 @@ function return_vehicle(nearby_garage)
 
             end
 
-            if exports["em_vehicles"]:is_vehicle_player_owned(veh) and nearby_garage.group_id == -1 then
+            if exports["em_vehicles"]:is_vehicle_owned_by_character(veh) and nearby_garage.group_id == -1 then
 
                 dialog = "[Store vehicle]"
                 callback = vehicle_store_callback

@@ -15,12 +15,12 @@ local function has_plate_been_registered(plate)
 
 end
 
-local function is_registered_to_player(character_id, plate)
+local function is_registered_to_character(character_id, plate)
 
     for i = 1, #registered_vehicles do
 
         if registered_vehicles[i].plate == plate then
-            return registered_vehicles[i].character_id == character_id
+            return registered_vehicles[i].character_id == character_id and registered_vehicles[i].group_id == nil
         end
 
     end
@@ -85,6 +85,12 @@ end)
 exports["em_fw"]:register_server_callback("em_vehicles:is_vehicle_player_owned", function(source, callback, plate)
 
     callback(has_plate_been_registered(plate))
+
+end)
+
+exports["em_fw"]:register_server_callback("em_vehicles:is_vehicle_owned_by_character", function(source, callback, character_id, plate)
+
+    callback(is_registered_to_character(character_id,plate))
 
 end)
 

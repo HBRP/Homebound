@@ -73,7 +73,6 @@ function spawn_vehicle(model, plate, state, position, heading, rotation, place_p
             set_vehicle_state(nveh, state)
         end
         SetVehicleDoorsLocked(nveh, 10)
-        register_vehicle_as_player_owned(nveh)
 
         return nveh
 

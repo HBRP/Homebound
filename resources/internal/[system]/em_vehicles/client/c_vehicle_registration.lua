@@ -7,13 +7,13 @@ function register_vehicle_as_group_owned(group_id, veh)
 
 end
 
-function is_vehicle_owned_by_group(veh, group_id)
+function is_vehicle_owned_by_group(group_id, veh)
 
     local plate = GetVehicleNumberPlateText(veh)
     local is_owned = false
     exports["em_fw"]:trigger_server_callback("em_vehicles:is_vehicle_owned_by_group", function(result)
         is_owned = result
-    end, group_id, veh)
+    end, group_id, plate)
 
     return is_owned
 
@@ -37,6 +37,21 @@ function is_vehicle_player_owned(veh)
         is_vehicle_player_owned = result
 
     end, plate)
+
+    return is_vehicle_player_owned
+
+end
+
+function is_vehicle_owned_by_character(veh)
+
+    local plate = GetVehicleNumberPlateText(veh)
+    local is_vehicle_player_owned = false
+
+    exports["em_fw"]:trigger_server_callback("em_vehicles:is_vehicle_owned_by_character", function(result) 
+
+        is_vehicle_player_owned = result
+
+    end, exports["em_fw"]:get_character_id(), plate)
 
     return is_vehicle_player_owned
 

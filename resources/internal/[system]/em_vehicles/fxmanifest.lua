@@ -30,6 +30,7 @@ exports {
     'is_vehicle_owned_by_group',
     'register_vehicle_as_player_owned',
     'is_vehicle_player_owned',
+    'is_vehicle_owned_by_character',
     'has_keys',
     'transfer_keys',
     'repair_vehicle'
