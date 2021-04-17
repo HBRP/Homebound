@@ -33,7 +33,7 @@ function store_vehicle(plate, vehicle_garage_id, vehicle_mods, vehicle_state, ve
 
 end
 
-function get_group_vehicles(callback, group_id)
+function get_group_vehicles_async(callback, group_id)
 
     trigger_server_callback_async("em_fw:get_group_vehicles", callback, group_id)
 

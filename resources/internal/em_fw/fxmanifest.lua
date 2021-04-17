@@ -192,7 +192,7 @@ export 'get_character_vehicles_async'
 export 'takeout_vehicle_async'
 export 'get_nearby_garage'
 export 'store_vehicle'
-export 'get_group_vehicles'
+export 'get_group_vehicles_async'
 
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'
