@@ -37,6 +37,7 @@ RegisterNUICallback('BuyVehicle', function(data, cb)
         exports["em_fw"]:insert_new_vehicle_async(function(result)
 
             SetVehicleNumberPlateText(veh, result.plate)
+            exports["em_vehicles"]:register_vehicle_as_player_owned(veh)
 
         end, data.model, veh_mods, veh_state)
 
