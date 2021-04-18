@@ -3,7 +3,7 @@
 function get_nearby_doors_async(callback)
 
     local player_coords = GetEntityCoords(PlayerPedId())
-    trigger_server_callback_async("em_fw:get_nearby_doors", callback, table.unpack(player_coords))
+    trigger_server_callback_async("em_fw:get_nearby_doors", callback, get_character_id(), table.unpack(player_coords))
 
 end
 
