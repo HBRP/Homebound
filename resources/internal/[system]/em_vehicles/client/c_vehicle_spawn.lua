@@ -72,7 +72,6 @@ function spawn_vehicle(model, plate, state, position, heading, rotation, place_p
         if state then
             set_vehicle_state(nveh, state)
         end
-        SetVehicleDoorsLocked(nveh, 10)
 
         return nveh
 
