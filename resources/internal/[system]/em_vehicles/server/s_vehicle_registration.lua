@@ -28,12 +28,25 @@ local function is_registered_to_character(character_id, plate)
 
 end
 
-local function is_registered_to_group(group_id, plate)
+local function is_registered_to_group_id(group_id, plate)
 
     for i = 1, #registered_vehicles do
 
         if registered_vehicles[i].plate == plate then
             return registered_vehicles[i].group_id == group_id
+        end
+
+    end
+    return false
+
+end
+
+local function is_registered_to_group(plate)
+
+    for i = 1, #registered_vehicles do
+
+        if registered_vehicles[i].plate == plate then
+            return registered_vehicles[i].group_id ~= nil
         end
 
     end
@@ -76,7 +89,13 @@ exports["em_fw"]:register_server_callback("em_vehicles:register_plate_as_group_o
 
 end)
 
-exports["em_fw"]:register_server_callback("em_vehicles:is_vehicle_owned_by_group", function(source, callback, group_id, plate)
+exports["em_fw"]:register_server_callback("em_vehicles:is_vehicle_owned_by_group_id", function(source, callback, group_id, plate)
+
+    callback(is_registered_to_group_id(group_id, plate))
+
+end)
+
+exports["em_fw"]:register_server_callback("em_vehicles:is_vehicle_owned_by_group", function(source, callback, plate)
 
     callback(is_registered_to_group(group_id, plate))
 
@@ -90,7 +109,7 @@ end)
 
 exports["em_fw"]:register_server_callback("em_vehicles:is_vehicle_owned_by_character", function(source, callback, character_id, plate)
 
-    callback(is_registered_to_character(character_id,plate))
+    callback(is_registered_to_character(character_id, plate))
 
 end)
 

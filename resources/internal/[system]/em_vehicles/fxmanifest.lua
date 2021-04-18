@@ -28,6 +28,7 @@ exports {
     'set_vehicle_state',
     'register_vehicle_as_group_owned',
     'is_vehicle_owned_by_group',
+    'is_vehicle_owned_by_group_id',
     'register_vehicle_as_player_owned',
     'is_vehicle_player_owned',
     'is_vehicle_owned_by_character',

@@ -135,20 +135,23 @@ function return_vehicle(nearby_garage)
 
             end
 
-            if exports["em_vehicles"]:is_vehicle_owned_by_character(veh) and nearby_garage.group_id == -1 then
+            if exports["em_vehicles"]:is_vehicle_player_owned(veh) and not exports["em_vehicles"]:is_vehicle_owned_by_group(veh) and nearby_garage.group_id == -1 then
 
                 dialog = "[Store vehicle]"
                 callback = vehicle_store_callback
 
-            elseif  nearby_garage.group_id ~= -1 and exports["em_vehicles"]:is_vehicle_owned_by_group(nearby_garage.group_id, veh) then
+            elseif  nearby_garage.group_id ~= -1 and exports["em_vehicles"]:is_vehicle_owned_by_group_id(nearby_garage.group_id, veh) then
 
                 dialog = "[Store vehicle]"
                 callback = vehicle_store_callback
 
             else
+
                 dialog = "[Cannot store this vehicle here]"
                 callback = function() exports["em_dialog"]:hide_dialog() end
+
             end
+
             return {
                 dialog = dialog,
                 callback = callback

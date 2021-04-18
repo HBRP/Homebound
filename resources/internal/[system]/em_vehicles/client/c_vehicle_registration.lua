@@ -7,13 +7,25 @@ function register_vehicle_as_group_owned(group_id, veh)
 
 end
 
-function is_vehicle_owned_by_group(group_id, veh)
+function is_vehicle_owned_by_group_id(group_id, veh)
 
     local plate = GetVehicleNumberPlateText(veh)
     local is_owned = false
-    exports["em_fw"]:trigger_server_callback("em_vehicles:is_vehicle_owned_by_group", function(result)
+    exports["em_fw"]:trigger_server_callback("em_vehicles:is_vehicle_owned_by_group_id", function(result)
         is_owned = result
     end, group_id, plate)
+
+    return is_owned
+
+end
+
+function is_vehicle_owned_by_group(veh)
+
+    local plate = GetVehicleNumberPlateText(veh)
+    local is_owned = false
+    exports["em_fw"]:trigger_server_callback("em_vehicles:is_vehicle_owned_by_group_id", function(result)
+        is_owned = result
+    end, plate)
 
     return is_owned
 
