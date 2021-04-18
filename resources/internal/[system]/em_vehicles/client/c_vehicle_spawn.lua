@@ -65,13 +65,15 @@ function spawn_vehicle(model, plate, state, position, heading, rotation, place_p
         end
         SetEntityAsMissionEntity(nveh, true, true)
         SetVehicleHasBeenOwnedByPlayer(nveh,true)
-
-
         SetModelAsNoLongerNeeded(mhash)
 
         if state then
             set_vehicle_state(nveh, state)
         end
+
+        SetVehicleDoorsLockedForAllPlayers(nveh, false)
+        SetVehicleDoorsLocked(nveh, 1)
+        SetVehicleDoorsLockedForPlayer(nveh, PlayerId(), false)
 
         return nveh
 
