@@ -137,13 +137,17 @@ function register_door_points(refresh_loop, text_func, control_pressed_func, loo
 
                 if object ~= 0 and #(player_coords - GetEntityCoords(object)) <= obj.nearby_points[i].max_unlock_distance then
 
-                    if not exports["cd_drawtextui"]:is_in_queue(obj.draw_text_id) then
-                        obj.draw_text_id = exports["cd_drawtextui"]:show_text(obj.text_func(obj.nearby_points[i]))
+                    if obj.nearby_points[i].can_unlock_door then
+
+                        if not exports["cd_drawtextui"]:is_in_queue(obj.draw_text_id) then
+                            obj.draw_text_id = exports["cd_drawtextui"]:show_text(obj.text_func(obj.nearby_points[i]))
+                        end
+                        controls[obj.point_id] = {func = obj.control_pressed_func, point = obj.nearby_points[i]}
+                        obj.nearby_point = doors[j].prop_hash == last_hash
+                        last_hash = doors[j].prop_hash
+                        return
+                        
                     end
-                    controls[obj.point_id] = {func = obj.control_pressed_func, point = obj.nearby_points[i]}
-                    obj.nearby_point = doors[j].prop_hash == last_hash
-                    last_hash = doors[j].prop_hash
-                    return
 
                 end
 
