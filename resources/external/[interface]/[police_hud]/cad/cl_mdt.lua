@@ -5,11 +5,13 @@ local zones = { ['AIRP'] = "Los Santos International Airport", ['ALAMO'] = "Alam
 
 local function open_cad()
 
-    exports["em_fw"]:get_latest_cad_reports_async(function(reports)
+    exports["em_fw"]:get_latest_cad_reports_async(function(cad_reports)
 
-        local warrants = {}
-        local officer = "test officer"
-        local job = "test job"
+        local reports = cad_reports["reports"] or {}
+        local warrants = cad_reports["warrants"] or {}
+
+        local officer = exports["em_fw"]:get_character_name()
+        local job = ""
 
         local playerPed = PlayerPedId()
         if not isVisible then
@@ -62,37 +64,37 @@ exports["em_commands"]:register_command("cad", function(source, args, callback)
 
 end)
 
---TriggerServerEvent("cad:getOffensesAndOfficer")
+local function get_charge_conversion(charges)
 
-RegisterNetEvent("cad:toggleVisibilty")
-AddEventHandler("cad:toggleVisibilty", function(reports, warrants, officer, job)
-    local playerPed = PlayerPedId()
-    if not isVisible then
-        local dict = "amb@world_human_seat_wall_tablet@female@base"
-        RequestAnimDict(dict)
-        if tabletObject == nil then
-            tabletObject = CreateObject(GetHashKey('prop_cs_tablet'), GetEntityCoords(playerPed), 1, 1, 1)
-            AttachEntityToEntity(tabletObject, playerPed, GetPedBoneIndex(playerPed, 28422), 0.0, 0.0, 0.03, 0.0, 0.0, 0.0, 1, 1, 0, 1, 0, 1)
-        end
-        while not HasAnimDictLoaded(dict) do Citizen.Wait(100) end
-        if not IsEntityPlayingAnim(playerPed, dict, 'base', 3) then
-            TaskPlayAnim(playerPed, dict, "base", 8.0, 1.0, -1, 49, 1.0, 0, 0, 0)
-        end
-    else
-        DeleteEntity(tabletObject)
-        ClearPedTasks(playerPed)
-        tabletObject = nil
+    local conversion = {}
+    for i = 1, #charges do
+
+        table.insert(conversion, {
+
+            id = charges[i].cad_charge_id,
+            label = charges[i].charge_name,
+            amount = charges[i].charge_fine,
+
+
+        })
+
     end
-    if #warrants == 0 then warrants = false end
-    if #reports == 0 then reports = false end
-    SendNUIMessage({
-        type = "recentReportsAndWarrantsLoaded",
-        reports = reports,
-        warrants = warrants,
-        officer = officer,
-        department = job
-    })
-    ToggleGUI()
+    return conversion
+
+end
+
+AddEventHandler("em_fw:character_loaded", function()
+
+    exports["em_fw"]:get_charges_async(function(charges)
+
+        SendNUIMessage({
+            type = "offensesAndOfficerLoaded",
+            offenses = get_charge_conversion(charges),
+            name = exports["em_fw"]:get_character_name()
+        })
+
+    end)
+
 end)
 
 RegisterNUICallback("close", function(data, cb)
