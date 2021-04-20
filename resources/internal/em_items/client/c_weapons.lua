@@ -256,7 +256,12 @@ function equip_weapon(item_id, item_metadata)
 
     local hash = get_item_weapon_hash(item_id)
     local ped  = PlayerPedId()
-    GiveWeaponToPed(ped, hash, 0, false, true)
+
+    local storage_items = (exports["em_fw"]:get_character_storage())["storage_items"]
+    local ammo_amount   = get_ammo_for_weapon(get_weapon_ammo_item_id(item_id), storage_items)
+    SetPedAmmo(ped, hash, ammo_amount)
+    
+    GiveWeaponToPed(ped, hash, ammo_amount, false, true)
     SetCurrentPedWeapon(ped, hash, true)
 
     equiped_weapon_hash    = hash
@@ -265,10 +270,6 @@ function equip_weapon(item_id, item_metadata)
     if not does_weapon_use_ammo(item_id) then
         return
     end
-
-    local storage_items = (exports["em_fw"]:get_character_storage())["storage_items"]
-    local ammo_amount   = get_ammo_for_weapon(get_weapon_ammo_item_id(item_id), storage_items)
-    SetPedAmmo(ped, hash, ammo_amount)
 
     if not running_shooting_loop then
         Citizen.CreateThread(shooting_loop)
