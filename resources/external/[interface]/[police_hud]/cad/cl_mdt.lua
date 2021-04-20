@@ -3,26 +3,66 @@ local tabletObject = nil
 local callBip = nil
 local zones = { ['AIRP'] = "Los Santos International Airport", ['ALAMO'] = "Alamo Sea", ['ALTA'] = "Alta", ['ARMYB'] = "Fort Zancudo", ['BANHAMC'] = "Banham Canyon Dr", ['BANNING'] = "Banning", ['BEACH'] = "Vespucci Beach", ['BHAMCA'] = "Banham Canyon", ['BRADP'] = "Braddock Pass", ['BRADT'] = "Braddock Tunnel", ['BURTON'] = "Burton", ['CALAFB'] = "Calafia Bridge", ['CANNY'] = "Raton Canyon", ['CCREAK'] = "Cassidy Creek", ['CHAMH'] = "Chamberlain Hills", ['CHIL'] = "Vinewood Hills", ['CHU'] = "Chumash", ['CMSW'] = "Chiliad Mountain State Wilderness", ['CYPRE'] = "Cypress Flats", ['DAVIS'] = "Davis", ['DELBE'] = "Del Perro Beach", ['DELPE'] = "Del Perro", ['DELSOL'] = "La Puerta", ['DESRT'] = "Grand Senora Desert", ['DOWNT'] = "Downtown", ['DTVINE'] = "Downtown Vinewood", ['EAST_V'] = "East Vinewood", ['EBURO'] = "El Burro Heights", ['ELGORL'] = "El Gordo Lighthouse", ['ELYSIAN'] = "Elysian Island", ['GALFISH'] = "Galilee", ['GOLF'] = "GWC and Golfing Society", ['GRAPES'] = "Grapeseed", ['GREATC'] = "Great Chaparral", ['HARMO'] = "Harmony", ['HAWICK'] = "Hawick", ['HORS'] = "Vinewood Racetrack", ['HUMLAB'] = "Humane Labs and Research", ['JAIL'] = "Bolingbroke Penitentiary", ['KOREAT'] = "Little Seoul", ['LACT'] = "Land Act Reservoir", ['LAGO'] = "Lago Zancudo", ['LDAM'] = "Land Act Dam", ['LEGSQU'] = "Legion Square", ['LMESA'] = "La Mesa", ['LOSPUER'] = "La Puerta", ['MIRR'] = "Mirror Park", ['MORN'] = "Morningwood", ['MOVIE'] = "Richards Majestic", ['MTCHIL'] = "Mount Chiliad", ['MTGORDO'] = "Mount Gordo", ['MTJOSE'] = "Mount Josiah", ['MURRI'] = "Murrieta Heights", ['NCHU'] = "North Chumash", ['NOOSE'] = "N.O.O.S.E", ['OCEANA'] = "Pacific Ocean", ['PALCOV'] = "Paleto Cove", ['PALETO'] = "Paleto Bay", ['PALFOR'] = "Paleto Forest", ['PALHIGH'] = "Palomino Highlands", ['PALMPOW'] = "Palmer-Taylor Power Station", ['PBLUFF'] = "Pacific Bluffs", ['PBOX'] = "Pillbox Hill", ['PROCOB'] = "Procopio Beach", ['RANCHO'] = "Rancho", ['RGLEN'] = "Richman Glen", ['RICHM'] = "Richman", ['ROCKF'] = "Rockford Hills", ['RTRAK'] = "Redwood Lights Track", ['SANAND'] = "San Andreas", ['SANCHIA'] = "San Chianski Mountain Range", ['SANDY'] = "Sandy Shores", ['SKID'] = "Mission Row", ['SLAB'] = "Stab City", ['STAD'] = "Maze Bank Arena", ['STRAW'] = "Strawberry", ['TATAMO'] = "Tataviam Mountains", ['TERMINA'] = "Terminal", ['TEXTI'] = "Textile City", ['TONGVAH'] = "Tongva Hills", ['TONGVAV'] = "Tongva Valley", ['VCANA'] = "Vespucci Canals", ['VESP'] = "Vespucci", ['VINE'] = "Vinewood", ['WINDF'] = "Ron Alternates Wind Farm", ['WVINE'] = "West Vinewood", ['ZANCUDO'] = "Zancudo River", ['ZP_ORT'] = "Port of South Los Santos", ['ZQ_UAR'] = "Davis Quartz" }
 
-RegisterCommand('mdt', function()
+local function open_cad()
+
+    exports["em_fw"]:get_latest_cad_reports_async(function(reports)
+
+        local warrants = {}
+        local officer = "test officer"
+        local job = "test job"
+
+        local playerPed = PlayerPedId()
+        if not isVisible then
+            local dict = "amb@world_human_seat_wall_tablet@female@base"
+            RequestAnimDict(dict)
+            if tabletObject == nil then
+                tabletObject = CreateObject(GetHashKey('prop_cs_tablet'), GetEntityCoords(playerPed), 1, 1, 1)
+                AttachEntityToEntity(tabletObject, playerPed, GetPedBoneIndex(playerPed, 28422), 0.0, 0.0, 0.03, 0.0, 0.0, 0.0, 1, 1, 0, 1, 0, 1)
+            end
+            while not HasAnimDictLoaded(dict) do Citizen.Wait(100) end
+            if not IsEntityPlayingAnim(playerPed, dict, 'base', 3) then
+                TaskPlayAnim(playerPed, dict, "base", 8.0, 1.0, -1, 49, 1.0, 0, 0, 0)
+            end
+        else
+            DeleteEntity(tabletObject)
+            ClearPedTasks(playerPed)
+            tabletObject = nil
+        end
+        if #warrants == 0 then warrants = false end
+        if #reports == 0 then reports = false end
+        SendNUIMessage({
+            type = "recentReportsAndWarrantsLoaded",
+            reports = reports,
+            warrants = warrants,
+            officer = officer,
+            department = job
+        })
+        ToggleGUI()
+
+    end)
+
+end
+
+exports["em_commands"]:register_command("cad", function(source, args, callback)
+
     local playerPed = PlayerPedId()
     local playerVeh = GetVehiclePedIsIn(playerPed, false)
     if not isVisible and IsPedInAnyPoliceVehicle(playerPed) and GetEntitySpeed(playerVeh) < 5.0 then
         if GetVehicleNumberPlateText(getVehicleInFront()) then
             --TriggerServerEvent("cad:performVehicleSearchInFront", GetVehicleNumberPlateText(getVehicleInFront()))
         else
-            TriggerServerEvent("cad:hotKeyOpen")
+            open_cad()
         end
     elseif not IsPedInAnyPoliceVehicle(playerPed) then
-        TriggerServerEvent("cad:hotKeyOpen")
+        open_cad()
     end
     if DoesEntityExist(playerPed) and IsPedUsingActionMode(playerPed) then -- disable action mode/combat stance when engaged in combat (thing which makes you run around like an idiot when shooting)
         SetPedUsingActionMode(playerPed, -1, -1, 1)
     end
-end, false)
 
-RegisterKeyMapping('mdt', 'Display the mdt', 'keyboard', 'delete')
+end)
 
-TriggerServerEvent("cad:getOffensesAndOfficer")
+--TriggerServerEvent("cad:getOffensesAndOfficer")
 
 RegisterNetEvent("cad:toggleVisibilty")
 AddEventHandler("cad:toggleVisibilty", function(reports, warrants, officer, job)
