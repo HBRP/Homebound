@@ -31,7 +31,8 @@ client_scripts {
     'client/events/c_trigger_events.lua',
     'client/character/c_character_emote_keybinds.lua',
     'client/vehicle/c_vehicle_store.lua',
-    'client/vehicle/c_vehicle_garage.lua'
+    'client/vehicle/c_vehicle_garage.lua',
+    'client/cad/c_cad.lua'
     
 }
 
@@ -62,7 +63,8 @@ server_scripts {
     'server/events/s_trigger_events.lua',
     'server/character/s_character_emote_keybinds.lua',
     'server/vehicle/s_vehicle_store.lua',
-    'server/vehicle/s_vehicle_garage.lua'
+    'server/vehicle/s_vehicle_garage.lua',
+    'server/cad/s_cad.lua'
 
 }
 
@@ -193,6 +195,9 @@ export 'takeout_vehicle_async'
 export 'get_nearby_garage'
 export 'store_vehicle'
 export 'get_group_vehicles_async'
+
+-- c_cad.lua
+export 'get_latest_cad_reports_async'
 
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'
