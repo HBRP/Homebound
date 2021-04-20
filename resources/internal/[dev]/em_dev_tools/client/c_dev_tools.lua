@@ -10,6 +10,7 @@ RegisterCommand("show_object_raycast", function()
         return
     end
 
+    local last_entity = 0
     Citizen.CreateThread(function()
 
         while raycasting do
@@ -23,17 +24,18 @@ RegisterCommand("show_object_raycast", function()
             end
 
             if entity ~= 0 and GetEntityType(entity) ~= 0 then
+
                 local successful, return_value = pcall(GetEntityModel, entity)
-                if successful then
+                if successful and last_entity ~= entity then
+
+                    last_entity = entity
                     local object_name = exports["ObjectNameFromHash"]:get_object_name(return_value)
                     print(GetEntityCoords(entity))
                     print(GetEntityHeading(entity))
                     Citizen.Trace(string.format("hash: %d, name: %s\n", return_value, object_name or "nil"))
-                else
-                    print(GetEntityType(entity))
-                    print(entity)
-                    print(return_value)
+
                 end
+
             end
         end
     end)
