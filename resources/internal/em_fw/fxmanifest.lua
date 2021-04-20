@@ -197,6 +197,7 @@ export 'store_vehicle'
 export 'get_group_vehicles_async'
 
 -- c_cad.lua
+export 'get_charges_async'
 export 'get_latest_cad_reports_async'
 
 -- s_player.lua
