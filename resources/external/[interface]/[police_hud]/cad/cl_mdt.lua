@@ -5,7 +5,7 @@ local zones = { ['AIRP'] = "Los Santos International Airport", ['ALAMO'] = "Alam
 
 local function open_cad()
 
-    exports["em_fw"]:get_latest_cad_reports_async(function(cad_reports)
+    exports["em_fw"]:cad_get_latest_cad_reports_async(function(cad_reports)
 
         local reports = cad_reports["reports"] or {}
         local warrants = cad_reports["warrants"] or {}
@@ -85,7 +85,7 @@ end
 
 AddEventHandler("em_fw:character_loaded", function()
 
-    exports["em_fw"]:get_charges_async(function(charges)
+    exports["em_fw"]:cad_get_charges_async(function(charges)
 
         SendNUIMessage({
             type = "offensesAndOfficerLoaded",
@@ -107,7 +107,33 @@ RegisterNUICallback("close", function(data, cb)
 end)
 
 RegisterNUICallback("performOffenderSearch", function(data, cb)
-    TriggerServerEvent("cad:performOffenderSearch", data.query)
+
+    local function get_search_conversion(matches)
+
+        local conversion = {}
+        for i = 1, #matches do
+
+            table.insert(conversion, {
+                id = matches[i].character_id,
+                firstname = matches[i].character_first_name,
+                lastname  = matches[i].character_last_name
+            })
+
+        end
+        return conversion
+
+    end
+
+    exports["em_fw"]:cad_search_for_character_async(function(result)
+
+        local matches = get_search_conversion(result)
+        SendNUIMessage({
+            type = "returnedPersonMatches",
+            matches = matches
+        })
+
+    end, data.query)
+
     cb('ok')
 end)
 
@@ -122,7 +148,15 @@ RegisterNUICallback("saveOffenderChanges", function(data, cb)
 end)
 
 RegisterNUICallback("submitNewReport", function(data, cb)
-    TriggerServerEvent("cad:submitNewReport", data)
+    
+    print(json.encode(data))
+    exports["em_fw"]:cad_new_report_async(function(result)
+
+        print(json.encode(result))
+
+    end, data.title, data.incident, data.charges, data.author, exports["em_fw"]:get_character_name(), data.date)
+
+    --TriggerServerEvent("cad:submitNewReport", data)
     cb('ok')
 end)
 
