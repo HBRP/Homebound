@@ -8,6 +8,7 @@ local function get_report_conversions(reports)
     for i = 1, #reports do
 
         reports[i].date = reports[i].report_date
+        reports[i].id   = reports[i].cad_warrant_id or reports[i].cad_report_id
 
     end
     return reports
@@ -150,28 +151,28 @@ end)
 
 
 RegisterNUICallback("viewOffender", function(data, cb)
-    TriggerServerEvent("cad:getOffenderDetails", data.offender)
+    print(json.encode(data))
+    --TriggerServerEvent("cad:getOffenderDetails", data.offender)
     cb('ok')
 end)
 
 RegisterNUICallback("saveOffenderChanges", function(data, cb)
-    TriggerServerEvent("cad:saveOffenderChanges", data.id, data.changes, data.identifier)
+    print(json.encode(data))
+    --TriggerServerEvent("cad:saveOffenderChanges", data.id, data.changes, data.identifier)
     cb('ok')
 end)
 
 local function load_report(cad_report_id)
 
-    print("here")
     exports["em_fw"]:cad_get_report_async(function(response) 
 
         if not response.result.successful then
-
-            exports['t-notify']:Alert({style="error", message = response.result.response})
-
+           TriggerEvent("cad:sendNotification", response.result.response)
         else
 
             local report = response.report
             report.date = report.report_date
+            report.id = report.cad_report_id
             SendNUIMessage({
                 type = "returnedReportDetails",
                 details = report
@@ -188,7 +189,7 @@ RegisterNUICallback("submitNewReport", function(data, cb)
     exports["em_fw"]:cad_new_report_async(function(response)
 
         if not response.result.successful then
-            exports['t-notify']:Alert({style="error", message = response.result.response})
+            TriggerEvent("cad:sendNotification", response.result.response)
         else
             load_report(response.cad_report_id)
         end
@@ -199,7 +200,8 @@ RegisterNUICallback("submitNewReport", function(data, cb)
 end)
 
 RegisterNUICallback("performReportSearch", function(data, cb)
-    TriggerServerEvent("cad:performReportSearch", data.query)
+    print(data.query)
+    --TriggerServerEvent("cad:performReportSearch", data.query)
     cb('ok')
 end)
 
@@ -209,7 +211,17 @@ RegisterNUICallback("getOffender", function(data, cb)
 end)
 
 RegisterNUICallback("deleteReport", function(data, cb)
-    TriggerServerEvent("cad:deleteReport", data.id)
+
+    exports["em_fw"]:cad_delete_report_async(function(response)
+
+        if not response.result.successful then
+            TriggerEvent("cad:sendNotification", response.result.response)
+        else
+            TriggerEvent("cad:sendNotification", "Report has been successfully deleted.")
+        end
+
+    end, data.id)
+
     cb('ok')
 end)
 
