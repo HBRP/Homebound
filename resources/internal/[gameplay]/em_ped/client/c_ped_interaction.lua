@@ -182,6 +182,55 @@ local function get_pleasantries(ped)
 
 end
 
+local function get_harvest_response(ped)
+
+    if not IsEntityDead(ped.entity) then
+        return
+    end
+
+    local response = nil
+    local callback = nil
+
+    if not exports["em_items"]:does_character_have_knife() then
+
+        response = "(You don't have a knife, besides why would you want to skin a human ... right?)"
+        callback = function()
+            exports["em_dialog"]:hide_dialog()
+        end
+
+    else
+        response = "(You begin tearing into the ped with your knife ... You wonder if you might be fucked in the head. Of course you are)"
+        callback = function()
+
+            exports["em_dialog"]:hide_dialog()
+            exports["em_animations"]:play_animation_sync("rcmextreme3", "idle", 2500, 2 + 32)
+            local human_meat_item_id = exports["em_items"]:get_item_id_from_name("human meat")
+            local human_leather_item_id = exports["em_items"]:get_item_id_from_name("human leather")
+            exports["em_fw"]:give_item(exports["em_fw"]:get_character_storage_id(), human_meat_item_id, 3, -1, -1)
+            exports["em_fw"]:give_item(exports["em_fw"]:get_character_storage_id(), human_leather_item_id, 3, -1, -1)
+            exports["em_fw"]:trigger_proximity_event("em_ped:delete_entity", 100.0, NetworkGetNetworkIdFromEntity(ped.entity))
+
+        end
+    end
+
+    return {
+
+        dialog = "[Harvest Local]",
+        response = response,
+        callback = callback
+
+    }
+
+end
+
+RegisterNetEvent("em_ped:delete_entity")
+AddEventHandler("em_ped:delete_entity", function(entity_network_id)
+
+    local entity = NetworkGetEntityFromNetworkId(entity_network_id)
+    DeleteEntity(entity)
+
+end)
+
 function talk_to_selected_ped(ped, entity, skip_animation)
 
     TaskStandStill(ped.entity, 1000000)
@@ -196,6 +245,11 @@ function talk_to_selected_ped(ped, entity, skip_animation)
     table.insert(ped_dialog, five_minutes(ped))
     table.insert(ped_dialog, get_beg_response(ped))
     table.insert(ped_dialog, fuck_you_up_response(ped))
+
+    local harvest_response = get_harvest_response(ped)
+    if harvest_response ~= nil then
+        table.insert(ped_dialog, harvest_response)
+    end
 
     exports["em_dialog"]:show_dialog("Local citizen", ped_dialog, function() clean_up(ped) end)
 
