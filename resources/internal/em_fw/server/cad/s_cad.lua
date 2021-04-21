@@ -46,9 +46,19 @@ register_server_callback("em_fw:cad_get_character_details", function(source, cal
 
 end)
 
-register_server_callback("em_fw:cad_new_report", function(source, callback, character_id, title, incident, charges, author, name, incident_date)
+register_server_callback("em_fw:cad_new_report", function(source, callback, modifying_character_id, character_id, title, incident, charges, author, name)
 
-    local data = {title = title, incident = incident, charges = charges, author = author, name = name, incident_date = incident_date}
+    local data = {
+
+        modifying_character_id = modifying_character_id, 
+        character_id = character_id, 
+        title = title, 
+        incident = incident, 
+        charges = charges, 
+        author = author, 
+        name = name
+
+    }
     HttpPost("/Cad/New/Report", data, function(error_code, result_data, result_headers)
 
         local temp = json.decode(result_data)

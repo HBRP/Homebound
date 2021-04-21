@@ -137,6 +137,7 @@ RegisterNUICallback("performOffenderSearch", function(data, cb)
     cb('ok')
 end)
 
+
 RegisterNUICallback("viewOffender", function(data, cb)
     TriggerServerEvent("cad:getOffenderDetails", data.offender)
     cb('ok')
@@ -150,11 +151,13 @@ end)
 RegisterNUICallback("submitNewReport", function(data, cb)
     
     print(json.encode(data))
-    exports["em_fw"]:cad_new_report_async(function(result)
+    exports["em_fw"]:cad_new_report_async(function(response)
 
-        print(json.encode(result))
+        if not response.result.succesful then
+            exports['t-notify']:Alert({style="error", message = response.result.response})
+        end
 
-    end, data.title, data.incident, data.charges, data.author, exports["em_fw"]:get_character_name(), data.date)
+    end, data.char_id, data.title, data.incident, data.charges, exports["em_fw"]:get_character_name(), data.name, data.date)
 
     --TriggerServerEvent("cad:submitNewReport", data)
     cb('ok')

@@ -26,5 +26,6 @@ client_script "cl_mdt.lua"
 
 dependencies {
     'em_fw',
-    'em_commands'
+    'em_commands',
+    't-notify'
 }
