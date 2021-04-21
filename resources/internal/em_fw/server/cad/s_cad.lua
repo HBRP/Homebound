@@ -91,3 +91,26 @@ register_server_callback("em_fw:cad_delete_report", function(source, callback, c
     end)
 
 end)
+
+register_server_callback("em_fw:cad_get_all_warrants", function(source, callback)
+
+    HttpGet("/Cad/Warrants/All", nil, function(error_code, result_data, result_headers)
+
+        local temp = json.decode(result_data)
+        callback(temp)
+
+    end)
+
+end)
+
+register_server_callback("em_fw:cad_search_reports", function(source, callback, query)
+
+    local endpoint = string.format("/Cad/Reports/Search/%s", query)
+    HttpGet(endpoint, nil, function(error_code, result_data, result_headers)
+
+        local temp = json.decode(result_data)
+        callback(temp)
+
+    end)
+
+end)

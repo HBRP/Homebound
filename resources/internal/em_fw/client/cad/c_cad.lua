@@ -40,3 +40,15 @@ function cad_delete_report_async(callback, cad_report_id)
     trigger_server_callback_async("em_fw:cad_delete_report", callback, get_character_id(), cad_report_id)
 
 end
+
+function cad_get_all_warrants_async(callback)
+
+    trigger_server_callback_async("em_fw:cad_get_all_warrants", callback)
+
+end
+
+function cad_search_reports_async(callback, query)
+
+    trigger_server_callback_async("em_fw:cad_search_reports", callback, query)
+
+end

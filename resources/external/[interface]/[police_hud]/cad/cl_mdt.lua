@@ -151,7 +151,7 @@ end)
 
 
 RegisterNUICallback("viewOffender", function(data, cb)
-    print(json.encode(data))
+    print(string.format("viewOffender: %s", json.encode(data)))
     --TriggerServerEvent("cad:getOffenderDetails", data.offender)
     cb('ok')
 end)
@@ -200,13 +200,23 @@ RegisterNUICallback("submitNewReport", function(data, cb)
 end)
 
 RegisterNUICallback("performReportSearch", function(data, cb)
-    print(data.query)
-    --TriggerServerEvent("cad:performReportSearch", data.query)
+
+    exports["em_fw"]:cad_search_reports_async(function(reports)
+
+        local results = get_report_conversions(reports)
+        SendNUIMessage({
+            type = "returnedReportMatches",
+            matches = results
+        })
+
+    end, data.query)
+
     cb('ok')
 end)
 
 RegisterNUICallback("getOffender", function(data, cb)
-    TriggerServerEvent("cad:getOffenderDetailsById", data.char_id)
+    print(string.format("getOffender: %s", json.encode(data)))
+    --TriggerServerEvent("cad:getOffenderDetailsById", data.char_id)
     cb('ok')
 end)
 
@@ -226,46 +236,59 @@ RegisterNUICallback("deleteReport", function(data, cb)
 end)
 
 RegisterNUICallback("saveReportChanges", function(data, cb)
-    TriggerServerEvent("cad:saveReportChanges", data)
+    print(string.format("saveReportChanges: %s", json.encode(data)))
+    --TriggerServerEvent("cad:saveReportChanges", data)
     cb('ok')
 end)
 
 RegisterNUICallback("vehicleSearch", function(data, cb)
-    TriggerServerEvent("cad:performVehicleSearch", data.plate)
+    print(string.format("vehicleSearch: %s", json.encode(data)))
+    --TriggerServerEvent("cad:performVehicleSearch", data.plate)
     cb('ok')
 end)
 
 RegisterNUICallback("getVehicle", function(data, cb)
-    TriggerServerEvent("cad:getVehicle", data.vehicle)
+    print(string.format("getVehicle: %s", json.encode(data)))
+    --TriggerServerEvent("cad:getVehicle", data.vehicle)
     cb('ok')
 end)
 
 RegisterNUICallback("getWarrants", function(data, cb)
-    TriggerServerEvent("cad:getWarrants")
+
+    exports["em_fw"]:cad_get_all_warrants_async(function(result)
+
+        SendNUIMessage({
+            type = "returnedWarrants",
+            warrants = result
+        })
+
+    end)
+
+    --print(string.format("getWarrants: %s", json.encode(data)))
+    --TriggerServerEvent("cad:getWarrants")
 end)
 
 RegisterNUICallback("submitNewWarrant", function(data, cb)
-    TriggerServerEvent("cad:submitNewWarrant", data)
+    print(string.format("submitNewWarrant: %s", json.encode(data)))
+    --TriggerServerEvent("cad:submitNewWarrant", data)
     cb('ok')
 end)
 
 RegisterNUICallback("deleteWarrant", function(data, cb)
-    TriggerServerEvent("cad:deleteWarrant", data.id)
-    cb('ok')
-end)
-
-RegisterNUICallback("deleteWarrant", function(data, cb)
-    TriggerServerEvent("cad:deleteWarrant", data.id)
+    print(string.format("deleteWarrant: %s", json.encode(data)))
+    --TriggerServerEvent("cad:deleteWarrant", data.id)
     cb('ok')
 end)
 
 RegisterNUICallback("getReport", function(data, cb)
-    TriggerServerEvent("cad:getReportDetailsById", data.id)
+    print(string.format("getReport: %s", json.encode(data)))
+    --TriggerServerEvent("cad:getReportDetailsById", data.id)
     cb('ok')
 end)
 
 RegisterNUICallback("getCalls", function(data, cb)
-    TriggerServerEvent("cad:getCalls")
+    print(string.format("getCalls: %s", json.encode(data)))
+    --TriggerServerEvent("cad:getCalls")
 end)
 
 RegisterNUICallback("attachToCall", function(data, cb)
@@ -356,10 +379,7 @@ end)
 
 RegisterNetEvent("cad:returnReportSearchResults")
 AddEventHandler("cad:returnReportSearchResults", function(results)
-    SendNUIMessage({
-        type = "returnedReportMatches",
-        matches = results
-    })
+
 end)
 
 RegisterNetEvent("cad:returnVehicleSearchInFront")
@@ -392,10 +412,7 @@ end)
 
 RegisterNetEvent("cad:returnWarrants")
 AddEventHandler("cad:returnWarrants", function(data)
-    SendNUIMessage({
-        type = "returnedWarrants",
-        warrants = data
-    })
+
 end)
 
 RegisterNetEvent("cad:completedWarrantAction")
