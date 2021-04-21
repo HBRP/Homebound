@@ -159,18 +159,42 @@ RegisterNUICallback("saveOffenderChanges", function(data, cb)
     cb('ok')
 end)
 
+local function load_report(cad_report_id)
+
+    print("here")
+    exports["em_fw"]:cad_get_report_async(function(response) 
+
+        if not response.result.successful then
+
+            exports['t-notify']:Alert({style="error", message = response.result.response})
+
+        else
+
+            local report = response.report
+            report.date = report.report_date
+            SendNUIMessage({
+                type = "returnedReportDetails",
+                details = report
+            })
+
+        end
+
+    end, cad_report_id)
+
+end
+
 RegisterNUICallback("submitNewReport", function(data, cb)
     
-    print(json.encode(data))
     exports["em_fw"]:cad_new_report_async(function(response)
 
-        if not response.result.succesful then
+        if not response.result.successful then
             exports['t-notify']:Alert({style="error", message = response.result.response})
+        else
+            load_report(response.cad_report_id)
         end
 
     end, data.char_id, data.title, data.incident, data.charges, exports["em_fw"]:get_character_name(), data.name, data.date)
 
-    --TriggerServerEvent("cad:submitNewReport", data)
     cb('ok')
 end)
 
