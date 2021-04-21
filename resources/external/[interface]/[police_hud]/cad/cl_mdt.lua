@@ -22,7 +22,7 @@ local function open_cad()
         local warrants = get_report_conversions(cad_reports["warrants"] or {})
 
         local officer = exports["em_fw"]:get_character_name()
-        local job = ""
+        local job = "police"
 
         local playerPed = PlayerPedId()
         if not isVisible then
