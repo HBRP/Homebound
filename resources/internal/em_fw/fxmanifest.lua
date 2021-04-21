@@ -202,6 +202,7 @@ export 'cad_get_latest_cad_reports_async'
 export 'cad_get_character_details_async'
 export 'cad_new_report_async'
 export 'cad_get_report_async'
+export 'cad_delete_report_async'
 export 'cad_search_for_character_async'
 
 -- s_player.lua

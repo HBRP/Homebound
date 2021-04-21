@@ -79,3 +79,15 @@ register_server_callback("em_fw:cad_new_report", function(source, callback, modi
     end)
 
 end)
+
+register_server_callback("em_fw:cad_delete_report", function(source, callback, character_id, cad_report_id)
+
+    local endpoint = string.format("/Cad/Delete/Report/%d/%d", character_id, cad_report_id)
+    HttpPost(endpoint, nil, function(error_code, result_data, result_headers)
+
+        local temp = json.decode(result_data)
+        callback(temp)
+
+    end)
+
+end)

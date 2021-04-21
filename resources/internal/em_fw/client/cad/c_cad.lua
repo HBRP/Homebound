@@ -34,3 +34,9 @@ function cad_get_report_async(callback, cad_report_id)
     trigger_server_callback_async("em_fw:cad_get_report", callback, cad_report_id)
 
 end
+
+function cad_delete_report_async(callback, cad_report_id)
+
+    trigger_server_callback_async("em_fw:cad_delete_report", callback, get_character_id(), cad_report_id)
+
+end
