@@ -28,3 +28,9 @@ function cad_new_report_async(callback, character_id, title, incident, charges, 
     trigger_server_callback_async("em_fw:cad_new_report", callback, get_character_id(), character_id, title, incident, charges, author, name, incident_date)
 
 end
+
+function cad_get_report_async(callback, cad_report_id)
+
+    trigger_server_callback_async("em_fw:cad_get_report", callback, cad_report_id)
+
+end
