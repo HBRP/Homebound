@@ -241,9 +241,41 @@ RegisterNUICallback("saveReportChanges", function(data, cb)
     cb('ok')
 end)
 
+local function get_vehicle_conversion(vehicles)
+
+    for i = 1, #vehicles do
+        if vehicles[i].vehicle_mods.colours then
+            local colours = vehicles[i].vehicle_mods.colours
+            if colors[tostring(colours[2])] then
+                vehicles[i].color = colors[tostring(colours[2])] .. " on " .. colors[tostring(colours[1])]
+            else
+                vehicles[i].color = colors[tostring(colours[1])]
+            end
+        end
+        vehicles[i].model = vehicles[i].vehicle_name
+        vehicles[i].type  = "Automobile"
+        vehicles[i].owner_id = vehicles[i].character_id
+        vehicles[i].owner = vehicles[i].character_name
+    end
+    return vehicles
+
+end
+
 RegisterNUICallback("vehicleSearch", function(data, cb)
+
     print(string.format("vehicleSearch: %s", json.encode(data)))
-    --TriggerServerEvent("cad:performVehicleSearch", data.plate)
+
+    exports["em_fw"]:cad_search_vehicle_async(function(vehicles)
+
+        vehicles = get_vehicle_conversion(vehicles)
+
+        SendNUIMessage({
+            type = "returnedVehicleMatches",
+            matches = vehicles
+        })
+
+    end, data.plate)
+    
     cb('ok')
 end)
 
@@ -393,10 +425,7 @@ end)
 
 RegisterNetEvent("cad:returnVehicleSearchResults")
 AddEventHandler("cad:returnVehicleSearchResults", function(results)
-    SendNUIMessage({
-        type = "returnedVehicleMatches",
-        matches = results
-    })
+
 end)
 
 RegisterNetEvent("cad:returnVehicleDetails")

@@ -52,3 +52,9 @@ function cad_search_reports_async(callback, query)
     trigger_server_callback_async("em_fw:cad_search_reports", callback, query)
 
 end
+
+function cad_search_vehicle_async(callback, plate)
+
+    trigger_server_callback_async("em_fw:cad_search_vehicle", callback, plate)
+
+end

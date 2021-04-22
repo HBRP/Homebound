@@ -19,10 +19,15 @@ files {
 
 server_scripts {
     "sv_mdt.lua",
-    "sv_vehcolors.lua"
+    "shared_vehcolors.lua"
 }
 
-client_script "cl_mdt.lua"
+client_scripts {
+
+    "cl_mdt.lua",
+    "shared_vehcolors.lua"
+    
+}
 
 dependencies {
     'em_fw',
