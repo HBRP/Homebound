@@ -138,3 +138,14 @@ register_server_callback("em_fw:cad_get_vehicle_details", function(source, callb
     end)
 
 end)
+
+register_server_callback("em_fw:cad_update_vehicle", function(source, callback, plate, notes, stolen)
+
+    local data = {plate = plate, notes = notes, stolen = stolen}
+    HttpPut("/Cad/Vehicle/UpdateStatus", data, function(error_code, result_data, result_headers)
+
+        callback()
+
+    end)
+
+end)

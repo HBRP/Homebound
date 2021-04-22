@@ -64,3 +64,9 @@ function cad_get_vehicle_details_async(callback, character_id, plate)
     trigger_server_callback_async("em_fw:cad_get_vehicle_details", callback, character_id, plate)
 
 end
+
+function cad_update_vehicle(plate, notes, stolen)
+
+    trigger_server_callback_async("em_fw:cad_update_vehicle", nil, plate, notes, stolen)
+
+end
