@@ -55,6 +55,7 @@ local function refresh_loop(refresh_func)
 
         exports["em_fw"]:get_nearby_doors_async(function(doors)
 
+            doors = doors or {}
             set_prop_hashes(doors)
             freeze_doors(doors)
 
