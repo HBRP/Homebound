@@ -171,8 +171,6 @@ end
 
 RegisterNUICallback("viewOffender", function(data, cb)
 
-    print(string.format("viewOffender: %s", json.encode(data)))
-
     exports["em_fw"]:cad_get_character_details_async(function(result)
 
         local temp_data        = {}
