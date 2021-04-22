@@ -48,7 +48,11 @@ AddEventHandler("em_fw:server_callback:response", function(callback_id, ...)
     callbacks[idx].event_returned = true
 
     if callbacks[idx].async then
-        callbacks[idx].callback(table.unpack(callbacks[idx].arg))
+
+        if callbacks[idx].callback ~= nil then
+            callbacks[idx].callback(table.unpack(callbacks[idx].arg))
+        end
+        
         table.remove(callbacks, find_callbacks_index(callback_id))
     end
 
