@@ -288,6 +288,7 @@ RegisterNUICallback("getVehicle", function(data, cb)
         details.haswarrant = vehicle_details.has_warrant
         details.bail       = vehicle_details.on_bail
         details.stolen     = vehicle_details.vehicle_stolen
+        details.notes      = vehicle_details.notes
 
         SendNUIMessage({
             type = "returnedVehicleDetails",
@@ -384,7 +385,16 @@ RegisterNUICallback("deleteCallBlip", function(data, cb)
 end)
 
 RegisterNUICallback("saveVehicleChanges", function(data, cb)
-    TriggerServerEvent("cad:saveVehicleChanges", data)
+
+    if data.notes == nil then
+        data.notes = ''
+    end
+    if data.stolen == nil then
+        data.stolen = false
+    end
+
+    exports["em_fw"]:cad_update_vehicle(data.plate, data.notes, data.stolen)
+    TriggerEvent("cad:sendNotification", "Vehicle changes have been saved.")
     cb('ok')
 end)
 
