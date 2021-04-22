@@ -281,9 +281,22 @@ RegisterNUICallback("vehicleSearch", function(data, cb)
 end)
 
 RegisterNUICallback("getVehicle", function(data, cb)
-    print(string.format("getVehicle: %s", json.encode(data)))
-    --TriggerServerEvent("cad:getVehicle", data.vehicle)
+
+    exports["em_fw"]:cad_get_vehicle_details_async(function(vehicle_details)
+
+        local details      = data.vehicle
+        details.haswarrant = vehicle_details.has_warrant
+        details.bail       = vehicle_details.on_bail
+        details.stolen     = vehicle_details.vehicle_stolen
+
+        SendNUIMessage({
+            type = "returnedVehicleDetails",
+            details = details
+        })
+
+    end, data.vehicle.character_id, data.vehicle.plate)
     cb('ok')
+
 end)
 
 RegisterNUICallback("getWarrants", function(data, cb)
@@ -431,13 +444,7 @@ end)
 
 RegisterNetEvent("cad:returnVehicleDetails")
 AddEventHandler("cad:returnVehicleDetails", function(data)
-    if type(data.model) == 'number' then
-        data.model = GetLabelText(GetDisplayNameFromVehicleModel(data.model))
-    end
-    SendNUIMessage({
-        type = "returnedVehicleDetails",
-        details = data
-    })
+
 end)
 
 RegisterNetEvent("cad:returnWarrants")

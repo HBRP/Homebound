@@ -124,5 +124,17 @@ register_server_callback("em_fw:cad_search_vehicle", function(source, callback, 
         callback(temp)
 
     end)
-    
+
+end)
+
+register_server_callback("em_fw:cad_get_vehicle_details", function(source, callback, character_id, plate)
+
+    local endpoint = string.format("/Cad/Vehicle/Details/%d/%s", character_id, plate)
+    HttpGet(endpoint, nil, function(error_code, result_data, result_headers)
+
+        local temp = json.decode(result_data)
+        callback(temp)
+
+    end)
+
 end)

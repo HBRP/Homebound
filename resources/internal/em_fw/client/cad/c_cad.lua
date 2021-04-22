@@ -58,3 +58,9 @@ function cad_search_vehicle_async(callback, plate)
     trigger_server_callback_async("em_fw:cad_search_vehicle", callback, plate)
 
 end
+
+function cad_get_vehicle_details_async(callback, character_id, plate)
+
+    trigger_server_callback_async("em_fw:cad_get_vehicle_details", callback, character_id, plate)
+
+end

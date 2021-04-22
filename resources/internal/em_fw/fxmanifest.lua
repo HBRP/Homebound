@@ -207,6 +207,7 @@ export 'cad_search_for_character_async'
 export 'cad_get_all_warrants_async'
 export 'cad_search_reports_async'
 export 'cad_search_vehicle_async'
+export 'cad_get_vehicle_details_async'
 
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'
