@@ -149,11 +149,59 @@ RegisterNUICallback("performOffenderSearch", function(data, cb)
     cb('ok')
 end)
 
+function get_vehicle_conversion(vehicles)
+
+    for i = 1, #vehicles do
+        if vehicles[i].vehicle_mods.colours then
+            local colours = vehicles[i].vehicle_mods.colours
+            if colors[tostring(colours[2])] then
+                vehicles[i].color = colors[tostring(colours[2])] .. " on " .. colors[tostring(colours[1])]
+            else
+                vehicles[i].color = colors[tostring(colours[1])]
+            end
+        end
+        vehicles[i].model = vehicles[i].vehicle_name
+        vehicles[i].type  = "Automobile"
+        vehicles[i].owner_id = vehicles[i].character_id
+        vehicles[i].owner = vehicles[i].character_name
+    end
+    return vehicles
+
+end
 
 RegisterNUICallback("viewOffender", function(data, cb)
+
     print(string.format("viewOffender: %s", json.encode(data)))
-    --TriggerServerEvent("cad:getOffenderDetails", data.offender)
+
+    exports["em_fw"]:cad_get_character_details_async(function(result)
+
+        local temp_data        = {}
+        temp_data.vehicles     = get_vehicle_conversion(result.vehicles)
+        temp_data.bail         = result.on_bail
+        temp_data.haswarrant   = result.haswarrant
+        temp_data.mugshot_url  = result.mugshot_url
+        temp_data.notes        = result.notes
+        temp_data.phone_number = "Unknown"
+        temp_data.convictions  = {}
+        temp_data.lastname     = data.offender.lastname
+        temp_data.firstname    = data.offender.firstname
+        temp_data.id           = data.offender.id
+        temp_data.licenses     = {}
+
+        for i = 1, #result.convictions do
+            local conviction = result.convictions[i]
+            temp_data.convictions[conviction.offense] = conviction.count
+        end
+
+        print(json.encode(temp_data))
+        SendNUIMessage({
+            type = "returnedOffenderDetails",
+            details = temp_data
+        })
+
+    end, data.offender.id)
     cb('ok')
+
 end)
 
 RegisterNUICallback("saveOffenderChanges", function(data, cb)
@@ -241,26 +289,6 @@ RegisterNUICallback("saveReportChanges", function(data, cb)
     --TriggerServerEvent("cad:saveReportChanges", data)
     cb('ok')
 end)
-
-local function get_vehicle_conversion(vehicles)
-
-    for i = 1, #vehicles do
-        if vehicles[i].vehicle_mods.colours then
-            local colours = vehicles[i].vehicle_mods.colours
-            if colors[tostring(colours[2])] then
-                vehicles[i].color = colors[tostring(colours[2])] .. " on " .. colors[tostring(colours[1])]
-            else
-                vehicles[i].color = colors[tostring(colours[1])]
-            end
-        end
-        vehicles[i].model = vehicles[i].vehicle_name
-        vehicles[i].type  = "Automobile"
-        vehicles[i].owner_id = vehicles[i].character_id
-        vehicles[i].owner = vehicles[i].character_name
-    end
-    return vehicles
-
-end
 
 RegisterNUICallback("vehicleSearch", function(data, cb)
 
@@ -415,13 +443,7 @@ end)
 
 RegisterNetEvent("cad:returnOffenderDetails")
 AddEventHandler("cad:returnOffenderDetails", function(data)
-    for i = 1, #data.vehicles do
-        data.vehicles[i].model = GetLabelText(GetDisplayNameFromVehicleModel(data.vehicles[i].model))
-    end
-    SendNUIMessage({
-        type = "returnedOffenderDetails",
-        details = data
-    })
+
 end)
 
 RegisterNetEvent("cad:returnOffensesAndOfficer")

@@ -36,7 +36,7 @@ end)
 
 register_server_callback("em_fw:cad_get_character_details", function(source, callback, character_id)
 
-    local endpoint = string.format("/Cad/CharacterDetails/%d", character_id)
+    local endpoint = string.format("/Cad/Character/Details/%d", character_id)
     HttpGet(endpoint, nil, function(error_code, result_data, result_headers)
 
         local temp = json.decode(result_data)
