@@ -123,14 +123,16 @@ RegisterNUICallback("performOffenderSearch", function(data, cb)
     local function get_search_conversion(matches)
 
         local conversion = {}
-        for i = 1, #matches do
+        if matches ~= nil then
+            for i = 1, #matches do
 
-            table.insert(conversion, {
-                id = matches[i].character_id,
-                firstname = matches[i].character_first_name,
-                lastname  = matches[i].character_last_name
-            })
+                table.insert(conversion, {
+                    id = matches[i].character_id,
+                    firstname = matches[i].character_first_name,
+                    lastname  = matches[i].character_last_name
+                })
 
+            end
         end
         return conversion
 
@@ -152,18 +154,29 @@ end)
 function get_vehicle_conversion(vehicles)
 
     for i = 1, #vehicles do
-        if vehicles[i].vehicle_mods.colours then
-            local colours = vehicles[i].vehicle_mods.colours
+
+        local colours = nil
+        if vehicles[i].vehicle_mods then
+            colours = vehicles[i].vehicle_mods.colours
+        end
+
+        if vehicles[i].vehicle_colours then
+            colours = vehicles[i].vehicle_colours
+        end
+
+        if colours then
             if colors[tostring(colours[2])] then
                 vehicles[i].color = colors[tostring(colours[2])] .. " on " .. colors[tostring(colours[1])]
             else
                 vehicles[i].color = colors[tostring(colours[1])]
             end
         end
+
         vehicles[i].model = vehicles[i].vehicle_name
         vehicles[i].type  = "Automobile"
         vehicles[i].owner_id = vehicles[i].character_id
         vehicles[i].owner = vehicles[i].character_name
+
     end
     return vehicles
 
