@@ -15,7 +15,7 @@ local function get_report_conversions(reports)
 
 end
 
-local function open_cad()
+local function open_mdt()
 
     exports["em_fw"]:cad_get_latest_cad_reports_async(function(cad_reports)
 
@@ -57,7 +57,7 @@ local function open_cad()
 
 end
 
-exports["em_commands"]:register_command("cad", function(source, args, callback)
+exports["em_commands"]:register_command("mdt", function(source, args, callback)
 
     local playerPed = PlayerPedId()
     local playerVeh = GetVehiclePedIsIn(playerPed, false)
@@ -65,10 +65,10 @@ exports["em_commands"]:register_command("cad", function(source, args, callback)
         if GetVehicleNumberPlateText(getVehicleInFront()) then
             --TriggerServerEvent("cad:performVehicleSearchInFront", GetVehicleNumberPlateText(getVehicleInFront()))
         else
-            open_cad()
+            open_mdt()
         end
     elseif not IsPedInAnyPoliceVehicle(playerPed) then
-        open_cad()
+        open_mdt()
     end
     if DoesEntityExist(playerPed) and IsPedUsingActionMode(playerPed) then -- disable action mode/combat stance when engaged in combat (thing which makes you run around like an idiot when shooting)
         SetPedUsingActionMode(playerPed, -1, -1, 1)
