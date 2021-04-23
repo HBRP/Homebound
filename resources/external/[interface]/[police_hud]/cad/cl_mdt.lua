@@ -213,7 +213,6 @@ RegisterNUICallback("viewOffender", function(data, cb)
             temp_data.convictions[conviction.offense] = conviction.count
         end
 
-        print(json.encode(temp_data))
         SendNUIMessage({
             type = "returnedOffenderDetails",
             details = temp_data
