@@ -207,6 +207,7 @@ RegisterNUICallback("viewOffender", function(data, cb)
         temp_data.firstname    = data.offender.firstname
         temp_data.id           = data.offender.id
         temp_data.licenses     = get_license_conversion(result.licenses)
+        temp_data.dateofbirth  = result.dob
 
         for i = 1, #result.convictions do
             local conviction = result.convictions[i]
