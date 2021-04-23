@@ -87,7 +87,6 @@ local function get_charge_conversion(charges)
             label = charges[i].charge_name,
             amount = charges[i].charge_fine,
 
-
         })
 
     end
@@ -182,6 +181,16 @@ function get_vehicle_conversion(vehicles)
 
 end
 
+function get_license_conversion(licenses)
+
+    local temp = {}
+    for i = 1, #licenses do
+        table.insert(temp, {type = licenses[i], label = licenses[i]})
+    end
+    return temp
+
+end
+
 RegisterNUICallback("viewOffender", function(data, cb)
 
     exports["em_fw"]:cad_get_character_details_async(function(result)
@@ -197,7 +206,7 @@ RegisterNUICallback("viewOffender", function(data, cb)
         temp_data.lastname     = data.offender.lastname
         temp_data.firstname    = data.offender.firstname
         temp_data.id           = data.offender.id
-        temp_data.licenses     = {}
+        temp_data.licenses     = get_license_conversion(result.licenses)
 
         for i = 1, #result.convictions do
             local conviction = result.convictions[i]
