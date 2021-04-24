@@ -224,6 +224,8 @@ server_export 'get_character_from_source'
 
 -- s_storage.lua
 server_export 'give_item'
+server_export 'get_storage'
+server_export 'remove_item'
 
 -- s_blips.lua
 server_export 'get_blip_group_subscription'

@@ -2,8 +2,8 @@
 local weapons = nil
 local attachments = nil
 
-local equiped_weapon_hash = nil
-local equiped_weapon_item_id = nil
+local equipped_weapon_hash = nil
+local equipped_weapon_item_id = nil
 local running_shooting_loop = false
 
 function is_item_type_a_weapon(item_type_id)
@@ -130,7 +130,7 @@ function is_ped_shooting_a_gun()
 
     if IsPedShooting(PlayerPedId()) then
 
-        local weapon_type = get_weapon_type(equiped_weapon_item_id)
+        local weapon_type = get_weapon_type(equipped_weapon_item_id)
         return weapon_type > 2 and weapon_type < 9
 
     end
@@ -178,13 +178,17 @@ local function remove_ammo(ammo_item_id, amount, storage_items)
     amount_left_to_remove = amount
     for i = 1, #storage_items do
 
+        if amount_left_to_remove == 0 then
+            return
+        end
+
         if storage_items[i].item_id == ammo_item_id then
 
-            if storage_items[i].amount >= amount_left_to_remove then
+            if storage_items[i].amount - amount_left_to_remove >= 0 then
                 exports["em_fw"]:remove_item(storage_items[i].storage_item_id, amount_left_to_remove)
-                break
+                amount_left_to_remove = 0
             else
-                exports["em_fw"]:remove_item(storage_items[i].storage_item_id, amount_left_to_remove - storage_items[i].amount)
+                exports["em_fw"]:remove_item(storage_items[i].storage_item_id, storage_items[i].amount)
                 amount_left_to_remove = amount_left_to_remove - storage_items[i].amount
             end
 
@@ -199,18 +203,37 @@ local function shooting_loop()
     running_shooting_loop = true
 
     local ped = PlayerPedId()
+    local ped_was_shooting = false
+
+    local shooting_weapon_hash = nil
+    local shooting_weapon_item_id = nil
     while running_shooting_loop do
 
         Citizen.Wait(10)
+
         if IsPedShooting(ped) then
 
-            Citizen.Wait(1000)
-            local current_ammo_in_gun = GetAmmoInPedWeapon(ped, equiped_weapon_hash)
-            local ammo_item_id        = get_weapon_ammo_item_id(equiped_weapon_item_id)
-            local storage_items       = (exports["em_fw"]:get_character_storage())["storage_items"]
-            local ammo_in_inventory   = get_ammo_for_weapon(ammo_item_id, storage_items)
-            local ammo_diff = ammo_in_inventory - current_ammo_in_gun
+            ped_was_shooting = true
+            shooting_weapon_hash    = equipped_weapon_hash
+            shooting_weapon_item_id = equipped_weapon_item_id
+
+            Citizen.Wait(2000)
+
+        end
+
+        if not IsPedShooting(ped) and ped_was_shooting then
+            
+            local ammo_item_id  = get_weapon_ammo_item_id(shooting_weapon_item_id)
+            local storage_items = (exports["em_fw"]:get_character_storage())["storage_items"]
+            local ammo_diff = get_ammo_for_weapon(ammo_item_id, storage_items) - GetAmmoInPedWeapon(ped, shooting_weapon_hash)
+
+            assert(ammo_diff >= 0, string.format("More ammo in gun than in inventory ammo_diff: %d for weapon_item_id: %d", ammo_diff, shooting_weapon_item_id))
+
             remove_ammo(ammo_item_id, ammo_diff, storage_items)
+
+            ped_was_shooting = false
+            shooting_weapon_hash    = nil
+            shooting_weapon_item_id = nil
 
         end
 
@@ -242,7 +265,7 @@ local function set_attachments(item_id, item_metadata)
         for i = 1, #storage_items do
             local hash = get_attachment_hash(item_id, storage_items[i].item_id)
             if hash ~= nil then
-                GiveWeaponComponentToPed(PlayerPedId(), equiped_weapon_hash, hash)
+                GiveWeaponComponentToPed(PlayerPedId(), equipped_weapon_hash, hash)
             end
         end
 
@@ -264,8 +287,8 @@ function equip_weapon(item_id, item_metadata)
     GiveWeaponToPed(ped, hash, ammo_amount, false, true)
     SetCurrentPedWeapon(ped, hash, true)
 
-    equiped_weapon_hash    = hash
-    equiped_weapon_item_id = item_id
+    equipped_weapon_hash    = hash
+    equipped_weapon_item_id = item_id
 
     if not does_weapon_use_ammo(item_id) then
         return
@@ -289,16 +312,16 @@ end)
 AddEventHandler('em_fw:inventory_change', function()
 
     local ped = PlayerPedId()
-    if equiped_weapon_hash ~= nil and equiped_weapon_hash == GetSelectedPedWeapon(ped) then
+    if equipped_weapon_hash ~= nil and equipped_weapon_hash == GetSelectedPedWeapon(ped) then
         local storage_items = (exports["em_fw"]:get_character_storage())["storage_items"]
-        local ammo_amount   = get_ammo_for_weapon(get_weapon_ammo_item_id(equiped_weapon_item_id), storage_items)
-        SetPedAmmo(ped, equiped_weapon_hash, ammo_amount)
+        local ammo_amount   = get_ammo_for_weapon(get_weapon_ammo_item_id(equipped_weapon_item_id), storage_items)
+        SetPedAmmo(ped, equipped_weapon_hash, ammo_amount)
         return
     end
 
     RemoveAllPedWeapons(ped, false)
     running_shooting_loop  = false
-    equiped_weapon_hash    = nil
-    equiped_weapon_item_id = nil
+    equipped_weapon_hash    = nil
+    equipped_weapon_item_id = nil
 
 end)
