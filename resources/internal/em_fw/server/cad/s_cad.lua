@@ -149,3 +149,15 @@ register_server_callback("em_fw:cad_update_vehicle", function(source, callback, 
     end)
 
 end)
+
+register_server_callback("em_fw:cad_update_character_details", function(source, callback, modifying_character_id, character_id, changes)
+
+    local data = {modifying_character_id = modifying_character_id, character_id = character_id, changes = changes}
+    HttpPost("/Cad/Character/Details/Update", data, function(error_code, result_data, result_headers)
+
+        local temp = json.decode(result_data)
+        callback(temp)
+
+    end))
+
+end)
