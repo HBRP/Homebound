@@ -52,6 +52,9 @@ dependencies {
 server_exports {
 
     'get_item_id_from_name',
-    'get_item_name_from_item_id'
+    'get_item_name_from_item_id',
+    'give_item_by_name',
+    'get_item_amount_by_name',
+    'remove_item_by_name'
 
 }

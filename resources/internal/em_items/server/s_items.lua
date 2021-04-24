@@ -87,7 +87,6 @@ end
 
 function get_item_amount_by_name(source, item_name)
 
-
     local item_id = get_item_id_from_name(item_name)
     local storage_items = get_storage_items(source)
     local amount = 0
@@ -95,7 +94,7 @@ function get_item_amount_by_name(source, item_name)
     for i = 1, #storage_items do
 
         if storage_items[i].item_id == item_id then
-            temp_amount = temp_amount + amount
+            amount = amount + storage_items[i].amount
         end
 
     end

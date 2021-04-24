@@ -1,17 +1,16 @@
 -- Helper function for getting player money
 function getMoney(source)
-    -- Add framework API's here (return large number by default)
-    return 1000000
+    return exports["em_items"]:get_item_amount_by_name(source, "cash")
 end
 
 -- Helper function for removing player money
 function removeMoney(source, amount)
-    -- Add framework API's here
+    exports["em_items"]:remove_item_by_name(source, "cash", amount)
 end
 
 -- Helper function for adding player money
 function addMoney(source, amount)
-    -- Add framework API's here
+    exports["em_items"]:give_item_by_name(source, "cash", amount)
 end
 
 -- Helper function for getting player name

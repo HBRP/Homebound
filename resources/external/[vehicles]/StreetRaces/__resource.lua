@@ -13,5 +13,8 @@ client_scripts {
 
 
 dependencies {
-    'em_commands'
+
+    'em_commands',
+    'em_items'
+    
 }

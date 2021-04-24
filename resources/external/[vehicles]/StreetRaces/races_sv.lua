@@ -85,6 +85,8 @@ end)
 RegisterNetEvent("StreetRaces:joinRace_sv")
 AddEventHandler("StreetRaces:joinRace_sv", function(index)
     -- Validate and deduct player money
+    local source = source
+
     local race = races[index]
     local amount = race.amount
     local playerMoney = getMoney(source)
@@ -109,6 +111,7 @@ AddEventHandler("StreetRaces:leaveRace_sv", function(index)
     -- Validate player is part of the race
     local race = races[index]
     local players = race.players
+    local source = source
     for index, player in pairs(players) do
         if source == player then
             -- Remove player from race and break
@@ -124,6 +127,7 @@ AddEventHandler("StreetRaces:finishedRace_sv", function(index, time)
     -- Check player was part of the race
     local race = races[index]
     local players = race.players
+    local source = source
     for index, player in pairs(players) do
         if source == player then 
             -- Calculate finish time

@@ -71,6 +71,9 @@ function get_character_from_source(source)
             return character_ids[i]
         end
     end
+
+    assert(0 == 1, string.format("Could not find character for source %d", source))
+
     return nil
 
 end
