@@ -158,6 +158,6 @@ register_server_callback("em_fw:cad_update_character_details", function(source, 
         local temp = json.decode(result_data)
         callback(temp)
 
-    end))
+    end)
 
 end)

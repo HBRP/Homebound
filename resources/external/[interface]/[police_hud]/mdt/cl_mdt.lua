@@ -225,8 +225,21 @@ RegisterNUICallback("viewOffender", function(data, cb)
 end)
 
 RegisterNUICallback("saveOffenderChanges", function(data, cb)
-    print(json.encode(data))
-    --TriggerServerEvent("cad:saveOffenderChanges", data.id, data.changes, data.identifier)
+
+    local licenses_removed = {}
+    for i = 1, #data.changes.licenses_removed do
+        table.insert(licenses_removed, data.changes.licenses_removed[i].label)
+    end
+
+    data.changes.licenses_removed = licenses_removed
+    exports["em_fw"]:cad_update_character_details_async(function(response)
+
+        if not response.result.successful then
+            TriggerEvent("cad:sendNotification", response.result.response)
+        end
+
+    end, data.id, data.changes)
+
     cb('ok')
 end)
 
