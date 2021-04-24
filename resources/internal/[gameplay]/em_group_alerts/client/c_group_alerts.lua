@@ -1,7 +1,8 @@
 
 local sprites = {
     ["10-31b"] = {color = 39, sprite = 156},
-    ["10-71"]  = {color = 39, sprite = 119}
+    ["10-71"]  = {color = 39, sprite = 119},
+    ["GTA"]    = {color = 39, sprite = 227}
 }
 
 function send_dispatch(group_alert_name, code, title, priority, requesting_officer)
