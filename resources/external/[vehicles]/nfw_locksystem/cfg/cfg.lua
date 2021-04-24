@@ -1,6 +1,6 @@
 cfg = {}
 
-cfg.chance = 20 -- chance of being unlocked in percentage
+cfg.chance = 10 -- chance of being unlocked in percentage
 cfg.infinite = false -- Determines if lock picks have infinite uses
 cfg.alarmPercent = 100 -- Percentage of alarm going off and cops being alerted
 
