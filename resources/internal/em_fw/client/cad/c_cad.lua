@@ -67,12 +67,18 @@ end
 
 function cad_update_vehicle(plate, notes, stolen)
 
-    trigger_server_callback_async("em_fw:cad_update_vehicle", nil, plate, notes, stolen)
+    trigger_server_callback_async("em_fw:cad_update_vehicle", nil, get_character_id(), plate, notes, stolen)
 
 end
 
 function cad_update_character_details_async(callback, character_id, changes)
 
     trigger_server_callback_async("em_fw:cad_update_character_details", callback, get_character_id(), character_id, changes)
+
+end
+
+function cad_update_report_async(callback, cad_report_id, title, incident)
+
+    trigger_server_callback_async("em_fw:cad_update_report", callback, get_character_id(), cad_report_id, title, incident)
 
 end

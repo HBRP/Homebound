@@ -319,7 +319,17 @@ end)
 
 RegisterNUICallback("saveReportChanges", function(data, cb)
     print(string.format("saveReportChanges: %s", json.encode(data)))
-    --TriggerServerEvent("cad:saveReportChanges", data)
+
+    exports["em_fw"]:cad_update_report_async(function(response)
+
+        if not response.result.successful then
+            TriggerEvent("cad:sendNotification", response.result.response)
+        else
+            TriggerEvent("cad:sendNotification", "Report changes have been saved.")
+        end
+
+    end, data.id, data.title, data.incident)
+
     cb('ok')
 end)
 
