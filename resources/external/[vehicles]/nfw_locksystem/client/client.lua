@@ -131,6 +131,14 @@ local function check_for_car()
 	local pedd = GetPedInVehicleSeat(veh, -1)
 	local plate = GetVehicleNumberPlateText(veh)
 
+	local vehicle_class = GetVehicleClass(veh)
+	print(vehicle_class)
+	if vehicle_class == 13 or vehicle_class == 8 or vehicle_class == 9 then
+		SetVehicleDoorsLocked(veh, 1)
+		TriggerServerEvent("nfw:unlock_doors_for_everyone", NetworkGetNetworkIdFromEntity(veh), plate)
+		return
+	end
+
 	if pedd ~= 0 then
 
 		if math.random(100) > 75 then
@@ -155,13 +163,6 @@ local function check_for_car()
 			Citizen.Wait(2500)
 	  	hotWire(veh)
 			return
-	end
-
-	local vehicle_class = GetVehicleClass(veh)
-	if vehicle_class == 13 or vehicle_class == 8 then
-		SetVehicleDoorsLocked(veh, 1)
-		TriggerServerEvent("nfw:unlock_doors_for_everyone", NetworkGetNetworkIdFromEntity(veh), plate)
-		return
 	end
 
 	if lucky then
@@ -217,9 +218,10 @@ exports["em_items"]:register_item_use("lockpick", function()
 	ClearPedTasks(PlayerPedId())
 
 	if math.random(100) > 70 then
+			local vehicle_model = GetDisplayNameFromVehicleModel(GetEntityModel(entity))
       SetVehicleAlarm(entity, true)
 	    SetVehicleAlarmTimeLeft(entity, 30 * 1000)
-	    TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", "GTA", string.format("Car alarm set off for %s with plate %s", GetEntityModel(entity), plate), 2)
+	    TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", "GTA", string.format("Car alarm set off for %s with plate %s", vehicle_model, plate), 2)
 	end
 
 	Citizen.Wait(100)
