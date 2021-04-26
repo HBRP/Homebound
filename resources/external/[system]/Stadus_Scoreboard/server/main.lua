@@ -10,7 +10,7 @@ function update_connected_players()
 		connectedPlayers[characters[i].source] = {
 			ping = GetPlayerPing(characters[i].source),
 			id = characters[i].character_id,
-			name = characters[i].character_name
+			name = exports["em_fw"]:get_steam_id(characters[i].source)
 		}
 
 	end

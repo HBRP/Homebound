@@ -213,6 +213,7 @@ export 'cad_update_character_details_async'
 
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'
+server_export 'get_steam_id'
 
 --s_items.lua
 server_export 'get_items'

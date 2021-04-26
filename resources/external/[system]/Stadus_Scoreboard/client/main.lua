@@ -41,7 +41,8 @@ function UpdatePlayerTable(connectedPlayers)
 
 	SendNUIMessage({
 		action  = 'updatePlayerList',
-		players = table.concat(formattedPlayerList)
+		players = table.concat(formattedPlayerList),
+		player_count = players
 	})
 
 end

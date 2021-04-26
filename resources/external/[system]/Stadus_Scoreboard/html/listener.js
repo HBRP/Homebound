@@ -47,6 +47,7 @@ $(function () {
 			case 'updatePlayerList':
 				$('#playerlist tr:gt(0)').remove();
 				$('#playerlist').append(event.data.players);
+				$('#player_count').html(event.data.player_count);
 				applyPingColor();
 				//sortPlayerList();
 				break;
