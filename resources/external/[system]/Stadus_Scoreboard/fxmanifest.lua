@@ -13,3 +13,7 @@ files {
 	'html/style.css',
 	'html/listener.js'
 }
+
+dependencies {
+	'em_fw'
+}
