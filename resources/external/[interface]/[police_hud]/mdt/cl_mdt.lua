@@ -282,7 +282,6 @@ end)
 
 RegisterNUICallback("performReportSearch", function(data, cb)
 
-    print(json.encode(data))
     exports["em_fw"]:cad_search_reports_async(function(reports)
 
         local results = get_report_conversions(reports)
@@ -318,7 +317,6 @@ RegisterNUICallback("deleteReport", function(data, cb)
 end)
 
 RegisterNUICallback("saveReportChanges", function(data, cb)
-    print(string.format("saveReportChanges: %s", json.encode(data)))
 
     exports["em_fw"]:cad_update_report_async(function(response)
 
@@ -334,8 +332,6 @@ RegisterNUICallback("saveReportChanges", function(data, cb)
 end)
 
 RegisterNUICallback("vehicleSearch", function(data, cb)
-
-    print(string.format("vehicleSearch: %s", json.encode(data)))
 
     exports["em_fw"]:cad_search_vehicle_async(function(vehicles)
 
