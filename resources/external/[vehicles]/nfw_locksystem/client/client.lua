@@ -132,7 +132,6 @@ local function check_for_car()
 	local plate = GetVehicleNumberPlateText(veh)
 
 	local vehicle_class = GetVehicleClass(veh)
-	print(vehicle_class)
 	if vehicle_class == 13 or vehicle_class == 8 or vehicle_class == 9 then
 		SetVehicleDoorsLocked(veh, 1)
 		TriggerServerEvent("nfw:unlock_doors_for_everyone", NetworkGetNetworkIdFromEntity(veh), plate)
