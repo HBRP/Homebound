@@ -1,7 +1,7 @@
 
 
 local character_ids = {}
-local function register_character_id_to_source(source, player_id, character_id, storage_id)
+local function register_character_id_to_source(source, character_id, character_name, storage_id)
 
     for i = 1, #character_ids do
         if character_ids[i].source == source or character_ids[i].character_id == character_id then
@@ -9,7 +9,7 @@ local function register_character_id_to_source(source, player_id, character_id, 
             break
         end
     end
-    table.insert(character_ids, {source = source, character_id = character_id, storage_id = storage_id})
+    table.insert(character_ids, {source = source, character_id = character_id, character_name = character_name, storage_id = storage_id})
 
 end
 
@@ -192,7 +192,8 @@ register_server_callback("em_fw:get_character_info", function(source, callback, 
     HttpGet("/Character/GetInfo", data, function(error_code, result_data, result_headers)
 
         local temp = json.decode(result_data)
-        register_character_id_to_source(source, character_id, temp["character"]["character_id"], temp["character"]["storage_id"])
+        local character_name = temp["character"]["first_name"] .. " " .. temp["character"]["last_name"]
+        register_character_id_to_source(source, temp["character"]["character_id"], character_name, temp["character"]["storage_id"])
         callback(temp)
 
     end)
