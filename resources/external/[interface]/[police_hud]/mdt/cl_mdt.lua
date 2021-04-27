@@ -251,7 +251,6 @@ end)
 
 local function load_report(cad_report_id)
 
-    print("load_report")
     exports["em_fw"]:cad_get_report_async(function(response) 
 
         if not response.result.successful then
@@ -376,7 +375,6 @@ end)
 
 RegisterNUICallback("getWarrants", function(data, cb)
 
-    print(string.format("getWarrants : %s", json.encode(data)))
     exports["em_fw"]:cad_get_all_warrants_async(function(result)
 
         SendNUIMessage({
@@ -421,9 +419,10 @@ RegisterNUICallback("deleteWarrant", function(data, cb)
 end)
 
 RegisterNUICallback("getReport", function(data, cb)
-    print(string.format("getReport: %s", json.encode(data)))
-    --TriggerServerEvent("cad:getReportDetailsById", data.id)
+    
+    load_report(data.id)
     cb('ok')
+    
 end)
 
 RegisterNUICallback("getCalls", function(data, cb)
