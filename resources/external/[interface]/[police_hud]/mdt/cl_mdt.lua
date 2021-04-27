@@ -373,6 +373,7 @@ end)
 
 RegisterNUICallback("getWarrants", function(data, cb)
 
+    print(string.format("getWarrants : %s", json.encode(data)))
     exports["em_fw"]:cad_get_all_warrants_async(function(result)
 
         SendNUIMessage({
@@ -382,14 +383,22 @@ RegisterNUICallback("getWarrants", function(data, cb)
 
     end)
 
-    --print(string.format("getWarrants: %s", json.encode(data)))
-    --TriggerServerEvent("cad:getWarrants")
 end)
 
 RegisterNUICallback("submitNewWarrant", function(data, cb)
-    print(string.format("submitNewWarrant: %s", json.encode(data)))
-    --TriggerServerEvent("cad:submitNewWarrant", data)
+
+    exports["em_fw"]:cad_new_warrant_async(function(response) 
+
+        if not response.result.successful then
+            TriggerEvent("cad:sendNotification", response.result.response)
+        else
+            TriggerEvent("cad:sendNotification", "Warrant submitted")
+        end
+
+    end, data.char_id, data.report_id, data.report_title, data.notes, data.charges, exports["em_fw"]:get_character_name(), data.name)
+
     cb('ok')
+
 end)
 
 RegisterNUICallback("deleteWarrant", function(data, cb)
