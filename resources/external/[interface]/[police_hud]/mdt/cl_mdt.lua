@@ -7,8 +7,10 @@ local function get_report_conversions(reports)
 
     for i = 1, #reports do
 
-        reports[i].date = reports[i].report_date
-        reports[i].id   = reports[i].cad_warrant_id or reports[i].cad_report_id
+        reports[i].date      = reports[i].report_date
+        reports[i].id        = reports[i].cad_warrant_id or reports[i].cad_report_id
+        reports[i].report_id = reports[i].cad_report_id
+        reports[i].char_id   = reports[i].character_id
 
     end
     return reports
@@ -245,6 +247,7 @@ end)
 
 local function load_report(cad_report_id)
 
+    print("load_report")
     exports["em_fw"]:cad_get_report_async(function(response) 
 
         if not response.result.successful then
@@ -282,6 +285,7 @@ end)
 
 RegisterNUICallback("performReportSearch", function(data, cb)
 
+    print("")
     exports["em_fw"]:cad_search_reports_async(function(reports)
 
         local results = get_report_conversions(reports)
