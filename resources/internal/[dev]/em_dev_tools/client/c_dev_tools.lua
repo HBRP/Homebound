@@ -41,7 +41,7 @@ RegisterCommand("show_object_raycast", function()
     end)
 end, false)
 
-RegisterCommand("create_object", function(source, args, raw_command)
+RegisterCommand("create_ped", function(source, args, raw_command)
 
     local hash = GetHashKey(args[1])
 
@@ -53,6 +53,31 @@ RegisterCommand("create_object", function(source, args, raw_command)
 
     local player_coords = GetEntityCoords(PlayerPedId())
     CreatePed(29, hash, player_coords.x + 1, player_coords.y + 1, player_coords.z + 1, true, true, true)
+
+end, false)
+
+RegisterCommand("create_object", function(source, args, raw_command)
+
+    local hash = GetHashKey(args[1])
+
+    print(hash)
+    RequestModel(hash)
+    while not HasModelLoaded(hash) do
+        Citizen.Wait(5)
+    end
+
+    local player_coords = GetEntityCoords(PlayerPedId())
+    local x = args[2] or player_coords.x
+    local y = args[3] or player_coords.y
+    local z = args[4] or player_coords.z
+
+    local obj = CreateObject(hash, x + 1, y + 1, z + 1, false, true, false)
+    FreezeEntityPosition(obj, true)
+
+    if args[5] then
+        SetEntityHeading(obj, args[5])
+    end
+    Citizen.Trace(string.format("Heading: %.02f", GetEntityHeading(obj)))
 
 end, false)
 
