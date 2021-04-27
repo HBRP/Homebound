@@ -70,3 +70,11 @@ RegisterCommand("veh_data", function(source, args, raw_command)
     end
 
 end, false)
+
+RegisterCommand("object_hash", function(source, args, raw_command)
+
+    if #args > 0 then
+        Citizen.Trace(string.format("Object Hash : %d", GetHashKey(args[1])))
+    end
+
+end, false)
