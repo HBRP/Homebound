@@ -88,3 +88,9 @@ function cad_new_warrant_async(callback, character_id, report_id, report_title, 
     trigger_server_callback_async("em_fw:cad_new_warrant", callback, get_character_id(), character_id, report_id, report_title, notes, charges, author, name)
 
 end
+
+function cad_delete_warrant_async(callback, cad_warrant_id)
+
+    trigger_server_callback_async("em_fw:cad_delete_warrant", callback, get_character_id(), cad_warrant_id)
+
+end

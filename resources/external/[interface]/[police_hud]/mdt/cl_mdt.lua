@@ -12,7 +12,8 @@ local function get_report_conversions(reports)
         reports[i].id           = reports[i].cad_warrant_id or reports[i].cad_report_id
         reports[i].report_id    = reports[i].cad_report_id
         reports[i].char_id      = reports[i].character_id
-        reports[i].expire_time  = reports[i].expiration_date
+        reports[i].expire       = reports[i].expiration_date
+        reports[i].expire_title = reports[i].expiration_date
         reports[i].report_title = reports[i].title
 
     end
@@ -303,7 +304,7 @@ end)
 
 RegisterNUICallback("getOffender", function(data, cb)
     print(string.format("getOffender: %s", json.encode(data)))
-    --TriggerServerEvent("cad:getOffenderDetailsById", data.char_id)
+    
     cb('ok')
 end)
 
@@ -405,7 +406,17 @@ end)
 
 RegisterNUICallback("deleteWarrant", function(data, cb)
     print(string.format("deleteWarrant: %s", json.encode(data)))
-    --TriggerServerEvent("cad:deleteWarrant", data.id)
+
+    exports["em_fw"]:cad_delete_warrant_async(function(response)
+
+        if not response.result.successful then
+            TriggerEvent("cad:sendNotification", response.result.response)
+        else
+            TriggerEvent("cad:sendNotification", "Warrant deleted")
+        end
+
+    end, data.id)
+
     cb('ok')
 end)
 

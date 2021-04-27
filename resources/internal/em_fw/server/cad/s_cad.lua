@@ -226,3 +226,20 @@ register_server_callback("em_fw:cad_new_warrant", function(source, callback, sub
     end)
 
 end)
+
+register_server_callback("em_fw:cad_delete_warrant", function(source, callback, character_id, cad_warrant_id)
+
+    if get_character_id_from_source(source) ~= character_id then
+        callback()
+        return
+    end
+
+    local endpoint = string.format("/Cad/Warrant/Delete/%d/%d", character_id, cad_warrant_id)
+    HttpPost(endpoint, nil, function(error_code, result_data, result_headers)
+
+        local temp = json.decode(result_data)
+        callback(temp)
+
+    end)
+
+end)
