@@ -211,6 +211,7 @@ export 'cad_get_vehicle_details_async'
 export 'cad_update_vehicle'
 export 'cad_update_character_details_async'
 export 'cad_update_report_async'
+export 'cad_new_warrant_async'
 
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'

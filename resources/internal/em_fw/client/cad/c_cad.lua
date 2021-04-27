@@ -82,3 +82,9 @@ function cad_update_report_async(callback, cad_report_id, title, incident)
     trigger_server_callback_async("em_fw:cad_update_report", callback, get_character_id(), cad_report_id, title, incident)
 
 end
+
+function cad_new_warrant_async(callback, character_id, report_id, report_title, notes, charges, author, name)
+
+    trigger_server_callback_async("em_fw:cad_new_warrant", callback, get_character_id(), character_id, report_id, report_title, notes, charges, author, name)
+
+end

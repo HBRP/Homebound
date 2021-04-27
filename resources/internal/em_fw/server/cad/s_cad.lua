@@ -199,3 +199,30 @@ register_server_callback("em_fw:cad_update_report", function(source, callback, c
     end)
 
 end)
+
+register_server_callback("em_fw:cad_new_warrant", function(source, callback, submitting_character_id, character_id, report_id, report_title, notes, charges, author, name)
+
+    if get_character_id_from_source(source) ~= submitting_character_id then
+        callback()
+        return
+    end
+
+    local data = 
+    {
+        submitting_character_id = submitting_character_id, 
+        character_id = character_id,
+        cad_report_id = report_id, 
+        report_title = report_title, 
+        notes = notes,
+        charges = charges,
+        author = author,
+        name = name
+    }
+    HttpPost("/Cad/Warrants/New", data, function(error_code, result_data, result_headers)
+
+        local temp = json.decode(result_data)
+        callback(temp)
+
+    end)
+
+end)
