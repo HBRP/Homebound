@@ -17,7 +17,7 @@
             <img v-if="officer.department == 'police'" src="badges/police.png" v-bind:class="getClass('badge')" >
             <img src="footer.png" id="banner" >
             
-            <p v-if="officer.department == 'police'" style="font-family: 'Georgia'; font-style: italic; font-size: 20pt; text-align: center;">Computer Aided Dispatch</p>
+            <p v-if="officer.department == 'police'" style="font-family: 'Georgia'; font-style: italic; font-size: 20pt; text-align: center;">Mobile Data Terminal</p>
             <p style="position: fixed; left: 17%; top: 5.5%">Welcome, {{ officer.name }}.</p>
             <button type="button" v-on:click="closeMDT()" style="position: fixed; right: 10%; top: 5.5%">LOGOUT</button>
 
