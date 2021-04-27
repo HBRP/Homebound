@@ -5,12 +5,15 @@ local zones = { ['AIRP'] = "Los Santos International Airport", ['ALAMO'] = "Alam
 
 local function get_report_conversions(reports)
 
+
     for i = 1, #reports do
 
-        reports[i].date      = reports[i].report_date
-        reports[i].id        = reports[i].cad_warrant_id or reports[i].cad_report_id
-        reports[i].report_id = reports[i].cad_report_id
-        reports[i].char_id   = reports[i].character_id
+        reports[i].date         = reports[i].report_date or reports[i].warrant_date
+        reports[i].id           = reports[i].cad_warrant_id or reports[i].cad_report_id
+        reports[i].report_id    = reports[i].cad_report_id
+        reports[i].char_id      = reports[i].character_id
+        reports[i].expire_time  = reports[i].expiration_date
+        reports[i].report_title = reports[i].title
 
     end
     return reports
@@ -285,7 +288,6 @@ end)
 
 RegisterNUICallback("performReportSearch", function(data, cb)
 
-    print("")
     exports["em_fw"]:cad_search_reports_async(function(reports)
 
         local results = get_report_conversions(reports)
@@ -378,7 +380,7 @@ RegisterNUICallback("getWarrants", function(data, cb)
 
         SendNUIMessage({
             type = "returnedWarrants",
-            warrants = result
+            warrants = get_report_conversions(result)
         })
 
     end)
