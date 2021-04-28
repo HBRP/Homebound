@@ -32,7 +32,8 @@ client_scripts {
     'client/character/c_character_emote_keybinds.lua',
     'client/vehicle/c_vehicle_store.lua',
     'client/vehicle/c_vehicle_garage.lua',
-    'client/cad/c_cad.lua'
+    'client/cad/c_cad.lua',
+    'client/housing/c_housing.lua'
     
 }
 
@@ -64,7 +65,8 @@ server_scripts {
     'server/character/s_character_emote_keybinds.lua',
     'server/vehicle/s_vehicle_store.lua',
     'server/vehicle/s_vehicle_garage.lua',
-    'server/cad/s_cad.lua'
+    'server/cad/s_cad.lua',
+    'server/housing/s_housing.lua'
 
 }
 
