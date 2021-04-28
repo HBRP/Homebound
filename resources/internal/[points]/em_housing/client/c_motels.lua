@@ -1,10 +1,84 @@
 
-
-local nearby_houses = {}
 local motel_house_id = 0
+
+local function get_door_lock_interaction(house)
+
+    local dialog = nil
+    local callback = function() 
+        exports["em_dialog"]:hide_dialog()
+    end
+
+    if house.locked and (house.can_unlock or not house.entrance or motel_house_id == house.house_id) then
+        dialog = "[Unlock door]"
+    end
+
+    if not house.locked and (house.can_unlock or motel_house_id == house.house_id) then
+        dialog = "[Lock door]"
+    end
+
+    if dialog == nil then
+        return nil
+    end
+
+    return {
+        dialog = dialog,
+        callback = callback
+    }
+
+end
+
+local function get_walk_through_interaction(house)
+
+    local dialog = nil
+    local callback = function() 
+        exports["em_dialog"]:hide_dialog()
+    end
+
+    if not house.locked then
+        dialog = "[Walk through door]"
+    end
+
+    if house.locked then
+        return nil
+    end
+
+    return {
+        dialog = dialog,
+        callback = callback
+    }
+
+end
 
 local function interact(house)
 
+    local dialog = {
+        {
+            dialog = "Knock",
+            callback = function()
+                exports["em_dialog"]:hide_dialog()
+            end
+        }
+    }
+
+    local lock_dialog = get_door_lock_interaction(house)
+    local walk_dialog = get_walk_through_interaction(house)
+
+    if lock_dialog ~= nil then
+        table.insert(dialog, lock_dialog)
+    end
+
+    if walk_dialog ~= nil then
+        table.insert(dialog, walk_dialog)
+    end
+
+    local house_name = nil
+    if house.locked then
+        house_name = string.format("%s (locked)", house.house_name)
+    else
+        house_name = string.format("%s (unlocked)", house.house_name)
+    end
+
+    exports["em_dialog"]:show_dialog(house_name, dialog)
 
 end
 
@@ -61,21 +135,7 @@ local function text(nearby_house)
     return "Press [E] to use door."
 
     --[[
-    if nearby_house.locked and (nearby_house.can_unlock or not nearby_house.entrance) then
-        return "Press [E] to use door.<br/>Press [G] to unlock."
-    end
 
-    if not nearby_house.locked and nearby_house.can_unlock then
-        return "Press [E] to use door.<br/>Press [G] to lock."
-    end
-
-    if not nearby_house.locked then
-        return "Press [E] to use door."
-    end
-
-    if nearby_house.locked then
-        return "Door is Locked."
-    end
     ]]
 
 end
