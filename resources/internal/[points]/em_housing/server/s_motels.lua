@@ -15,13 +15,13 @@ local function set_allotment()
 
 end
 
-local function set_player_motel_allotment(player_id)
+local function get_player_motel_allotment(player_id)
 
     for i = 1, #motel_allotment do
 
         if motel_allotment[i].player_id == nil then
             motel_allotment[i].player_id = player_id
-            return
+            return motel_allotment[i].house_id
         end
 
     end
@@ -41,10 +41,9 @@ local function remove_player_motel_allotment(player_id)
 
 end
 
-exports["em_fw"]:register_server_callback("em_housing:set_player_motel_allotment", function(source, callback, player_id)
+exports["em_fw"]:register_server_callback("em_housing:get_player_motel_allotment", function(source, callback, player_id)
 
-    set_player_motel_allotment(player_id)
-    callback()
+    callback(get_player_motel_allotment(player_id))
 
 end)
 

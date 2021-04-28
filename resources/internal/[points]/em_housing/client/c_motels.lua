@@ -1,8 +1,9 @@
 
 
 local nearby_houses = {}
+local motel_house_id = 0
 
-local function attempt_toggle_lock(house)
+local function interact(house)
 
 
 end
@@ -57,6 +58,9 @@ end
 
 local function text(nearby_house)
 
+    return "Press [E] to use door."
+
+    --[[
     if nearby_house.locked and (nearby_house.can_unlock or not nearby_house.entrance) then
         return "Press [E] to use door.<br/>Press [G] to unlock."
     end
@@ -72,13 +76,19 @@ local function text(nearby_house)
     if nearby_house.locked then
         return "Door is Locked."
     end
+    ]]
 
 end
 
 AddEventHandler("em_fw:character_loaded", function()
 
-    exports["em_fw"]:trigger_server_callback_async("em_housing:set_player_motel_allotment", nil, exports["em_fw"]:get_player_id())
-    exports["em_points"]:register_points(refresh_loop, text, attempt_toggle_lock)
+    exports["em_fw"]:trigger_server_callback_async("em_housing:get_player_motel_allotment", function(house_id) 
+
+        motel_house_id = house_id
+
+    end, exports["em_fw"]:get_player_id())
+
+    exports["em_points"]:register_points(refresh_loop, text, interact)
     
 end)
 
