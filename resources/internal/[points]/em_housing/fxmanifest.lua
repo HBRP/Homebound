@@ -10,6 +10,11 @@ client_scripts {
 
 }
 
+server_scripts {
+    'config.lua',
+    'server/s_motels.lua'
+}
+
 dependencies {
 
     'em_fw',

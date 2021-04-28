@@ -77,6 +77,7 @@ end
 
 AddEventHandler("em_fw:character_loaded", function()
 
+    exports["em_fw"]:trigger_server_callback_async("em_housing:set_player_motel_allotment", nil, exports["em_fw"]:get_player_id())
     exports["em_points"]:register_points(refresh_loop, text, attempt_toggle_lock)
     
 end)
