@@ -33,9 +33,8 @@ local function remove_player_motel_allotment(player_id)
     for i = 1, #motel_allotment do
 
         if motel_allotment[i].player_id == player_id then
-            table.remove(motel_allotment, i)
+            motel_allotment[i].player_id = nil
             return
-
         end
 
     end
@@ -45,8 +44,11 @@ end
 exports["em_fw"]:register_server_callback("em_housing:set_player_motel_allotment", function(source, callback, player_id)
 
     set_player_motel_allotment(player_id)
+    callback()
 
 end)
+
+AddEventHandler("em_fw:player_id_dropped", remove_player_motel_allotment)
 
 Citizen.CreateThread(function()
 
