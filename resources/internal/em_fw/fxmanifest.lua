@@ -219,6 +219,7 @@ export 'cad_delete_warrant_async'
 -- c_housing.lua
 export 'get_nearby_houses_async'
 export 'get_house_async'
+export 'toggle_housing_door_lock_async'
 
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'

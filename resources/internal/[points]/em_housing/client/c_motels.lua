@@ -5,7 +5,17 @@ local function get_door_lock_interaction(house)
 
     local dialog = nil
     local callback = function() 
+
         exports["em_dialog"]:hide_dialog()
+        exports["em_fw"]:toggle_housing_door_lock_async(function(locked)
+
+            house.locked = locked
+            exports["em_fw"]:trigger_proximity_event("em_housing:toogle_motel_lock", 100.0, house)
+            Citizen.Wait(200)
+            interact_motel(house)
+
+        end, house.housing_door_id)
+
     end
 
     if house.locked and (house.can_unlock or not house.entrance or motel_house_id == house.house_id) then
@@ -49,7 +59,7 @@ local function get_walk_through_interaction(house)
 
 end
 
-local function interact(house)
+function interact_motel(house)
 
     local dialog = {
         {
@@ -89,6 +99,7 @@ local function get_split_by_doors(houses)
 
         table.insert(housing_doors, {
             entrance = true,
+            housing_door_id = houses[i].housing_door_id,
             house_id = houses[i].house_id,
             house_name = houses[i].house_name,
             x = houses[i].enter_x,
@@ -102,6 +113,7 @@ local function get_split_by_doors(houses)
         })
         table.insert(housing_doors, {
             entrance = false,
+            housing_door_id = houses[i].housing_door_id,
             house_id = houses[i].house_id,
             house_name = houses[i].house_name,
             x = houses[i].exit_x,
@@ -134,10 +146,6 @@ local function text(nearby_house)
 
     return "Press [E] to use door."
 
-    --[[
-
-    ]]
-
 end
 
 AddEventHandler("em_fw:character_loaded", function()
@@ -148,7 +156,20 @@ AddEventHandler("em_fw:character_loaded", function()
 
     end, exports["em_fw"]:get_player_id())
 
-    exports["em_points"]:register_points(refresh_loop, text, interact)
+    exports["em_points"]:register_points(refresh_loop, text, interact_motel)
     
 end)
 
+RegisterNetEvent("em_housing:toogle_motel_lock")
+AddEventHandler("em_housing:toogle_motel_lock", function(house)
+
+    for i = 1, #housing_doors do
+
+        if housing_doors[i].housing_door_id == house.housing_door_id then
+            housing_doors[i].locked = house.locked
+            break
+        end
+
+    end
+
+end)

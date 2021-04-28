@@ -65,3 +65,19 @@ register_server_callback("em_fw:get_house", function(source, callback, house_id)
     end)
 
 end)
+
+register_server_callback("em_fw:toggle_housing_door_lock", function(source, callback, housing_door_id)
+
+    for i = 1, #housing_doors do
+
+        if housing_doors[i].housing_door_id == housing_door_id then
+
+            housing_doors[i].locked = not housing_doors[i].locked
+            callback(housing_doors[i].locked)
+            break
+
+        end
+
+    end
+
+end)

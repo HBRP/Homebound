@@ -110,7 +110,7 @@ end)
 RegisterNetEvent("em_fw:trigger_proximity_event")
 AddEventHandler("em_fw:trigger_proximity_event", function(event, distance, args) 
 
-    local source_coords = GetEntityCoords(source_coords)
+    local source_coords = GetEntityCoords(GetPlayerPed(source))
     for i = 1, #character_ids do
 
         local ped = GetPlayerPed(character_ids[i].source)
