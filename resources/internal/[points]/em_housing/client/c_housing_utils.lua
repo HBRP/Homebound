@@ -56,8 +56,8 @@ end
 
 function despawn_house()
 
-    for i = 1, #create_objects do
-        DeleteObject(create_objects[i])
+    for i = 1, #created_objects do
+        DeleteObject(created_objects[i])
     end
     created_objects = {}
 

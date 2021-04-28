@@ -99,7 +99,7 @@ end, false)
 RegisterCommand("object_hash", function(source, args, raw_command)
 
     if #args > 0 then
-        Citizen.Trace(string.format("Object Hash : %d", GetHashKey(args[1])))
+        Citizen.Trace(string.format("('%s', %d)\n", args[1], GetHashKey(args[1])))
     end
 
 end, false)
