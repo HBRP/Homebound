@@ -1,5 +1,6 @@
 
 local motel_house_id = 0
+local housing_doors_cache = {}
 
 local function get_door_lock_interaction(house)
 
@@ -37,6 +38,14 @@ local function get_door_lock_interaction(house)
 
 end
 
+local function prepare_house(house)
+
+    spawn_house(function()
+
+    end, house)
+
+end
+
 local function get_walk_through_interaction(house)
 
     local dialog = nil
@@ -46,6 +55,10 @@ local function get_walk_through_interaction(house)
 
     if not house.locked then
         dialog = "[Walk through door]"
+        callback = function()
+            exports["em_dialog"]:hide_dialog()
+            prepare_house(house)
+        end
     end
 
     if house.locked then
@@ -135,8 +148,8 @@ local function refresh_loop(refresh_func)
 
     exports["em_fw"]:get_nearby_houses_async(function(houses)
 
-        local housing_doors = get_split_by_doors(houses)
-        refresh_func(housing_doors)
+        housing_doors_cache = get_split_by_doors(houses)
+        refresh_func(housing_doors_cache)
 
     end, housing_type_ids.motels)
 
@@ -163,10 +176,10 @@ end)
 RegisterNetEvent("em_housing:toogle_motel_lock")
 AddEventHandler("em_housing:toogle_motel_lock", function(house)
 
-    for i = 1, #housing_doors do
+    for i = 1, #housing_doors_cache do
 
-        if housing_doors[i].housing_door_id == house.housing_door_id then
-            housing_doors[i].locked = house.locked
+        if housing_doors_cache[i].housing_door_id == house.housing_door_id then
+            housing_doors_cache[i].locked = house.locked
             break
         end
 

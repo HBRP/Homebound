@@ -6,7 +6,8 @@ game 'gta5'
 client_scripts {
 
     'config.lua',
-    'client/c_motels.lua'
+    'client/c_motels.lua',
+    'client/c_housing_utils.lua'
 
 }
 
