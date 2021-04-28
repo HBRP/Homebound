@@ -6,14 +6,36 @@ local timer = 0
 local freezeTime = false
 local blackout = false
 
+local sync_weather = true
+
 RegisterNetEvent('vSync:updateWeather')
 AddEventHandler('vSync:updateWeather', function(NewWeather, newblackout)
+
+    if not sync_weather then
+        return
+    end
+
     CurrentWeather = NewWeather
     blackout = newblackout
+
 end)
 
 Citizen.CreateThread(function()
     while true do
+
+        if not sync_weather then
+
+            Citizen.Wait(100)
+            SetBlackout(false)
+            ClearOverrideWeather()
+            ClearWeatherTypePersist()
+            SetWeatherTypePersist('EXTRASUNNY')
+            SetWeatherTypeNow('EXTRASUNNY')
+            SetWeatherTypeNowPersist('EXTRASUNNY')
+
+            goto sync_weather_continue
+        end
+
         if lastWeather ~= CurrentWeather then
             lastWeather = CurrentWeather
             SetWeatherTypeOverTime(CurrentWeather, 15.0)
@@ -33,14 +55,22 @@ Citizen.CreateThread(function()
             SetForceVehicleTrails(false)
             SetForcePedFootstepsTracks(false)
         end
+        ::sync_weather_continue::
+        
     end
 end)
 
 RegisterNetEvent('vSync:updateTime')
 AddEventHandler('vSync:updateTime', function(base, offset, freeze)
+
+    if not sync_weather then
+        return
+    end
+
     freezeTime = freeze
     timeOffset = offset
     baseTime = base
+
 end)
 
 Citizen.CreateThread(function()
@@ -59,7 +89,13 @@ Citizen.CreateThread(function()
         baseTime = newBaseTime
         hour = math.floor(((baseTime+timeOffset)/60)%24)
         minute = math.floor((baseTime+timeOffset)%60)
-        NetworkOverrideClockTime(hour, minute, 0)
+
+        if not sync_weather then
+            NetworkOverrideClockTime(9, 0, 0)
+        else
+            NetworkOverrideClockTime(hour, minute, 0)
+        end
+
     end
 end)
 
@@ -78,6 +114,19 @@ end
 RegisterNetEvent('vSync:notify')
 AddEventHandler('vSync:notify', function(message, blink)
     ShowNotification(message, blink)
+end)
+
+AddEventHandler("vSync:StopSyncWeather", function()
+
+    sync_weather = false
+
+end)
+
+AddEventHandler("vSync:SyncWeather", function()
+
+    sync_weather = true
+    TriggerServerEvent("vSync:requestSync_for_player")
+
 end)
 
 exports["em_commands"]:register_command("freezetime", function(source, args, raw_command)
