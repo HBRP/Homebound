@@ -10,7 +10,7 @@ function get_steam_id_from_identifier(source)
 
 end
 
-local function register_player_identifier(source, steamid)
+local function register_player_identifier(source, steamid, player_id)
 
     table.insert(player_identifiers, {source = source, steamid = steamid})
 
@@ -19,12 +19,30 @@ end
 function get_steam_id(source)
 
     for i = 1, #player_identifiers do
+
         if player_identifiers[i].source == source then
+
             return player_identifiers[i].steamid
+
         end
+
     end
 
     assert(0 == 1, string.format("Could not find steam_id for source %d", source))
+
+end
+
+function get_player_id(source)
+
+    for i = 1, #player_identifiers do
+
+        if player_identifiers[i].source == source then
+
+            return player_identifiers[i].player_id
+
+        end
+
+    end
 
 end
 
@@ -34,10 +52,12 @@ AddEventHandler("em_fw:get_player_id", function()
     local source = source
     local steam_identifier = {steamid = get_steam_id_from_identifier(source)}
 
-    register_player_identifier(source, steam_identifier.steamid)
-
     HttpGet("/Player/GetPlayerId", steam_identifier, function(error_code, result_data, result_headers)
-        TriggerClientEvent("get_player_info:response", source, json.decode(result_data))
+
+        local temp = json.decode(result_data)
+        register_player_identifier(source, steam_identifier.steamid, temp["player_id"])
+        TriggerClientEvent("get_player_info:response", source, temp)
+
     end)
 
 end)
@@ -57,3 +77,9 @@ function get_priority_if_whitelisted(steam_id)
     return result
 
 end
+
+AddEventHandler('playerDropped', function(reason)
+
+    TriggerEvent("em_fw:player_id_dropped", get_player_id(source))
+
+end)
