@@ -40,9 +40,22 @@ end
 
 local function prepare_house(house)
 
-    spawn_house(function()
+    if house.entrance then
+        spawn_house(function()
 
-    end, house)
+            SetEntityCoords(PlayerPedId(), house.t_x, house.t_y, house.t_z+0.5, false, false, false, false)
+            SetEntityHeading(PlayerPedId(), house.t_heading)
+            TriggerEvent("vSync:StopSyncWeather")
+
+        end, house)
+    else
+
+        TriggerEvent("vSync:SyncWeather")
+        SetEntityCoords(PlayerPedId(), house.t_x, house.t_y, house.t_z+0.5, false, false, false, false)
+        SetEntityHeading(PlayerPedId(), house.t_heading)
+        despawn_house()
+
+    end
 
 end
 
@@ -121,6 +134,7 @@ local function get_split_by_doors(houses)
             t_x = houses[i].exit_x,
             t_y = houses[i].exit_y,
             t_z = houses[i].exit_z,
+            t_heading = houses[i].exit_heading,
             can_unlock = houses[i].can_unlock,
             locked = houses[i].locked
         })
@@ -135,6 +149,7 @@ local function get_split_by_doors(houses)
             t_x = houses[i].enter_x,
             t_y = houses[i].enter_y,
             t_z = houses[i].enter_z,
+            t_heading = houses[i].enter_heading,
             can_unlock = houses[i].can_unlock,
             locked = houses[i].locked
         })

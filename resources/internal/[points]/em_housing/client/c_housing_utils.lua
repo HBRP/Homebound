@@ -47,14 +47,18 @@ function spawn_house(callback, house)
 
         create_shell(house_data.house)
         create_objects(house_data.house, house_data.house_objects)
+        print("Created objects. Calling back now.")
         callback()
 
     end, house.house_id)
 
 end
 
-function despawn_house(house)
+function despawn_house()
 
-
+    for i = 1, #create_objects do
+        DeleteObject(create_objects[i])
+    end
+    created_objects = {}
 
 end
