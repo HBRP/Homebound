@@ -216,6 +216,10 @@ export 'cad_update_report_async'
 export 'cad_new_warrant_async'
 export 'cad_delete_warrant_async'
 
+-- c_housing.lua
+export 'get_nearby_houses_async'
+export 'get_house_async'
+
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'
 server_export 'get_steam_id'

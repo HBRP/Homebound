@@ -34,7 +34,7 @@ register_server_callback("em_fw:get_nearby_houses", function(source, callback, h
     local endpoint = string.format("/Housing/House/Nearby/%d/%d/%.2f/%.2f/%.2f", housing_type_id, character_id, x, y, z)
     HttpGet(endpoint, nil, function(error_code, result_data, result_headers)
 
-        local temp = json.decode(result_data)
+        local temp = json.decode(result_data) or {}
         set_locks(temp)
         callback(temp)
 
