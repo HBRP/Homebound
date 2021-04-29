@@ -12,6 +12,7 @@ dependencies {
 
     'em_fw',
     'em_points',
+    'em_animations',
     'cd_drawtextui',
     't-notify'
     
