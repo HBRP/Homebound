@@ -53,11 +53,11 @@ function hotWire(vehicle)
     pBreaking = false
     loadAnimDict(animDict)
     ClearPedTasks(player_entity)
-    TaskPlayAnim(player_entity, animDict, anim, 3.0, 1.0, 10000, flags, -1, 0, 0, 0)
+    TaskPlayAnim(player_entity, animDict, anim, 3.0, 1.0, 1000 * 30, flags, -1, 0, 0, 0)
     if hotwiring then
 		  exports["rprogress"]:Custom({
 		      Async    = false,
-		      Duration = 1000 * 10,
+		      Duration = 1000 * 30,
 		      Label    = "Hotwiring"
 		  })
     end
