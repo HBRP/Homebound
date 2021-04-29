@@ -142,13 +142,23 @@ local function check_for_car()
 		return
 	end
 
+	if not IsVehicleWindowIntact(veh, 0) then
+			SetVehicleDoorsLocked(veh, 7)
+			TriggerServerEvent("nfw:unlock_doors_for_everyone", NetworkGetNetworkIdFromEntity(veh), plate)
+			Citizen.Wait(2500)
+	  	hotWire(veh)
+			return
+	end
+
 	if pedd ~= 0 then
 
 		if math.random(100) > 75 then
 			local vehicle_model = GetDisplayNameFromVehicleModel(GetEntityModel(veh))
+			SetVehicleDoorsLocked(veh, 2)
 			TriggerServerEvent("nfw:unlock_doors_for_everyone", NetworkGetNetworkIdFromEntity(veh), plate)
 			TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", "GTA", string.format("Help someone is stealing my %s %s", vehicle_model, plate), 2)
 		else
+			SetVehicleDoorsLocked(veh, 2)
 			TriggerServerEvent("nfw:lock_doors_for_everyone", NetworkGetNetworkIdFromEntity(veh), plate)
 			TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", "GTA", string.format("Help someone just tried to steal my vehicle!"), 2)
 
@@ -160,19 +170,13 @@ local function check_for_car()
 
 	end
 
-	if not IsVehicleWindowIntact(veh, 0) then
-			SetVehicleDoorsLocked(veh, 7)
-			TriggerServerEvent("nfw:unlock_doors_for_everyone", NetworkGetNetworkIdFromEntity(veh), plate)
-			Citizen.Wait(2500)
-	  	hotWire(veh)
-			return
-	end
-
 	if lucky then
+		SetVehicleDoorsLocked(veh, 1)
 		TriggerServerEvent("nfw:unlock_doors_for_everyone", NetworkGetNetworkIdFromEntity(veh), plate)
 	  Citizen.Wait(2500)
 	  hotWire(veh)
 	else
+		SetVehicleDoorsLocked(veh, 2)
 		TriggerServerEvent("nfw:lock_doors_for_everyone", NetworkGetNetworkIdFromEntity(veh), plate)
 	end
 end
