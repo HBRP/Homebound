@@ -41,7 +41,7 @@ AddEventHandler('vSync:requestSync', function()
 end)
 
 RegisterServerEvent('vSync:requestSync_for_player')
-AddEventHandler('vSync:requestSync_for_player', function(source)
+AddEventHandler('vSync:requestSync_for_player', function()
 
     TriggerClientEvent('vSync:updateWeather', source, CurrentWeather, blackout)
     TriggerClientEvent('vSync:updateTime', source, baseTime, timeOffset, freezeTime)

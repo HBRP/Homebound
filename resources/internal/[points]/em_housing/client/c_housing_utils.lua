@@ -15,7 +15,7 @@ local function create_shell(house)
     local hash = GetHashKey(house.housing_shell_name)
     load_model(hash)
 
-    local obj = CreateObject(hash, house.spawn_x, house.spawn_y, house.spawn_z, false, true, false)
+    local obj = CreateObject(hash, house.spawn_x, house.spawn_y, house.spawn_z, false, false, false)
     FreezeEntityPosition(obj, true)
     table.insert(created_objects, obj)
 
@@ -31,7 +31,7 @@ local function create_objects(house, objects)
         local y = house.spawn_y + objects[i].y_offset
         local z = house.spawn_z + objects[i].z_offset
 
-        local obj = CreateObject(objects[i].prop_hash, x, y, z, false, true, false)
+        local obj = CreateObject(objects[i].prop_hash, x, y, z, false, false, false)
         SetEntityHeading(obj, objects[i].heading_offset)
         FreezeEntityPosition(obj, objects[i].freeze_object)
 
@@ -47,7 +47,6 @@ function spawn_house(callback, house)
 
         create_shell(house_data.house)
         create_objects(house_data.house, house_data.house_objects)
-        print("Created objects. Calling back now.")
         callback()
 
     end, house.house_id)
