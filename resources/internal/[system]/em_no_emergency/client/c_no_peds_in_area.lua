@@ -6,11 +6,22 @@ local area_locations = {
     {x = -569.338, y = 235.288, z = 74.89, radius = 20.0} -- hackerspace
 }
 
+local vehicle_locations = {
+    {x = 1639.77, y = 2599.09, z = 45.56, radius = 10.0} -- Boilingbroke buses
+}
+
 local function clear_area_of_peds()
 
-    local coords = GetEntityCoords(PlayerPedId())
     for i = 1, #area_locations do
         ClearAreaOfPeds(area_locations[i].x, area_locations[i].y, area_locations[i].z, area_locations[i].radius, 1)
+    end
+
+end
+
+local function clear_area_of_cards()
+
+    for i = 1, #vehicle_locations do
+        ClearAreaOfVehicles(vehicle_locations[i].x, vehicle_locations[i].y, vehicle_locations[i].z, vehicle_locations[i].radius, false, false, false, false, false)
     end
 
 end
@@ -22,6 +33,7 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(100)
         clear_area_of_peds()
+        clear_area_of_cards()
     end
 
 end)
