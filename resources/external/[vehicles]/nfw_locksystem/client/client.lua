@@ -131,6 +131,10 @@ local function check_for_car()
 	local pedd = GetPedInVehicleSeat(veh, -1)
 	local plate = GetVehicleNumberPlateText(veh)
 
+	if IsPedAPlayer(pedd) then
+		return
+	end
+
 	local vehicle_class = GetVehicleClass(veh)
 	if vehicle_class == 13 or vehicle_class == 8 or vehicle_class == 9 then
 		SetVehicleDoorsLocked(veh, 1)
