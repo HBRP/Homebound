@@ -61,7 +61,7 @@ end
 
 function GetNaked()
 
-	if GetEntityModel(PlayerPedId()) == 'mp_m_freemode_01' then
+	if GetEntityModel(PlayerPedId()) == GetHashKey('mp_m_freemode_01') then
 
 		TriggerEvent('skinchanger:loadSkin', {
 			sex      = 0,
