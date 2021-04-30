@@ -33,7 +33,7 @@ AddEventHandler("em_customization:loaded_appearance", function()
 
     set_tattoos(function()
         Citizen.CreateThread(function()
-            Citizen.Wait(100)
+            Citizen.Wait(1000)
             GetNaked()
             ResetSkin()
         end)
@@ -61,7 +61,8 @@ end
 
 function GetNaked()
 
-	if GetEntityModel(PlayerPedId()) == GetHashKey('mp_m_freemode_01') then
+	local entity_model_hash = GetEntityModel(PlayerPedId())
+	if entity_model_hash == GetHashKey('mp_m_freemode_01') then
 
 		TriggerEvent('skinchanger:loadSkin', {
 			sex      = 0,
@@ -76,7 +77,7 @@ function GetNaked()
 			glasses_1 = 0
 		})
 		
-	else
+	elseif entity_model_hash == GetHashKey('mp_f_freemode_01') then
 
 		TriggerEvent('skinchanger:loadSkin', {
 			sex      = 1,
@@ -274,7 +275,7 @@ Citizen.CreateThread(function()
 				end
 				for _, tattoo in pairs(Config.AllTattooList) do
 					if tattoo.Zone == v[1] then
-						if GetEntityModel(PlayerPedId()) == 'mp_m_freemode_01' then
+						if GetEntityModel(PlayerPedId()) == GetHashKey('mp_m_freemode_01') then
 							if tattoo.HashNameMale ~= '' then
 								local found = false
 								for k, v in pairs(currentTattoos) do
