@@ -29,6 +29,7 @@ exports {
     'is_item_type_ammo',
     'get_item_in_slot',
     'register_item_use',
+    'get_item_weapon_hash',
     'does_character_have_knife',
     'does_weapon_hash_alert_cops',
     'does_character_have_a_weapon',

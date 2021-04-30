@@ -9,6 +9,14 @@ local keys = {
 
 local key_tab = 37
 
+local function put_away_weapon(weapon_hash)
+
+    exports["em_items"]:animate_weapon_pullout(exports["em_items"]:get_weapon_item_id_from_hash(weapon_hash), false)
+    SetPedCurrentWeaponVisible(PlayerPedId(), false, true, false, false)
+    SetCurrentPedWeapon(PlayerPedId(), 0xA2719263, true)
+
+end
+
 local function use_item_in_slot(slot)
 
     local storage_items = (exports["em_fw"]:get_character_storage())["storage_items"]
@@ -16,6 +24,22 @@ local function use_item_in_slot(slot)
 
     if item_in_slot == nil then
         return
+    end
+
+    local weapon_hash = GetSelectedPedWeapon(PlayerPedId())
+    if weapon_hash ~= -1569615261 and weapon_hash ~= 0 then
+        
+        if exports["em_items"]:is_item_type_a_weapon(item_in_slot.item_type_id) then
+
+            if exports["em_items"]:get_item_weapon_hash(item_in_slot.item_id) == weapon_hash then
+
+                put_away_weapon(weapon_hash)
+                return
+
+            end
+
+        end
+
     end
     exports["em_items"]:use_item(item_in_slot.item_id, item_in_slot.item_type_id, item_in_slot.storage_item_id, item_in_slot.item_metadata)
 
@@ -61,9 +85,7 @@ RegisterCommand('hotbar_tab', function()
         return
     end
 
-    exports["em_items"]:animate_weapon_pullout(exports["em_items"]:get_weapon_item_id_from_hash(weapon_hash), false)
-    SetPedCurrentWeaponVisible(PlayerPedId(), false, true, false, false)
-    SetCurrentPedWeapon(PlayerPedId(), 0xA2719263, true)
+    put_away_weapon(weapon_hash)
 
 end, false)
 
