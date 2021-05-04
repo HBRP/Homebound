@@ -38,7 +38,7 @@ Config.vehicle = {
 		cruiser		= 'CAPITAL',
 		signalLeft	= 'LEFT',
 		signalRight	= 'RIGHT',
-		signalBoth	= 'DOWN',
+		signalBoth	= 'BACKSPACE',
 	}
 }
 

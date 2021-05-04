@@ -584,21 +584,6 @@ Citizen.CreateThread(function()
 								count_ind_timer = 0
 								count_bcast_timer = delay_bcast_timer
 							-- IND H
-							elseif IsControlJustReleased(0, 202) then -- INPUT_FRONTEND_CANCEL / Backspace
-								if GetLastInputMethod(0) then -- last input was with kb
-									local cstate = state_indic[veh]
-									if cstate == ind_state_h then
-										state_indic[veh] = ind_state_o
-										PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-									else
-										state_indic[veh] = ind_state_h
-										PlaySoundFrontend(-1, "NAV_LEFT_RIGHT", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-									end
-									TogIndicStateForVeh(veh, state_indic[veh])
-									actv_ind_timer = false
-									count_ind_timer = 0
-									count_bcast_timer = delay_bcast_timer
-								end
 							end
 						
 						end
@@ -625,6 +610,6 @@ Citizen.CreateThread(function()
 				end
 			end
 			
-		Citizen.Wait(0)
+		Citizen.Wait(5)
 	end
 end)
