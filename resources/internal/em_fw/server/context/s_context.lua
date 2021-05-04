@@ -7,7 +7,7 @@ register_server_callback("em_fw:get_context", function(source, callback, charact
         return
     end
 
-    local endpoint = string.format("/Context/%d/%.2f/%.2f/%.2f")
+    local endpoint = string.format("/Context/%d/%.2f/%.2f/%.2f", character_id, x, y, z)
     HttpGet(endpoint, nil, function(error_code, result_data, result_headers)
 
         local temp = json.decode(result_data)

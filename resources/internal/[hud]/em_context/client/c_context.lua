@@ -1,4 +1,21 @@
 
+local context_functions = {}
+
+function register_context(name, callback)
+
+    for i = 1, #context_functions do
+
+        if context_functions[i].name == name then
+            Citizen.Trace(string.format("Replacing context %s\n", name))
+            context_functions[i].callback = callback
+            return
+        end
+
+    end
+    table.insert(context_functions, {name = name, callback = callback})
+
+end
+
 local function build_context_menu()
 
     local context_dialog = {}
@@ -14,25 +31,51 @@ local function build_context_menu()
         table.insert(context_dialog, return_context)
     end
 
-    if #context_dialog == 0 then
+    return context_dialog
 
-        table.insert(context_dialog, {
-            dialog = "[Nothing nearby]",
-            callback = function()
-                exports["em_dialog"]:hide_dialog()
-            end
-        })
+end
 
+local function get_context_if_exists(context_name)
+
+    for i = 1, #context_functions do
+        if context_functions[i].name == context_name then
+            return context_functions[i].callback()
+        end
     end
 
-    return context_dialog
+    assert(0 == 1, string.format("get_context_if_exists: context_name %s does not exist", context_name))
+    return nil
 
 end
 
 local function setup_context()
 
-    local context_dialog = build_context_menu()
-    exports["em_dialog"]:show_dialog("Context Menu", context_dialog)
+
+    exports["em_fw"]:get_context_async(function(results) 
+
+        local context_dialog = build_context_menu()
+
+        for i = 1, #results do 
+            local context = get_context_if_exists(results[i].context_name)
+            if context ~= nil then
+                table.insert(context_dialog, context)
+            end
+        end
+
+        if #context_dialog == 0 then
+
+            table.insert(context_dialog, {
+                dialog = "[Nothing nearby]",
+                callback = function()
+                    exports["em_dialog"]:hide_dialog()
+                end
+            })
+
+        end
+        
+        exports["em_dialog"]:show_dialog("Context Menu", context_dialog)
+
+    end)
 
 end
 
