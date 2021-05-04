@@ -13,6 +13,10 @@ local function open_selected_customization(customization_point)
 
     if customization_point.customization_type_id == customization_type_ids.CLOTHING_SHOP then
         open_clothing_store()
+    elseif customization_point.customization_type_id == customization_type_ids.BARBER_SHOP then
+        open_barber_store()
+    elseif customization_point.customization_type_id == customization_type_ids.SURGERY_SHOP then
+        open_surgery_store()
     end
 
 end
