@@ -156,11 +156,11 @@ local function check_for_car()
 			local vehicle_model = GetDisplayNameFromVehicleModel(GetEntityModel(veh))
 			SetVehicleDoorsLocked(veh, 2)
 			TriggerServerEvent("nfw:unlock_doors_for_everyone", NetworkGetNetworkIdFromEntity(veh), plate)
-			TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", "GTA", string.format("Help someone is stealing my %s %s", vehicle_model, plate), 2)
+			TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", "GTA", string.format("Help someone is stealing my %s with plate %s", GetLabelText(vehicle_model), plate), 2)
 		else
 			SetVehicleDoorsLocked(veh, 2)
 			TriggerServerEvent("nfw:lock_doors_for_everyone", NetworkGetNetworkIdFromEntity(veh), plate)
-			TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", "GTA", string.format("Help someone just tried to steal my vehicle!"), 2)
+			TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", "GTA", string.format("Help someone just tried to steal my car!"), 2)
 
 			SetVehicleCanBeUsedByFleeingPeds(veh, true)
 			SetPedFleeAttributes(pedd, 0, true)
@@ -226,9 +226,10 @@ exports["em_items"]:register_item_use("lockpick", function()
 
 	if math.random(100) > 70 then
 			local vehicle_model = GetDisplayNameFromVehicleModel(GetEntityModel(entity))
+			local plate = GetVehicleNumberPlateText(entity)
       SetVehicleAlarm(entity, true)
 	    SetVehicleAlarmTimeLeft(entity, 30 * 1000)
-	    TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", "GTA", string.format("Car alarm set off for %s with plate %s", vehicle_model, plate), 2)
+	    TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", "GTA", string.format("Car alarm set off for %s with plate %s", GetLabelText(vehicle_model), plate), 2)
 	end
 
 	Citizen.Wait(100)
