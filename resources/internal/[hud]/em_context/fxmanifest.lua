@@ -8,6 +8,11 @@ client_scripts {
     'client/emergency_repair/c_emergency_repair.lua'
 }
 
+exports {
+    'register_context',
+    'register_always_checked_context'
+}
+
 dependencies {
     'em_fw',
     'em_dialog',
