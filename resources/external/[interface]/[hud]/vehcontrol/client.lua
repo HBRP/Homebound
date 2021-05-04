@@ -80,8 +80,12 @@ function EngineControl()
 	if exports["em_gen_commands"]:is_handcuffed() then
 		return
 	end
+	local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
 
-    local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+	if not GetIsVehicleEngineRunning(vehicle) and not exports["em_vehicles"]:has_keys(vehicle) then
+		return
+	end
+
     if vehicle ~= nil and vehicle ~= 0 and GetPedInVehicleSeat(vehicle, 0) then
         SetVehicleEngineOn(vehicle, (not GetIsVehicleEngineRunning(vehicle)), false, true)
     end
