@@ -37,7 +37,9 @@ exports {
     'get_character_storage_item_id',
     'get_character_storage_item_id_by_name',
     'animate_weapon_pullout',
-    'get_weapon_item_id_from_hash'
+    'get_weapon_item_id_from_hash',
+    'get_item_amount_by_name',
+    'has_item_by_name'
 
 }
 

@@ -1,6 +1,6 @@
 
 local loaded_character  = nil
-local character_storage = nil
+local character_storage = { storage = nil, next_refresh = 0 }
 
 function get_character_storage_id()
 
@@ -10,7 +10,11 @@ end
 
 function get_character_storage()
 
-    return get_storage(get_character_storage_id())
+    if character_storage.next_refresh < GetGameTimer() then
+        character_storage = { storage = get_storage(get_character_storage_id()), next_refresh = GetGameTimer() + 500}
+    end
+
+    return character_storage.storage
 
 end
 

@@ -28,7 +28,6 @@ end
 
 function hotWire(vehicle)
 
-	print(vehicle)
 	local player_entity = PlayerPedId()
 	disableEngine(vehicle)
 	finished_jacking = false
@@ -207,7 +206,12 @@ exports["em_context"]:register_always_checked_context("nfw:hotwiring", function(
 		callback = function()
 
 			exports["em_dialog"]:hide_dialog()
-			hotWire(GetVehiclePedIsIn(PlayerPedId(), false))
+
+			if exports["em_items"]:has_item_by_name("toolkit") or exports["em_items"]:has_item_by_name("screwdriver") or exports["em_items"]:has_item_by_name("crowbar") then
+				hotWire(GetVehiclePedIsIn(PlayerPedId(), false))
+			else
+				exports['t-notify']:Alert({style = "error", message = "Missing items. You need a toolkit, screwdriver or crowbar to hotwire a car"})
+			end
 
 		end
 
