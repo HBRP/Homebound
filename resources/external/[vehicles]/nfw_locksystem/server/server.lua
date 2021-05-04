@@ -55,3 +55,13 @@ AddEventHandler("nfw:lock_doors_for_everyone", function(network_veh, plate)
     TriggerClientEvent("nfw:lock_doors_for_everyone_response", -1, network_veh)
 
 end)
+
+exports["em_fw"]:register_server_callback("nfw_locksystem:is_car_jacked", function(source, callback, plate)
+
+    if vehicles[plate] == true then
+        callback(true)
+    else
+        callback(false)
+    end
+
+end)

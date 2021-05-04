@@ -6,71 +6,73 @@ local Time = 10 * 1000 -- Time for each stage (ms)
 local animDict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@"
 local anim = "machinic_loop_mechandplayer"
 local flags = 49
+local finished_jacking = false
 
 function loadAnimDict(dict)
-    while (not HasAnimDictLoaded(dict)) do
-        RequestAnimDict(dict)
-        Citizen.Wait(5)
-    end
+	while (not HasAnimDictLoaded(dict)) do
+		RequestAnimDict(dict)
+		Citizen.Wait(5)
+	end
 end
 
 function disableEngine(vehicle)
 	Citizen.CreateThread(function()
-		while hotwiring do
+		while finished_jacking do
 			SetVehicleEngineOn(vehicle, false, true, false)
-			if not hotwiring then
+			if not finished_jacking then
 				break
 			end
-			Citizen.Wait(0)
+			Citizen.Wait(5)
 		end
 	end)
 end
 
 function table.contains(table, element)
-  for _, value in pairs(table) do
-    if value[1] == element then
-      return true
-    end
-  end
-  return false
+	for _, value in pairs(table) do
+		if value[1] == element then
+			return true
+		end
+	end
+	return false
 end
 
 local function has_value (tab, val)
-    for index, value in ipairs(tab) do
-        if value == val then
-            return true
-        end
-    end
 
-    return false
+	for index, value in ipairs(tab) do
+		if value == val then
+			return true
+		end
+	end
+
+	return false
+
 end	
 
 function hotWire(vehicle)
-  if IsVehicleNeedsToBeHotwired(vehicle) then
-  	local player_entity = PlayerPedId()
-    disableEngine(vehicle)
-    hotwiring = true
-    pBreaking = false
-    loadAnimDict(animDict)
-    ClearPedTasks(player_entity)
-    TaskPlayAnim(player_entity, animDict, anim, 3.0, 1.0, 1000 * 30, flags, -1, 0, 0, 0)
-    if hotwiring then
-		  exports["rprogress"]:Custom({
-		      Async    = false,
-		      Duration = 1000 * 30,
-		      Label    = "Hotwiring"
-		  })
-    end
-    hotwiring = false
-    StopAnimTask(player_entity, animDict, anim, 1.0)
-    Citizen.Wait(1000)
-    TriggerEvent('EngineToggle:Engine')
-    SetVehicleJetEngineOn(vehicle, true)
-    RemoveAnimDict(animDict)
-    if not Radio then
-      SetVehicleRadioEnabled(vehicle, false)
-    end
-  end
+
+	local player_entity = PlayerPedId()
+	disableEngine(vehicle)
+	pBreaking = false
+	loadAnimDict(animDict)
+	ClearPedTasks(player_entity)
+	TaskPlayAnim(player_entity, animDict, anim, 3.0, 1.0, 1000 * 30, flags, -1, 0, 0, 0)
+	if hotwiring then
+		exports["rprogress"]:Custom({
+				Async    = false,
+				Duration = 1000 * 30,
+				Label    = "Hotwiring"
+		})
+	end
+	StopAnimTask(player_entity, animDict, anim, 1.0)
+	Citizen.Wait(1000)
+	TriggerEvent('EngineToggle:Engine')
+	SetVehicleJetEngineOn(vehicle, true)
+	RemoveAnimDict(animDict)
+	if not Radio then
+		SetVehicleRadioEnabled(vehicle, false)
+	end
+	finished_jacking = true
+
 end
 
 local vehicles = {}; RPWorking = true
@@ -89,11 +91,11 @@ AddEventHandler('EngineToggle:Engine', function()
 	if IsPedInAnyVehicle(GetPlayerPed(-1), false) then 
 		if (GetPedInVehicleSeat(veh, -1) == GetPlayerPed(-1)) then
 			vehicles[StateIndex][2] = not GetIsVehicleEngineRunning(veh)
-      if vehicles[StateIndex][2] then
-      	exports['t-notify']:Alert({style = "success", message = 'Engine turned on!'})
+			if vehicles[StateIndex][2] then
+				exports['t-notify']:Alert({style = "success", message = 'Engine turned on!'})
 			end
 		end 
-  end 
+	end 
 end)
 
 local function check_for_car()
@@ -108,6 +110,19 @@ local function check_for_car()
 		return
 	end
 
+	local plate = GetVehicleNumberPlateText(veh)
+	local jacked = true
+	exports["em_fw"]:trigger_server_callback("nfw_locksystem:is_car_jacked", function(result)
+
+		jacked = result
+
+	end, plate)
+
+	if jacked then
+		return
+	end
+
+	finished_jacking = false
 	-- gets vehicle player is trying to enter and its lock status
 	local lock = GetVehicleDoorLockStatus(veh)
 		
@@ -123,13 +138,11 @@ local function check_for_car()
 
 	-- check if got lucky
 	local lucky = (math.random(100) < cfg.chance)
-
 	if doorAngle > 0.0 then
 		lucky = true
 	end
 
 	local pedd = GetPedInVehicleSeat(veh, -1)
-	local plate = GetVehicleNumberPlateText(veh)
 
 	if IsPedAPlayer(pedd) then
 		return
@@ -143,11 +156,10 @@ local function check_for_car()
 	end
 
 	if not IsVehicleWindowIntact(veh, 0) then
-			SetVehicleDoorsLocked(veh, 7)
-			TriggerServerEvent("nfw:unlock_doors_for_everyone", NetworkGetNetworkIdFromEntity(veh), plate)
-			Citizen.Wait(2500)
-	  	hotWire(veh)
-			return
+		SetVehicleDoorsLocked(veh, 7)
+		TriggerServerEvent("nfw:unlock_doors_for_everyone", NetworkGetNetworkIdFromEntity(veh), plate)
+		Citizen.Wait(2500)
+		return
 	end
 
 	if pedd ~= 0 then
@@ -155,6 +167,7 @@ local function check_for_car()
 		if math.random(100) > 75 then
 			local vehicle_model = GetDisplayNameFromVehicleModel(GetEntityModel(veh))
 			SetVehicleDoorsLocked(veh, 2)
+			finished_jacking = true
 			TriggerServerEvent("nfw:unlock_doors_for_everyone", NetworkGetNetworkIdFromEntity(veh), plate)
 			TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", "GTA", string.format("Help someone is stealing my %s with plate %s", GetLabelText(vehicle_model), plate), 2)
 		else
@@ -173,8 +186,8 @@ local function check_for_car()
 	if lucky then
 		SetVehicleDoorsLocked(veh, 1)
 		TriggerServerEvent("nfw:unlock_doors_for_everyone", NetworkGetNetworkIdFromEntity(veh), plate)
-	  Citizen.Wait(2500)
-	  hotWire(veh)
+		Citizen.Wait(2500)
+		hotWire(veh)
 	else
 		SetVehicleDoorsLocked(veh, 2)
 		TriggerServerEvent("nfw:lock_doors_for_everyone", NetworkGetNetworkIdFromEntity(veh), plate)
@@ -189,6 +202,11 @@ RegisterNetEvent("nfw:unlock_doors_for_everyone_response")
 AddEventHandler("nfw:unlock_doors_for_everyone_response", function(network_veh)
 
 	local veh = NetworkGetEntityFromNetworkId(network_veh)
+	disableEngine(veh)
+
+	SetVehicleEngineOn(veh, false, true, true)
+	SetVehicleNeedsToBeHotwired(veh, false)
+
 	SetVehicleDoorsLocked(veh, 1)
 
 end)
@@ -197,7 +215,12 @@ RegisterNetEvent("nfw:lock_doors_for_everyone_response")
 AddEventHandler("nfw:lock_doors_for_everyone_response", function(network_veh)
 
 	local veh = NetworkGetEntityFromNetworkId(network_veh)
-	SetVehicleDoorsLocked(veh, 2)
+	disableEngine(veh)
+
+	SetVehicleEngineOn(veh, false, true, true)
+	SetVehicleNeedsToBeHotwired(veh, false)
+
+	SetVehicleDoorsLocked(veh, 7)
 
 end)
 
@@ -213,13 +236,13 @@ exports["em_items"]:register_item_use("lockpick", function()
 		return
 	end
 
-  exports["rprogress"]:Custom({
-      Async    = true,
-      Duration = 1000 * 10,
-      Label    = "Lockpicking vehicle"
-  })
+	exports["rprogress"]:Custom({
+		Async    = true,
+		Duration = 1000 * 10,
+		Label    = "Lockpicking vehicle"
+	})
 
-  exports["em_animations"]:play_animation_sync('anim@amb@clubhouse@tutorial@bkr_tut_ig3@', 'machinic_loop_mechandplayer', 10000, 16)
+	exports["em_animations"]:play_animation_sync('anim@amb@clubhouse@tutorial@bkr_tut_ig3@', 'machinic_loop_mechandplayer', 10000, 16)
 	SetVehicleDoorsLocked(entity, 1)
 	SetVehicleDoorsLockedForAllPlayers(entity, false)
 	ClearPedTasks(PlayerPedId())
@@ -227,16 +250,14 @@ exports["em_items"]:register_item_use("lockpick", function()
 	if math.random(100) > 70 then
 			local vehicle_model = GetDisplayNameFromVehicleModel(GetEntityModel(entity))
 			local plate = GetVehicleNumberPlateText(entity)
-      SetVehicleAlarm(entity, true)
-	    SetVehicleAlarmTimeLeft(entity, 30 * 1000)
-	    TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", "GTA", string.format("Car alarm set off for %s with plate %s", GetLabelText(vehicle_model), plate), 2)
+			SetVehicleAlarm(entity, true)
+			SetVehicleAlarmTimeLeft(entity, 30 * 1000)
+			TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", "GTA", string.format("Car alarm set off for %s with plate %s", GetLabelText(vehicle_model), plate), 2)
 	end
 
 	Citizen.Wait(100)
 	TaskEnterVehicle(PlayerPedId(), entity, 10.0, -1, 1.0, 1, 0)
-  SetVehicleEngineOn(entity, false, true, true)
-  SetVehicleNeedsToBeHotwired(entity, true)
-  Citizen.Wait(2500)
-  hotWire(entity)
+	SetVehicleEngineOn(entity, false, true, true)
+	SetVehicleNeedsToBeHotwired(entity, true)
 
 end)
