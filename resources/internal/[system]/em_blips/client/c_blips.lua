@@ -21,7 +21,8 @@ local function set_non_static_blips(blips)
                 SetBlipSprite(blip, blips[i].blip_type)
                 SetBlipColour(blip, blips[i].blip_color)
                 SetBlipAsShortRange(blip, true)
-
+                SetBlipScale(blip, 0.8)
+                
                 BeginTextCommandSetBlipName('STRING')
                 AddTextComponentString(blips[i].blip_name)
                 EndTextCommandSetBlipName(blip)
@@ -58,6 +59,7 @@ local function set_static_blips(blips)
             SetBlipSprite(blip, blips[i].blip_type)
             SetBlipColour(blip, blips[i].blip_color)
             SetBlipAsShortRange(blip, true)
+            SetBlipScale(blip, 0.8)
 
             BeginTextCommandSetBlipName('STRING')
             AddTextComponentString(blips[i].blip_name)
