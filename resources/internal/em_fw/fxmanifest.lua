@@ -33,7 +33,8 @@ client_scripts {
     'client/vehicle/c_vehicle_store.lua',
     'client/vehicle/c_vehicle_garage.lua',
     'client/cad/c_cad.lua',
-    'client/housing/c_housing.lua'
+    'client/housing/c_housing.lua',
+    'client/context/c_context.lua'
     
 }
 
@@ -66,7 +67,8 @@ server_scripts {
     'server/vehicle/s_vehicle_store.lua',
     'server/vehicle/s_vehicle_garage.lua',
     'server/cad/s_cad.lua',
-    'server/housing/s_housing.lua'
+    'server/housing/s_housing.lua',
+    'server/context/s_context.lua'
 
 }
 
@@ -220,6 +222,9 @@ export 'cad_delete_warrant_async'
 export 'get_nearby_houses_async'
 export 'get_house_async'
 export 'toggle_housing_door_lock_async'
+
+-- c_context.lua
+export 'get_context_async'
 
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'
