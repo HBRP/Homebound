@@ -1,11 +1,9 @@
 local PlayerData = {}
 local Time = 10 * 1000 -- Time for each stage (ms)
 
-
 local animDict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@"
 local anim = "machinic_loop_mechandplayer"
 local flags = 49
-local finished_jacking = false
 
 function loadAnimDict(dict)
 	while (not HasAnimDictLoaded(dict)) do
@@ -29,8 +27,7 @@ end
 function hotWire(vehicle)
 
 	local player_entity = PlayerPedId()
-	disableEngine(vehicle)
-	finished_jacking = false
+	local finished_jacking = false
 
 	loadAnimDict(animDict)
 	ClearPedTasks(player_entity)
@@ -44,7 +41,7 @@ function hotWire(vehicle)
 		StopAnimTask(player_entity, animDict, anim, 1.0)
 		Citizen.Wait(1000)
 		if finished_jacking then
-			SetVehicleJetEngineOn(vehicle, true)
+			SetVehicleEngineOn(vehicle, true, false, true)
 			SetVehicleRadioEnabled(vehicle, false)
 		end
 		RemoveAnimDict(animDict)
@@ -62,8 +59,6 @@ function hotWire(vehicle)
 
 end
 
-local vehicles = {}; RPWorking = true
-
 local function check_for_car()
 
 	Citizen.Wait(100)
@@ -79,16 +74,13 @@ local function check_for_car()
 	local plate = GetVehicleNumberPlateText(veh)
 	local jacked = true
 	exports["em_fw"]:trigger_server_callback("nfw_locksystem:is_car_jacked", function(result)
-
 		jacked = result
-
 	end, plate)
 
 	if jacked then
 		return
 	end
 
-	finished_jacking = false
 	local lock = GetVehicleDoorLockStatus(veh)
 		
 	local doorAngle = GetVehicleDoorAngleRatio(veh, 0)
@@ -129,9 +121,9 @@ local function check_for_car()
 		if math.random(100) > 75 then
 			local vehicle_model = GetDisplayNameFromVehicleModel(GetEntityModel(veh))
 			SetVehicleDoorsLocked(veh, 2)
-			finished_jacking = true
 			TriggerServerEvent("nfw:unlock_doors_for_everyone", NetworkGetNetworkIdFromEntity(veh), plate)
 			TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", "GTA", string.format("Help someone is stealing my %s with plate %s", GetLabelText(vehicle_model), plate), 2)
+			return
 		else
 			SetVehicleDoorsLocked(veh, 2)
 			TriggerServerEvent("nfw:lock_doors_for_everyone", NetworkGetNetworkIdFromEntity(veh), plate)
@@ -139,7 +131,7 @@ local function check_for_car()
 
 			SetVehicleCanBeUsedByFleeingPeds(veh, true)
 			SetPedFleeAttributes(pedd, 0, true)
-			--TaskReactAndFleePed(pedd, PlayerPedId())
+			return
 		end
 		return
 
@@ -163,11 +155,11 @@ RegisterNetEvent("nfw:unlock_doors_for_everyone_response")
 AddEventHandler("nfw:unlock_doors_for_everyone_response", function(network_veh)
 
 	local veh = NetworkGetEntityFromNetworkId(network_veh)
-	disableEngine(veh)
 
-	SetVehicleEngineOn(veh, false, true, true)
+	if not IsVehicleEngineOn(veh) then
+		SetVehicleEngineOn(veh, false, true, true)
+	end
 	SetVehicleNeedsToBeHotwired(veh, false)
-
 	SetVehicleDoorsLocked(veh, 1)
 
 end)
@@ -176,12 +168,16 @@ RegisterNetEvent("nfw:lock_doors_for_everyone_response")
 AddEventHandler("nfw:lock_doors_for_everyone_response", function(network_veh)
 
 	local veh = NetworkGetEntityFromNetworkId(network_veh)
-	disableEngine(veh)
+	local pedd = GetPedInVehicleSeat(veh, -1)
 
-	SetVehicleEngineOn(veh, false, true, true)
+	if pedd ~= 0 then
+		SetVehicleDoorsLocked(veh, 2)
+	else
+		SetVehicleDoorsLocked(veh, 7)
+		SetVehicleEngineOn(veh, false, true, true)
+	end
+
 	SetVehicleNeedsToBeHotwired(veh, false)
-
-	SetVehicleDoorsLocked(veh, 7)
 
 end)
 

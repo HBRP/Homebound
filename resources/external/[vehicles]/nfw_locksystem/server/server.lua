@@ -1,12 +1,4 @@
 
-RegisterNetEvent('nfwlock:removeKit')
-AddEventHandler('nfwlock:removeKit', function()
-	local _source = source
-	local xPlayer = ESX.GetPlayerFromId(_source)
-
-	xPlayer.removeInventoryItem('lockpick', 1)
-end)
-
 local vehicles = {}
 
 RegisterNetEvent("nfwlock:setVehicleDoorsForEveryone")
