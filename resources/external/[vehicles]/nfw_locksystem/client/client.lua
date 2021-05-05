@@ -206,7 +206,7 @@ exports["em_context"]:register_always_checked_context("nfw:hotwiring", function(
 			if exports["em_items"]:has_item_by_name("toolkit") or exports["em_items"]:has_item_by_name("screwdriver") or exports["em_items"]:has_item_by_name("crowbar") then
 				hotWire(GetVehiclePedIsIn(PlayerPedId(), false))
 			else
-				exports['t-notify']:Alert({style = "error", message = "Missing items. You need a toolkit, screwdriver or crowbar to hotwire a car"})
+				exports['t-notify']:Alert({style = "error", message = "Missing items. You need a toolkit, screwdriver or crowbar to hotwire a car", duration = 5000})
 			end
 
 		end
