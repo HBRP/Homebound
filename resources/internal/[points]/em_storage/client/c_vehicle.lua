@@ -57,4 +57,5 @@ RegisterCommand('secondary_inventory', function()
     attempt_open_trunk_inventory()
 
 end, false)
+
 RegisterKeyMapping('secondary_inventory', 'secondary_inventory', 'keyboard', 'F2')

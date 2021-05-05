@@ -11,4 +11,8 @@ local function text(stash)
     return "Press [E] to access stash"
 end
 
-exports["em_points"]:register_points(refresh_loop, text, open_stash)
+AddEventHandler("em_fw:character_loaded", function()
+
+    exports["em_points"]:register_points(refresh_loop, text, open_stash)
+
+end)

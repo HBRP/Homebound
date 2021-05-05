@@ -78,4 +78,8 @@ local function text(stash)
     return "Press [E] to open bag"
 end
 
-exports["em_points"]:register_points(refresh_loop, text, open_drop, 1000)
+AddEventHandler("em_fw:character_loaded", function()
+
+    exports["em_points"]:register_points(refresh_loop, text, open_drop, 1000)
+    
+end)
