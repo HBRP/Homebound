@@ -7,7 +7,7 @@ Citizen.CreateThread(function()
         local ped = PlayerPedId()
         if IsPedShooting(ped) then
             if exports["em_items"]:does_weapon_hash_alert_cops(GetSelectedPedWeapon(ped)) then
-                send_dispatch("Law Enforcement", '10-71', 'Gunfire', 2)
+                TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", '10-71', 'Gunfire', 2)
                 Citizen.Wait(10000)
             end
         else

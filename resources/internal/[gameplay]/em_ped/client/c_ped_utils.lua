@@ -1,19 +1,19 @@
 
-local function can_ped_realistically_see_me(ped)
+local function is_ped_in_line_of_sight(ped, other_ped)
 
-    if is_ped_an_animal(ped) then
+    if is_ped_an_animal(other_ped) then
         return false
     end
 
-    if IsPedAPlayer(ped) then
+    if IsPedAPlayer(other_ped) then
         return false
     end
 
-    if IsEntityDead(ped) then
+    if IsEntityDead(other_ped) then
         return false
     end
 
-    if not HasEntityClearLosToEntityInFront(ped, PlayerPedId()) then
+    if not HasEntityClearLosToEntityInFront(other_ped, ped) then
         return false
     end
 
@@ -21,9 +21,8 @@ local function can_ped_realistically_see_me(ped)
 
 end
 
-function does_any_ped_see_me()
+function does_any_ped_see_ped(ped)
 
-    local ped = PlayerPedId()
     local ped_coords = GetEntityCoords(ped)
     local other_coords = nil
 
@@ -32,7 +31,7 @@ function does_any_ped_see_me()
         other_coords = GetEntityCoords(other_ped)
         if #(other_coords - ped_coords) < 30.0 then
 
-            if can_ped_realistically_see_me(other_ped) then
+            if is_ped_in_line_of_sight(ped, other_ped) then
                 return true
             end
 
@@ -41,6 +40,12 @@ function does_any_ped_see_me()
     end
 
     return false
+
+end
+
+function does_any_ped_see_me()
+
+    return does_any_ped_see_ped(PlayerPedId())
 
 end
 
