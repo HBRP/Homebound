@@ -4,7 +4,8 @@ local resources = {
     'fivem-appearance',
     'cui_wardrobe',
     'em_customization',
-    'em_stores'
+    'em_stores',
+    'em_housing'
 
 }
 

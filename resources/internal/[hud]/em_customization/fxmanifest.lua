@@ -13,7 +13,9 @@ client_scripts {
 exports {
 
     'get_character_appearance',
-    'refresh_character_appearance'
+    'refresh_character_appearance',
+    'register_manual_customization_spots',
+    'deregister_manual_customization_spots'
 
 }
 

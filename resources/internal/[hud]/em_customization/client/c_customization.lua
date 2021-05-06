@@ -1,5 +1,6 @@
 
 local nearby_customization = {}
+local manual_customization_points = {}
 
 local customization_type_ids = {
 
@@ -63,6 +64,10 @@ local function refresh_nearby_customization(result)
         nearby_customization = {}
     end
 
+    for i = 1, #manual_customization_points do
+        table.insert(nearby_customization, manual_customization_points[i])
+    end
+
 end
 
 local function refresh_nearby_customization_loop()
@@ -73,6 +78,21 @@ local function refresh_nearby_customization_loop()
         exports["em_fw"]:get_nearby_customization_points_async(refresh_nearby_customization)
 
     end
+
+end
+
+function register_manual_customization_spots(customization_spots)
+
+    for i = 1, #customization_spots do
+        assert(customization_spots[i].customization_type_id ~= nil, "register_manual_customization_spot: Error, did not set customization_type_id")
+    end
+    manual_customization_points = customization_spots
+
+end
+
+function deregister_manual_customization_spots()
+
+    manual_customization_points = {}
 
 end
 
