@@ -202,6 +202,10 @@ local function get_harvest_response(ped)
         response = "(You begin tearing into the ped with your knife ... You wonder if you might be fucked in the head. Of course you are)"
         callback = function()
 
+            if does_any_ped_see_me() then
+                TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", "Corpse Mutilation", "Help! Someone is mutilating a corpse!", 2)
+            end
+
             exports["em_dialog"]:hide_dialog()
             exports["em_animations"]:play_animation_sync("rcmextreme3", "idle", 2500, 2 + 32)
             local human_meat_item_id = exports["em_items"]:get_item_id_from_name("human meat")
