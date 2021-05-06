@@ -12,7 +12,7 @@ end
 
 local function register_player_identifier(source, steamid, player_id)
 
-    table.insert(player_identifiers, {source = source, steamid = steamid})
+    table.insert(player_identifiers, {source = source, steamid = steamid, player_id = player_id})
 
 end
 
@@ -28,7 +28,7 @@ function get_steam_id(source)
 
     end
 
-    assert(0 == 1, string.format("Could not find steam_id for source %d", source))
+    assert(0, string.format("Could not find steam_id for source %d", source))
 
 end
 
@@ -43,6 +43,7 @@ function get_player_id(source)
         end
 
     end
+    assert(0, "Unable to find player_id")
 
 end
 

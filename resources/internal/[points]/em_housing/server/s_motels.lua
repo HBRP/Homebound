@@ -33,8 +33,11 @@ local function remove_player_motel_allotment(player_id)
     for i = 1, #motel_allotment do
 
         if motel_allotment[i].player_id == player_id then
+
             motel_allotment[i].player_id = nil
-            return
+            exports["em_fw"]:lock_doors_for_house_id(motel_allotment[i].house_id)
+            break
+
         end
 
     end

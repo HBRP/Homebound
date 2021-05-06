@@ -20,8 +20,22 @@ local function set_locks(nearby_houses)
 
         if not found_door then
 
-            table.insert(housing_doors, {housing_door_id = nearby_houses[i].housing_door_id, locked = true})
+            table.insert(housing_doors, {house_id = nearby_houses[i].house_id, housing_door_id = nearby_houses[i].housing_door_id, locked = true})
             nearby_houses[i].locked = true
+
+        end
+
+    end
+
+end
+
+function lock_doors_for_house_id(house_id)
+
+    for i = 1, #housing_doors do
+
+        if housing_doors[i].house_id == house_id then
+
+            housing_doors[i].locked = true
 
         end
 

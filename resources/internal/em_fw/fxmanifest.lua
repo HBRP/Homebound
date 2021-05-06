@@ -260,3 +260,4 @@ server_export 'direct_deposit'
 
 -- s_housing.lua
 server_export 'get_all_house_ids_of_type_async'
+server_export 'lock_doors_for_house_id'
