@@ -57,6 +57,23 @@ local function setup_clothing(house, clothing_points)
 
 end
 
+local function setup_storage(house_id, house)
+
+    exports["em_fw"]:trigger_server_callback_async("em_housing:get_motel_storage", function(storage_points)
+
+        for i = 1, #storage_points do
+
+            storage_points[i].x = house.spawn_x + storage_points[i].x_offset
+            storage_points[i].y = house.spawn_y + storage_points[i].y_offset
+            storage_points[i].z = house.spawn_z + storage_points[i].z_offset
+
+        end
+        exports["em_storage"]:register_manual_stashes(storage_points)
+
+    end, house_id)
+
+end
+
 function spawn_house(callback, house)
 
     exports["em_fw"]:get_house_async(function(house_data)
@@ -64,6 +81,7 @@ function spawn_house(callback, house)
         create_shell(house_data.house)
         create_objects(house_data.house, house_data.house_objects)
         setup_clothing(house_data.house, house_data.clothing_points)
+        setup_storage(house.house_id, house_data.house)
         callback()
 
     end, house.house_id)
@@ -77,6 +95,7 @@ function despawn_house()
     end
 
     exports["em_customization"]:deregister_manual_customization_spots()
+    exports["em_storage"]:deregister_manual_stashes()
 
     created_objects = {}
     clothing_points = {}

@@ -12,7 +12,9 @@ client_scripts {
 
 exports {
 
-    'get_nearby_drop_storage_id'
+    'get_nearby_drop_storage_id',
+    'register_manual_stashes',
+    'deregister_manual_stashes'
 
 }
 

@@ -21,6 +21,7 @@ dependencies {
     'em_fw',
     'em_points',
     'em_dialog',
-    'em_customization'
+    'em_customization',
+    'em_storage'
 
 }

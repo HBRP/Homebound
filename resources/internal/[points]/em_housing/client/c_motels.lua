@@ -182,7 +182,7 @@ AddEventHandler("em_fw:character_loaded", function()
 
         motel_house_id = house_id
 
-    end, exports["em_fw"]:get_player_id())
+    end, exports["em_fw"]:get_player_id(), exports["em_fw"]:get_character_id())
 
     exports["em_points"]:register_points(refresh_loop, text, interact_motel)
     

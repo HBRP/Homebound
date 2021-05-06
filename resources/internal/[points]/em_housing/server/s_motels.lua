@@ -8,7 +8,8 @@ local function set_allotment()
 
         table.insert(motel_allotment, {
             house_id = housing_ids_cache[i],
-            player_id = nil
+            player_id = nil,
+            storage_points = {}
         })
 
     end
@@ -35,6 +36,7 @@ local function remove_player_motel_allotment(player_id)
         if motel_allotment[i].player_id == player_id then
 
             motel_allotment[i].player_id = nil
+            motel_allotment[i].storage_points = {}
             exports["em_fw"]:lock_doors_for_house_id(motel_allotment[i].house_id)
             break
 
@@ -44,9 +46,35 @@ local function remove_player_motel_allotment(player_id)
 
 end
 
-exports["em_fw"]:register_server_callback("em_housing:get_player_motel_allotment", function(source, callback, player_id)
+exports["em_fw"]:register_server_callback("em_housing:get_motel_storage", function(source, callback, house_id)
 
-    callback(get_player_motel_allotment(player_id))
+    for i = 1, #motel_allotment do
+
+        if motel_allotment[i].house_id == house_id then
+            callback(motel_allotment[i].storage_points)
+            break
+        end
+
+    end
+
+end)
+
+exports["em_fw"]:register_server_callback("em_housing:get_player_motel_allotment", function(source, callback, player_id, character_id)
+
+    local house_id = get_player_motel_allotment(player_id)
+    exports["em_fw"]:get_housing_storage_async(function(storage_points) 
+
+        for i = 1, #motel_allotment do
+
+            if motel_allotment[i].house_id == house_id then
+                motel_allotment[i].storage_points = storage_points
+                break
+            end
+
+        end
+
+    end, character_id, house_id)
+    callback(house_id)
 
 end)
 
