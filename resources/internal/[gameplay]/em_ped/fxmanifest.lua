@@ -4,10 +4,10 @@ games { 'gta5' }
 
 client_scripts {
 
-    'client/c_ped.lua',
-    'client/c_first_person_vehicle_shooting.lua',
+    'client/disable_controls/c_ped_disable_controls.lua',
+    'client/disable_controls/c_first_person_vehicle_shooting.lua',
     'client/c_ped_utils.lua',
-    'client/c_ped_interaction.lua'
+    'client/ped_interaction/c_ped_interaction.lua'
 
 }
 
