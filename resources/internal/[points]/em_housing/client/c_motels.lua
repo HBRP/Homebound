@@ -191,7 +191,7 @@ local function marker_loop()
         found_nearby_door = false
         for i = 1, #housing_doors_cache do
 
-            if housing_doors_cache[i].house_id == motel_house_id then
+            if housing_doors_cache[i].house_id == motel_house_id and housing_doors_cache[i].entrance then
                 found_nearby_door = true
                 local x = housing_doors_cache[i].x
                 local y = housing_doors_cache[i].y
