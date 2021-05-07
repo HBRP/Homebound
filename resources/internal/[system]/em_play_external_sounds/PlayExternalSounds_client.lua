@@ -48,6 +48,8 @@ local function CalculateAudioVolumeForBystanders(audio_file, audio_vol_base, aud
 
 end
 
+AddEventHandler("PlaySound", PlaySound)
+
 RegisterNetEvent("PlayAudioForBystanders")
 AddEventHandler("PlayAudioForBystanders", CalculateAudioVolumeForBystanders)
 

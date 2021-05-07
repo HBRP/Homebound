@@ -12,6 +12,7 @@ local function get_door_lock_interaction(house)
 
             house.locked = locked
             exports["em_fw"]:trigger_proximity_event("em_housing:toogle_motel_lock", 100.0, house)
+            TriggerEvent("PlaySoundForEveryoneInVicinity", "sounds/Doors/door_unlock.mp3")
             Citizen.Wait(200)
             interact_motel(house)
 
@@ -41,17 +42,22 @@ end
 local function prepare_house(house)
 
     if house.entrance then
+
+        TriggerEvent("PlaySoundForEveryoneInVicinity", "sounds/Doors/door_open.mp3")
         spawn_house(function()
 
-            SetEntityCoords(PlayerPedId(), house.t_x, house.t_y, house.t_z+0.5, false, false, false, false)
+            SetEntityCoords(PlayerPedId(), house.t_x, house.t_y, house.t_z+0.05, false, false, false, false)
             SetEntityHeading(PlayerPedId(), house.t_heading)
             TriggerEvent("vSync:StopSyncWeather")
 
         end, house)
+
     else
 
         TriggerEvent("vSync:SyncWeather")
-        SetEntityCoords(PlayerPedId(), house.t_x, house.t_y, house.t_z+0.5, false, false, false, false)
+        TriggerEvent("PlaySound", "sounds/Doors/door_open.mp3", .3)
+        TriggerEvent("PlaySoundForEveryoneInVicinity", "sounds/Doors/door_open.mp3")
+        SetEntityCoords(PlayerPedId(), house.t_x, house.t_y, house.t_z+0.05, false, false, false, false)
         SetEntityHeading(PlayerPedId(), house.t_heading)
         despawn_house()
 
