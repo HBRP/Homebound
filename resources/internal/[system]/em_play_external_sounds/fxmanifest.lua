@@ -41,7 +41,8 @@ files {
     "html/sounds/htNotifySounds/*.mp3",
     "html/sounds/PrisonJobs/*.mp3",
     "html/sounds/AltJobs/*.mp3",
-    "html/sounds/Repair/*.mp3"
+    "html/sounds/Repair/*.mp3",
+    'html/sounds/Doors/*.mp3'
 }
 
 export 'PlaySound'
