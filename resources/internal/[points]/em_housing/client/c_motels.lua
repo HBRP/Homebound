@@ -190,7 +190,7 @@ local function marker_loop()
                 local x = housing_doors_cache[i].x
                 local y = housing_doors_cache[i].y
                 local z = housing_doors_cache[i].z
-                DrawMarker(1, x, y, z, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 1.0, 1.0, 1.0, 0, 0, 255, 50, false, true, 2, nil, nil, false)
+                DrawMarker(0, x, y, z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0, 0, 255, 50, false, true, 2, nil, nil, false)
             end
 
         end
