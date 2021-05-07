@@ -170,7 +170,7 @@ function register_points(refresh_loop, text_func, control_pressed_func, loop_tim
         for i = 1, #obj.nearby_points do
 
             local nearby_coords = vector3(obj.nearby_points[i].x, obj.nearby_points[i].y, obj.nearby_points[i].z)
-            if #(ped_coords - nearby_coords) < 2 then
+            if #(ped_coords - nearby_coords) < 1.0 then
 
                 obj.nearby_point = true
                 if not exports["cd_drawtextui"]:is_in_queue(obj.draw_text_id) then
