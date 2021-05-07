@@ -201,11 +201,31 @@ local function marker_loop()
 
 end
 
+local function setup_blip()
+
+    exports["em_fw"]:get_house_async(function(house_data)
+
+        local house = house_data.house
+        local blip = AddBlipForCoord(house.spawn_x, house.spawn_y, house.spawn_z)
+        SetBlipSprite(blip, 40)
+        SetBlipColour(blip, 19)
+        SetBlipAsShortRange(blip, true)
+        SetBlipScale(blip, 0.8)
+        
+        BeginTextCommandSetBlipName('STRING')
+        AddTextComponentString("Motel")
+        EndTextCommandSetBlipName(blip)
+
+    end, motel_house_id)
+
+end
+
 AddEventHandler("em_fw:character_loaded", function()
 
     exports["em_fw"]:trigger_server_callback_async("em_housing:get_player_motel_allotment", function(house_id) 
 
         motel_house_id = house_id
+        setup_blip()
         Citizen.CreateThread(marker_loop)
 
     end, exports["em_fw"]:get_player_id(), exports["em_fw"]:get_character_id())
