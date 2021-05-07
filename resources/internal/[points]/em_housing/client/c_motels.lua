@@ -176,11 +176,37 @@ local function text(nearby_house)
 
 end
 
+local function marker_loop()
+
+    local found_nearby_door = false
+    while true do
+
+        Citizen.Wait(5)
+        found_nearby_door = false
+        for i = 1, #housing_doors_cache do
+
+            if housing_doors_cache[i].house_id == motel_house_id then
+                found_nearby_door = true
+                local x = housing_doors_cache[i].x
+                local y = housing_doors_cache[i].y
+                local z = housing_doors_cache[i].z
+                DrawMarker(1, x, y, z, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 1.0, 1.0, 1.0, 0, 0, 255, 50, false, true, 2, nil, nil, false)
+            end
+
+        end
+        if not found_nearby_door then
+            Citizen.Wait(5000)
+        end
+    end
+
+end
+
 AddEventHandler("em_fw:character_loaded", function()
 
     exports["em_fw"]:trigger_server_callback_async("em_housing:get_player_motel_allotment", function(house_id) 
 
         motel_house_id = house_id
+        Citizen.CreateThread(marker_loop)
 
     end, exports["em_fw"]:get_player_id(), exports["em_fw"]:get_character_id())
 

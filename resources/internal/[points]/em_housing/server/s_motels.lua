@@ -26,6 +26,7 @@ local function get_player_motel_allotment(player_id)
         end
 
     end
+    return 0
 
 end
 
