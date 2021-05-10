@@ -2,11 +2,11 @@
 local items_cache = nil
 local item_use_callbacks = {}
 
-local function fire_item_callback(item_id, storage_item_id)
+local function fire_item_callback(item_id, storage_item_id, item_metadata)
 
     for i = 1, #item_use_callbacks do
         if item_use_callbacks[i].item_id == item_id then
-            item_use_callbacks[i].callback(storage_item_id)
+            item_use_callbacks[i].callback(storage_item_id, item_metadata)
             break
         end
     end
@@ -143,7 +143,7 @@ function use_item(item_id, item_type_id, storage_item_id, item_metadata)
         equip_weapon(item_id, item_metadata)
 
     end
-    fire_item_callback(item_id, storage_item_id)
+    fire_item_callback(item_id, storage_item_id, item_metadata)
 
 end
 
