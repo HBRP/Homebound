@@ -1,0 +1,63 @@
+
+body {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.license_img {
+
+    position: absolute;
+    width: 50vw;
+    height:  50vh;
+    right:  0vw;
+    top: 15vh;
+
+}
+
+#expiration {
+
+    right: 25.25vw;
+    top: 33vh;
+    position: absolute;
+
+}
+
+#lastname {
+
+    right: 25vw;
+    top: 35vh;
+    position: absolute;
+
+}
+
+#firstname {
+
+    right: 25vw;
+    top: 37vh;
+    position: absolute;
+
+}
+
+#dob {
+
+    right: 27vw;
+    top: 41.4vh;
+    position: absolute;
+
+}
+
+#gender {
+
+    right: 25.5vw;
+    top: 48vh;
+    position: absolute;
+
+}
+
+#issued {
+
+    right: 14vw;
+    top: 51.5vh;
+    position: absolute;
+
+}
