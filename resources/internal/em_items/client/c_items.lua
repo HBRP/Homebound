@@ -89,7 +89,20 @@ function register_item_use(item_name, callback)
             Citizen.Wait(1000)
         end
 
-        table.insert(item_use_callbacks, {item_id = get_item_id_from_name(item_name), callback = callback})
+        local item_id = get_item_id_from_name(item_name)
+        for i = 1, #item_use_callbacks do
+
+            if item_use_callbacks[i].item_id == item_id then
+
+                Citizen.Trace(string.format("Replacing register_item_use %s callback", item_name))
+                item_use_callbacks[i].callback = callback
+                return
+
+            end 
+
+        end 
+
+        table.insert(item_use_callbacks, {item_id = item_id, callback = callback})
 
     end)
 
