@@ -11,11 +11,11 @@ function show_id(item_metadata) {
 
     $(".license_img").show("slide", {direction:"right"}, 1000, function() {
 
-        $("#license_text").fadeIn();
+        $(".license_text").fadeIn();
         $.post("http://em_license/license_hide", JSON.stringify({}));
         setTimeout(function() {
 
-            $("#license_text").fadeOut();
+            $(".license_text").fadeOut();
             $(".license_img").fadeOut();
 
         }, 5000)
@@ -31,7 +31,7 @@ function test_show_id() {
             "DOB" : "25/06/1994",
             "Expiration" : "03-08-2021",
             "Firstname" : "Amelia",
-            "LastName" : "Knightly",
+            "Lastname" : "Knightly",
             "Gender" : "f",
             "Issued" : "11-05-2021"
         }
@@ -41,9 +41,7 @@ function test_show_id() {
 
 $(function() {
 
-    /*
-        test_show_id()
-    */
+    //test_show_id()
     window.addEventListener("message", function (event) {
 
         if (event.data.show_id) {

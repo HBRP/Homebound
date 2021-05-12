@@ -7,57 +7,121 @@ body {
 .license_img {
 
     position: absolute;
-    width: 50vw;
-    height:  50vh;
+    width: 35vw;
+    height:  35vh;
     right:  0vw;
     top: 15vh;
 
 }
 
-#expiration {
+.license_text {
 
-    right: 25.25vw;
-    top: 33vh;
-    position: absolute;
-
-}
-
-#lastname {
-
-    right: 25vw;
-    top: 35vh;
-    position: absolute;
+    font-family: 'Open Sans', sans-serif;
+    font-size: medium;
+    text-align: left;
 
 }
 
-#firstname {
+@media screen and (max-width:  1920px) {
 
-    right: 25vw;
-    top: 37vh;
-    position: absolute;
+    #expiration {
+
+        right: 16vw;
+        top: 26.5vh;
+        position: absolute;
+
+    }
+
+    #lastname {
+
+        right: 17vw;
+        top: 28vh;
+        position: absolute;
+
+    }
+
+    #firstname {
+
+        right: 17.5vw;
+        top: 29.5vh;
+        position: absolute;
+
+    }
+
+    #dob {
+
+        right: 16vw;
+        top: 32.5vh;
+        position: absolute;
+
+    }
+
+    #gender {
+
+        right: 18vw;
+        top: 37vh;
+        position: absolute;
+
+    }
+
+    #issued {
+
+        right: 10vw;
+        top: 39.5vh;
+        position: absolute;
+
+    }
 
 }
 
-#dob {
+@media screen and (min-width:  2560px) {
 
-    right: 27vw;
-    top: 41.4vh;
-    position: absolute;
+    #expiration {
 
-}
+        right: 17vw;
+        top: 27vh;
+        position: absolute;
 
-#gender {
+    }
 
-    right: 25.5vw;
-    top: 48vh;
-    position: absolute;
+    #lastname {
 
-}
+        right: 18vw;
+        top: 28.5vh;
+        position: absolute;
 
-#issued {
+    }
 
-    right: 14vw;
-    top: 51.5vh;
-    position: absolute;
+    #firstname {
+
+        right: 18.5vw;
+        top: 30vh;
+        position: absolute;
+
+    }
+
+    #dob {
+
+        right: 17vw;
+        top: 33.25vh;
+        position: absolute;
+
+    }
+
+    #gender {
+
+        right: 18vw;
+        top: 37.75vh;
+        position: absolute;
+
+    }
+
+    #issued {
+
+        right: 10vw;
+        top: 40.5vh;
+        position: absolute;
+
+    }
 
 }
