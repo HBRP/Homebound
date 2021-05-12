@@ -24,9 +24,8 @@ function show_id(item_metadata) {
 
 }
 
-$(function() {
+function test_show_id() {
 
-    /*
     show_id({
         "hidden" : {
             "DOB" : "25/06/1994",
@@ -37,6 +36,13 @@ $(function() {
             "Issued" : "11-05-2021"
         }
     })
+
+}
+
+$(function() {
+
+    /*
+        test_show_id()
     */
     window.addEventListener("message", function (event) {
 
