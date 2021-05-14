@@ -8,8 +8,7 @@ item_type_ids = {
     BAG        = 6,
     MISC       = 7,
     ARMOUR     = 8,
-    ATTACHMENT = 9,
-    LICENSE    = 10
+    LICENSE    = 9
 
 }
 
