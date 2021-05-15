@@ -34,7 +34,8 @@ client_scripts {
     'client/vehicle/c_vehicle_garage.lua',
     'client/cad/c_cad.lua',
     'client/housing/c_housing.lua',
-    'client/context/c_context.lua'
+    'client/context/c_context.lua',
+    'client/bank/c_bank.lua'
     
 }
 
