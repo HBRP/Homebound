@@ -13,7 +13,7 @@ AddEventHandler("em_commands:propagate_to_nearby_clients", function(content, pro
 
 end)
 
-exports["em_fw"]:register_server_callback("em_commands:camera_rotation", function(source, callback)
+exports["em_dal"]:register_server_callback("em_commands:camera_rotation", function(source, callback)
 
     callback(GetPlayerCameraRotation(source))
 

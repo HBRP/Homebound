@@ -75,7 +75,7 @@ local function refresh_nearby_customization_loop()
     while true do
 
         Citizen.Wait(5000)
-        exports["em_fw"]:get_nearby_customization_points_async(refresh_nearby_customization)
+        exports["em_dal"]:get_nearby_customization_points_async(refresh_nearby_customization)
 
     end
 
@@ -98,7 +98,7 @@ end
 
 function get_character_appearance()
 
-    local skin = exports["em_fw"]:get_skin()
+    local skin = exports["em_dal"]:get_skin()
     assert(skin ~= nil, "Skin was not null")
     return skin["character_skin"]
 

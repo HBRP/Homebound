@@ -33,7 +33,7 @@ AddEventHandler("em_group_alerts:send_alert", function(group_alert_name, group_a
 
     local group_alert_id = get_group_alert_id(group_alert_name)
     local group_ids = get_group_ids(group_alert_id)
-    local current_jobs = exports["em_fw"]:get_current_character_jobs()
+    local current_jobs = exports["em_dal"]:get_current_character_jobs()
 
     group_alert_info.id = unique_alert_id
     unique_alert_id = unique_alert_id + 1
@@ -51,10 +51,10 @@ end)
 Citizen.CreateThread(function()
 
     Citizen.Wait(0)
-    exports["em_fw"]:get_group_alerts(function(result)
+    exports["em_dal"]:get_group_alerts(function(result)
         group_alerts = result or {}
     end)
-    exports["em_fw"]:get_group_alert_subscriptions(function(result)
+    exports["em_dal"]:get_group_alert_subscriptions(function(result)
         group_subscriptions = result or {}
     end)
 

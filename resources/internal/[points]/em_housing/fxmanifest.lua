@@ -18,7 +18,7 @@ server_scripts {
 
 dependencies {
 
-    'em_fw',
+    'em_dal',
     'em_points',
     'em_dialog',
     'em_customization',

@@ -4,7 +4,7 @@ local menu = MenuV:CreateMenu('Teleporters', 'Select landing', 'topleft', 0, 0, 
 
 local function open_selected_teleporter(teleporter)
 
-    exports["em_fw"]:get_teleporter_options_async(function(options)
+    exports["em_dal"]:get_teleporter_options_async(function(options)
 
         menu:ClearItems()
         for i = 1, #options do
@@ -22,7 +22,7 @@ end
 
 local function refresh_loop(refresh_func)
 
-    exports["em_fw"]:get_nearby_teleporter_points_async(refresh_func)
+    exports["em_dal"]:get_nearby_teleporter_points_async(refresh_func)
 
 end
 
@@ -32,7 +32,7 @@ local function text(teleporter)
 
 end
 
-AddEventHandler("em_fw:character_loaded", function()
+AddEventHandler("em_dal:character_loaded", function()
 
     exports["em_points"]:register_points(refresh_loop, text, open_selected_teleporter)
     

@@ -17,7 +17,7 @@ exports {
 }
 
 dependencies {
-    'em_fw',
+    'em_dal',
     'em_items',
     'em_dialog',
     'em_medical',

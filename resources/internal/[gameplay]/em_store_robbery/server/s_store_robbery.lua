@@ -1,7 +1,7 @@
 
 local recently_robbed = {}
 
-exports["em_fw"]:register_server_callback("em_store_robbery:can_rob_store", function(source, callback, interaction_ped_id)
+exports["em_dal"]:register_server_callback("em_store_robbery:can_rob_store", function(source, callback, interaction_ped_id)
 
     for i = 1, #recently_robbed do
 
@@ -15,7 +15,7 @@ exports["em_fw"]:register_server_callback("em_store_robbery:can_rob_store", func
 
 end)
 
-exports["em_fw"]:register_server_callback("em_store_robbery:begin_robbing_store", function(source, callback, interaction_ped_id)
+exports["em_dal"]:register_server_callback("em_store_robbery:begin_robbing_store", function(source, callback, interaction_ped_id)
 
     for i = 1, #recently_robbed do
 
@@ -31,7 +31,7 @@ exports["em_fw"]:register_server_callback("em_store_robbery:begin_robbing_store"
 
 end)
 
-exports["em_fw"]:register_server_callback("em_store_robbery:finished_robbing_store", function(source, callback, interaction_ped_id, successful)
+exports["em_dal"]:register_server_callback("em_store_robbery:finished_robbing_store", function(source, callback, interaction_ped_id, successful)
 
     local found_id = false
     for i = 1, #recently_robbed do
@@ -47,11 +47,11 @@ exports["em_fw"]:register_server_callback("em_store_robbery:finished_robbing_sto
 
         local amount       = math.random(50, 250)
         local item_id      = exports["em_items"]:get_item_id_from_name("cash")
-        local character    = exports["em_fw"]:get_character_from_source(source)
+        local character    = exports["em_dal"]:get_character_from_source(source)
         local character_id = character.character_id
         local storage_id   = character.storage_id
 
-        exports["em_fw"]:give_item(source, function()
+        exports["em_dal"]:give_item(source, function()
 
             TriggerClientEvent("t-notify:client:Alert", source, {
                 style = "success",

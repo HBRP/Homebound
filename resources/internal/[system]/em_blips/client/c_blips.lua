@@ -72,11 +72,11 @@ end
 
 local function set_active_blips()
 
-    local blips = exports["em_fw"]:get_blips()
+    local blips = exports["em_dal"]:get_blips()
     set_static_blips(blips)
     non_static_blip_loop(blips)
 
 end
 
-RegisterNetEvent("em_fw:character_loaded")
-AddEventHandler("em_fw:character_loaded", set_active_blips)
+RegisterNetEvent("em_dal:character_loaded")
+AddEventHandler("em_dal:character_loaded", set_active_blips)

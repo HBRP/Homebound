@@ -21,7 +21,7 @@ end
 
 local function start_safe_cracking(point)
 
-    exports["em_fw"]:trigger_server_callback_async("em_store_robbery:start_robbing_safe", function(can_rob) 
+    exports["em_dal"]:trigger_server_callback_async("em_store_robbery:start_robbing_safe", function(can_rob) 
 
         if not can_rob then
             exports['t-notify']:Alert({style = 'error', message = "Cannot crack that right now."})
@@ -43,14 +43,14 @@ local function start_safe_cracking(point)
             end
         end
 
-        exports["em_fw"]:trigger_server_callback_async("em_store_robbery:stopped_robbing_safe", function(amount)
+        exports["em_dal"]:trigger_server_callback_async("em_store_robbery:stopped_robbing_safe", function(amount)
 
             if not successful_crack then
                 return
             end
 
             local item_id = exports["em_items"]:get_item_id_from_name("cash")
-            exports["em_fw"]:give_item(exports["em_fw"]:get_character_storage_id(), item_id, amount, -1, -1)
+            exports["em_dal"]:give_item(exports["em_dal"]:get_character_storage_id(), item_id, amount, -1, -1)
             exports['t-notify']:Alert({style = 'success', message = string.format("Took $%d from safe", amount)})
 
         end, point, successful_crack)

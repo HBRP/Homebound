@@ -59,7 +59,7 @@ end
 
 local function setup_storage(house_id, house)
 
-    exports["em_fw"]:trigger_server_callback_async("em_housing:get_motel_storage", function(storage_points)
+    exports["em_dal"]:trigger_server_callback_async("em_housing:get_motel_storage", function(storage_points)
 
         for i = 1, #storage_points do
 
@@ -76,7 +76,7 @@ end
 
 function spawn_house(callback, house)
 
-    exports["em_fw"]:get_house_async(function(house_data)
+    exports["em_dal"]:get_house_async(function(house_data)
 
         create_shell(house_data.house)
         create_objects(house_data.house, house_data.house_objects)

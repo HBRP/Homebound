@@ -2,8 +2,8 @@
 function register_vehicle_as_group_owned(group_id, veh)
 
     local plate = GetVehicleNumberPlateText(veh)
-    local character_id = exports["em_fw"]:get_character_id()
-    exports["em_fw"]:trigger_server_callback_async("em_vehicles:register_plate_as_group_owned", function() end, character_id, group_id, plate)
+    local character_id = exports["em_dal"]:get_character_id()
+    exports["em_dal"]:trigger_server_callback_async("em_vehicles:register_plate_as_group_owned", function() end, character_id, group_id, plate)
 
 end
 
@@ -11,7 +11,7 @@ function is_vehicle_owned_by_group_id(group_id, veh)
 
     local plate = GetVehicleNumberPlateText(veh)
     local is_owned = false
-    exports["em_fw"]:trigger_server_callback("em_vehicles:is_vehicle_owned_by_group_id", function(result)
+    exports["em_dal"]:trigger_server_callback("em_vehicles:is_vehicle_owned_by_group_id", function(result)
         is_owned = result
     end, group_id, plate)
 
@@ -23,7 +23,7 @@ function is_vehicle_owned_by_group(veh)
 
     local plate = GetVehicleNumberPlateText(veh)
     local is_owned = false
-    exports["em_fw"]:trigger_server_callback("em_vehicles:is_vehicle_owned_by_group_id", function(result)
+    exports["em_dal"]:trigger_server_callback("em_vehicles:is_vehicle_owned_by_group_id", function(result)
         is_owned = result
     end, plate)
 
@@ -34,8 +34,8 @@ end
 function register_vehicle_as_player_owned(veh)
 
     local plate = GetVehicleNumberPlateText(veh)
-    local character_id = exports["em_fw"]:get_character_id()
-    exports["em_fw"]:trigger_server_callback_async("em_vehicles:register_plate_as_player_owned", function() end, character_id, plate)
+    local character_id = exports["em_dal"]:get_character_id()
+    exports["em_dal"]:trigger_server_callback_async("em_vehicles:register_plate_as_player_owned", function() end, character_id, plate)
 
 end
 
@@ -44,7 +44,7 @@ function is_vehicle_player_owned(veh)
     local plate = GetVehicleNumberPlateText(veh)
     local is_vehicle_player_owned = false
 
-    exports["em_fw"]:trigger_server_callback("em_vehicles:is_vehicle_player_owned", function(result) 
+    exports["em_dal"]:trigger_server_callback("em_vehicles:is_vehicle_player_owned", function(result) 
 
         is_vehicle_player_owned = result
 
@@ -59,11 +59,11 @@ function is_vehicle_owned_by_character(veh)
     local plate = GetVehicleNumberPlateText(veh)
     local is_vehicle_player_owned = false
 
-    exports["em_fw"]:trigger_server_callback("em_vehicles:is_vehicle_owned_by_character", function(result) 
+    exports["em_dal"]:trigger_server_callback("em_vehicles:is_vehicle_owned_by_character", function(result) 
 
         is_vehicle_player_owned = result
 
-    end, exports["em_fw"]:get_character_id(), plate)
+    end, exports["em_dal"]:get_character_id(), plate)
 
     return is_vehicle_player_owned
 
@@ -74,11 +74,11 @@ function has_keys(veh)
     local plate = GetVehicleNumberPlateText(veh)
     local has_keys_to_car = false
 
-    exports["em_fw"]:trigger_server_callback("em_vehicles:has_keys", function(result) 
+    exports["em_dal"]:trigger_server_callback("em_vehicles:has_keys", function(result) 
 
         has_keys_to_car = result
 
-    end, exports["em_fw"]:get_character_id(), plate)
+    end, exports["em_dal"]:get_character_id(), plate)
 
     return has_keys_to_car
 
@@ -88,7 +88,7 @@ function transfer_keys(to_character_id, veh)
 
     local plate = GetVehicleNumberPlateText(veh)
 
-    exports["em_fw"]:trigger_server_callback_async("em_vehicles:transfer_keys", function(success)
+    exports["em_dal"]:trigger_server_callback_async("em_vehicles:transfer_keys", function(success)
 
         if success then
             print("Successfully transfer_keys")
@@ -97,7 +97,7 @@ function transfer_keys(to_character_id, veh)
             -- not successful transfer
         end
 
-    end, exports["em_fw"]:get_character_id(), to_character_id, plate)
+    end, exports["em_dal"]:get_character_id(), to_character_id, plate)
 
 
 end

@@ -8,10 +8,10 @@ exports["em_commands"]:register_command("gsr", function(source, args, raw_comman
     end
     local character_id = tonumber(args[1])
 
-    exports["em_fw"]:is_character_id_in_radius_async(function(is_in_range) 
+    exports["em_dal"]:is_character_id_in_radius_async(function(is_in_range) 
 
         if is_in_range then
-            exports["em_fw"]:trigger_event_for_character("em_police_commands:gsr_request", character_id, exports["em_fw"]:get_character_id())
+            exports["em_dal"]:trigger_event_for_character("em_police_commands:gsr_request", character_id, exports["em_dal"]:get_character_id())
         else
             exports["t-notify"]:Alert({style="error", message = "Character isn't even around you"})
         end
@@ -27,7 +27,7 @@ AddEventHandler("em_police_commands:gsr_request", function(other_character_id)
         has_gsr = false
     end
 
-    exports["em_fw"]:trigger_event_for_character("em_police_commands:gsr_response", other_character_id, has_gsr)
+    exports["em_dal"]:trigger_event_for_character("em_police_commands:gsr_response", other_character_id, has_gsr)
 
 end)
 

@@ -20,7 +20,7 @@ local function get_beg_response(ped)
             if math.random(0, 99) > 80 then
                 local amount = math.random(1, 10)
                 local item_id = exports["em_items"]:get_item_id_from_name("cash")
-                exports["em_fw"]:give_item(exports["em_fw"]:get_character_storage_id(), item_id, amount, -1, -1)
+                exports["em_dal"]:give_item(exports["em_dal"]:get_character_storage_id(), item_id, amount, -1, -1)
                 exports['t-notify']:Alert({style = "success", message = string.format("You have received $%d from begging", amount)})
             else
                 exports['t-notify']:Alert({style = "error", message = "You didn't receive anything."})
@@ -61,7 +61,7 @@ local function fuck_you_up_response(ped)
 
             local amount = math.random(5, 25)
             local item_id = exports["em_items"]:get_item_id_from_name("cash")
-            exports["em_fw"]:give_item(exports["em_fw"]:get_character_storage_id(), item_id, amount, -1, -1)
+            exports["em_dal"]:give_item(exports["em_dal"]:get_character_storage_id(), item_id, amount, -1, -1)
             exports['t-notify']:Alert({style = "success", message = string.format("You have received $%d from threatening", amount)})
             exports["em_dialog"]:hide_dialog()
 
@@ -210,9 +210,9 @@ local function get_harvest_response(ped)
             exports["em_animations"]:play_animation_sync("rcmextreme3", "idle", 2500, 2 + 32)
             local human_meat_item_id = exports["em_items"]:get_item_id_from_name("human meat")
             local human_leather_item_id = exports["em_items"]:get_item_id_from_name("human leather")
-            exports["em_fw"]:give_item(exports["em_fw"]:get_character_storage_id(), human_meat_item_id, 3, -1, -1)
-            exports["em_fw"]:give_item(exports["em_fw"]:get_character_storage_id(), human_leather_item_id, 3, -1, -1)
-            exports["em_fw"]:trigger_proximity_event("em_ped:delete_entity", 100.0, NetworkGetNetworkIdFromEntity(ped.entity))
+            exports["em_dal"]:give_item(exports["em_dal"]:get_character_storage_id(), human_meat_item_id, 3, -1, -1)
+            exports["em_dal"]:give_item(exports["em_dal"]:get_character_storage_id(), human_leather_item_id, 3, -1, -1)
+            exports["em_dal"]:trigger_proximity_event("em_ped:delete_entity", 100.0, NetworkGetNetworkIdFromEntity(ped.entity))
 
         end
     end
@@ -263,7 +263,7 @@ local function refresh_loop(refresh_func)
 
     local peds = {}
 
-    local hit, coords, entity = table.unpack(exports["em_fw"]:ray_cast_game_play_camera(10.0))
+    local hit, coords, entity = table.unpack(exports["em_dal"]:ray_cast_game_play_camera(10.0))
     if not hit then
         refresh_func(peds)
         return
@@ -298,7 +298,7 @@ local function text(nearby_ped)
 
 end
 
-AddEventHandler("em_fw:character_loaded", function()
+AddEventHandler("em_dal:character_loaded", function()
 
     exports["em_points"]:register_raycast_points(refresh_loop, text, talk_to_selected_ped, 500)
     

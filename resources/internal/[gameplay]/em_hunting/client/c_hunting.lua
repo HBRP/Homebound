@@ -25,7 +25,7 @@ local function give_items(prop)
     for i = 1, #items do
 
         local item_id = exports["em_items"]:get_item_id_from_name(items[i].item_name)
-        exports["em_fw"]:give_item(exports["em_fw"]:get_character_storage_id(), item_id, items[i].amount, -1, -1)
+        exports["em_dal"]:give_item(exports["em_dal"]:get_character_storage_id(), item_id, items[i].amount, -1, -1)
 
     end
 
@@ -64,13 +64,13 @@ AddEventHandler("animal_cutting", function(prop, entity)
         return
     end
 
-    exports["em_fw"]:trigger_proximity_event("em_hunting:skinning_animal", 100.0, NetworkGetNetworkIdFromEntity(entity))
+    exports["em_dal"]:trigger_proximity_event("em_hunting:skinning_animal", 100.0, NetworkGetNetworkIdFromEntity(entity))
 
     animate_skinning(prop)
     give_items(prop)
 
     exports["t-notify"]:Alert({style="info", message="Skinned Animal"})
-    exports["em_fw"]:trigger_proximity_event("em_hunting:delete_entity", 100.0, NetworkGetNetworkIdFromEntity(entity))
+    exports["em_dal"]:trigger_proximity_event("em_hunting:delete_entity", 100.0, NetworkGetNetworkIdFromEntity(entity))
 
 end)
 

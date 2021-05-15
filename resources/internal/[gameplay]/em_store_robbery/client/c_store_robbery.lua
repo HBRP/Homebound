@@ -35,7 +35,7 @@ local function robbing_loop(ped)
 
     end
 
-    exports["em_fw"]:trigger_server_callback("em_store_robbery:finished_robbing_store", function(amount) 
+    exports["em_dal"]:trigger_server_callback("em_store_robbery:finished_robbing_store", function(amount) 
 
         if amount > 0 then
             TriggerEvent("em_group_alerts:send_dispatch", "Law Enforcement", "10-31b", string.format("They took $%d from my register!", amount), 1)
@@ -49,7 +49,7 @@ local function rob_npc_dialog(ped)
 
     local response = string.format("Woah, slow down ... (%s moves a hand underneath the desk, pressing a button before complying)", ped.ped_name)
     local callback = function() end
-    exports["em_fw"]:trigger_server_callback("em_store_robbery:can_rob_store", function(can_rob)
+    exports["em_dal"]:trigger_server_callback("em_store_robbery:can_rob_store", function(can_rob)
 
         if not can_rob then
             response = string.format("Come on man! I just got robbed (%s moves a hand underneath the desk, pressing a button as he speaks)", ped.ped_name)
@@ -62,7 +62,7 @@ local function rob_npc_dialog(ped)
         else
             callback = function()
 
-                exports["em_fw"]:trigger_server_callback_async("em_store_robbery:begin_robbing_store", function(can_still_rob_store)
+                exports["em_dal"]:trigger_server_callback_async("em_store_robbery:begin_robbing_store", function(can_still_rob_store)
 
                     exports["em_dialog"]:hide_dialog()
                     if can_still_rob_store then
@@ -94,7 +94,7 @@ local function shop_dialog()
         response = "Sure thing.",
         callback = function()
 
-            exports["em_fw"]:get_store_items_async(function(store_items)
+            exports["em_dal"]:get_store_items_async(function(store_items)
 
                 exports["em_dialog"]:hide_dialog()
                 TriggerEvent("esx_inventoryhud:open_store", {store_name = "Convenience Store"}, store_items)

@@ -35,7 +35,7 @@ end
 local function build_context_menu()
 
     local context_dialog = {}
-    local nearby_garage  = exports["em_fw"]:get_nearby_garage()
+    local nearby_garage  = exports["em_dal"]:get_nearby_garage()
 
     local vehicle_context = take_out_vehicle(nearby_garage)
     if vehicle_context ~= nil then
@@ -66,7 +66,7 @@ end
 
 local function setup_context()
 
-    exports["em_fw"]:get_context_async(function(results) 
+    exports["em_dal"]:get_context_async(function(results) 
 
         local context_dialog = build_context_menu()
 

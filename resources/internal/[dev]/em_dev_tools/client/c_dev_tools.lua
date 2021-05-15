@@ -16,7 +16,7 @@ RegisterCommand("show_object_raycast", function()
         while raycasting do
             Citizen.Wait(5)
 
-            local hit, coords, entity = table.unpack(exports["em_fw"]:ray_cast_game_play_camera(1000.0))
+            local hit, coords, entity = table.unpack(exports["em_dal"]:ray_cast_game_play_camera(1000.0))
 
             if hit then
                 local position = GetEntityCoords(GetPlayerPed(-1))

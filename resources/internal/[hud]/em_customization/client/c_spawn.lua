@@ -15,7 +15,7 @@ local function open_full_customization()
     exports['fivem-appearance']:startPlayerCustomization(function(appearance)
         if (appearance) then
 
-            exports["em_fw"]:create_skin(json.encode(appearance))
+            exports["em_dal"]:create_skin(json.encode(appearance))
             local outfit = {
                 ped_components = exports["fivem-appearance"]:getPedComponents(),
                 props = exports["fivem-appearance"]:getPedProps()
@@ -31,7 +31,7 @@ end
 
 AddEventHandler("esx_kashacters:spawned_character", function()
 
-    local skin = exports["em_fw"]:get_skin()
+    local skin = exports["em_dal"]:get_skin()
     if skin == nil then
         open_full_customization()
     else

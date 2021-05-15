@@ -21,7 +21,7 @@ exports {
 
 dependencies {
 
-    'em_fw',
+    'em_dal',
     'em_commands',
     'cd_drawtextui',
     'fivem-appearance'

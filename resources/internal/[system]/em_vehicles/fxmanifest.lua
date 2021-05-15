@@ -40,7 +40,7 @@ exports {
 
 dependencies {
 
-    'em_fw',
+    'em_dal',
     't-notify'
 
 }

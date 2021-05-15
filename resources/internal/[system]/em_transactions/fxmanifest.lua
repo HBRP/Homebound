@@ -16,7 +16,7 @@ exports {
 
 dependencies {
 
-    'em_fw',
+    'em_dal',
     'em_items',
     't-notify'
 

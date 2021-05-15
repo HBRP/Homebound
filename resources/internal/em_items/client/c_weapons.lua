@@ -141,7 +141,7 @@ end
 
 function does_character_have_knife()
 
-    local storage_items = (exports["em_fw"]:get_character_storage())["storage_items"]
+    local storage_items = (exports["em_dal"]:get_character_storage())["storage_items"]
     for i = 1, #storage_items do
 
         if get_weapon_type(storage_items[i].item_id) == item_weapon_type_ids.KNIFE then
@@ -156,7 +156,7 @@ end
 
 function does_character_have_a_weapon()
 
-    local storage_items = (exports["em_fw"]:get_character_storage())["storage_items"]
+    local storage_items = (exports["em_dal"]:get_character_storage())["storage_items"]
     for i = 1, #storage_items do
 
         if get_weapon_type(storage_items[i].item_id) ~= 0 then
@@ -185,10 +185,10 @@ local function remove_ammo(ammo_item_id, amount, storage_items)
         if storage_items[i].item_id == ammo_item_id then
 
             if storage_items[i].amount - amount_left_to_remove >= 0 then
-                exports["em_fw"]:remove_item(storage_items[i].storage_item_id, amount_left_to_remove)
+                exports["em_dal"]:remove_item(storage_items[i].storage_item_id, amount_left_to_remove)
                 amount_left_to_remove = 0
             else
-                exports["em_fw"]:remove_item(storage_items[i].storage_item_id, storage_items[i].amount)
+                exports["em_dal"]:remove_item(storage_items[i].storage_item_id, storage_items[i].amount)
                 amount_left_to_remove = amount_left_to_remove - storage_items[i].amount
             end
 
@@ -224,7 +224,7 @@ local function shooting_loop()
         if not IsPedShooting(ped) and ped_was_shooting then
             
             local ammo_item_id  = get_weapon_ammo_item_id(shooting_weapon_item_id)
-            local storage_items = (exports["em_fw"]:get_character_storage())["storage_items"]
+            local storage_items = (exports["em_dal"]:get_character_storage())["storage_items"]
             local ammo_diff = get_ammo_for_weapon(ammo_item_id, storage_items) - GetAmmoInPedWeapon(ped, shooting_weapon_hash)
 
             assert(ammo_diff >= 0, string.format("More ammo in gun than in inventory ammo_diff: %d for weapon_item_id: %d", ammo_diff, shooting_weapon_item_id))
@@ -258,7 +258,7 @@ local function set_attachments(item_id, item_metadata)
         return
     end
 
-    exports["em_fw"]:get_storage_async(function(result)
+    exports["em_dal"]:get_storage_async(function(result)
 
         local storage_items = result["storage_items"]
 
@@ -280,7 +280,7 @@ function equip_weapon(item_id, item_metadata)
     local hash = get_item_weapon_hash(item_id)
     local ped  = PlayerPedId()
 
-    local storage_items = (exports["em_fw"]:get_character_storage())["storage_items"]
+    local storage_items = (exports["em_dal"]:get_character_storage())["storage_items"]
     local ammo_amount   = get_ammo_for_weapon(get_weapon_ammo_item_id(item_id), storage_items)
     SetPedAmmo(ped, hash, ammo_amount)
     
@@ -304,16 +304,16 @@ end
 Citizen.CreateThread(function()
 
     Citizen.Wait(0)
-    weapons     = exports["em_fw"]:get_weapons()
-    attachments = exports["em_fw"]:get_attachments()
+    weapons     = exports["em_dal"]:get_weapons()
+    attachments = exports["em_dal"]:get_attachments()
 
 end)
 
-AddEventHandler('em_fw:inventory_change', function()
+AddEventHandler('em_dal:inventory_change', function()
 
     local ped = PlayerPedId()
     if equipped_weapon_hash ~= nil and equipped_weapon_hash == GetSelectedPedWeapon(ped) then
-        local storage_items = (exports["em_fw"]:get_character_storage())["storage_items"]
+        local storage_items = (exports["em_dal"]:get_character_storage())["storage_items"]
         local ammo_amount   = get_ammo_for_weapon(get_weapon_ammo_item_id(equipped_weapon_item_id), storage_items)
         SetPedAmmo(ped, equipped_weapon_hash, ammo_amount)
         return

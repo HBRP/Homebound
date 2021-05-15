@@ -19,7 +19,7 @@ end
 
 local function use_item_in_slot(slot)
 
-    local storage_items = (exports["em_fw"]:get_character_storage())["storage_items"]
+    local storage_items = (exports["em_dal"]:get_character_storage())["storage_items"]
     local item_in_slot = exports["em_items"]:get_item_in_slot(storage_items, slot)
 
     if item_in_slot == nil then

@@ -26,7 +26,7 @@ function does_any_ped_see_ped(ped)
     local ped_coords = GetEntityCoords(ped)
     local other_coords = nil
 
-    for other_ped in exports["em_fw"]:enumerate_peds() do
+    for other_ped in exports["em_dal"]:enumerate_peds() do
 
         other_coords = GetEntityCoords(other_ped)
         if #(other_coords - ped_coords) < 30.0 then

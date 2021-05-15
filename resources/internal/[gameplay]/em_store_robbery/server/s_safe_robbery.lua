@@ -28,7 +28,7 @@ local function remove_safe(safe)
 
 end
 
-exports["em_fw"]:register_server_callback("em_store_robbery:start_robbing_safe", function(source, callback, safe)
+exports["em_dal"]:register_server_callback("em_store_robbery:start_robbing_safe", function(source, callback, safe)
 
     local can_rob = not is_safe_being_robbed(safe)
 
@@ -40,7 +40,7 @@ exports["em_fw"]:register_server_callback("em_store_robbery:start_robbing_safe",
 
 end)
 
-exports["em_fw"]:register_server_callback("em_store_robbery:stopped_robbing_safe", function(source, callback, safe, finished)
+exports["em_dal"]:register_server_callback("em_store_robbery:stopped_robbing_safe", function(source, callback, safe, finished)
 
     Citizen.CreateThread(function()
 

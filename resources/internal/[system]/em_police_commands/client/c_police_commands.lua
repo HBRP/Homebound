@@ -6,10 +6,10 @@ exports["em_commands"]:register_command("search", function(source, args, raw_com
     end
     local character_id = tonumber(args[1])
 
-    exports["em_fw"]:is_character_id_in_radius_async(function(is_in_range) 
+    exports["em_dal"]:is_character_id_in_radius_async(function(is_in_range) 
 
         if is_in_range then
-            exports["em_fw"]:trigger_event_for_character("em_police_commands:search_request", character_id, exports["em_fw"]:get_character_id())
+            exports["em_dal"]:trigger_event_for_character("em_police_commands:search_request", character_id, exports["em_dal"]:get_character_id())
         else
             exports["t-notify"]:Alert({style="error", message = "Character isn't even around you"})
         end
@@ -21,7 +21,7 @@ end, "Search someone's pockets", {{name = "character_id", help = "try /ids to fi
 RegisterNetEvent("em_police_commands:search_request")
 AddEventHandler("em_police_commands:search_request", function(response_character_id)
 
-    exports["em_fw"]:trigger_event_for_character("em_police_commands:search_response", response_character_id, exports["em_fw"]:get_character_storage_id())
+    exports["em_dal"]:trigger_event_for_character("em_police_commands:search_response", response_character_id, exports["em_dal"]:get_character_storage_id())
 
 end)
 
@@ -39,10 +39,10 @@ exports["em_commands"]:register_command("frisk", function(source, args, raw_comm
     end
     local character_id = tonumber(args[1])
 
-    exports["em_fw"]:is_character_id_in_radius_async(function(is_in_range) 
+    exports["em_dal"]:is_character_id_in_radius_async(function(is_in_range) 
 
         if is_in_range then
-            exports["em_fw"]:trigger_event_for_character("em_police_commands:frisk_request", character_id, exports["em_fw"]:get_character_id())
+            exports["em_dal"]:trigger_event_for_character("em_police_commands:frisk_request", character_id, exports["em_dal"]:get_character_id())
         else
             exports["t-notify"]:Alert({style="error", message = "Character isn't even around you"})
         end
@@ -55,7 +55,7 @@ RegisterNetEvent("em_police_commands:frisk_request")
 AddEventHandler("em_police_commands:frisk_request", function(response_character_id)
 
     local has_weapon = exports["em_items"]:does_character_have_a_weapon()
-    exports["em_fw"]:trigger_event_for_character("em_police_commands:frisk_response", response_character_id, has_weapon)
+    exports["em_dal"]:trigger_event_for_character("em_police_commands:frisk_response", response_character_id, has_weapon)
 
 end)
 

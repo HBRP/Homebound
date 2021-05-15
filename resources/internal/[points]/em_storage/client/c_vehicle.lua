@@ -15,7 +15,7 @@ local function attempt_open_glovebox_inventory()
         return false
     end
 
-    local storage_id = exports["em_fw"]:get_vehicle_storage_id(GetVehicleNumberPlateText(vehicle), "Glovebox")
+    local storage_id = exports["em_dal"]:get_vehicle_storage_id(GetVehicleNumberPlateText(vehicle), "Glovebox")
     TriggerEvent("esx_inventoryhud:open_secondary_inventory", storage_id, "Glovebox")
 
 end
@@ -28,7 +28,7 @@ local function attempt_open_trunk_inventory()
         return
     end
 
-    local vehicle = exports["em_fw"]:get_nearest_vehicle()
+    local vehicle = exports["em_dal"]:get_nearest_vehicle()
 
     if vehicle == 0 then
         return
@@ -41,7 +41,7 @@ local function attempt_open_trunk_inventory()
     end
 
     if GetVehicleDoorAngleRatio(vehicle, 5) ~= 0 then
-        local storage_id = exports["em_fw"]:get_vehicle_storage_id(GetVehicleNumberPlateText(vehicle), "Trunk")
+        local storage_id = exports["em_dal"]:get_vehicle_storage_id(GetVehicleNumberPlateText(vehicle), "Trunk")
         TriggerEvent("esx_inventoryhud:open_secondary_inventory", storage_id, "Trunk")
     else
         return

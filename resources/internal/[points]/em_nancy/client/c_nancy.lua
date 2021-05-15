@@ -72,7 +72,7 @@ local function handle_healing(idx)
         Label = "Receiving Medical Care"
     })
     ClearPedTasksImmediately(PlayerPedId())
-    exports["em_fw"]:trigger_server_callback_async("em_nancy:free_bed", function() end, idx)
+    exports["em_dal"]:trigger_server_callback_async("em_nancy:free_bed", function() end, idx)
     exports["em_medical"]:heal_player()
     FreezeEntityPosition(PlayerPedId(), false)
 
@@ -81,7 +81,7 @@ end
 AddEventHandler("pillbox_nancy", function(no_animation)
 
 
-    exports["em_fw"]:trigger_server_callback_async("em_nancy:get_empty_bed", function(idx)
+    exports["em_dal"]:trigger_server_callback_async("em_nancy:get_empty_bed", function(idx)
 
         if idx == 0 then
             exports["t-notify"]:Alert({style = "error", message = "No Free beds"})

@@ -1,7 +1,7 @@
 
 local function spawn_vehicle(group_id, vehicle_id)
 
-    exports["em_fw"]:takeout_vehicle_async(function(vehicle)
+    exports["em_dal"]:takeout_vehicle_async(function(vehicle)
 
         local player_coords = GetEntityCoords(PlayerPedId())
         local forward_vec   = GetEntityForwardVector(PlayerPedId())
@@ -71,7 +71,7 @@ end
 
 local function setup_character_vehicles(nearby_garage)
 
-    exports["em_fw"]:get_character_vehicles_async(function(vehicles)
+    exports["em_dal"]:get_character_vehicles_async(function(vehicles)
         setup_vehicles(nearby_garage, vehicles)
     end)
 
@@ -79,7 +79,7 @@ end
 
 local function setup_group_vehicles(nearby_garage)
 
-    exports["em_fw"]:get_group_vehicles_async(function(vehicles)
+    exports["em_dal"]:get_group_vehicles_async(function(vehicles)
 
         setup_vehicles(nearby_garage, vehicles)
 
@@ -129,7 +129,7 @@ function return_vehicle(nearby_garage)
                 local veh_state = exports["em_vehicles"]:get_vehicle_state(veh)
                 local veh_gas_level = exports["LegacyFuel"]:GetFuel(veh)
 
-                exports["em_fw"]:store_vehicle(plate, nearby_garage.vehicle_garage_id, veh_mods, veh_state, veh_gas_level)
+                exports["em_dal"]:store_vehicle(plate, nearby_garage.vehicle_garage_id, veh_mods, veh_state, veh_gas_level)
                 exports["em_vehicles"]:despawn_vehicle(veh)
                 exports["em_dialog"]:hide_dialog()
 

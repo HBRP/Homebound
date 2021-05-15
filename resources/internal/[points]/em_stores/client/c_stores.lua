@@ -17,7 +17,7 @@ local function open_selected_store(store)
     if store.store_type_id == store_type_ids.TATTOO_SHOP then
         TriggerEvent("tattoos:open_shop")
     else
-        exports["em_fw"]:get_store_items_async(function(store_items)
+        exports["em_dal"]:get_store_items_async(function(store_items)
             TriggerEvent("esx_inventoryhud:open_store", store, store_items)
         end, store.store_type_id)
     end
@@ -26,7 +26,7 @@ end
 
 local function refresh_loop(refresh_func)
 
-    exports["em_fw"]:get_nearby_stores_async(refresh_func)
+    exports["em_dal"]:get_nearby_stores_async(refresh_func)
 
 end
 
@@ -36,7 +36,7 @@ local function text(nearby_store)
 
 end
 
-AddEventHandler("em_fw:character_loaded", function()
+AddEventHandler("em_dal:character_loaded", function()
 
     exports["em_points"]:register_points(refresh_loop, text, open_selected_store)
     

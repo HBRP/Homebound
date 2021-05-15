@@ -18,7 +18,7 @@ end
 local function spawn_peds(peds)
 
     local nearby_peds = {}
-    for ped in exports["em_fw"]:enumerate_peds() do
+    for ped in exports["em_dal"]:enumerate_peds() do
 
         local entity_hash   = GetEntityModel(ped)
         local entity_coords = GetEntityCoords(ped)
@@ -60,7 +60,7 @@ end
 
 local function refresh_loop(refresh_func)
 
-    exports["em_fw"]:get_nearby_interaction_peds_async(function(result)
+    exports["em_dal"]:get_nearby_interaction_peds_async(function(result)
 
         local peds = result or {}
         known_interaction_peds = {}
@@ -90,7 +90,7 @@ function is_interaction_ped(ped)
 
 end
 
-AddEventHandler("em_fw:character_loaded", function()
+AddEventHandler("em_dal:character_loaded", function()
 
     exports["em_points"]:register_raycast_points(refresh_loop, text, interact_with_ped)
     

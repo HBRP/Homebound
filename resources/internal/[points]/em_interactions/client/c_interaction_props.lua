@@ -19,9 +19,9 @@ local function text(prop)
 
 end
 
-AddEventHandler("em_fw:character_loaded", function()
+AddEventHandler("em_dal:character_loaded", function()
 
-    exports["em_fw"]:get_all_interaction_props_async(function(result)
+    exports["em_dal"]:get_all_interaction_props_async(function(result)
 
         props = result or {}
 

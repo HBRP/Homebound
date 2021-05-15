@@ -11,7 +11,7 @@ function get_nearby_drop_storage_id()
         end
     end
 
-    local new_drop = exports["em_fw"]:get_free_drop_zone()
+    local new_drop = exports["em_dal"]:get_free_drop_zone()
     return new_drop.storage_id
 
 end
@@ -60,7 +60,7 @@ end
 
 local function refresh_loop(refresh_check)
     
-    exports["em_fw"]:get_nearby_drops_async(function(result)
+    exports["em_dal"]:get_nearby_drops_async(function(result)
 
         nearby_drops = result
         if nearby_drops == nil then
@@ -78,7 +78,7 @@ local function text(stash)
     return "Press [E] to open bag"
 end
 
-AddEventHandler("em_fw:character_loaded", function()
+AddEventHandler("em_dal:character_loaded", function()
 
     exports["em_points"]:register_points(refresh_loop, text, open_drop, 1000)
     

@@ -26,7 +26,7 @@ end
 
 local function send_character_blip_groups()
 
-    local character_jobs = exports["em_fw"]:get_current_character_jobs()
+    local character_jobs = exports["em_dal"]:get_current_character_jobs()
 
     for i = 1, #character_jobs do
 
@@ -72,7 +72,7 @@ end
 Citizen.CreateThread(function()
 
     Citizen.Wait(0)
-    exports["em_fw"]:get_blip_group_subscription(function(result)
+    exports["em_dal"]:get_blip_group_subscription(function(result)
 
         blip_subscriptions = result or {}
         Citizen.CreateThread(blip_group_loop)

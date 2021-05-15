@@ -2,7 +2,7 @@
 local function browse_basic_selection()
 
     exports["em_dialog"]:hide_dialog()
-    exports["em_fw"]:get_vehicle_store_stock_async(function(result)
+    exports["em_dal"]:get_vehicle_store_stock_async(function(result)
 
         TriggerEvent("OpenVehicleShop", result)
 

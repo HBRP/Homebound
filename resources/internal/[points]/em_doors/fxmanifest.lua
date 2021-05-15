@@ -10,7 +10,7 @@ client_scripts {
 
 dependencies {
 
-    'em_fw',
+    'em_dal',
     'em_points',
     'em_animations',
     'cd_drawtextui',

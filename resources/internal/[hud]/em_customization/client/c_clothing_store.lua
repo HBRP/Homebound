@@ -15,7 +15,7 @@ function open_clothing_store()
     exports['fivem-appearance']:startPlayerCustomization(function(appearance)
 
         if appearance then
-            exports["em_fw"]:update_skin(json.encode(appearance))
+            exports["em_dal"]:update_skin(json.encode(appearance))
             TriggerEvent("cui_wardrobe:open")
         end
         TriggerEvent("cd_drawtextui:temp_show_text")
@@ -39,7 +39,7 @@ function open_barber_store()
     exports['fivem-appearance']:startPlayerCustomization(function(appearance)
 
         if appearance then
-            exports["em_fw"]:update_skin(json.encode(appearance))
+            exports["em_dal"]:update_skin(json.encode(appearance))
         end
         TriggerEvent("cd_drawtextui:temp_show_text")
 
@@ -62,7 +62,7 @@ function open_surgery_store()
     exports['fivem-appearance']:startPlayerCustomization(function(appearance)
 
         if appearance then
-            exports["em_fw"]:update_skin(json.encode(appearance))
+            exports["em_dal"]:update_skin(json.encode(appearance))
         end
         TriggerEvent("cd_drawtextui:temp_show_text")
 

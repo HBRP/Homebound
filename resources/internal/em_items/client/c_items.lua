@@ -37,7 +37,7 @@ end
 
 function get_character_storage_item_id(item_id)
 
-    local storage_items = (exports["em_fw"]:get_character_storage())["storage_items"]
+    local storage_items = (exports["em_dal"]:get_character_storage())["storage_items"]
     for i = 1, #storage_items do
 
         if storage_items[i].item_id == item_id then
@@ -59,7 +59,7 @@ end
 function get_item_amount_by_name(item_name)
 
     local item_id = get_item_id_from_name(item_name)
-    local storage_items = (exports["em_fw"]:get_character_storage())["storage_items"]
+    local storage_items = (exports["em_dal"]:get_character_storage())["storage_items"]
     local amount = 0
 
     for i = 1, #storage_items do
@@ -110,7 +110,7 @@ end
 
 local function apply_item_modifiers(item_id)
 
-    local item_modifiers = exports["em_fw"]:get_item_modifiers(item_id)
+    local item_modifiers = exports["em_dal"]:get_item_modifiers(item_id)
     for i = 1, #item_modifiers do
 
         if item_modifiers[i].item_modifier_type_id == item_modifier_type_ids.FOOD then
@@ -137,19 +137,19 @@ function use_item(item_id, item_type_id, storage_item_id, item_metadata)
 
         eat()
         apply_item_modifiers(item_id)
-        exports["em_fw"]:remove_item(storage_item_id, 1)
+        exports["em_dal"]:remove_item(storage_item_id, 1)
 
     elseif item_type_id == item_type_ids.LIQUID then
 
         drink()
         apply_item_modifiers(item_id)
-        exports["em_fw"]:remove_item(storage_item_id, 1)
+        exports["em_dal"]:remove_item(storage_item_id, 1)
 
     elseif item_type_id == item_type_ids.ARMOUR then
 
         apply_armour_anim()
         apply_item_modifiers(item_id)
-        exports["em_fw"]:remove_item(storage_item_id, 1)
+        exports["em_dal"]:remove_item(storage_item_id, 1)
 
     elseif item_type_id == item_type_ids.WEAPON then
 
@@ -175,7 +175,7 @@ end
 Citizen.CreateThread(function()
 
     Citizen.Wait(0)
-    exports["em_fw"]:trigger_server_callback("em_items:get_items", function(items)
+    exports["em_dal"]:trigger_server_callback("em_items:get_items", function(items)
 
         items_cache = items or {}
         

@@ -11,7 +11,7 @@ server_script 'server/s_group_alerts.lua'
 
 dependencies {
 
-    'em_fw',
+    'em_dal',
     'em_items',
     'em_commands'
 

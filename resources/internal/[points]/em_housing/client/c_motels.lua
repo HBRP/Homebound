@@ -8,10 +8,10 @@ local function get_door_lock_interaction(house)
     local callback = function() 
 
         exports["em_dialog"]:hide_dialog()
-        exports["em_fw"]:toggle_housing_door_lock_async(function(locked)
+        exports["em_dal"]:toggle_housing_door_lock_async(function(locked)
 
             house.locked = locked
-            exports["em_fw"]:trigger_proximity_event("em_housing:toogle_motel_lock", 100.0, house)
+            exports["em_dal"]:trigger_proximity_event("em_housing:toogle_motel_lock", 100.0, house)
             TriggerEvent("PlaySoundForEveryoneInVicinity", "sounds/Doors/door_unlock.mp3")
             Citizen.Wait(200)
             interact_motel(house)
@@ -167,7 +167,7 @@ end
 
 local function refresh_loop(refresh_func)
 
-    exports["em_fw"]:get_nearby_houses_async(function(houses)
+    exports["em_dal"]:get_nearby_houses_async(function(houses)
 
         housing_doors_cache = get_split_by_doors(houses)
         refresh_func(housing_doors_cache)
@@ -209,7 +209,7 @@ end
 
 local function setup_blip()
 
-    exports["em_fw"]:get_house_async(function(house_data)
+    exports["em_dal"]:get_house_async(function(house_data)
 
         local house = house_data.house
         local blip = AddBlipForCoord(house.spawn_x, house.spawn_y, house.spawn_z)
@@ -226,15 +226,15 @@ local function setup_blip()
 
 end
 
-AddEventHandler("em_fw:character_loaded", function()
+AddEventHandler("em_dal:character_loaded", function()
 
-    exports["em_fw"]:trigger_server_callback_async("em_housing:get_player_motel_allotment", function(house_id) 
+    exports["em_dal"]:trigger_server_callback_async("em_housing:get_player_motel_allotment", function(house_id) 
 
         motel_house_id = house_id
         setup_blip()
         Citizen.CreateThread(marker_loop)
 
-    end, exports["em_fw"]:get_player_id(), exports["em_fw"]:get_character_id())
+    end, exports["em_dal"]:get_player_id(), exports["em_dal"]:get_character_id())
 
     exports["em_points"]:register_points(refresh_loop, text, interact_motel)
     

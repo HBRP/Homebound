@@ -40,7 +40,7 @@ local function nearby_clock_in_loop()
                 if IsControlJustReleased(0, 38) then
 
                     if not job.clocked_in then
-                        exports["em_fw"]:clock_in_async(function(result) 
+                        exports["em_dal"]:clock_in_async(function(result) 
 
                             set_job_result(result)
                             exports["cd_drawtextui"]:hide_text(draw_text_id)
@@ -48,7 +48,7 @@ local function nearby_clock_in_loop()
 
                         end, nearby_job_clock_in[i].group_id)
                     else
-                        exports["em_fw"]:clock_out_async(function(result)
+                        exports["em_dal"]:clock_out_async(function(result)
 
                             set_job_result(result)
                             exports["cd_drawtextui"]:hide_text(draw_text_id)
@@ -76,9 +76,9 @@ end
 
 local function refresh_nearby_clock_in_loop()
 
-    exports["em_fw"]:get_clocked_on_job_async(set_job_result)
+    exports["em_dal"]:get_clocked_on_job_async(set_job_result)
     while true do
-        exports["em_fw"]:get_nearby_job_clock_in_async(set_nearby_job_clock_in)
+        exports["em_dal"]:get_nearby_job_clock_in_async(set_nearby_job_clock_in)
         Citizen.Wait(5000)
     end
 
@@ -90,7 +90,7 @@ function get_current_job()
     
 end
 
-AddEventHandler("em_fw:character_loaded", function()
+AddEventHandler("em_dal:character_loaded", function()
 
     Citizen.CreateThread(refresh_nearby_clock_in_loop)
     Citizen.CreateThread(nearby_clock_in_loop)

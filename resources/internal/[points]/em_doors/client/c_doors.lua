@@ -5,10 +5,10 @@ local next_refresh_time = 0
 
 local function interact_with_door(door)
 
-    exports["em_fw"]:toggle_door(door.door_location_id)
+    exports["em_dal"]:toggle_door(door.door_location_id)
 
     door.locked = not door.locked
-    exports["em_fw"]:trigger_proximity_event("em_doors:proximity_change", 100.0, door)
+    exports["em_dal"]:trigger_proximity_event("em_doors:proximity_change", 100.0, door)
     exports["em_animations"]:play_animation_sync("anim@heists@keycard@", "idle_a", 1000, 48)
     exports["cd_drawtextui"]:clear_queue()
 
@@ -52,7 +52,7 @@ local function refresh_loop(refresh_func)
     local current_coords = GetEntityCoords(PlayerPedId())
     if #(current_coords - last_coords) > 25.0 or GetGameTimer() > next_refresh_time then
 
-        exports["em_fw"]:get_nearby_doors_async(function(doors)
+        exports["em_dal"]:get_nearby_doors_async(function(doors)
 
             doors = doors or {}
             set_prop_hashes(doors)
@@ -85,7 +85,7 @@ local function text(door)
 
 end
 
-AddEventHandler("em_fw:character_loaded", function()
+AddEventHandler("em_dal:character_loaded", function()
 
     exports["em_points"]:register_door_points(refresh_loop, text, interact_with_door, 250)
     

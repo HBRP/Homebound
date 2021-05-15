@@ -7,7 +7,7 @@ end
 
 local function refresh_loop(refresh_func)
 
-    exports["em_fw"]:get_nearby_interaction_points_async(refresh_func)
+    exports["em_dal"]:get_nearby_interaction_points_async(refresh_func)
 
 end
 
@@ -17,7 +17,7 @@ local function text(point)
 
 end
 
-AddEventHandler("em_fw:character_loaded", function()
+AddEventHandler("em_dal:character_loaded", function()
 
     exports["em_points"]:register_points(refresh_loop, text, interact_with_point)
     

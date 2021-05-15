@@ -7,7 +7,7 @@ end
 
 local function refresh_loop(refresh_check)
 
-    local nearby_stashes = exports["em_fw"]:get_nearby_stashes()
+    local nearby_stashes = exports["em_dal"]:get_nearby_stashes()
 
     for i = 1, #manual_stashes do
         table.insert(nearby_stashes, manual_stashes[i])
@@ -21,7 +21,7 @@ local function text(stash)
     return "Press [E] to access stash"
 end
 
-AddEventHandler("em_fw:character_loaded", function()
+AddEventHandler("em_dal:character_loaded", function()
 
     exports["em_points"]:register_points(refresh_loop, text, open_stash)
 

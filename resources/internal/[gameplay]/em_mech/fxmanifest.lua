@@ -7,7 +7,7 @@ client_scripts {
 }
 
 dependencies {
-    'em_fw',
+    'em_dal',
     'em_dialog',
     'em_transactions',
     'em_vehicles',

@@ -31,8 +31,8 @@ end, "Teleport to coordinates", {{name = 'x', help = 'float'}, {name = 'y', help
 
 register_command("give_item", function(source, args, raw)
 
-    local storage_id = exports["em_fw"]:get_character_storage_id()
-    local response = exports["em_fw"]:give_item(storage_id, tonumber(args[1]), tonumber(args[2]), -1, -1)
+    local storage_id = exports["em_dal"]:get_character_storage_id()
+    local response = exports["em_dal"]:give_item(storage_id, tonumber(args[1]), tonumber(args[2]), -1, -1)
 
     if response.response.success then
         exports['t-notify']:Alert({style = 'success', message = "Gave Item"})

@@ -15,7 +15,7 @@ local function purchase_item(item_name, item_cost)
     end
 
     local item_id = exports["em_items"]:get_item_id_from_name(item_name)
-    local response = exports["em_fw"]:give_item(exports["em_fw"]:get_character_storage_id(), item_id, 1, -1, -1)
+    local response = exports["em_dal"]:give_item(exports["em_dal"]:get_character_storage_id(), item_id, 1, -1, -1)
 
     if response.response.success then
         exports["em_transactions"]:remove_cash(item_cost)
@@ -56,7 +56,7 @@ AddEventHandler("buy_sprunk", function(prop)
             callback = function()
                 if math.random(0, 99) > 85 then
                     local item_id = exports["em_items"]:get_item_id_from_name(item_name)
-                    exports["em_fw"]:give_item(exports["em_fw"]:get_character_storage_id(), item_id, 1, -1, -1)
+                    exports["em_dal"]:give_item(exports["em_dal"]:get_character_storage_id(), item_id, 1, -1, -1)
                     exports['t-notify']:Alert({style = "success", message = "A sprunk fell out!"})
                 else
                     exports['t-notify']:Alert({style = "error", message = "You kicked the machine, but nothing happened"})

@@ -20,7 +20,7 @@ exports {
 
 dependencies {
 
-    'em_fw',
+    'em_dal',
     'em_points',
     'em_commands',
     'cd_drawtextui',

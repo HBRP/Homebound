@@ -85,7 +85,7 @@ function register_raycast_points(refresh_loop, text_func, control_pressed_func, 
     local last_hash = nil
     local interaction_func = function(obj)
 
-        local hit, coords, entity = table.unpack(exports["em_fw"]:ray_cast_game_play_camera(10.0))
+        local hit, coords, entity = table.unpack(exports["em_dal"]:ray_cast_game_play_camera(10.0))
         if not hit then
             goto object_continue
         end

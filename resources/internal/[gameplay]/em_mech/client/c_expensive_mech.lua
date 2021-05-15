@@ -6,7 +6,7 @@ local function repair_vehicle()
     local veh = GetVehiclePedIsIn(PlayerPedId(), false)
     if veh == 0 then
 
-        veh = exports["em_fw"]:get_nearest_vehicle()
+        veh = exports["em_dal"]:get_nearest_vehicle()
         if veh == 0 or #(GetEntityCoords(veh) - GetEntityCoords(PlayerPedId())) > 5.0 then
 
             exports['t-notify']:Alert({style = "error", message = "No close enough vehicle"})

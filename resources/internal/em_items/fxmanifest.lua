@@ -45,7 +45,7 @@ exports {
 
 dependencies {
 
-    'em_fw',
+    'em_dal',
     'em_medical',
     'rprogress',
     't-notify'

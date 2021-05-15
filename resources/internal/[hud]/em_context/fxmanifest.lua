@@ -14,7 +14,7 @@ exports {
 }
 
 dependencies {
-    'em_fw',
+    'em_dal',
     'em_dialog',
     'em_vehicles'
 }

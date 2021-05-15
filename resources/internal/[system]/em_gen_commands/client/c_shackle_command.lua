@@ -5,7 +5,7 @@ local other_player_shackled = nil
 local function is_other_character_shackled(character_id)
 
     other_player_shackled = nil
-    exports["em_fw"]:trigger_event_for_character("em_gen_commands:is_shackled_request", character_id, exports["em_fw"]:get_character_id())
+    exports["em_dal"]:trigger_event_for_character("em_gen_commands:is_shackled_request", character_id, exports["em_dal"]:get_character_id())
 
     while other_player_shackled == nil do
         Citizen.Wait(50)
@@ -25,7 +25,7 @@ exports["em_commands"]:register_command_no_perms("shackle", function(source, arg
     end
     local character_id = tonumber(args[1])
 
-    exports["em_fw"]:is_character_id_in_radius_async(function(is_in_range) 
+    exports["em_dal"]:is_character_id_in_radius_async(function(is_in_range) 
 
         if is_in_range then
 
@@ -43,8 +43,8 @@ exports["em_commands"]:register_command_no_perms("shackle", function(source, arg
             end
 
             exports["em_animations"]:play_animation_sync("mp_arrest_paired", "cop_p2_back_right", 2000, 16)
-            exports["em_fw"]:trigger_event_for_character("em_gen_commands:shackle_request", character_id)
-            exports["em_fw"]:remove_item(storage_item_id, 1)
+            exports["em_dal"]:trigger_event_for_character("em_gen_commands:shackle_request", character_id)
+            exports["em_dal"]:remove_item(storage_item_id, 1)
 
         else
 
@@ -60,8 +60,8 @@ end, "Shakle someone's feet", {{name = "character_id", help = "try /ids to find 
 local function give_shackles_back()
 
     local item_id = exports["em_items"]:get_item_id_from_name("shackles")
-    local storage_id = exports["em_fw"]:get_character_storage_id()
-    local response = exports["em_fw"]:give_item(storage_id, item_id, 1, -1, -1)
+    local storage_id = exports["em_dal"]:get_character_storage_id()
+    local response = exports["em_dal"]:give_item(storage_id, item_id, 1, -1, -1)
 
     if not response.response.success then
         print(response)
@@ -76,7 +76,7 @@ exports["em_commands"]:register_command_no_perms("unshackle", function(source, a
     end
     local character_id = tonumber(args[1])
 
-    exports["em_fw"]:is_character_id_in_radius_async(function(is_in_range) 
+    exports["em_dal"]:is_character_id_in_radius_async(function(is_in_range) 
 
         if is_in_range then
 
@@ -94,7 +94,7 @@ exports["em_commands"]:register_command_no_perms("unshackle", function(source, a
             end
 
             exports["em_animations"]:play_animation_sync("mp_arresting", "a_uncuff", 2000, 16)
-            exports["em_fw"]:trigger_event_for_character("em_gen_commands:unshackle_request", character_id)
+            exports["em_dal"]:trigger_event_for_character("em_gen_commands:unshackle_request", character_id)
             give_shackles_back()
 
         else
@@ -145,7 +145,7 @@ end)
 RegisterNetEvent("em_gen_commands:is_shackled_request")
 AddEventHandler("em_gen_commands:is_shackled_request", function(other_character_id)
 
-    exports["em_fw"]:trigger_event_for_character("em_gen_commands:is_shackled_response", other_character_id, shackled)
+    exports["em_dal"]:trigger_event_for_character("em_gen_commands:is_shackled_response", other_character_id, shackled)
 
 end)
 

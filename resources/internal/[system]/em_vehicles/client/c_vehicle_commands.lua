@@ -2,7 +2,7 @@
 
 RegisterCommand('unlock_car', function() 
 
-    local veh = exports["em_fw"]:get_nearest_vehicle()
+    local veh = exports["em_dal"]:get_nearest_vehicle()
 
     if not has_keys(veh) then
 
