@@ -7,7 +7,7 @@ local scaleString = ""
 
 local function set_tattoos(callback)
 
-	exports["em_fw"]:get_tattoos_async(function(result)
+	exports["em_dal"]:get_tattoos_async(function(result)
         if result then
             ClearPedDecorations(PlayerPedId())
             for k, v in pairs(result) do
@@ -158,7 +158,7 @@ function BuyTattoo(collection, name, label, price)
 
 	if exports["em_transactions"]:remove_cash(price) then
 		table.insert(currentTattoos, {collection = collection, nameHash = name, Count = opacity})
-        exports["em_fw"]:update_tattoos(currentTattoos)
+        exports["em_dal"]:update_tattoos(currentTattoos)
 	else
 		-- 
 	end
@@ -178,7 +178,7 @@ function RemoveTattoo(name, label)
 			table.remove(currentTattoos, k)
 		end
 	end
-	exports["em_fw"]:update_tattoos(currentTattoos)
+	exports["em_dal"]:update_tattoos(currentTattoos)
 end
 
 function CreateScale(sType)

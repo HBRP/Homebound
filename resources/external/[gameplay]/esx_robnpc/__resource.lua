@@ -13,7 +13,7 @@ client_scripts {
 }
 
 dependencies {
-    'em_fw',
+    'em_dal',
     't-notify',
     'em_commands',
     'rprogress'

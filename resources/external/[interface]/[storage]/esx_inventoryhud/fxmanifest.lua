@@ -26,7 +26,7 @@ files {
 
 dependencies {
 
-  "em_fw",
+  "em_dal",
   "em_items",
   "em_storage",
   "em_transactions",

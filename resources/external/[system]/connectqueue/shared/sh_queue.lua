@@ -152,7 +152,7 @@ function Queue:IsPriority(ids)
 
             _Queue.Priority[id] = nil
 
-            local priority = exports["em_fw"]:get_priority_if_whitelisted(id)
+            local priority = exports["em_dal"]:get_priority_if_whitelisted(id)
 
             if priority.queue_priority ~= -1 then
                 _Queue.Priority[id] = priority

@@ -20,7 +20,7 @@ RegisterNUICallback('BuyVehicle', function(data, cb)
 	local amount = get_vehicle_amount(data.model)
 	assert(amount ~= nil, string.format("Unable to find price for %s", data.model))
 
-    local response = exports["em_fw"]:can_purchase_a_vehicle()
+    local response = exports["em_dal"]:can_purchase_a_vehicle()
     if not response.can_purchase then
         exports['t-notify']:Alert({style = "error", message = "You cannot purchase another vehicle. Sell one."})
         return
@@ -35,7 +35,7 @@ RegisterNUICallback('BuyVehicle', function(data, cb)
         local veh_mods = exports["em_vehicles"]:get_vehicle_mods(veh)
         local veh_state = exports["em_vehicles"]:get_vehicle_state(veh)
 
-        exports["em_fw"]:insert_new_vehicle_async(function(result)
+        exports["em_dal"]:insert_new_vehicle_async(function(result)
 
             SetVehicleNumberPlateText(veh, result.plate)
             exports["em_vehicles"]:register_vehicle_as_player_owned(veh)

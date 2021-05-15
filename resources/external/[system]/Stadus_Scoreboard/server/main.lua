@@ -2,7 +2,7 @@ local connectedPlayers = {}
 
 function update_connected_players()
 
-	local characters = exports["em_fw"]:get_current_character_ids()
+	local characters = exports["em_dal"]:get_current_character_ids()
 	connectedPlayers = {}
 
 	for i = 1, #characters do
@@ -10,7 +10,7 @@ function update_connected_players()
 		connectedPlayers[characters[i].source] = {
 			ping = GetPlayerPing(characters[i].source),
 			id = characters[i].character_id,
-			name = exports["em_fw"]:get_steam_id(characters[i].source)
+			name = exports["em_dal"]:get_steam_id(characters[i].source)
 		}
 
 	end

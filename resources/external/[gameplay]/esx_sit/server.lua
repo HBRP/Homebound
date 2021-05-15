@@ -12,6 +12,6 @@ AddEventHandler('esx_sit:leavePlace', function(objectCoords)
 	end
 end)
 
-exports["em_fw"]:register_server_callback('esx_sit:getPlace', function(source, callback, objectCoords)
+exports["em_dal"]:register_server_callback('esx_sit:getPlace', function(source, callback, objectCoords)
     callback(seatsTaken[objectCoords])
 end)

@@ -23,12 +23,12 @@ end
 
 local function open_mdt()
 
-    exports["em_fw"]:cad_get_latest_cad_reports_async(function(cad_reports)
+    exports["em_dal"]:cad_get_latest_cad_reports_async(function(cad_reports)
 
         local reports = get_report_conversions(cad_reports["reports"] or {})
         local warrants = get_report_conversions(cad_reports["warrants"] or {})
 
-        local officer = exports["em_fw"]:get_character_name()
+        local officer = exports["em_dal"]:get_character_name()
         local job = "police"
 
         local playerPed = PlayerPedId()
@@ -100,14 +100,14 @@ local function get_charge_conversion(charges)
 
 end
 
-AddEventHandler("em_fw:character_loaded", function()
+AddEventHandler("em_dal:character_loaded", function()
 
-    exports["em_fw"]:cad_get_charges_async(function(charges)
+    exports["em_dal"]:cad_get_charges_async(function(charges)
 
         SendNUIMessage({
             type = "offensesAndOfficerLoaded",
             offenses = get_charge_conversion(charges),
-            name = exports["em_fw"]:get_character_name()
+            name = exports["em_dal"]:get_character_name()
         })
 
     end)
@@ -143,7 +143,7 @@ RegisterNUICallback("performOffenderSearch", function(data, cb)
 
     end
 
-    exports["em_fw"]:cad_search_for_character_async(function(result)
+    exports["em_dal"]:cad_search_for_character_async(function(result)
 
         local matches = get_search_conversion(result)
         SendNUIMessage({
@@ -199,7 +199,7 @@ end
 
 RegisterNUICallback("viewOffender", function(data, cb)
 
-    exports["em_fw"]:cad_get_character_details_async(function(result)
+    exports["em_dal"]:cad_get_character_details_async(function(result)
 
         local temp_data        = {}
         temp_data.vehicles     = get_vehicle_conversion(result.vehicles)
@@ -238,7 +238,7 @@ RegisterNUICallback("saveOffenderChanges", function(data, cb)
     end
 
     data.changes.licenses_removed = licenses_removed
-    exports["em_fw"]:cad_update_character_details_async(function(response)
+    exports["em_dal"]:cad_update_character_details_async(function(response)
 
         if not response.result.successful then
             TriggerEvent("cad:sendNotification", response.result.response)
@@ -251,7 +251,7 @@ end)
 
 local function load_report(cad_report_id)
 
-    exports["em_fw"]:cad_get_report_async(function(response) 
+    exports["em_dal"]:cad_get_report_async(function(response) 
 
         if not response.result.successful then
            TriggerEvent("cad:sendNotification", response.result.response)
@@ -273,7 +273,7 @@ end
 
 RegisterNUICallback("submitNewReport", function(data, cb)
     
-    exports["em_fw"]:cad_new_report_async(function(response)
+    exports["em_dal"]:cad_new_report_async(function(response)
 
         if not response.result.successful then
             TriggerEvent("cad:sendNotification", response.result.response)
@@ -281,14 +281,14 @@ RegisterNUICallback("submitNewReport", function(data, cb)
             load_report(response.cad_report_id)
         end
 
-    end, data.char_id, data.title, data.incident, data.charges, exports["em_fw"]:get_character_name(), data.name, data.date)
+    end, data.char_id, data.title, data.incident, data.charges, exports["em_dal"]:get_character_name(), data.name, data.date)
 
     cb('ok')
 end)
 
 RegisterNUICallback("performReportSearch", function(data, cb)
 
-    exports["em_fw"]:cad_search_reports_async(function(reports)
+    exports["em_dal"]:cad_search_reports_async(function(reports)
 
         local results = get_report_conversions(reports)
         SendNUIMessage({
@@ -309,7 +309,7 @@ end)
 
 RegisterNUICallback("deleteReport", function(data, cb)
 
-    exports["em_fw"]:cad_delete_report_async(function(response)
+    exports["em_dal"]:cad_delete_report_async(function(response)
 
         if not response.result.successful then
             TriggerEvent("cad:sendNotification", response.result.response)
@@ -324,7 +324,7 @@ end)
 
 RegisterNUICallback("saveReportChanges", function(data, cb)
 
-    exports["em_fw"]:cad_update_report_async(function(response)
+    exports["em_dal"]:cad_update_report_async(function(response)
 
         if not response.result.successful then
             TriggerEvent("cad:sendNotification", response.result.response)
@@ -339,7 +339,7 @@ end)
 
 RegisterNUICallback("vehicleSearch", function(data, cb)
 
-    exports["em_fw"]:cad_search_vehicle_async(function(vehicles)
+    exports["em_dal"]:cad_search_vehicle_async(function(vehicles)
 
         vehicles = get_vehicle_conversion(vehicles)
 
@@ -355,7 +355,7 @@ end)
 
 RegisterNUICallback("getVehicle", function(data, cb)
 
-    exports["em_fw"]:cad_get_vehicle_details_async(function(vehicle_details)
+    exports["em_dal"]:cad_get_vehicle_details_async(function(vehicle_details)
 
         local details      = data.vehicle
         details.haswarrant = vehicle_details.has_warrant
@@ -375,7 +375,7 @@ end)
 
 RegisterNUICallback("getWarrants", function(data, cb)
 
-    exports["em_fw"]:cad_get_all_warrants_async(function(result)
+    exports["em_dal"]:cad_get_all_warrants_async(function(result)
 
         SendNUIMessage({
             type = "returnedWarrants",
@@ -388,7 +388,7 @@ end)
 
 RegisterNUICallback("submitNewWarrant", function(data, cb)
 
-    exports["em_fw"]:cad_new_warrant_async(function(response) 
+    exports["em_dal"]:cad_new_warrant_async(function(response) 
 
         if not response.result.successful then
             TriggerEvent("cad:sendNotification", response.result.response)
@@ -396,7 +396,7 @@ RegisterNUICallback("submitNewWarrant", function(data, cb)
             TriggerEvent("cad:sendNotification", "Warrant submitted")
         end
 
-    end, data.char_id, data.report_id, data.report_title, data.notes, data.charges, exports["em_fw"]:get_character_name(), data.name)
+    end, data.char_id, data.report_id, data.report_title, data.notes, data.charges, exports["em_dal"]:get_character_name(), data.name)
 
     cb('ok')
 
@@ -405,7 +405,7 @@ end)
 RegisterNUICallback("deleteWarrant", function(data, cb)
     print(string.format("deleteWarrant: %s", json.encode(data)))
 
-    exports["em_fw"]:cad_delete_warrant_async(function(response)
+    exports["em_dal"]:cad_delete_warrant_async(function(response)
 
         if not response.result.successful then
             TriggerEvent("cad:sendNotification", response.result.response)
@@ -485,7 +485,7 @@ RegisterNUICallback("saveVehicleChanges", function(data, cb)
         data.stolen = false
     end
 
-    exports["em_fw"]:cad_update_vehicle(data.plate, data.notes, data.stolen)
+    exports["em_dal"]:cad_update_vehicle(data.plate, data.notes, data.stolen)
     TriggerEvent("cad:sendNotification", "Vehicle changes have been saved.")
     cb('ok')
 end)

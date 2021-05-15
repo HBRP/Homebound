@@ -1,9 +1,9 @@
 
 local keybinds = {}
 
-AddEventHandler("em_fw:character_loaded", function()
+AddEventHandler("em_dal:character_loaded", function()
 
-    exports["em_fw"]:get_emote_keybinds(function(result)
+    exports["em_dal"]:get_emote_keybinds(function(result)
         keybinds = result or {}
     end)
 
@@ -88,13 +88,13 @@ function EmoteBindStart(source, args, raw)
 
         if (Config.KeybindKeys[key]) ~= nil then
         	if DP.Emotes[emote] ~= nil then
-                exports["em_fw"]:update_emote_keybinds(get_keybind_number(key), emote)
+                exports["em_dal"]:update_emote_keybinds(get_keybind_number(key), emote)
                 update_local_keybind(get_keybind_number(key), emote)
         	elseif DP.Dances[emote] ~= nil then
-          		exports["em_fw"]:update_emote_keybinds(get_keybind_number(key), emote)
+          		exports["em_dal"]:update_emote_keybinds(get_keybind_number(key), emote)
                 update_local_keybind(get_keybind_number(key), emote)
         	elseif DP.PropEmotes[emote] ~= nil then
-          		exports["em_fw"]:update_emote_keybinds(get_keybind_number(key), emote)
+          		exports["em_dal"]:update_emote_keybinds(get_keybind_number(key), emote)
                 update_local_keybind(get_keybind_number(key), emote)
         	else
           		EmoteChatMessage("'"..emote.."' "..Config.Languages[lang]['notvalidemote'].."")

@@ -35,7 +35,7 @@ function refreshUI()
 
     local html = ''
     local emptyName = 'Empty slot'
-    local gender = exports["em_fw"]:get_character_gender()
+    local gender = exports["em_dal"]:get_character_gender()
     for i = 1, Config.SlotsNumber do
         if outfits[i] ~= nil then
             html = html .. '<div class="slot" data-number="' .. i .. '" data-gender="' .. gender .. '"><span class="slot-text">' .. outfits[i].outfit_name ..'</span><div class="controls"><button class="edit"></button><button class="clear"></button></div></div>'
@@ -59,7 +59,7 @@ AddEventHandler('cui_wardrobe:open', function()
         isOpening = true
         RequestStreamedTextureDict('shared')
 
-        outfits = exports["em_fw"]:get_all_outfit_meta_data()
+        outfits = exports["em_dal"]:get_all_outfit_meta_data()
         if outfits == nil then
             outfits = {}
         end
@@ -95,8 +95,8 @@ RegisterNUICallback('save', function(data, cb)
 
     if outfits[tonumber(data['slot'])] == nil then
 
-        exports["em_fw"]:create_outfit(data['name'], json.encode(outfit))
-        local active_outfit = exports["em_fw"]:get_active_outfit()
+        exports["em_dal"]:create_outfit(data['name'], json.encode(outfit))
+        local active_outfit = exports["em_dal"]:get_active_outfit()
 
         outfits[tonumber(data['slot'])] = {}
         outfits[tonumber(data['slot'])].outfit_name         = active_outfit["outfit_name"]
@@ -104,7 +104,7 @@ RegisterNUICallback('save', function(data, cb)
 
     else
 
-        exports["em_fw"]:update_outfit(outfits[tonumber(data['slot'])].character_outfit_id, data['name'], json.encode(outfit))
+        exports["em_dal"]:update_outfit(outfits[tonumber(data['slot'])].character_outfit_id, data['name'], json.encode(outfit))
 
     end
 
@@ -119,7 +119,7 @@ end)
 
 RegisterNUICallback('clear', function(data, cb)
 
-    exports["em_fw"]:delete_outfit(outfits[tonumber(data['slot'])].character_outfit_id)
+    exports["em_dal"]:delete_outfit(outfits[tonumber(data['slot'])].character_outfit_id)
     SendNUIMessage({
         action = 'completeDeletion',
         slot = tonumber(data['slot'])
@@ -129,13 +129,13 @@ end)
 
 RegisterNUICallback('load', function(data, cb)
     if not isLoading then
-        local player_data = exports["em_fw"]:get_outfit(outfits[tonumber(data['slot'])].character_outfit_id)
+        local player_data = exports["em_dal"]:get_outfit(outfits[tonumber(data['slot'])].character_outfit_id)
         local outfit = player_data['outfit']
         exports["fivem-appearance"]:setPedComponents(PlayerPedId(), outfit.ped_components)
         exports["fivem-appearance"]:setPedProps(PlayerPedId(), outfit.props)
 
         local appearance = exports["fivem-appearance"]:getPedAppearance(PlayerPedId())
-        exports["em_fw"]:update_skin(json.encode(appearance))
+        exports["em_dal"]:update_skin(json.encode(appearance))
 
     end
 end)

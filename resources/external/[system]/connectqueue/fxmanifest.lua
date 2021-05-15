@@ -9,6 +9,6 @@ client_script "shared/sh_queue.lua"
 
 dependencies {
 
-    'em_fw'
+    'em_dal'
 
 }

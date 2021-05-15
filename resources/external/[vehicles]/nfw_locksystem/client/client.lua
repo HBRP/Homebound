@@ -73,7 +73,7 @@ local function check_for_car()
 
 	local plate = GetVehicleNumberPlateText(veh)
 	local jacked = true
-	exports["em_fw"]:trigger_server_callback("nfw_locksystem:is_car_jacked", function(result)
+	exports["em_dal"]:trigger_server_callback("nfw_locksystem:is_car_jacked", function(result)
 		jacked = result
 	end, plate)
 

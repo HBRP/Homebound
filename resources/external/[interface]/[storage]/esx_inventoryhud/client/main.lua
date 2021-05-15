@@ -127,7 +127,7 @@ end)
 RegisterNUICallback("GetNearPlayers", function(data, cb)
 
     local elements = {}
-    local characters = exports["em_fw"]:get_nearby_character_ids(3.0)
+    local characters = exports["em_dal"]:get_nearby_character_ids(3.0)
 
     for i = 1, #characters do
         table.insert(elements, { label = "", player = characters[i].character_id})
@@ -171,7 +171,7 @@ RegisterNUICallback("DropItem", function(data, cb)
 
     local drop_storage_id = exports["em_storage"]:get_nearby_drop_storage_id()
 
-    exports["em_fw"]:give_item(drop_storage_id, item.item_id, data["number"], item.storage_item_id, -1)
+    exports["em_dal"]:give_item(drop_storage_id, item.item_id, data["number"], item.storage_item_id, -1)
     TriggerEvent("em_storage:manual_drop_refresh")
     loadPlayerInventory()
 
@@ -186,10 +186,10 @@ RegisterNUICallback("GiveItem", function(data, cb)
         amount_to_give = data.item.count
     end
 
-    local result = exports["em_fw"]:give_item_to_other_character(data.player, data.item.item_id, amount_to_give, data.item.storage_item_id)
+    local result = exports["em_dal"]:give_item_to_other_character(data.player, data.item.item_id, amount_to_give, data.item.storage_item_id)
     if result.response.success then
         exports['t-notify']:Alert({style = 'success', message = "Gave item to character"})
-        exports["em_fw"]:remove_item(data.item.storage_item_id, amount_to_give)
+        exports["em_dal"]:remove_item(data.item.storage_item_id, amount_to_give)
     else
         exports['t-notify']:Alert({style = 'error', message = "Cannot give item to character"})
     end
@@ -198,8 +198,8 @@ RegisterNUICallback("GiveItem", function(data, cb)
     cb("ok")
 end)
 
-RegisterNetEvent("em_fw:successful_give")
-AddEventHandler("em_fw:successful_give", function(item_id, amount)
+RegisterNetEvent("em_dal:successful_give")
+AddEventHandler("em_dal:successful_give", function(item_id, amount)
 
     if isInInventory then
         loadPlayerInventory()
@@ -264,8 +264,8 @@ end
 
 function loadPlayerInventory()
 
-    left_storage_id = exports["em_fw"]:get_character_storage_id()
-    local storage_container = exports["em_fw"]:get_character_storage()
+    left_storage_id = exports["em_dal"]:get_character_storage_id()
+    local storage_container = exports["em_dal"]:get_character_storage()
 
     SendNUIMessage(
         {
@@ -278,11 +278,11 @@ end
 
 local function load_secondary_inventory(storage_id)
 
-    local storage_container = exports["em_fw"]:get_storage(right_storage_id)
+    local storage_container = exports["em_dal"]:get_storage(right_storage_id)
 
     if right_inventory_name == "Drop" and #storage_container["storage_items"] == 0 then
 
-        exports["em_fw"]:set_drop_zone_inactive(right_storage_id)
+        exports["em_dal"]:set_drop_zone_inactive(right_storage_id)
         TriggerEvent("em_storage:manual_drop_refresh")
         closeInventory()
         right_storage_id = nil
@@ -397,14 +397,14 @@ RegisterNUICallback("MoveItem", function(data, cb)
 
     elseif data.inventory_from == "main" and data.inventory_to == "main" then
 
-        local response = exports["em_fw"]:move_item(left_storage_id, data.storage_item_id, left_storage_id, data.item_slot_to, data.item_id, data.amount)
+        local response = exports["em_dal"]:move_item(left_storage_id, data.storage_item_id, left_storage_id, data.item_slot_to, data.item_id, data.amount)
         if not response.response.success then
             exports['t-notify']:Alert({style = 'error', message = response.response.message})
         end
 
     elseif data.inventory_from == "main" and data.inventory_to == "other" then
 
-        local response = exports["em_fw"]:move_item(left_storage_id, data.storage_item_id, right_storage_id, data.item_slot_to, data.item_id, data.amount)
+        local response = exports["em_dal"]:move_item(left_storage_id, data.storage_item_id, right_storage_id, data.item_slot_to, data.item_id, data.amount)
         if not response.response.success then
             exports['t-notify']:Alert({style = 'error', message = response.response.message})
         end

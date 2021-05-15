@@ -16,7 +16,7 @@ local function setup_character_ui()
     
     SendNUIMessage({
         action = "openui",
-        characters = exports["em_fw"]:get_all_characters()
+        characters = exports["em_dal"]:get_all_characters()
     })
     SetNuiFocus(true, true)
 
@@ -61,7 +61,7 @@ end
 RegisterNUICallback("CharacterChosen", function(data, cb)
 
     SetNuiFocus(false,false)
-    local character = exports["em_fw"]:load_character(data["character_id"])
+    local character = exports["em_dal"]:load_character(data["character_id"])
     spawn_character(character)
 
 end)
@@ -69,8 +69,8 @@ end)
 RegisterNUICallback("CreateCharacter", function(data, cb)
 
     SetNuiFocus(false, false)
-    local character_id = exports["em_fw"]:create_character(data)
-    local character = exports["em_fw"]:load_character(character_id)
+    local character_id = exports["em_dal"]:create_character(data)
+    local character = exports["em_dal"]:load_character(character_id)
     spawn_character(character)
 
 end)
@@ -78,18 +78,18 @@ end)
 RegisterNUICallback("DeleteCharacter", function(data, cb)
 
     SetNuiFocus(false,false)
-    exports["em_fw"]:delete_character(data["character_id"])
+    exports["em_dal"]:delete_character(data["character_id"])
     cb("ok")
     SendNUIMessage({
         action = "openui",
-        characters = exports["em_fw"]:get_all_characters()
+        characters = exports["em_dal"]:get_all_characters()
     })
     SetNuiFocus(true, true)
 
 end)
 
-RegisterNetEvent("em_fw:player_loaded")
-AddEventHandler("em_fw:player_loaded", function()
+RegisterNetEvent("em_dal:player_loaded")
+AddEventHandler("em_dal:player_loaded", function()
 
     Citizen.Wait(1000)
     setup_character_ui()

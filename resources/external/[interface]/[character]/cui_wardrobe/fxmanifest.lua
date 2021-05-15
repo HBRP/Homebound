@@ -26,7 +26,7 @@ files {
 }
 
 dependencies {
-    'em_fw',
+    'em_dal',
     'em_commands',
     'fivem-appearance'
 }

@@ -13,7 +13,7 @@ server_scripts {
 }
 
 dependencies {
-	'em_fw',
+	'em_dal',
 	'em_items',
 	'em_context',
 	'em_vehicles',

@@ -65,7 +65,7 @@ local function set_player_coords()
 
     end
 
-    local character_ids = exports["em_fw"]:get_target_character_id_batch(server_ids)
+    local character_ids = exports["em_dal"]:get_target_character_id_batch(server_ids)
     for k, v in pairs(playerDistances) do
         for i = 1, #character_ids do
             if v.server_id == character_ids[i].source then
