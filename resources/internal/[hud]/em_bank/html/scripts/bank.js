@@ -46,9 +46,33 @@ function populate_pending(pending) {
 
 }
 
+const bank_transaction_types = {1 : "ACH", 2 : "Withdrawal", 3 : "Deposit", 4 : "Wire Transfer"}
+
+function populate_transactions(transactions) {
+
+    var element = '<tr><td>{0}</td><td>{1}</td><td>${2}</td><td>{3}</td></tr>'
+    for (var i = 0; i < transactions.length; i++) {
+
+        var transaction_type = bank_transaction_types[transactions[i].transaction_type_id]
+        var new_element = element.replace("{0}", transactions[i].bank_account_name).replace("{1}", transactions[i].transaction_date).replace("{2}", transactions[i].amount).replace("{3}", transaction_type)
+        $(".recent_transactions_data").append(new_element)
+
+    }
+
+}
+
 function display() {
 
     $(".container-background").fadeIn();
+
+}
+
+function hide() {
+
+    $(".accounts-dropdown").empty();
+    $(".pending_transactions_data").empty();
+    $(".recent_transactions_data").empty();
+    $(".container-background").fadeOut();
 
 }
 
@@ -89,6 +113,23 @@ function test_populate() {
             "current": false
         }
 
+    ]);
+
+    populate_transactions([
+        {
+            "bank_account_name": "bank_account_name",
+            "reason": "reason",
+            "amount": 100,
+            "transaction_date": "",
+            "transaction_type_id": 1
+        },
+        {
+            "bank_account_name": "bank_account_name",
+            "reason": "reason",
+            "amount": 200,
+            "transaction_date": "",
+            "transaction_type_id": 2
+        }
     ]);
 
 }
