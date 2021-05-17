@@ -27,15 +27,8 @@
                   </a>
 
                   <div class="navbar-item has-dropdown is-hoverable">
-                    <a class="navbar-link">
-                      Accounts
-                    </a>
-                    <div class="navbar-dropdown">
-                      <!--<a class="navbar-item">
-                        About
-                      </a>
-                        -->
-                    </div>
+                    <a class="navbar-link">Accounts</a>
+                    <div class="navbar-dropdown accounts-dropdown"></div>
                   </div>
                 </div>
               </div>
@@ -44,24 +37,45 @@
             <br/>
 
             <div class="tile is-ancestor content-tiles">
-                <div class="tile is-vertical is-parent is-5">
+                <div class="tile is-vertical is-parent is-6">
                     <div class="tile is-child box">
                         <p class="title">Summary</p>
-                        <p>Summary</p>
+                        <p class="networth"></p>
+                        <p class="total-due"></p>
                     </div>
                     <div class="tile is-child box">
-                        <p class="title">Bills</p>
-                        <p>Bills</p>
+                        <p class="title">Pending Transactions</p>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Account</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Past Due</th>
+                                </tr>
+                            </thead>
+                            <tbody class="pending_transactions_data"></tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="tile is-child box is-6">
+                <div class="tile is-child box is-5">
                     <p class="title">Recent Activity</p>
-                    <p>Recent Activity</p>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Account</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Type</th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
 
         </div>
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script src="scripts/bank.js"></script>
     </body>
 
 

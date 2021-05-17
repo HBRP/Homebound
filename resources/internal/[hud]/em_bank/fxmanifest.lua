@@ -19,6 +19,7 @@ files {
 
 dependencies {
     
-    'em_dal'
+    'em_dal',
+    'em_commands'
 
 }
