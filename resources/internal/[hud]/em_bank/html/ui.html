@@ -22,7 +22,7 @@
 
               <div id="navbar-fleeca" class="navbar-menu">
                 <div class="navbar-start">
-                  <a class="navbar-item">
+                  <a class="navbar-item home-navbar-item">
                     Home
                   </a>
 
@@ -38,14 +38,24 @@
 
             <div class="tile is-ancestor content-tiles">
                 <div class="tile is-vertical is-parent is-6">
-                    <div class="tile is-child box">
-                        <p class="title">Summary</p>
+                    <div class="tile is-child box summary_box">
+                        <p class="summary-title title">Summary</p>
                         <p class="networth"></p>
                         <p class="total-due"></p>
                     </div>
-                    <div class="tile is-child box">
+                    <div class="tile is-child box account_summary_box">
+                        <p class="account_summary_title title"></p>
+                        <p class="account_funds_text"></p>
+                    </div>
+                    <div class="tile is-child box account_actions_box">
+                        <button class="button is-primary deposit_button">Deposit</button>
+                        <button class="button is-primary withdraw_button">Withdraw</button>
+                        <button class="button is-primary transfer_button">Transfer</button>
+                        <button class="button is-danger delete_button">Delete</button>
+                    </div>
+                    <div class="tile is-child box pending_transaction_tile">
                         <p class="title">Pending Transactions</p>
-                        <table class="table">
+                        <table class="table pending_transaction_tile">
                             <thead>
                                 <tr>
                                     <th>Account</th>
@@ -73,8 +83,34 @@
                     </table>
                 </div>
             </div>
-
         </div>
+
+        <div class="modal deposit_money_modal">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <section class="modal-card-body">
+                <input class="input" type="text" placeholder="Amount to deposit">
+                <br/>
+                <br/>
+                <button class="button is-success">Deposit</button>
+                <button class="button">Cancel</button>
+            </section>
+          </div>
+        </div>
+
+        <div class="modal withdraw_money_modal">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <section class="modal-card-body">
+                <input class="input" type="text" placeholder="Amount to withdraw">
+                <br/>
+                <br/>
+                <button class="button is-success">Withdraw</button>
+                <button class="button">Cancel</button>
+            </section>
+          </div>
+        </div>
+
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script src="scripts/bank.js"></script>
     </body>

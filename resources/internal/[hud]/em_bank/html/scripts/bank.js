@@ -1,8 +1,56 @@
 
+var cache_accounts     = null
+var cache_pending      = null
+var cache_transactions = null
+
+function load_account(bank_account_id) {
+
+    $('.summary_box').hide();
+    $('.account_summary_box').show();
+    $('.account_actions_box').show();
+    for (var i = 0; i < cache_accounts.length; i++) {
+
+        if (cache_accounts[i].bank_account_id == bank_account_id) {
+
+            $('.account_summary_title').text('Viewing account: ' + cache_accounts[i].bank_account_name)
+            $('.account_funds_text').html('<b>Available Funds:</b> $' + cache_accounts[i].funds)
+            break;
+
+        }
+
+    }
+
+    $('.deposit_button').click(function() {
+
+        $('.deposit_money_modal').addClass('is-active')
+
+    })
+
+    $('.withdraw_button').click(function() {
+
+        $('.withdraw_money_modal').addClass('is-active')
+
+    })
+
+    $('.transfer_button').click(function() {
+
+
+
+    })
+
+    $('.delete_button').click(function() {
+
+
+
+    })
+
+}
 
 function populate_accounts(accounts) {
 
-    var element = '<a class="navbar-item" bank_account_id="{id}">({id}) {name}</a>'
+    cache_accounts = accounts;
+
+    var element = '<a class="navbar-item account-item" bank_account_id="{id}">({id}) {name}</a>'
     for (var i = 0; i < accounts.length;i++) {
 
         var new_element = element.replace("{name}", accounts[i].bank_account_name).replaceAll("{id}", accounts[i].bank_account_id)
@@ -22,6 +70,13 @@ function populate_accounts(accounts) {
     }
     $(".networth").empty();
     $(".networth").append('<b>Networth: </b>${}'.replace("{}", networth))
+
+    $(".account-item").click(function() {
+
+        var bank_account_id = $(this).attr("bank_account_id")
+        load_account(bank_account_id)
+
+    });
     
 }
 
@@ -67,11 +122,17 @@ function display() {
 
 }
 
-function hide() {
+function empty_out_data() {
 
     $(".accounts-dropdown").empty();
     $(".pending_transactions_data").empty();
     $(".recent_transactions_data").empty();
+
+}
+
+function hide() {
+
+    empty_out_data();
     $(".container-background").fadeOut();
 
 }
@@ -137,6 +198,17 @@ function test_populate() {
 $(function() {
 
     test_populate();
+
+    $('.home-navbar-item').click(function() {
+
+        empty_out_data();
+        $('.summary_box').show();
+        $('.account_summary_box').hide();
+        $('.account_actions_box').hide();
+        test_populate();
+        $.post("http://em_bank/refresh_bank", JSON.stringify({}))
+
+    })
 
     window.addEventListener("message", function (event) {
 

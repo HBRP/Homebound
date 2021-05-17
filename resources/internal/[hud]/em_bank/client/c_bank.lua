@@ -19,6 +19,13 @@ local function open_bank()
 
 end
 
+RegisterNUICallback("refresh_bank", function(data, cb)
+
+    open_bank()
+    cb()
+
+end)
+
 
 exports["em_commands"]:register_command("test_bank", function(source, args, raw_command)
 
