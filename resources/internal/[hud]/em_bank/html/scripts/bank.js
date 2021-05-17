@@ -14,6 +14,7 @@ function load_account(bank_account_id) {
 
             $('.account_summary_title').text('Viewing account: ' + cache_accounts[i].bank_account_name)
             $('.account_funds_text').html('<b>Available Funds:</b> $' + cache_accounts[i].funds)
+            $('.account_id').html('<b>Account Number: </b>' + bank_account_id)
             break;
 
         }
@@ -85,19 +86,10 @@ function populate_pending(pending) {
     var element = '<tr><td>{0}</td><td>{1}</td><td>${2}</td><td>{3}</td></tr>'
     for (var i = 0; i < pending.length;i++) {
 
-        var new_element = element.replace("{0}", pending[i].bank_account_name).replace("{1}", pending[i].pending_trasaction_date).replace("{2}", pending[i].amount).replace("{3}", !pending[i].current)
+        var new_element = element.replace("{0}", pending[i].pending_trasaction_date).replace("{1}", pending[i].bank_account_name).replace("{2}", pending[i].amount).replace("{3}", !pending[i].current)
         $(".pending_transactions_data").append(new_element)
 
     }
-
-    var amount_due = 0;
-    for (var i = 0;i < pending.length;i++) {
-
-        amount_due += pending[i].amount;
-
-    }
-    $(".total-due").empty();
-    $(".total-due").append('<b>Amount Due: </b>${}'.replace("{}", amount_due));
 
 }
 
@@ -109,7 +101,7 @@ function populate_transactions(transactions) {
     for (var i = 0; i < transactions.length; i++) {
 
         var transaction_type = bank_transaction_types[transactions[i].transaction_type_id]
-        var new_element = element.replace("{0}", transactions[i].bank_account_name).replace("{1}", transactions[i].transaction_date).replace("{2}", transactions[i].amount).replace("{3}", transaction_type)
+        var new_element = element.replace("{0}", transactions[i].transaction_date).replace("{1}", transactions[i].bank_account_name).replace("{2}", transactions[i].amount).replace("{3}", transaction_type)
         $(".recent_transactions_data").append(new_element)
 
     }

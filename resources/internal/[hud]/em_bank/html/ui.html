@@ -9,7 +9,7 @@
         <div class="container is-widescreen container-background">
             <nav class="navbar" role="navigation" aria-label="main navigation">
               <div class="navbar-brand">
-                <a class="navbar-item">
+                <a class="navbar-item home-navbar-item">
                   <img src="images/Fleeca-GTAV-Logo.png" width="112" height="28">
                 </a>
 
@@ -41,13 +41,13 @@
                     <div class="tile is-child box summary_box">
                         <p class="summary-title title">Summary</p>
                         <p class="networth"></p>
-                        <p class="total-due"></p>
                     </div>
-                    <div class="tile is-child box account_summary_box">
+                    <div class="tile is-child box account_summary_box" style="display: none;">
                         <p class="account_summary_title title"></p>
+                        <p class="account_id"></p>
                         <p class="account_funds_text"></p>
                     </div>
-                    <div class="tile is-child box account_actions_box">
+                    <div class="tile is-child box account_actions_box" style="display: none;">
                         <button class="button is-primary deposit_button">Deposit</button>
                         <button class="button is-primary withdraw_button">Withdraw</button>
                         <button class="button is-primary transfer_button">Transfer</button>
@@ -58,8 +58,8 @@
                         <table class="table pending_transaction_tile">
                             <thead>
                                 <tr>
-                                    <th>Account</th>
                                     <th>Date</th>
+                                    <th>Account</th>
                                     <th>Amount</th>
                                     <th>Past Due</th>
                                 </tr>
@@ -73,8 +73,8 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Account</th>
                                 <th>Date</th>
+                                <th>Account</th>
                                 <th>Amount</th>
                                 <th>Type</th>
                             </tr>
