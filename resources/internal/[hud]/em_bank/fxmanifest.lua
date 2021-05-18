@@ -14,7 +14,8 @@ files {
     'html/ui.html',
     'html/scripts/bank.js',
     'html/css/bank.css',
-    'html/css/bulma/css/bulma.min.css'
+    'html/css/bulma/css/bulma.min.css',
+    'html/images/*.png'
 }
 
 dependencies {

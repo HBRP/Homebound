@@ -23,7 +23,7 @@ local function open_bank()
     SendNUIMessage({accounts = bank_accounts, populate_accounts = true})
     SendNUIMessage({pending = pending_transactions, populate_pending = true})
     SendNUIMessage({transactions = transactions, populate_transactions = true})
-    SendNUIMessage({display = true})
+    SendNUIMessage({display = true, name = exports["em_dal"]:get_character_name()})
 
 end
 

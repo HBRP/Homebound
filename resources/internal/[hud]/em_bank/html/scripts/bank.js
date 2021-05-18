@@ -85,12 +85,11 @@ function populate_accounts(accounts) {
 
 function populate_pending(pending) {
 
-    var element = '<tr><td>{0}</td><td>{1}</td><td>${2}</td><td>{3}</td></tr>'
+    cache_pending = pending;
     for (var i = 0; i < pending.length;i++) {
 
-        var new_element = element.replace("{0}", pending[i].pending_trasaction_date).replace("{1}", pending[i].bank_account_name).replace("{2}", pending[i].amount).replace("{3}", !pending[i].current)
-        $(".pending_transactions_data").append(new_element)
-        cache_pending.push(pending[i]);
+        var new_element = `<tr data-pending-transaction-id="${pending[i].bank_pending_transaction_id}"><td>${pending[i].pending_trasaction_date}</td><td>${pending[i].bank_account_name}</td><td>$${pending[i].amount}</td><td>${!pending[i].current}</td></tr>`
+        $(".pending_transactions_data").append(new_element);
 
     }
 
@@ -100,13 +99,12 @@ const bank_transaction_types = {1 : "ACH", 2 : "Withdrawal", 3 : "Deposit", 4 : 
 
 function populate_transactions(transactions) {
 
-    var element = '<tr><td>{0}</td><td>{1}</td><td>${2}</td><td>{3}</td></tr>'
+    cache_transactions = transactions;
     for (var i = 0; i < transactions.length; i++) {
 
         var transaction_type = bank_transaction_types[transactions[i].transaction_type_id]
-        var new_element = element.replace("{0}", transactions[i].transaction_date).replace("{1}", transactions[i].bank_account_name).replace("{2}", transactions[i].amount).replace("{3}", transaction_type)
+        var new_element = `<tr><td>${transactions[i].transaction_date}</td><td>${transactions[i].bank_account_name}</td><td>$${transactions[i].amount}</td><td>${transaction_type}</td></tr>`
         $(".recent_transactions_data").append(new_element)
-        cache_transactions.push(transactions[i])
 
     }
 
@@ -130,9 +128,12 @@ function hide() {
 
     empty_out_data();
     $(".container-background").fadeOut();
-    cache_accounts     = []
-    cache_pending      = []
-    cache_transactions = []
+
+}
+
+function set_welcome_name(name) {
+
+    $('.welcome-navbar-item').text(name);
 
 }
 
@@ -258,6 +259,7 @@ $(function() {
         if (event.data.display) {
 
             display();
+            set_welcome_name(event.data.name);
 
         } else if (event.data.populate_accounts) {
 
