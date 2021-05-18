@@ -181,7 +181,7 @@ function populate_pending(pending) {
     cache_pending = pending;
     for (var i = 0; i < pending.length;i++) {
 
-        var new_element = `<tr data-pending-transaction-id="${pending[i].bank_pending_transaction_id}"><td>${pending[i].pending_trasaction_date}</td><td>${pending[i].bank_account_name}</td><td>$${pending[i].amount}</td><td>${!pending[i].current}</td></tr>`
+        var new_element = `<tr class="table-record" data-pending-transaction-id="${pending[i].bank_pending_transaction_id}"><td>${pending[i].pending_trasaction_date}</td><td>${pending[i].bank_account_name}</td><td>$${pending[i].amount}</td><td>${!pending[i].current}</td></tr>`
         $(".pending_transactions_data").append(new_element);
 
     }
@@ -211,7 +211,7 @@ function populate_transactions(transactions) {
     for (var i = 0; i < transactions.length; i++) {
 
         var transaction_type = bank_transaction_types[transactions[i].transaction_type_id]
-        var new_element = `<tr><td>${transactions[i].transaction_date}</td><td>${transactions[i].bank_account_name}</td><td>$${transactions[i].amount}</td><td>${transaction_type}</td></tr>`
+        var new_element = `<tr class="table-record"><td>${transactions[i].transaction_date}</td><td>${transactions[i].bank_account_name}</td><td>$${transactions[i].amount}</td><td>${transaction_type}</td></tr>`
         $(".recent_transactions_data").append(new_element)
 
     }
@@ -239,7 +239,7 @@ function hide() {
 
 function set_welcome_name(name) {
 
-    $('.welcome-navbar-item').text(name + "!");
+    $('.welcome-navbar-item').html(`<b>Welcome, ${name}!</b>`);
 
 }
 
@@ -252,6 +252,7 @@ function set_cash_on_hand(cash) {
 
 function test_populate() {
 
+    set_welcome_name("Test Customer")
     set_cash_on_hand(1000)
     populate_accounts([
         {
