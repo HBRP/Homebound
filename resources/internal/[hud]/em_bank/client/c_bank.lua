@@ -8,7 +8,7 @@ local function open_bank()
     for i = 1, #bank_accounts do
 
         local temp_pending = exports["em_dal"]:bank_get_pending_transactions(bank_accounts[i].bank_account_id)
-        local temp_transactions = exports["em_dal"]:bank_get_transactions_async(bank_accounts[i].bank_account_id)
+        local temp_transactions = exports["em_dal"]:bank_get_transactions(bank_accounts[i].bank_account_id)
 
         for _, v in ipairs(temp_pending) do 
             table.insert(pending_transactions, v)
@@ -26,6 +26,7 @@ local function open_bank()
     SendNUIMessage({cash = exports["em_transactions"]:get_cash_on_hand(), populate_cash = true})
     SendNUIMessage({display = true, name = exports["em_dal"]:get_character_name()})
 
+    SetNuiFocus(true, true)
 end
 
 RegisterNUICallback("refresh_bank", function(data, cb)
