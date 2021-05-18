@@ -154,8 +154,10 @@ function populate_accounts(accounts) {
 
         var bank_account_id = $(this).attr("bank_account_id");
         empty_out_data();
-        test_populate();
+        //test_populate();
+        $.post("http://em_bank/load_bank", JSON.stringify({bank_account_id : current_bank_account_id}))
         load_account(bank_account_id);
+        setup_modal_table_clicks();
 
     });
     
@@ -211,7 +213,7 @@ function populate_transactions(transactions) {
     for (var i = 0; i < transactions.length; i++) {
 
         var transaction_type = bank_transaction_types[transactions[i].transaction_type_id]
-        var new_element = `<tr class="table-record"><td>${transactions[i].transaction_date}</td><td>${transactions[i].bank_account_name}</td><td>$${transactions[i].amount}</td><td>${transaction_type}</td></tr>`
+        var new_element = `<tr class="table-record" data-transaction-id="${transactions[i].bank_transaction_id}"><td>${transactions[i].transaction_date}</td><td>${transactions[i].bank_account_name}</td><td>$${transactions[i].amount}</td><td>${transaction_type}</td></tr>`
         $(".recent_transactions_data").append(new_element)
 
     }
@@ -221,6 +223,7 @@ function populate_transactions(transactions) {
 function display() {
 
     $(".container-background").fadeIn();
+    setup_modal_table_clicks();
 
 }
 
@@ -271,6 +274,7 @@ function test_populate() {
 
     populate_transactions([
         {
+            "bank_transaction_id": 1,
             "bank_account_name": "bank_account_name",
             "reason": "reason",
             "amount": 100,
@@ -278,6 +282,7 @@ function test_populate() {
             "transaction_type_id": 1
         },
         {
+            "bank_transaction_id": 2,
             "bank_account_name": "bank_account_name",
             "reason": "reason",
             "amount": 200,
@@ -285,6 +290,7 @@ function test_populate() {
             "transaction_type_id": 2
         },
         {
+            "bank_transaction_id": 3,
             "bank_account_name": "bank_account_name",
             "reason": "reason",
             "amount": 100,
@@ -292,6 +298,7 @@ function test_populate() {
             "transaction_type_id": 1
         },
         {
+            "bank_transaction_id": 4,
             "bank_account_name": "bank_account_name",
             "reason": "reason",
             "amount": 200,
@@ -299,6 +306,7 @@ function test_populate() {
             "transaction_type_id": 2
         },
         {
+            "bank_transaction_id": 5,
             "bank_account_name": "bank_account_name",
             "reason": "reason",
             "amount": 100,
@@ -306,6 +314,7 @@ function test_populate() {
             "transaction_type_id": 1
         },
         {
+            "bank_transaction_id": 6,
             "bank_account_name": "bank_account_name",
             "reason": "reason",
             "amount": 200,
@@ -313,6 +322,7 @@ function test_populate() {
             "transaction_type_id": 2
         },
         {
+            "bank_transaction_id":7,
             "bank_account_name": "bank_account_name",
             "reason": "reason",
             "amount": 100,
@@ -320,6 +330,7 @@ function test_populate() {
             "transaction_type_id": 1
         },
         {
+            "bank_transaction_id": 8,
             "bank_account_name": "bank_account_name",
             "reason": "reason",
             "amount": 200,
@@ -327,6 +338,7 @@ function test_populate() {
             "transaction_type_id": 2
         },
         {
+            "bank_transaction_id": 9,
             "bank_account_name": "bank_account_name",
             "reason": "reason",
             "amount": 100,
@@ -334,6 +346,7 @@ function test_populate() {
             "transaction_type_id": 1
         },
         {
+            "bank_transaction_id": 10,
             "bank_account_name": "bank_account_name",
             "reason": "reason",
             "amount": 200,
@@ -341,6 +354,7 @@ function test_populate() {
             "transaction_type_id": 2
         },
         {
+            "bank_transaction_id": 11,
             "bank_account_name": "bank_account_name",
             "reason": "reason",
             "amount": 100,
@@ -348,6 +362,7 @@ function test_populate() {
             "transaction_type_id": 1
         },
         {
+            "bank_transaction_id": 12,
             "bank_account_name": "bank_account_name",
             "reason": "reason",
             "amount": 200,
@@ -416,27 +431,79 @@ function test_populate() {
 
 }
 
+function home_navbar_item_click() {
+
+    empty_out_data();
+    $('.summary_box').show();
+    $('.account_summary_box').hide();
+    $('.account_actions_box').hide();
+    //test_populate();
+    $.post("http://em_bank/refresh_bank", JSON.stringify({}))
+    setup_modal_table_clicks();
+
+}
+
+function setup_modal_table_clicks() {
+
+    $('.table-record').click(record_click)
+    $('.transaction-modal-close').click(function() {
+        $('.transaction-modal').removeClass('is-active');
+    })
+
+}
+
+function handle_bank_transaction_click(bank_transaction_id) {
+
+    for (var i = 0; i < cache_transactions.length;i++) {
+
+        if (cache_transactions[i].bank_transaction_id == bank_transaction_id) {
+
+            var transaction = cache_transactions[i]
+            $('.transaction-modal-title').text(`Transaction Reference #${transaction.bank_transaction_id}`);
+            $('.transaction-modal-body').html(
+                `
+                <p><b>Reason</b>: ${transaction.reason}</p>
+                <p><b>Transaction Amount:</b> ${transaction.amount}<p>
+                <p><b>Transaction Date:</b> ${transaction.transaction_date}</p>
+                <p><b>Transaction Type:</b> ${bank_transaction_types[transaction.transaction_type_id]}</p>
+                `)
+            $('.transaction-modal').addClass('is-active');
+
+            break;
+        }
+
+    }
+
+}
+
+function handle_pending_transaction_click(pending_transaction_id) {
+
+
+
+}
+
+function record_click() {
+
+    var bank_transaction_id = $(this).attr('data-transaction-id');
+    var pending_transaction_id = $(this).attr('data-pending-transaction-id');
+    if (bank_transaction_id != null) {
+
+        handle_bank_transaction_click(bank_transaction_id);
+
+    } else if (pending_transaction_id != null) {
+
+        handle_pending_transaction_click(pending_transaction_id);
+
+    }
+
+}
+
 $(function() {
 
-    test_populate();
-    
+    //test_populate();
     modal_clicks();
-    $('.home-navbar-item').click(function() {
-
-        empty_out_data();
-        $('.summary_box').show();
-        $('.account_summary_box').hide();
-        $('.account_actions_box').hide();
-        test_populate();
-        $.post("http://em_bank/refresh_bank", JSON.stringify({}))
-
-    })
-
-    $('tr').click(function() {
-
-        console.log(this)
-
-    })
+    setup_modal_table_clicks();
+    $('.home-navbar-item').click(home_navbar_item_click)
 
     window.addEventListener("message", function (event) {
 

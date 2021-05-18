@@ -6,7 +6,7 @@
         <link rel="stylesheet" type="text/css" href="css/bank.css" />
     </head>
     <body>
-        <div class="container is-widescreen container-background">
+        <div class="container is-widescreen container-background" style="display:none;">
             <nav class="navbar" role="navigation" aria-label="main navigation">
               <div class="navbar-brand">
                 <a class="navbar-item home-navbar-item">
@@ -88,6 +88,17 @@
                 <button class="button is-success withdraw-button">Withdraw</button>
                 <button class="button withdraw-cancel-button">Cancel</button>
             </section>
+          </div>
+        </div>
+
+        <div class="modal transaction-modal">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title transaction-modal-title">Modal title</p>
+              <button class="delete transaction-modal-close" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body transaction-modal-body"></section>
           </div>
         </div>
 
