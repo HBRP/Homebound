@@ -17,7 +17,7 @@ body {
 .content-tiles {
 
     margin-left: 7% !important;
-    margin-top: 5% !important;
+    margin-top: 3% !important;
 
 }
 
@@ -45,4 +45,16 @@ tr:hover {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555; 
+}
+
+.pending_table_wrapper {
+  overflow:hidden;
+  overflow-y: scroll;
+  height: 20vh;
+}
+
+.transactions_table_wrapper {
+  overflow:hidden;
+  overflow-y: scroll;
+  height: 40vh;
 }

@@ -85,6 +85,21 @@ function populate_accounts(accounts) {
 
 function populate_pending(pending) {
 
+    $(".pending_transaction_table_div").html(
+        `
+            <table id="pending_transaction_table" class="table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Account</th>
+                        <th>Amount</th>
+                        <th>Past Due</th>
+                    </tr>
+                </thead>
+                <tbody class="pending_transactions_data"></tbody>
+            </table>
+        `)
+
     cache_pending = pending;
     for (var i = 0; i < pending.length;i++) {
 
@@ -92,12 +107,28 @@ function populate_pending(pending) {
         $(".pending_transactions_data").append(new_element);
 
     }
+    //$('#pending_transaction_table').scrollTableBody({rowsToDisplay:4});
 
 }
 
 const bank_transaction_types = {1 : "ACH", 2 : "Withdrawal", 3 : "Deposit", 4 : "Wire Transfer"}
 
 function populate_transactions(transactions) {
+
+    $('.recent_transactions_table_div').html(
+        `
+            <table id="recent_transactions_table" class="table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Account</th>
+                        <th>Amount</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody class="recent_transactions_data"></tbody>
+            </table>
+        `)
 
     cache_transactions = transactions;
     for (var i = 0; i < transactions.length; i++) {
@@ -119,8 +150,6 @@ function display() {
 function empty_out_data() {
 
     $(".accounts-dropdown").empty();
-    $(".pending_transactions_data").empty();
-    $(".recent_transactions_data").empty();
 
 }
 
@@ -133,7 +162,7 @@ function hide() {
 
 function set_welcome_name(name) {
 
-    $('.welcome-navbar-item').text(name);
+    $('.welcome-navbar-item').text(name + "!");
 
 }
 
@@ -151,6 +180,93 @@ function test_populate() {
             "bank_account_name":"test2",
             "funds": 10111,
             "owner": false
+        }
+    ]);
+
+    populate_transactions([
+        {
+            "bank_account_name": "bank_account_name",
+            "reason": "reason",
+            "amount": 100,
+            "transaction_date": "10-11-2021",
+            "transaction_type_id": 1
+        },
+        {
+            "bank_account_name": "bank_account_name",
+            "reason": "reason",
+            "amount": 200,
+            "transaction_date": "10-11-2021",
+            "transaction_type_id": 2
+        },
+        {
+            "bank_account_name": "bank_account_name",
+            "reason": "reason",
+            "amount": 100,
+            "transaction_date": "10-11-2021",
+            "transaction_type_id": 1
+        },
+        {
+            "bank_account_name": "bank_account_name",
+            "reason": "reason",
+            "amount": 200,
+            "transaction_date": "10-11-2021",
+            "transaction_type_id": 2
+        },
+        {
+            "bank_account_name": "bank_account_name",
+            "reason": "reason",
+            "amount": 100,
+            "transaction_date": "10-11-2021",
+            "transaction_type_id": 1
+        },
+        {
+            "bank_account_name": "bank_account_name",
+            "reason": "reason",
+            "amount": 200,
+            "transaction_date": "10-11-2021",
+            "transaction_type_id": 2
+        },
+        {
+            "bank_account_name": "bank_account_name",
+            "reason": "reason",
+            "amount": 100,
+            "transaction_date": "10-11-2021",
+            "transaction_type_id": 1
+        },
+        {
+            "bank_account_name": "bank_account_name",
+            "reason": "reason",
+            "amount": 200,
+            "transaction_date": "10-11-2021",
+            "transaction_type_id": 2
+        },
+        {
+            "bank_account_name": "bank_account_name",
+            "reason": "reason",
+            "amount": 100,
+            "transaction_date": "10-11-2021",
+            "transaction_type_id": 1
+        },
+        {
+            "bank_account_name": "bank_account_name",
+            "reason": "reason",
+            "amount": 200,
+            "transaction_date": "10-11-2021",
+            "transaction_type_id": 2
+        },
+        {
+            "bank_account_name": "bank_account_name",
+            "reason": "reason",
+            "amount": 100,
+            "transaction_date": "10-11-2021",
+            "transaction_type_id": 1
+        },
+        {
+            "bank_account_name": "bank_account_name",
+            "reason": "reason",
+            "amount": 200,
+            "transaction_date": "10-11-2021",
+            "transaction_type_id": 2
         }
     ]);
     populate_pending([
@@ -212,31 +328,12 @@ function test_populate() {
 
     ]);
 
-    populate_transactions([
-        {
-            "bank_account_name": "bank_account_name",
-            "reason": "reason",
-            "amount": 100,
-            "transaction_date": "10-11-2021",
-            "transaction_type_id": 1
-        },
-        {
-            "bank_account_name": "bank_account_name",
-            "reason": "reason",
-            "amount": 200,
-            "transaction_date": "10-11-2021",
-            "transaction_type_id": 2
-        }
-    ]);
-
 }
 
 $(function() {
 
     test_populate();
-    $('#recent_transactions_table').scrollTableBody({rowsToDisplay:10});
-    $('#pending_transaction_table').scrollTableBody({rowsToDisplay:4});
-
+    
     $('.home-navbar-item').click(function() {
 
         empty_out_data();
@@ -264,7 +361,6 @@ $(function() {
         } else if (event.data.populate_accounts) {
 
             populate_accounts(event.data.accounts);
-
 
         } else if (event.data.populate_pending) {
 
