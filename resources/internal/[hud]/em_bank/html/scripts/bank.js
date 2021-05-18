@@ -3,7 +3,85 @@ var cache_accounts     = []
 var cache_pending      = []
 var cache_transactions = []
 
+var cash_on_hand = 0
+var current_bank_account_id = 0
+
+function deposit_button_click() {
+
+    var value = $('.deposit-input').val()
+    value = parseInt(value)
+    if (isNaN(value) || value > cash_on_hand) {
+
+        $('.deposit-input').addClass('is-danger')
+        return;
+
+    }
+    $('.deposit-input').removeClass('is-danger')
+    $('.deposit-input').val('')
+    $('.deposit_money_modal').removeClass('is-active')
+    $.post("http://em_bank/deposit_cash", JSON.stringify({ bank_account_id : current_bank_account_id, deposit_amount : value }));
+
+}
+
+function deposit_cancel_click() {
+
+    $('.deposit-input').removeClass('is-danger')
+    $('.deposit-input').val('')
+    $('.deposit_money_modal').removeClass('is-active')
+
+}
+
+function withdraw_button_click() {
+
+    var value = $('.withdraw-input').val();
+    var funds = 0
+
+    for (var i = 0; i < cache_accounts.length;i++) {
+
+        if (current_bank_account_id == cache_accounts[i].bank_account_id) {
+
+            funds = cache_accounts[i].funds;
+            break;
+
+        }
+
+    }
+
+    value = parseInt(value)
+
+    if (isNaN(value) || value > funds) {
+
+        $('.withdraw-input').addClass('is-danger')
+        return;
+
+    }
+    $('.withdraw-input').removeClass('is-danger')
+    $('.withdraw-input').val('')
+    $('.withdraw_money_modal').removeClass('is-active')
+    $.post("http://em_bank/withdraw_cash", JSON.stringify({ bank_account_id : current_bank_account_id, withdraw_amount : value }));
+
+}
+
+function withdraw_cancel_button() {
+
+    $('.withdraw-input').removeClass('is-danger')
+    $('.withdraw-input').val('')
+    $('.withdraw_money_modal').removeClass('is-active')
+
+}
+
+function modal_clicks() {
+
+    $('.deposit-button').click(deposit_button_click)
+    $('.deposit-cancel-button').click(deposit_cancel_click)
+    $('.withdraw-button').click(withdraw_button_click)
+    $('.withdraw-cancel-button').click(withdraw_cancel_button)
+
+}
+
 function load_account(bank_account_id) {
+
+    current_bank_account_id = bank_account_id
 
     $('.summary_box').hide();
     $('.account_summary_box').show();
@@ -167,12 +245,14 @@ function set_welcome_name(name) {
 
 function set_cash_on_hand(cash) {
 
+    cash_on_hand = cash
     $('.cash_on_hand').text(`You have $${cash} available to deposit.`)
 
 }
 
 function test_populate() {
 
+    set_cash_on_hand(1000)
     populate_accounts([
         {
             "bank_account_id":1,
@@ -339,6 +419,7 @@ $(function() {
 
     test_populate();
     
+    modal_clicks();
     $('.home-navbar-item').click(function() {
 
         empty_out_data();
