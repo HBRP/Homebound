@@ -74,8 +74,11 @@ function populate_accounts(accounts) {
 
     $(".account-item").click(function() {
 
-        var bank_account_id = $(this).attr("bank_account_id")
-        load_account(bank_account_id)
+        var bank_account_id = $(this).attr("bank_account_id");
+        empty_out_data();
+        test_populate();
+        $.post("http://em_bank/load_bank", JSON.stringify({bank_account_id}))
+        load_account(bank_account_id);
 
     });
     
@@ -216,6 +219,10 @@ $(function() {
         } else if (event.data.populate_pending) {
 
             populate_pending(event.data.pending);
+
+        } else if (event.data.populate_transactions) {
+
+            populate_transactions(event.data.transactions)
 
         } else if (!event.data.display) {
 
