@@ -52,7 +52,7 @@
                     </div>
                     <div class="tile is-child box pending_transaction_tile">
                         <p class="title">Pending Transactions</p>
-                        <table class="table pending_transaction_tile">
+                        <table id="pending_transaction_table" class="table pending_transaction_tile">
                             <thead>
                                 <tr>
                                     <th>Date</th>
@@ -67,7 +67,7 @@
                 </div>
                 <div class="tile is-child box is-5">
                     <p class="title">Recent Activity</p>
-                    <table class="table">
+                    <table id="recent_transactions_table" class="table">
                         <thead>
                             <tr>
                                 <th>Date</th>
@@ -109,6 +109,7 @@
         </div>
 
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script src="libs/jquery.scrollTableBody-1.0.0.js" type="text/javascript"></script>
         <script src="scripts/bank.js"></script>
     </body>
 

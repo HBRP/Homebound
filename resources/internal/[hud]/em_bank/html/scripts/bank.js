@@ -197,6 +197,8 @@ function test_populate() {
 $(function() {
 
     test_populate();
+    $('#recent_transactions_table').scrollTableBody({rowsToDisplay:10});
+    $('#pending_transaction_table').scrollTableBody({rowsToDisplay:4});
 
     $('.home-navbar-item').click(function() {
 
