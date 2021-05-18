@@ -107,7 +107,6 @@ function populate_pending(pending) {
         $(".pending_transactions_data").append(new_element);
 
     }
-    //$('#pending_transaction_table').scrollTableBody({rowsToDisplay:4});
 
 }
 
@@ -163,6 +162,12 @@ function hide() {
 function set_welcome_name(name) {
 
     $('.welcome-navbar-item').text(name + "!");
+
+}
+
+function set_cash_on_hand(cash) {
+
+    $('.cash_on_hand').text(`You have $${cash} available to deposit.`)
 
 }
 
@@ -357,6 +362,10 @@ $(function() {
 
             display();
             set_welcome_name(event.data.name);
+
+        } else if (event.data.populate_cash) {
+
+            set_cash_on_hand(event.data.cash);
 
         } else if (event.data.populate_accounts) {
 

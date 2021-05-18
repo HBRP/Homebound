@@ -23,6 +23,7 @@ local function open_bank()
     SendNUIMessage({accounts = bank_accounts, populate_accounts = true})
     SendNUIMessage({pending = pending_transactions, populate_pending = true})
     SendNUIMessage({transactions = transactions, populate_transactions = true})
+    SendNUIMessage({cash = exports["em_transactions"]:get_cash_on_hand(), populate_cash = true})
     SendNUIMessage({display = true, name = exports["em_dal"]:get_character_name()})
 
 end
@@ -30,6 +31,27 @@ end
 RegisterNUICallback("refresh_bank", function(data, cb)
 
     open_bank()
+    cb()
+
+end)
+
+RegisterNUICallback("deposit_cash", function(data, cb)
+
+    if exports["em_transactions"]:get_cash_on_hand() < data.deposit_amount then
+        return
+    end
+
+    exports["em_dal"]:bank_deposit_money(data.bank_account_id, data.deposit_amount)
+    SendNUIMessage({cash = exports["em_transactions"]:get_cash_on_hand(), populate_cash = true})
+
+    cb()
+
+end)
+
+RegisterNUICallback("withdraw_cash", function(data, cb)
+
+    exports["em_dal"]:bank_withdraw_amount(data.bank_account_id, data.withdraw_amount)
+    SendNUIMessage({cash = exports["em_transactions"]:get_cash_on_hand(), populate_cash = true})
     cb()
 
 end)
