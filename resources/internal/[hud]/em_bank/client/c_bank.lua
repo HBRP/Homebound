@@ -1,26 +1,29 @@
 
 local function open_bank()
 
-    exports["em_dal"]:bank_get_bank_accounts_async(function(results)
+    local bank_accounts = exports["em_dal"]:bank_get_bank_accounts()
+    local pending_transactions = {}
+    local transactions = {}
 
-        SendNUIMessage({accounts = results, populate_accounts = true})
-        for i = 1, #results do
+    for i = 1, #bank_accounts do
 
-            exports["em_dal"]:bank_get_pending_transactions_async(function(results)
+        local temp_pending = exports["em_dal"]:bank_get_pending_transactions(bank_accounts[i].bank_account_id)
+        local temp_transactions = exports["em_dal"]:bank_get_transactions_async(bank_accounts[i].bank_account_id)
 
-                SendNUIMessage({pending = results, populate_pending = true})
-
-            end, results[i].bank_account_id)
-            exports["em_dal"]:bank_get_transactions_async(function(results)
-
-                SendNUIMessage({populate_transactions = true, transactions = results})
-
-            end, data.bank_account_id)
-
+        for _, v in ipairs(temp_pending) do 
+            table.insert(pending_transactions, v)
         end
-        SendNUIMessage({display = true})
 
-    end)
+        for _, v in ipairs(temp_transactions) do 
+            table.insert(transactions, v)
+        end
+
+    end
+
+    SendNUIMessage({accounts = bank_accounts, populate_accounts = true})
+    SendNUIMessage({pending = pending_transactions, populate_pending = true})
+    SendNUIMessage({transactions = transactions, populate_transactions = true})
+    SendNUIMessage({display = true})
 
 end
 
@@ -33,17 +36,11 @@ end)
 
 RegisterNUICallback("load_bank", function(data, cb)
 
-    exports["em_dal"]:bank_get_pending_transactions_async(function(results)
+    local temp_pending = exports["em_dal"]:bank_get_pending_transactions(data.bank_account_id)
+    local temp_transactions = exports["em_dal"]:bank_get_transactions_async(data.bank_account_id)
 
-        SendNUIMessage({pending = results, populate_pending = true})
-
-    end, data.bank_account_id)
-
-    exports["em_dal"]:bank_get_transactions_async(function(results)
-
-        SendNUIMessage({populate_transactions = true, transactions = results})
-
-    end, data.bank_account_id)
+    SendNUIMessage({pending = temp_pending, populate_pending = true})
+    SendNUIMessage({transactions = temp_transactions, populate_transactions = true})
 
 end)
 

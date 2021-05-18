@@ -157,7 +157,7 @@ function test_populate() {
         {
             "bank_account_name": "bank_account_name",
             "bank_pending_transaction_id":1,
-            "pending_trasaction_date": "",
+            "pending_trasaction_date": "10-11-2021",
             "reason": "Because",
             "amount": 100,
             "amount_left": 120,
@@ -166,7 +166,7 @@ function test_populate() {
         {
             "bank_account_name": "bank_account_name",
             "bank_pending_transaction_id":2,
-            "pending_trasaction_date": "",
+            "pending_trasaction_date": "10-11-2021",
             "reason": "Because Yes",
             "amount": 100,
             "amount_left": 100,
@@ -175,7 +175,7 @@ function test_populate() {
         {
             "bank_account_name": "bank_account_name",
             "bank_pending_transaction_id":1,
-            "pending_trasaction_date": "",
+            "pending_trasaction_date": "10-11-2021",
             "reason": "Because",
             "amount": 100,
             "amount_left": 120,
@@ -184,7 +184,7 @@ function test_populate() {
         {
             "bank_account_name": "bank_account_name",
             "bank_pending_transaction_id":2,
-            "pending_trasaction_date": "",
+            "pending_trasaction_date": "10-11-2021",
             "reason": "Because Yes",
             "amount": 100,
             "amount_left": 100,
@@ -193,7 +193,7 @@ function test_populate() {
         {
             "bank_account_name": "bank_account_name",
             "bank_pending_transaction_id":1,
-            "pending_trasaction_date": "",
+            "pending_trasaction_date": "10-11-2021",
             "reason": "Because",
             "amount": 100,
             "amount_left": 120,
@@ -202,7 +202,7 @@ function test_populate() {
         {
             "bank_account_name": "bank_account_name",
             "bank_pending_transaction_id":2,
-            "pending_trasaction_date": "",
+            "pending_trasaction_date": "10-11-2021",
             "reason": "Because Yes",
             "amount": 100,
             "amount_left": 100,
@@ -216,14 +216,14 @@ function test_populate() {
             "bank_account_name": "bank_account_name",
             "reason": "reason",
             "amount": 100,
-            "transaction_date": "",
+            "transaction_date": "10-11-2021",
             "transaction_type_id": 1
         },
         {
             "bank_account_name": "bank_account_name",
             "reason": "reason",
             "amount": 200,
-            "transaction_date": "",
+            "transaction_date": "10-11-2021",
             "transaction_type_id": 2
         }
     ]);
