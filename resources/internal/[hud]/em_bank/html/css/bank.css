@@ -20,3 +20,29 @@ body {
     margin-top: 5% !important;
 
 }
+
+tr:hover {
+    background-color: rgba(38, 143, 58, 0.8);
+    color:  white;
+    cursor: pointer;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(38, 143, 58, 0.8);
+  border-radius: 4px; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}

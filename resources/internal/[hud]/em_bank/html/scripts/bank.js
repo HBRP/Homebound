@@ -171,6 +171,42 @@ function test_populate() {
             "amount": 100,
             "amount_left": 100,
             "current": false
+        },
+        {
+            "bank_account_name": "bank_account_name",
+            "bank_pending_transaction_id":1,
+            "pending_trasaction_date": "",
+            "reason": "Because",
+            "amount": 100,
+            "amount_left": 120,
+            "current": true
+        },
+        {
+            "bank_account_name": "bank_account_name",
+            "bank_pending_transaction_id":2,
+            "pending_trasaction_date": "",
+            "reason": "Because Yes",
+            "amount": 100,
+            "amount_left": 100,
+            "current": false
+        },
+        {
+            "bank_account_name": "bank_account_name",
+            "bank_pending_transaction_id":1,
+            "pending_trasaction_date": "",
+            "reason": "Because",
+            "amount": 100,
+            "amount_left": 120,
+            "current": true
+        },
+        {
+            "bank_account_name": "bank_account_name",
+            "bank_pending_transaction_id":2,
+            "pending_trasaction_date": "",
+            "reason": "Because Yes",
+            "amount": 100,
+            "amount_left": 100,
+            "current": false
         }
 
     ]);
@@ -208,6 +244,12 @@ $(function() {
         $('.account_actions_box').hide();
         test_populate();
         $.post("http://em_bank/refresh_bank", JSON.stringify({}))
+
+    })
+
+    $('tr').click(function() {
+
+        console.log(this)
 
     })
 
