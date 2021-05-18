@@ -1,7 +1,7 @@
 
-var cache_accounts     = null
-var cache_pending      = null
-var cache_transactions = null
+var cache_accounts     = []
+var cache_pending      = []
+var cache_transactions = []
 
 function load_account(bank_account_id) {
 
@@ -77,7 +77,6 @@ function populate_accounts(accounts) {
         var bank_account_id = $(this).attr("bank_account_id");
         empty_out_data();
         test_populate();
-        $.post("http://em_bank/load_bank", JSON.stringify({bank_account_id}))
         load_account(bank_account_id);
 
     });
@@ -91,6 +90,7 @@ function populate_pending(pending) {
 
         var new_element = element.replace("{0}", pending[i].pending_trasaction_date).replace("{1}", pending[i].bank_account_name).replace("{2}", pending[i].amount).replace("{3}", !pending[i].current)
         $(".pending_transactions_data").append(new_element)
+        cache_pending.push(pending[i]);
 
     }
 
@@ -106,6 +106,7 @@ function populate_transactions(transactions) {
         var transaction_type = bank_transaction_types[transactions[i].transaction_type_id]
         var new_element = element.replace("{0}", transactions[i].transaction_date).replace("{1}", transactions[i].bank_account_name).replace("{2}", transactions[i].amount).replace("{3}", transaction_type)
         $(".recent_transactions_data").append(new_element)
+        cache_transactions.push(transactions[i])
 
     }
 
@@ -129,6 +130,9 @@ function hide() {
 
     empty_out_data();
     $(".container-background").fadeOut();
+    cache_accounts     = []
+    cache_pending      = []
+    cache_transactions = []
 
 }
 
