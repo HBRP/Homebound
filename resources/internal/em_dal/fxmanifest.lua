@@ -227,6 +227,15 @@ export 'toggle_housing_door_lock_async'
 -- c_context.lua
 export 'get_context_async'
 
+-- c_bank.lua
+export 'bank_withdraw_amount'
+export 'bank_deposit_money'
+export 'bank_post_payment'
+export 'bank_get_pending_transactions'
+export 'bank_get_bank_accounts'
+export 'bank_transfer_amount'
+export 'bank_get_transactions'
+
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'
 server_export 'get_steam_id'
