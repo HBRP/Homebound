@@ -34,3 +34,9 @@ function bank_transfer_amount_async(callback, amount, from_bank_account_id, to_b
     trigger_server_callback_async("em_dal:bank_transfer_amount", callback, amount, from_bank_account_id, to_bank_account_id, reason)
 
 end
+
+function bank_get_transactions_async(callback, bank_account_id)
+
+    trigger_server_callback_async("em_dal:bank_get_transactions", callback, bank_account_id)
+
+end
