@@ -155,7 +155,7 @@ function populate_accounts(accounts) {
     $(".account-item").click(function() {
 
         var bank_account_id = $(this).attr("bank_account_id");
-        //test_populate();
+        test_populate();
         $.post("http://em_bank/load_bank", JSON.stringify({bank_account_id : current_bank_account_id}))
         load_account(bank_account_id);
         setup_modal_table_clicks();
@@ -430,7 +430,7 @@ function home_navbar_item_click() {
     $('.summary_box').show();
     $('.account_summary_box').hide();
     $('.account_actions_box').hide();
-    //test_populate();
+    test_populate();
     $.post("http://em_bank/refresh_bank", JSON.stringify({}))
     setup_modal_table_clicks();
 
@@ -491,9 +491,54 @@ function record_click() {
 
 }
 
+setTimeout(function() {
+
+    $('.loading_screen').fadeOut(450);
+    setTimeout(function() {
+        $('.main_app').fadeIn();
+    }, 500)
+
+}, 10000)
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function loading_screen() {
+
+    $('.loading_screen').show();
+    $('.main_app').hide();
+
+    const loading_text = [
+        "Investing in Doge Coin",
+        "Auditing your accounts",
+        "Spending all your cash",
+        "Rebooting for maintenance",
+        "Is this thing down again?",
+        "Rated the best banking app, by no one!",
+        "Scrubbing scandalous transactions",
+        "You should hire an accountant",
+        "Are we there yet?",
+        "Give me your money!",
+        "Getting robbed again!",
+        "If money doesn't grow on trees, then why do banks have branches?",
+        "If money talks, why do we need bank tellers?",
+    ]
+
+    for (var i = 0; i < 5;i++) {
+
+        await sleep(i * 750);
+        $('.loading-text').text(loading_text[Math.floor(Math.random() * loading_text.length)]);
+
+    }
+
+}
+
 $(function() {
 
-    //test_populate();
+    test_populate();
+    loading_screen();
+
     modal_clicks();
     setup_modal_table_clicks();
     $('.home-navbar-item').click(home_navbar_item_click)
@@ -520,6 +565,10 @@ $(function() {
         } else if (event.data.populate_transactions) {
 
             populate_transactions(event.data.transactions)
+
+        } else if (event.data.show_loading) {
+
+            loading_screen();
 
         } else if (!event.data.display) {
 

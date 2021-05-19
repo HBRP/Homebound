@@ -32,6 +32,30 @@ body {
     cursor: pointer;
 }
 
+.loading-screen-logo {
+  width: 400;
+  height: 125;
+  background-color: white;
+  margin-left: 35%;
+  margin-top: 25%;
+  border-radius: 6px;
+}
+
+.loading-progress-bar {
+
+  width: 50%;
+  margin-left: 25%;
+  margin-top: 12%;
+
+}
+
+.loading-text {
+
+  color: white;
+  font-size: 24px;
+
+}
+
 ::-webkit-scrollbar {
   width: 8px;
 }

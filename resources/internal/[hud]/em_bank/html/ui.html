@@ -6,63 +6,73 @@
         <link rel="stylesheet" type="text/css" href="css/bank.css" />
     </head>
     <body>
-        <div class="container is-widescreen container-background" style="display:none;">
-            <nav class="navbar" role="navigation" aria-label="main navigation">
-              <div class="navbar-brand">
-                <a class="navbar-item home-navbar-item">
-                  <img src="images/Fleeca-GTAV-Logo.png" width="112" height="28">
-                </a>
+        <div class="container is-widescreen container-background">
+          <div class="loading_screen" style="display: none;">
+            <img src="images/Fleeca-GTAV-Logo.png" class="loading-screen-logo">
+            <progress class="progress is-small is-success loading-progress-bar" max="100">15%</progress>
+            <center>
+              <p class="loading-text">Investing in the next Crypto Currency!</p>
+            </center>
+            
+          </div>
+          <div class="main_app" style="display: none;">
+              <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                  <a class="navbar-item home-navbar-item">
+                    <img src="images/Fleeca-GTAV-Logo.png" width="112" height="28">
+                  </a>
 
-                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                  <span aria-hidden="true"></span>
-                  <span aria-hidden="true"></span>
-                  <span aria-hidden="true"></span>
-                </a>
-              </div>
+                  <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                  </a>
+                </div>
 
-              <div id="navbar-fleeca" class="navbar-menu">
-                <div class="navbar-start">
-                  <div class="navbar-item has-dropdown is-hoverable">
-                    <a class="navbar-link">Accounts</a>
-                    <div class="navbar-dropdown accounts-dropdown"></div>
+                <div id="navbar-fleeca" class="navbar-menu">
+                  <div class="navbar-start">
+                    <div class="navbar-item has-dropdown is-hoverable">
+                      <a class="navbar-link">Accounts</a>
+                      <div class="navbar-dropdown accounts-dropdown"></div>
+                    </div>
+                  </div>
+                  <div class="navbar-end">
+                    <div class="navbar-item welcome-navbar-item" style="margin-right:50px">Welcome, Amelia Knightly!</div>
                   </div>
                 </div>
-                <div class="navbar-end">
-                  <div class="navbar-item welcome-navbar-item" style="margin-right:50px">Welcome, Amelia Knightly!</div>
-                </div>
+              </nav>
+
+              <br/>
+
+              <div class="tile is-ancestor content-tiles">
+                  <div class="tile is-vertical is-parent is-6">
+                      <div class="tile is-child box summary_box">
+                          <p class="summary-title title">Summary</p>
+                          <p class="networth"></p>
+                      </div>
+                      <div class="tile is-child box account_summary_box" style="display: none;">
+                          <p class="account_summary_title title"></p>
+                          <p class="account_id"></p>
+                          <p class="account_funds_text"></p>
+                      </div>
+                      <div class="tile is-child box account_actions_box" style="display: none;">
+                          <button class="button is-primary deposit_button">Deposit</button>
+                          <button class="button is-primary withdraw_button">Withdraw</button>
+                          <button class="button is-primary transfer_button">Transfer</button>
+                          <button class="button is-danger delete_button">Delete</button>
+                      </div>
+                      <div class="tile is-child box pending_transaction_tile">
+                          <p class="title">Pending Transactions</p>
+                          <div class = "pending_transaction_table_div pending_table_wrapper"></div>
+                      </div>
+                  </div>
+                  <div class="tile is-child box is-5">
+                      <p class="title">Recent Activity</p>
+                      <div class="recent_transactions_table_div transactions_table_wrapper"></div>
+                  </div>
               </div>
-            </nav>
-
-            <br/>
-
-            <div class="tile is-ancestor content-tiles">
-                <div class="tile is-vertical is-parent is-6">
-                    <div class="tile is-child box summary_box">
-                        <p class="summary-title title">Summary</p>
-                        <p class="networth"></p>
-                    </div>
-                    <div class="tile is-child box account_summary_box" style="display: none;">
-                        <p class="account_summary_title title"></p>
-                        <p class="account_id"></p>
-                        <p class="account_funds_text"></p>
-                    </div>
-                    <div class="tile is-child box account_actions_box" style="display: none;">
-                        <button class="button is-primary deposit_button">Deposit</button>
-                        <button class="button is-primary withdraw_button">Withdraw</button>
-                        <button class="button is-primary transfer_button">Transfer</button>
-                        <button class="button is-danger delete_button">Delete</button>
-                    </div>
-                    <div class="tile is-child box pending_transaction_tile">
-                        <p class="title">Pending Transactions</p>
-                        <div class = "pending_transaction_table_div pending_table_wrapper"></div>
-                    </div>
-                </div>
-                <div class="tile is-child box is-5">
-                    <p class="title">Recent Activity</p>
-                    <div class="recent_transactions_table_div transactions_table_wrapper"></div>
-                </div>
             </div>
-        </div>
+          </div>
 
         <div class="modal deposit_money_modal">
           <div class="modal-background"></div>
