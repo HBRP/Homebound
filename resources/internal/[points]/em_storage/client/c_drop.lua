@@ -1,6 +1,8 @@
 
 local nearby_drops = {}
 local bags = {}
+local player_coords = nil
+local force_refresh = false
 
 function get_nearby_drop_storage_id()
 
@@ -60,6 +62,15 @@ end
 
 local function refresh_loop(refresh_check)
     
+    local temp_coords = GetEntityCoords(PlayerPedId())
+
+    if #(temp_coords - player_coords) < 50.0 and not force_refresh then
+        return
+    end
+
+    player_coords = temp_coords
+    force_refresh = false
+
     exports["em_dal"]:get_nearby_drops_async(function(result)
 
         nearby_drops = result
@@ -80,6 +91,21 @@ end
 
 AddEventHandler("em_dal:character_loaded", function()
 
+    player_coords = GetEntityCoords(PlayerPedId())
     exports["em_points"]:register_points(refresh_loop, text, open_drop, 1000)
     
+end)
+
+
+AddEventHandler("em_storage:manual_drop_refresh", function()
+
+    exports["em_dal"]:trigger_proximity_event("em_storage:proximity_drop", 75.0)
+
+end)
+
+RegisterNetEvent("em_storage:proximity_drop")
+AddEventHandler("em_storage:proximity_drop", function()
+
+    force_refresh = true
+
 end)
