@@ -380,8 +380,6 @@ function handle_bank_transaction_click(bank_transaction_id) {
 function pending_transaction_make_payment(pending_transaction) {
 
     var value = $('.pending-transaction-amount-input').val();
-    console.log(value)
-    console.log(pending_transaction.amount_left)
     value = parseInt(value);
     if (isNaN(value) || value > pending_transaction.amount_left) {
 

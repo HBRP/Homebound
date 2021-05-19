@@ -97,7 +97,6 @@ end)
 
 RegisterNUICallback("post_payment", function(data, cb)
 
-    print(json.encode(data))
     local response = exports["em_dal"]:bank_post_payment(data.bank_account_id, data.bank_pending_transaction_id, data.amount)
 
     if not response.result.successful then
