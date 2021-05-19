@@ -22,6 +22,7 @@ dependencies {
     
     'em_dal',
     'em_commands',
-    'em_transactions'
+    'em_transactions',
+    't-notify'
 
 }

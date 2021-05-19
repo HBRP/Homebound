@@ -155,7 +155,7 @@ function populate_accounts(accounts) {
     $(".account-item").click(function() {
 
         var bank_account_id = $(this).attr("bank_account_id");
-        test_populate();
+        //test_populate();
         $.post("http://em_bank/load_bank", JSON.stringify({bank_account_id : current_bank_account_id}))
         load_account(bank_account_id);
         setup_modal_table_clicks();
@@ -231,13 +231,15 @@ function display() {
             setup_modal_table_clicks();
         }, 500)
 
-    }, 2000)
+    }, 3000)
 
 }
 
 function hide() {
 
     $(".container-background").fadeOut();
+    $('.transaction-modal').removeClass('is-active');
+    $('.pending-transactions-modal').removeClass('is-active');
 
 }
 
@@ -322,7 +324,7 @@ function home_navbar_item_click() {
     $('.summary_box').show();
     $('.account_summary_box').hide();
     $('.account_actions_box').hide();
-    test_populate();
+    //test_populate();
     $.post("http://em_bank/refresh_bank", JSON.stringify({}))
     setup_modal_table_clicks();
 
@@ -366,18 +368,32 @@ function handle_bank_transaction_click(bank_transaction_id) {
 
 /*
     bank_account_name: String,
+    bank_account_id: i32,
     bank_pending_transaction_id: i32,
     pending_transaction_date: String,
     reason: String,
     amount: i32,
     amount_left: i32,
     current: bool
-
 */
 
 function pending_transaction_make_payment(pending_transaction) {
 
+    var value = $('.pending-transaction-amount-input').val();
+    console.log(value)
+    console.log(pending_transaction.amount_left)
+    value = parseInt(value);
+    if (isNaN(value) || value > pending_transaction.amount_left) {
 
+        $('.pending-transaction-amount-input').addClass('is-danger');
+        return;
+
+    }
+
+    $('.pending-transaction-amount-input').removeClass('is-danger');
+    $('.pending-transaction-amount-input').val('');
+    $('.pending-transactions-modal').removeClass('is-active');
+    $.post("http://em_bank/post_payment", JSON.stringify({amount : value, bank_account_id: pending_transaction.bank_account_id, bank_pending_transaction_id: pending_transaction.bank_pending_transaction_id }));
 
 }
 
@@ -453,11 +469,21 @@ async function loading_screen() {
         "Getting robbed again!",
         "If money doesn't grow on trees, then why do banks have branches?",
         "If money talks, why do we need bank tellers?",
+        "Scandalizing the public",
+        "Tickling fancies",
+        "Burning bridges",
+        "Drawing conclusions",
+        "Contemplating the universe",
+        "Deliberately Stalling",
+        "Pretending to load",
+        "Finding your money...",
+        "Pretending we didn't gamble away your savings",
+        "Sign up for our money laundering service!"
     ]
 
     for (var i = 0; i < 10;i++) {
 
-        await sleep(i * 750);
+        await sleep(i * 1000);
         $('.loading-text').text(loading_text[Math.floor(Math.random() * loading_text.length)]);
 
     }
@@ -466,8 +492,8 @@ async function loading_screen() {
 
 $(function() {
 
-    test_populate();
-    loading_screen();
+    //test_populate();
+    //loading_screen();
 
     modal_clicks();
     setup_modal_table_clicks();

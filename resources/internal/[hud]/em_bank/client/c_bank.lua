@@ -49,16 +49,29 @@ RegisterNUICallback("deposit_cash", function(data, cb)
         return
     end
 
-    exports["em_dal"]:bank_deposit_money(data.bank_account_id, data.deposit_amount)
-    SendNUIMessage({cash = exports["em_transactions"]:get_cash_on_hand(), populate_cash = true})
+    local response = exports["em_dal"]:bank_deposit_money(data.bank_account_id, data.deposit_amount)
 
+    if not response.result.successful then
+        exports['t-notify']:Alert({style = "error", message = response.result.reason})
+    else
+        exports['t-notify']:Alert({style = "success", message = "Successfully withdrawed cash"})
+    end
+
+    SendNUIMessage({cash = exports["em_transactions"]:get_cash_on_hand(), populate_cash = true})
     cb()
 
 end)
 
 RegisterNUICallback("withdraw_cash", function(data, cb)
 
-    exports["em_dal"]:bank_withdraw_amount(data.bank_account_id, data.withdraw_amount)
+    local response = exports["em_dal"]:bank_withdraw_amount(data.bank_account_id, data.withdraw_amount)
+
+    if not response.result.successful then
+        exports['t-notify']:Alert({style = "error", message = response.result.reason})
+    else
+        exports['t-notify']:Alert({style = "success", message = "Successfully withdrawed cash"})
+    end
+
     SendNUIMessage({cash = exports["em_transactions"]:get_cash_on_hand(), populate_cash = true})
     cb()
 
@@ -78,6 +91,21 @@ end)
 RegisterNUICallback("hide", function(data, cb)
 
     SetNuiFocus(false, false)
+    cb()
+
+end)
+
+RegisterNUICallback("post_payment", function(data, cb)
+
+    print(json.encode(data))
+    local response = exports["em_dal"]:bank_post_payment(data.bank_account_id, data.bank_pending_transaction_id, data.amount)
+
+    if not response.result.successful then
+        exports['t-notify']:Alert({style = "error", message = response.result.reason})
+    else
+        exports['t-notify']:Alert({style = "success", message = "Successfully made payment"})
+    end
+
     cb()
 
 end)
