@@ -129,6 +129,8 @@ function populate_accounts(accounts) {
 
     cache_accounts = accounts;
 
+    $('.accounts-dropdown').empty();
+    
     var element = '<a class="navbar-item account-item" bank_account_id="{id}">({id}) {name}</a>'
     for (var i = 0; i < accounts.length;i++) {
 
@@ -153,7 +155,6 @@ function populate_accounts(accounts) {
     $(".account-item").click(function() {
 
         var bank_account_id = $(this).attr("bank_account_id");
-        empty_out_data();
         //test_populate();
         $.post("http://em_bank/load_bank", JSON.stringify({bank_account_id : current_bank_account_id}))
         load_account(bank_account_id);
@@ -227,15 +228,8 @@ function display() {
 
 }
 
-function empty_out_data() {
-
-    $(".accounts-dropdown").empty();
-
-}
-
 function hide() {
 
-    empty_out_data();
     $(".container-background").fadeOut();
 
 }
@@ -433,7 +427,6 @@ function test_populate() {
 
 function home_navbar_item_click() {
 
-    empty_out_data();
     $('.summary_box').show();
     $('.account_summary_box').hide();
     $('.account_actions_box').hide();
