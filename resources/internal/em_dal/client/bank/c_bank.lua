@@ -28,7 +28,7 @@ end
 function bank_post_payment(bank_account_id, bank_pending_transaction_id, amount)
 
     local data = nil
-    trigger_server_callback("em_dal:bank_deposit_money", function(result)
+    trigger_server_callback("em_dal:bank_post_payment", function(result)
 
         data = result
 
