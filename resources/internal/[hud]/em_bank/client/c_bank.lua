@@ -60,10 +60,18 @@ end)
 RegisterNUICallback("load_bank", function(data, cb)
 
     local temp_pending = exports["em_dal"]:bank_get_pending_transactions(data.bank_account_id)
-    local temp_transactions = exports["em_dal"]:bank_get_transactions_async(data.bank_account_id)
+    local temp_transactions = exports["em_dal"]:bank_get_transactions(data.bank_account_id)
 
     SendNUIMessage({pending = temp_pending, populate_pending = true})
     SendNUIMessage({transactions = temp_transactions, populate_transactions = true})
+    cb()
+
+end)
+
+RegisterNUICallback("hide", function(data, cb)
+
+    SetNuiFocus(false, false)
+    cb()
 
 end)
 

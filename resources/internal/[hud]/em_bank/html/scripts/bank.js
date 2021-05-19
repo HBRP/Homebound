@@ -535,4 +535,11 @@ $(function() {
 
     })
 
+    $("body").on("keyup", function (key) {
+        if (key.which == 27) {
+            hide()
+            $.post("http://em_bank/hide", JSON.stringify({}));
+        }
+    });
+
 })
