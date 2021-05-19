@@ -478,7 +478,11 @@ async function loading_screen() {
         "Pretending to load",
         "Finding your money...",
         "Pretending we didn't gamble away your savings",
-        "Sign up for our money laundering service!"
+        "Sign up for our money laundering service!",
+        "Wait, you wanted your money back?!",
+        "Closing down and running away with your money!",
+        "Money? What's Money?",
+        "And it's gone..."
     ]
 
     for (var i = 0; i < 10;i++) {
@@ -517,10 +521,12 @@ $(function() {
         } else if (event.data.populate_pending) {
 
             populate_pending(event.data.pending);
+            setup_modal_table_clicks();
 
         } else if (event.data.populate_transactions) {
 
             populate_transactions(event.data.transactions)
+            setup_modal_table_clicks();
 
         } else if (event.data.show_loading) {
 

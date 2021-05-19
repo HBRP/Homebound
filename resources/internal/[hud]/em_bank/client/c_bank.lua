@@ -103,6 +103,12 @@ RegisterNUICallback("post_payment", function(data, cb)
     if not response.result.successful then
         exports['t-notify']:Alert({style = "error", message = response.result.reason})
     else
+
+        local temp_pending = exports["em_dal"]:bank_get_pending_transactions(data.bank_account_id)
+        local temp_transactions = exports["em_dal"]:bank_get_transactions(data.bank_account_id)
+        SendNUIMessage({pending = temp_pending, populate_pending = true})
+        SendNUIMessage({transactions = temp_transactions, populate_transactions = true})
+
         exports['t-notify']:Alert({style = "success", message = "Successfully made payment"})
     end
 
