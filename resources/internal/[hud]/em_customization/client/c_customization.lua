@@ -72,11 +72,16 @@ end
 
 local function refresh_nearby_customization_loop()
 
+    local player_coords = GetEntityCoords(PlayerPedId())
     while true do
 
         Citizen.Wait(5000)
-        exports["em_dal"]:get_nearby_customization_points_async(refresh_nearby_customization)
-
+        local new_coords = GetEntityCoords(PlayerPedId())
+        if #(player_coords - new_coords) > 50.0 then
+            player_coords = new_coords
+            exports["em_dal"]:get_nearby_customization_points_async(refresh_nearby_customization)
+        end
+        
     end
 
 end
