@@ -223,8 +223,15 @@ function populate_transactions(transactions) {
 
 function display() {
 
-    $(".container-background").fadeIn();
-    setup_modal_table_clicks();
+    setTimeout(function() {
+
+        $('.loading_screen').fadeOut(450);
+        setTimeout(function() {
+            $('.main_app').fadeIn();
+            setup_modal_table_clicks();
+        }, 500)
+
+    }, 2000)
 
 }
 
@@ -282,86 +289,6 @@ function test_populate() {
             "amount": 200,
             "transaction_date": "10-11-2021",
             "transaction_type_id": 2
-        },
-        {
-            "bank_transaction_id": 3,
-            "bank_account_name": "bank_account_name",
-            "reason": "reason",
-            "amount": 100,
-            "transaction_date": "10-11-2021",
-            "transaction_type_id": 1
-        },
-        {
-            "bank_transaction_id": 4,
-            "bank_account_name": "bank_account_name",
-            "reason": "reason",
-            "amount": 200,
-            "transaction_date": "10-11-2021",
-            "transaction_type_id": 2
-        },
-        {
-            "bank_transaction_id": 5,
-            "bank_account_name": "bank_account_name",
-            "reason": "reason",
-            "amount": 100,
-            "transaction_date": "10-11-2021",
-            "transaction_type_id": 1
-        },
-        {
-            "bank_transaction_id": 6,
-            "bank_account_name": "bank_account_name",
-            "reason": "reason",
-            "amount": 200,
-            "transaction_date": "10-11-2021",
-            "transaction_type_id": 2
-        },
-        {
-            "bank_transaction_id":7,
-            "bank_account_name": "bank_account_name",
-            "reason": "reason",
-            "amount": 100,
-            "transaction_date": "10-11-2021",
-            "transaction_type_id": 1
-        },
-        {
-            "bank_transaction_id": 8,
-            "bank_account_name": "bank_account_name",
-            "reason": "reason",
-            "amount": 200,
-            "transaction_date": "10-11-2021",
-            "transaction_type_id": 2
-        },
-        {
-            "bank_transaction_id": 9,
-            "bank_account_name": "bank_account_name",
-            "reason": "reason",
-            "amount": 100,
-            "transaction_date": "10-11-2021",
-            "transaction_type_id": 1
-        },
-        {
-            "bank_transaction_id": 10,
-            "bank_account_name": "bank_account_name",
-            "reason": "reason",
-            "amount": 200,
-            "transaction_date": "10-11-2021",
-            "transaction_type_id": 2
-        },
-        {
-            "bank_transaction_id": 11,
-            "bank_account_name": "bank_account_name",
-            "reason": "reason",
-            "amount": 100,
-            "transaction_date": "10-11-2021",
-            "transaction_type_id": 1
-        },
-        {
-            "bank_transaction_id": 12,
-            "bank_account_name": "bank_account_name",
-            "reason": "reason",
-            "amount": 200,
-            "transaction_date": "10-11-2021",
-            "transaction_type_id": 2
         }
     ]);
     populate_pending([
@@ -383,45 +310,10 @@ function test_populate() {
             "amount": 100,
             "amount_left": 100,
             "current": false
-        },
-        {
-            "bank_account_name": "bank_account_name",
-            "bank_pending_transaction_id":1,
-            "pending_trasaction_date": "10-11-2021",
-            "reason": "Because",
-            "amount": 100,
-            "amount_left": 120,
-            "current": true
-        },
-        {
-            "bank_account_name": "bank_account_name",
-            "bank_pending_transaction_id":2,
-            "pending_trasaction_date": "10-11-2021",
-            "reason": "Because Yes",
-            "amount": 100,
-            "amount_left": 100,
-            "current": false
-        },
-        {
-            "bank_account_name": "bank_account_name",
-            "bank_pending_transaction_id":1,
-            "pending_trasaction_date": "10-11-2021",
-            "reason": "Because",
-            "amount": 100,
-            "amount_left": 120,
-            "current": true
-        },
-        {
-            "bank_account_name": "bank_account_name",
-            "bank_pending_transaction_id":2,
-            "pending_trasaction_date": "10-11-2021",
-            "reason": "Because Yes",
-            "amount": 100,
-            "amount_left": 100,
-            "current": false
         }
 
     ]);
+    display();
 
 }
 
@@ -442,6 +334,9 @@ function setup_modal_table_clicks() {
     $('.transaction-modal-close').click(function() {
         $('.transaction-modal').removeClass('is-active');
     })
+    $('.pending-transactions-modal-close').click(function() {
+        $('.pending-transactions-modal').removeClass('is-active');
+    })
 
 }
 
@@ -455,7 +350,7 @@ function handle_bank_transaction_click(bank_transaction_id) {
             $('.transaction-modal-title').text(`Transaction Reference #${transaction.bank_transaction_id}`);
             $('.transaction-modal-body').html(
                 `
-                <p><b>Reason</b>: ${transaction.reason}</p>
+                <p><b>Description</b>: ${transaction.reason}</p>
                 <p><b>Transaction Amount:</b> ${transaction.amount}<p>
                 <p><b>Transaction Date:</b> ${transaction.transaction_date}</p>
                 <p><b>Transaction Type:</b> ${bank_transaction_types[transaction.transaction_type_id]}</p>
@@ -469,9 +364,52 @@ function handle_bank_transaction_click(bank_transaction_id) {
 
 }
 
-function handle_pending_transaction_click(pending_transaction_id) {
+/*
+    bank_account_name: String,
+    bank_pending_transaction_id: i32,
+    pending_transaction_date: String,
+    reason: String,
+    amount: i32,
+    amount_left: i32,
+    current: bool
+
+*/
+
+function pending_transaction_make_payment(pending_transaction) {
 
 
+
+}
+
+function handle_pending_transaction_click(bank_pending_transaction_id) {
+
+    for (var i = 0; i < cache_pending.length;i++) {
+
+        if (cache_pending[i].bank_pending_transaction_id == bank_pending_transaction_id) {
+
+            var pending = cache_pending[i];
+            $('.pending-transactions-modal-title').text(`Pending Transaction Reference #${pending.bank_pending_transaction_id}`);
+            $('.pending-transactions-modal-body').html(
+            `
+                <p><b>Account Name:</b> ${pending.bank_account_name}</p>
+                <p><b>Description:</b> ${pending.reason}</p>
+                <p><b>Amount Due Now:</b> $${pending.amount}</p>
+                <p><b>Total Amount Due:</b> $${pending.amount_left}</p>
+                <p><b>Past Due: </b> ${!pending.current}</p>
+                <br/>
+                <p><b>Make a Payment</b><p>
+                <br/>
+                <input class="input is-rounded pending-transaction-amount-input" type="text" placeholder="Payment Amount">
+            `)
+
+            $('.pending-transactions-modal').addClass('is-active');
+            $('.pending-transaction-make-payment').click(function() {
+                pending_transaction_make_payment(pending)
+            })
+
+        }
+
+    }
 
 }
 
@@ -491,21 +429,13 @@ function record_click() {
 
 }
 
-setTimeout(function() {
-
-    $('.loading_screen').fadeOut(450);
-    setTimeout(function() {
-        $('.main_app').fadeIn();
-    }, 500)
-
-}, 10000)
-
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 async function loading_screen() {
 
+    $(".container-background").fadeIn();
     $('.loading_screen').show();
     $('.main_app').hide();
 
@@ -525,7 +455,7 @@ async function loading_screen() {
         "If money talks, why do we need bank tellers?",
     ]
 
-    for (var i = 0; i < 5;i++) {
+    for (var i = 0; i < 10;i++) {
 
         await sleep(i * 750);
         $('.loading-text').text(loading_text[Math.floor(Math.random() * loading_text.length)]);

@@ -1,5 +1,5 @@
 
-local function open_bank()
+local function load_bank_data()
 
     local bank_accounts = exports["em_dal"]:bank_get_bank_accounts()
     local pending_transactions = {}
@@ -29,9 +29,16 @@ local function open_bank()
     SetNuiFocus(true, true)
 end
 
+local function open_bank()
+
+    SendNUIMessage({show_loading = true})
+    load_bank_data()
+
+end
+
 RegisterNUICallback("refresh_bank", function(data, cb)
 
-    open_bank()
+    load_bank_data()
     cb()
 
 end)

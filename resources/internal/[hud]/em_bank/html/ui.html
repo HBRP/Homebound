@@ -6,7 +6,7 @@
         <link rel="stylesheet" type="text/css" href="css/bank.css" />
     </head>
     <body>
-        <div class="container is-widescreen container-background">
+        <div class="container is-widescreen container-background" style="display: none;">
           <div class="loading_screen" style="display: none;">
             <img src="images/Fleeca-GTAV-Logo.png" class="loading-screen-logo">
             <progress class="progress is-small is-success loading-progress-bar" max="100">15%</progress>
@@ -98,6 +98,20 @@
                 <button class="button is-success withdraw-button">Withdraw</button>
                 <button class="button withdraw-cancel-button">Cancel</button>
             </section>
+          </div>
+        </div>
+
+        <div class="modal pending-transactions-modal">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title pending-transactions-modal-title">Modal title</p>
+              <button class="delete pending-transactions-modal-close" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body pending-transactions-modal-body"></section>
+            <footer class="modal-card-foot">
+              <button class="button is-success pending-transaction-make-payment">Make Payment</button>
+            </footer>
           </div>
         </div>
 
