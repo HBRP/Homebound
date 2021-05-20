@@ -55,13 +55,29 @@ local function get_hacking_dialog(prop)
                 exports["em_dialog"]:hide_dialog()
             end
         else
-            response = "(You stick the USB in the appropriate place and begin working your magic.) ((Use left click!))"
-            callback = function()
-                hacking = true
-                exports["em_dialog"]:hide_dialog()
-                Citizen.CreateThread(dispatch_loop)
-                exports["datacrack"]:Start(3.75)
-            end
+
+            exports["em_dal"]:trigger_server_callback("em_bank:can_hack", function(atm_is_hackable)
+                
+                if atm_is_hackable then
+                    response = "(You stick the USB in the appropriate place and begin working your magic.) ((Use left click!))"
+                    callback = function()
+
+                        hacking = true
+                        exports["em_dal"]:trigger_server_callback_async("em_bank:begin_hacking", function() end, GetEntityCoords(PlayerPedId()))
+                        exports["em_dialog"]:hide_dialog()
+                        Citizen.CreateThread(dispatch_loop)
+                        exports["datacrack"]:Start(3.75)
+
+                    end
+                else
+                    response = "(You take out your USB but before you slot it in, you notice the ATM has already been tampered with. Try again later)"
+                    callback = function()
+                        exports["em_dialog"]:hide_dialog()
+                    end
+                end
+
+            end, GetEntityCoords(PlayerPedId()))
+
         end
 
     else
