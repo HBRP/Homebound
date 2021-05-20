@@ -97,6 +97,8 @@ end
 
 AddEventHandler("use_atm", function(prop)
 
+    TaskStartScenarioInPlace(PlayerPedId(), "PROP_HUMAN_ATM", 0, true)
+
     local dialog = {
         {
             dialog = "[Use ATM]",
@@ -115,5 +117,7 @@ AddEventHandler("use_atm", function(prop)
 
     exports["em_dialog"]:show_dialog("ATM", dialog)
 
+    Citizen.Wait(5000)
+    ClearPedTasksImmediately(PlayerPedId())
 
 end)
