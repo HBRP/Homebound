@@ -7,6 +7,10 @@ client_scripts {
     'client/c_atms.lua'
 }
 
+server_scripts {
+    'server/s_atms.lua'
+}
+
 ui_page {
     'html/ui.html',
 }
