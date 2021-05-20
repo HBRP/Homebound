@@ -3,7 +3,8 @@ fx_version 'bodacious'
 games { 'gta5' }
 
 client_scripts {
-    'client/c_bank.lua'
+    'client/c_bank.lua',
+    'client/c_atms.lua'
 }
 
 ui_page {
@@ -22,6 +23,7 @@ dependencies {
     
     'em_dal',
     'em_commands',
+    'em_dialog',
     'em_transactions',
     't-notify'
 

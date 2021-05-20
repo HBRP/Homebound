@@ -36,6 +36,8 @@ local function open_bank()
 
 end
 
+AddEventHandler("em_bank:open_bank", open_bank)
+
 RegisterNUICallback("refresh_bank", function(data, cb)
 
     load_bank_data()
