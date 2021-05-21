@@ -4,7 +4,11 @@ function get_tattoos()
     local tattoos = {}
     trigger_server_callback("em_dal:get_tattoos", function(result)
 
-        tattoos = json.decode(result)
+        tattoos = result
+
+        if type(result) == "string" then
+            tattoos = json.decode(result)
+        end
 
     end, get_character_id())
 
@@ -16,7 +20,12 @@ function get_tattoos_async(callback)
 
     trigger_server_callback_async("em_dal:get_tattoos", function(result) 
 
-        local temp = json.decode(result)
+        local temp = result
+
+        if type(result) == "string" then
+            temp = json.decode(result)
+        end
+
         callback(temp)
 
     end, get_character_id())
