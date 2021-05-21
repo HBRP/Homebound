@@ -59,7 +59,7 @@
                           <button class="button is-primary deposit_button">Deposit</button>
                           <button class="button is-primary withdraw_button">Withdraw</button>
                           <button class="button is-primary transfer_button">Transfer</button>
-                          <button class="button is-danger delete_button">Delete</button>
+                          <!--<button class="button is-danger delete_button">Delete</button>-->
                       </div>
                       <div class="tile is-child box pending_transaction_tile">
                           <p class="title">Pending Transactions</p>
@@ -123,6 +123,28 @@
               <button class="delete transaction-modal-close" aria-label="close"></button>
             </header>
             <section class="modal-card-body transaction-modal-body"></section>
+          </div>
+        </div>
+
+        <div class="modal transfer-modal">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title transfer-modal-title">Transfer Amount</p>
+              <button class="delete transfer-modal-close" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+              <p><b>Amount</b></p>
+              <input class="input is-rounded transfer-amount-input" type="text" placeholder="Transfer Amount">
+              <p><b>Bank Account Id</b></p>
+              <input class="input is-rounded transfer-bankaccount-input" type="text" placeholder="Bank account id">
+              <p><b>Transfer Reason</b></p>
+              <input class="input is-rounded transfer-reason-input" type="text" placeholder="Reason">
+              <br/>
+            </section>
+            <footer class="modal-card-foot">
+              <button class="button is-success make-transfer-button">Transfer</button>
+            </footer>
           </div>
         </div>
 

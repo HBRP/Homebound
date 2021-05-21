@@ -6,6 +6,20 @@ var cache_transactions = []
 var cash_on_hand = 0
 var current_bank_account_id = 0
 
+function get_current_funds() {
+
+    for (var i = 0; i < cache_accounts.length;i++) {
+
+        if (current_bank_account_id == cache_accounts[i].bank_account_id) {
+
+            return cache_accounts[i].funds;
+
+        }
+
+    }
+
+}
+
 function deposit_button_click() {
 
     var value = $('.deposit-input').val()
@@ -34,18 +48,7 @@ function deposit_cancel_click() {
 function withdraw_button_click() {
 
     var value = $('.withdraw-input').val();
-    var funds = 0
-
-    for (var i = 0; i < cache_accounts.length;i++) {
-
-        if (current_bank_account_id == cache_accounts[i].bank_account_id) {
-
-            funds = cache_accounts[i].funds;
-            break;
-
-        }
-
-    }
+    var funds = get_current_funds();
 
     value = parseInt(value)
 
@@ -59,6 +62,54 @@ function withdraw_button_click() {
     $('.withdraw-input').val('')
     $('.withdraw_money_modal').removeClass('is-active')
     $.post("http://em_bank/withdraw_cash", JSON.stringify({ bank_account_id : current_bank_account_id, withdraw_amount : value }));
+
+}
+
+function transfer_button_button() {
+
+    var amount_value = $('.transfer-amount-input').val();
+    var bank_account_id_value = $('.transfer-bankaccount-input').val();
+    var reason = $('.transfer-reason-input').val();
+    var funds = get_current_funds();
+
+    amount_value = parseInt(amount_value)
+    if (isNaN(amount_value) || amount_value > funds) {
+
+        $('.transfer-amount-input').addClass('is-danger')
+        return;
+
+    }
+    $('.transfer-amount-input').removeClass('is-danger')
+
+    bank_account_id_value = parseInt(bank_account_id_value)
+    if (isNaN(bank_account_id_value)) {
+
+        $('.transfer-bankaccount-input').addClass('is-danger')
+        return;
+
+    }
+
+    $('.transfer-bankaccount-input').removeClass('is-danger')
+    $('.transfer-modal').removeClass('is-active')
+
+    $.post("http://em_bank/transfer_amount", JSON.stringify({
+        amount : amount_value,
+        to_bank_account_id : bank_account_id_value,
+        from_bank_account_id : parseInt(current_bank_account_id),
+        reason: reason
+    }))
+
+}
+
+function transfer_cancel_button() {
+
+    $('.transfer-modal').removeClass('is-active')
+    $('.transfer-amount-input').val('')
+    $('.transfer-bankaccount-input').val('')
+    $('.transfer-reason-input').val('')
+
+    $('.transfer-amount-input').removeClass('is-danger')
+    $('.transfer-bankaccount-input').removeClass('is-danger')
 
 }
 
@@ -76,6 +127,8 @@ function modal_clicks() {
     $('.deposit-cancel-button').click(deposit_cancel_click)
     $('.withdraw-button').click(withdraw_button_click)
     $('.withdraw-cancel-button').click(withdraw_cancel_button)
+    $('.make-transfer-button').click(transfer_button_button)
+    $('.transfer-modal-close').click(transfer_cancel_button)
 
 }
 
@@ -113,7 +166,7 @@ function load_account(bank_account_id) {
 
     $('.transfer_button').click(function() {
 
-
+        $('.transfer-modal').addClass('is-active')
 
     })
 
@@ -191,7 +244,14 @@ function populate_pending(pending) {
 
 }
 
-const bank_transaction_types = {1 : "ACH", 2 : "Withdrawal", 3 : "Deposit", 4 : "Wire Transfer"}
+const bank_transaction_types = 
+    {
+        1 : "ACH", 
+        2 : "Withdrawal", 
+        3 : "Deposit", 
+        4 : "Wire Transfer", 
+        5 : "Payment"
+    }
 
 function populate_transactions(transactions) {
 
@@ -240,6 +300,7 @@ function hide() {
     $(".container-background").fadeOut();
     $('.transaction-modal').removeClass('is-active');
     $('.pending-transactions-modal').removeClass('is-active');
+    $('.transfer-modal').removeClass('is-active');
 
 }
 
