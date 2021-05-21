@@ -134,8 +134,6 @@ function modal_clicks() {
 
 function load_account(bank_account_id) {
 
-    current_bank_account_id = bank_account_id
-
     $('.summary_box').hide();
     $('.account_summary_box').show();
     $('.account_actions_box').show();
@@ -208,6 +206,7 @@ function populate_accounts(accounts) {
     $(".account-item").click(function() {
 
         var bank_account_id = $(this).attr("bank_account_id");
+        current_bank_account_id = bank_account_id
         //test_populate();
         $.post("http://em_bank/load_bank", JSON.stringify({bank_account_id : current_bank_account_id}))
         load_account(bank_account_id);

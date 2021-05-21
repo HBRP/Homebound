@@ -112,7 +112,7 @@ RegisterNUICallback("transfer_amount", function(data, cb)
         SendNUIMessage({transactions = temp_transactions, populate_transactions = true})
 
         exports['t-notify']:Alert({style = "success", message = "Successfully transfered cash"})
-        
+
     end
 
 end)
