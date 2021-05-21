@@ -63,12 +63,19 @@ AddEventHandler("convenience_store_safe", function(point)
 
     successful_crack = nil
 
-    if GetGameTimer() < next_try_time then
-        exports['t-notify']:Alert({style = 'error', message = "Slow down! You're feeling nervous."})
-        return
-    end
+    local can_safe_crack = exports["em_dal"]:can_do_action("store_safe_cracking")
 
-    --check if they have permission to use a safe
-    start_safe_cracking(point)
+    if can_safe_crack then
+
+        if GetGameTimer() < next_try_time then
+            exports['t-notify']:Alert({style = 'error', message = "Slow down! You're feeling nervous."})
+            return
+        end
+
+        start_safe_cracking(point)
+
+    else
+        exports['t-notify']:Alert({style = "error", message = "You don't have the necessary skill to safecrack.", duration = 5000})
+    end
 
 end)

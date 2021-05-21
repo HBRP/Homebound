@@ -48,7 +48,7 @@ local function get_hacking_dialog(prop)
     local callback = nil
     if exports["em_items"]:has_item_by_name("usb") then
 
-        local can_hack = true
+        local can_hack = exports["em_dal"]:can_do_action("atm_hacking")
         if not can_hack then
             response = "(You attempt to jam the USB into the card slot. Nothing happens. Why is hacking so difficult?)"
             callback = function()
