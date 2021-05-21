@@ -35,7 +35,8 @@ client_scripts {
     'client/cad/c_cad.lua',
     'client/housing/c_housing.lua',
     'client/context/c_context.lua',
-    'client/bank/c_bank.lua'
+    'client/bank/c_bank.lua',
+    'client/actions/c_actions.lua'
     
 }
 
@@ -69,7 +70,8 @@ server_scripts {
     'server/vehicle/s_vehicle_garage.lua',
     'server/cad/s_cad.lua',
     'server/housing/s_housing.lua',
-    'server/context/s_context.lua'
+    'server/context/s_context.lua',
+    'server/actions/s_actions.lua'
 
 }
 
@@ -235,6 +237,10 @@ export 'bank_get_pending_transactions'
 export 'bank_get_bank_accounts'
 export 'bank_transfer_amount'
 export 'bank_get_transactions'
+
+-- c_actions.lua
+export 'can_do_action_async'
+export 'can_do_action'
 
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'
