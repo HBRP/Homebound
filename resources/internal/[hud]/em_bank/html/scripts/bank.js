@@ -236,7 +236,7 @@ function populate_pending(pending) {
     cache_pending = pending;
     for (var i = 0; i < pending.length;i++) {
 
-        var new_element = `<tr class="table-record" data-pending-transaction-id="${pending[i].bank_pending_transaction_id}"><td>${pending[i].pending_trasaction_date}</td><td>${pending[i].bank_account_name}</td><td>$${pending[i].amount}</td><td>${!pending[i].current}</td></tr>`
+        var new_element = `<tr class="table-record" data-pending-transaction-id="${pending[i].bank_pending_transaction_id}"><td>${pending[i].pending_transaction_date}</td><td>${pending[i].bank_account_name}</td><td>$${pending[i].amount}</td><td>${!pending[i].current}</td></tr>`
         $(".pending_transactions_data").append(new_element);
 
     }
@@ -358,7 +358,7 @@ function test_populate() {
         {
             "bank_account_name": "bank_account_name",
             "bank_pending_transaction_id":1,
-            "pending_trasaction_date": "10-11-2021",
+            "pending_transaction_date": "10-11-2021",
             "reason": "Because",
             "amount": 100,
             "amount_left": 120,
@@ -367,7 +367,7 @@ function test_populate() {
         {
             "bank_account_name": "bank_account_name",
             "bank_pending_transaction_id":2,
-            "pending_trasaction_date": "10-11-2021",
+            "pending_transaction_date": "10-11-2021",
             "reason": "Because Yes",
             "amount": 100,
             "amount_left": 100,
