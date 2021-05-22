@@ -14,6 +14,7 @@ local function send_paychecks()
 
 end
 
+--[[
 Citizen.CreateThread(function()
 
     while true do
@@ -24,3 +25,4 @@ Citizen.CreateThread(function()
     end
 
 end)
+]]
