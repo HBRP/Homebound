@@ -78,6 +78,7 @@ function test_function() {
             callback_id: 1
         }
     ]
+    show_title("test title")
     show_dialog(dialog)
 
 }
