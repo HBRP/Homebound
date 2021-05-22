@@ -4,7 +4,8 @@ local sprites = {
     ["10-71"]  = {color = 39, sprite = 119},
     ["GTA"]    = {color = 39, sprite = 227},
     ["Corpse Mutilation"] = {color = 39, sprite = 84},
-    ["ATM Hacked"] = {color = 39, sprite = 647}
+    ["ATM Hacked"] = {color = 39, sprite = 647},
+    ["Bank Teller"] = {color = 39, sprite = 647},
 }
 
 function send_dispatch(group_alert_name, code, title, priority, requesting_officer)
