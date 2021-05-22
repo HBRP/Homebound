@@ -4,11 +4,13 @@ games { 'gta5' }
 
 client_scripts {
     'client/c_bank.lua',
-    'client/c_atms.lua'
+    'client/c_atms.lua',
+    'client/c_bank_teller.lua'
 }
 
 server_scripts {
-    'server/s_atms.lua'
+    'server/s_atms.lua',
+    'server/s_bank_teller.lua'
 }
 
 ui_page {
