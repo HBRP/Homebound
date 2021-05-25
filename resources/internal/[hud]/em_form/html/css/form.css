@@ -1,0 +1,26 @@
+
+.form-container {
+
+	width: 25vw;
+	margin-top: 10vh;
+	
+}
+
+.box-style {
+
+	background-color: rgb(20, 59, 122);
+
+}
+
+.label {
+
+	color: white;
+
+}
+
+.form-title {
+
+	color: white;
+	text-align: left;
+
+}
