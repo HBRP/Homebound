@@ -33,8 +33,19 @@ function give_item_by_name(source, item_name, amount)
 
     local character = exports["em_dal"]:get_character_from_source(source)
     local item_id   = get_item_id_from_name(item_name)
+    local response = nil
+    
+    exports["em_dal"]:give_item(source, function(result) 
 
-    exports["em_dal"]:give_item(source, function() end, character.character_id, character.storage_id, item_id, amount, -1, -1)
+        response = result
+
+    end, character.character_id, character.storage_id, item_id, amount, -1, -1)
+
+    while result == nil do
+        Citizen.Wait(50)
+    end
+
+    return response
 
 end
 
