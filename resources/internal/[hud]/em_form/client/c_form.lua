@@ -24,6 +24,18 @@ function get_form_value(form, input_name)
 
 end
 
+function get_form_number(form, input_name)
+
+	local value = get_form_value(form, input_name)
+
+	if type(value) == "number" then
+		return value
+	end
+
+	return tonumber(value)
+
+end
+
 RegisterNUICallback("submit", function(data, cb)
 
 	form_callback(data)

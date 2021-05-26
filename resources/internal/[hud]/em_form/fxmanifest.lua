@@ -20,6 +20,7 @@ files {
 exports {
 
 	'display_form',
-	'get_form_value'
+	'get_form_value',
+    'get_form_number'
 
 }
