@@ -160,6 +160,7 @@ function submit() {
 
 	let found_problem = false;
 	let inputs: ParsedInput[] = [];
+
 	for (var i = 0; i < current_form.length; i++) {
 
 		$(`.input-${i}`).removeClass('is-danger');

@@ -3,7 +3,7 @@ local form_callback = nil
 
 function display_form(callback, title, form)
 
-	last_callback = callback
+	form_callback = callback
 	SendNUIMessage({title = title, form = form, display = true})
 	SetNuiFocus(true, true)
 
@@ -54,11 +54,7 @@ RegisterCommand("test_form", function(source, args, raw_command)
 		{
 			input_type = "dropdown",
 			input_name =  "dropdown_form",
-			placeholder =  "",
-			options =  {"first option", "second option", "third option"},
-			numbers_valid =  true,
-			characters_valid = true,
-			optional =  false
+			options =  {"first option", "second option", "third option"}
 		}
 
 	}
