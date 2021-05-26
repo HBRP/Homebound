@@ -21,6 +21,17 @@ function add_dropdown_menu(idx, menu) {
 function add_text_input(idx, input) {
     $('.input-container').append("\n\t\t<div class=\"field\">\n\t\t\t<label class=\"label\">" + input.input_name + "</label>\n\t\t\t<div class=\"control\">\n\t\t\t\t<input class=\"input input-" + idx + "\" placeholder=\"" + input.placeholder + "\">\n\t\t\t</div>\n\t\t</div>\t\n\t");
 }
+function add_radio_button(idx, input) {
+    $('.input-container').append("<div class=\"control input-" + idx + "\"></div>");
+    for (var i = 0; i < input.options.length; i++) {
+        if (i == 0) {
+            $(".input-" + idx).append("\n\t\t\t\t<label class=\"radio\">\n\t\t\t\t\t<input type=\"radio\" name=\"answer\" class=\"radio-" + idx + "-" + i + "\" checked>\n\t\t\t\t\t" + input.options[i] + "\n\t\t\t\t</label>\n\t\t\t");
+        }
+        else {
+            $(".input-" + idx).append("\n\t\t\t\t<label class=\"radio\">\n\t\t\t\t\t<input type=\"radio\" name=\"answer\" class=\"radio-" + idx + "-" + i + "\">\n\t\t\t\t\t" + input.options[i] + "\n\t\t\t\t</label>\n\t\t\t");
+        }
+    }
+}
 function generate_form(title, form) {
     current_form = form;
     for (var i = 0; i < form.length; i++) {
@@ -29,6 +40,9 @@ function generate_form(title, form) {
         }
         else if (form[i].input_type == "dropdown") {
             add_dropdown_menu(i, form[i]);
+        }
+        else if (form[i].input_type == "radiobutton") {
+            add_radio_button(i, form[i]);
         }
     }
     $('.form-title').html("<b>" + title + "</b>");
@@ -59,6 +73,15 @@ function parse_dropdown_selection(idx, form) {
     }
     return [false, 0];
 }
+function parse_radio_selection(idx, form) {
+    for (var i = 0; i < form.options.length; i++) {
+        var attribute = $(".radio-" + idx + "-" + i).attr('checked');
+        if (attribute) {
+            return [true, form.options[i]];
+        }
+    }
+    return [false, 0];
+}
 function submit() {
     var found_problem = false;
     var inputs = [];
@@ -78,6 +101,17 @@ function submit() {
         }
         else if (current_form[i].input_type == "dropdown") {
             var parsed = parse_dropdown_selection(i, current_form[i]);
+            if (!parsed[0]) {
+                found_problem = true;
+                continue;
+            }
+            inputs.push({
+                input_name: current_form[i].input_name,
+                value: parsed[1]
+            });
+        }
+        else if (current_form[i].input_type == "radiobutton") {
+            var parsed = parse_radio_selection(i, current_form[i]);
             if (!parsed[0]) {
                 found_problem = true;
                 continue;
@@ -129,6 +163,15 @@ function test_generate() {
         {
             input_type: "dropdown",
             input_name: "fourth_form",
+            placeholder: "",
+            options: ["first option", "second option", "third option"],
+            numbers_valid: true,
+            characters_valid: true,
+            optional: false
+        },
+        {
+            input_type: "radiobutton",
+            input_name: "fifth_form",
             placeholder: "",
             options: ["first option", "second option", "third option"],
             numbers_valid: true,

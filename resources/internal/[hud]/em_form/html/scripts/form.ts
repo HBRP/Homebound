@@ -84,6 +84,38 @@ function add_text_input(idx: number, input: FormInput) {
 
 }
 
+function add_radio_button(idx: number, input: FormInput) {
+
+	$('.input-container').append(`<div class="control input-${idx}"></div>`);
+
+	for (var i = 0; i < input.options.length; i++) {
+
+		if (i == 0) {
+
+			$(`.input-${idx}`).append(
+			`
+				<label class="radio">
+					<input type="radio" name="answer" class="radio-${idx}-${i}" checked>
+					${input.options[i]}
+				</label>
+			`);
+
+		} else {
+
+			$(`.input-${idx}`).append(
+			`
+				<label class="radio">
+					<input type="radio" name="answer" class="radio-${idx}-${i}">
+					${input.options[i]}
+				</label>
+			`)
+
+		}
+
+	}
+
+}
+
 function generate_form(title: string, form: FormInput[]) {
 
 	current_form = form;
@@ -96,6 +128,10 @@ function generate_form(title: string, form: FormInput[]) {
 		} else if (form[i].input_type == "dropdown") {
 
 			add_dropdown_menu(i, form[i]);
+
+		} else if (form[i].input_type == "radiobutton") {
+
+			add_radio_button(i, form[i]);
 
 		}
 
@@ -156,6 +192,23 @@ function parse_dropdown_selection(idx: number, form: FormInput) : [boolean, any]
 
 }
 
+function parse_radio_selection(idx: number, form: FormInput) : [boolean, any] {
+
+	for (var i = 0; i < form.options.length;i++) {
+
+		var attribute  = $(`.radio-${idx}-${i}`).attr('checked');
+		if (attribute) {
+
+			return [true, form.options[i]];
+
+		}
+
+	}
+
+	return [false, 0];
+
+}
+
 function submit() {
 
 	let found_problem = false;
@@ -184,6 +237,20 @@ function submit() {
 		} else if (current_form[i].input_type == "dropdown") {
 
 			let parsed = parse_dropdown_selection(i, current_form[i]);
+			if (!parsed[0]) {
+
+				found_problem = true;
+				continue;
+
+			}
+			inputs.push({
+				input_name: current_form[i].input_name,
+				value: parsed[1]
+			})
+
+		} else if (current_form[i].input_type == "radiobutton") {
+
+			let parsed = parse_radio_selection(i, current_form[i]);
 			if (!parsed[0]) {
 
 				found_problem = true;
@@ -247,6 +314,15 @@ function test_generate() {
 		{
 			input_type: "dropdown",
 			input_name: "fourth_form",
+			placeholder: "",
+			options: ["first option", "second option", "third option"],
+			numbers_valid: true,
+			characters_valid: true,
+			optional: false
+		},
+		{
+			input_type: "radiobutton",
+			input_name: "fifth_form",
 			placeholder: "",
 			options: ["first option", "second option", "third option"],
 			numbers_valid: true,

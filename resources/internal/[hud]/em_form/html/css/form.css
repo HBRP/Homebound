@@ -31,3 +31,15 @@ html {
 	text-align: left;
 
 }
+
+.radio {
+
+	color:  white;
+
+}
+
+.radio:hover {
+
+	color: rgb(171, 176, 184);
+
+}

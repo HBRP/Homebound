@@ -55,6 +55,11 @@ RegisterCommand("test_form", function(source, args, raw_command)
 			input_type = "dropdown",
 			input_name =  "dropdown_form",
 			options =  {"first option", "second option", "third option"}
+		},
+		{
+			input_type = "radiobutton",
+			input_name =  "radio_button",
+			options =  {"first option", "second option", "third option"}
 		}
 
 	}
