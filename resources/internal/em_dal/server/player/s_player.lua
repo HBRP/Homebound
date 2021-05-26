@@ -47,6 +47,20 @@ function get_player_id(source)
 
 end
 
+local function create_session(player_id)
+
+    local endpoint = string.format("/Player/CreateSession/%d", player_id)
+    HttpPost(endpoint, nil, function(error_code, result_data, result_headers) end)
+
+end
+
+local function end_session(player_id)
+
+    local endpoint = string.format("/Player/EndSession/%d", player_id)
+    HttpPost(endpoint, nil, function(error_code, result_data, result_headers) end)
+
+end
+
 RegisterNetEvent("em_dal:get_player_id")
 AddEventHandler("em_dal:get_player_id", function() 
 
@@ -56,6 +70,7 @@ AddEventHandler("em_dal:get_player_id", function()
     HttpGet("/Player/GetPlayerId", steam_identifier, function(error_code, result_data, result_headers)
 
         local temp = json.decode(result_data)
+        create_session(temp["player_id"])
         register_player_identifier(source, steam_identifier.steamid, temp["player_id"])
         TriggerClientEvent("get_player_info:response", source, temp)
 
@@ -81,6 +96,8 @@ end
 
 AddEventHandler('playerDropped', function(reason)
 
-    TriggerEvent("em_dal:player_id_dropped", get_player_id(source))
+    local player_id = get_player_id(source)
+    end_session(player_id)
+    TriggerEvent("em_dal:player_id_dropped", player_id)
 
 end)
