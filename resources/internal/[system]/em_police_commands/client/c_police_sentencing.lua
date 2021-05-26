@@ -1,11 +1,21 @@
 
 local function sentence_player(result)
 
-	local character_id = exports["em_form"]:get_form_value(result, "State ID")
-	local time = exports["em_form"]:get_form_value(result, "Time")
-	local fine = exports["em_form"]:get_form_value(result, "Fine")
+	local character_id = exports["em_form"]:get_form_number(result, "State ID")
+	local time = exports["em_form"]:get_form_number(result, "Time")
+	local fine = exports["em_form"]:get_form_number(result, "Fine")
+
+	exports["em_dal"]:trigger_event_for_character("em_police_commands:teleport_to_prison", character_id)
 
 end
+
+RegisterNetEvent("em_police_commands:teleport_to_prison")
+AddEventHandler("em_police_commands:teleport_to_prison", function()
+
+	SetEntityCoords(PlayerPedId(), 1774.039185, 2545.649170, 45.586483)
+	SetEntityHeading(PlayerPedId(), 120.12)
+
+end)
 
 local function sentencing()
 
