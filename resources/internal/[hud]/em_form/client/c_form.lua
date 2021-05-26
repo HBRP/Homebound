@@ -27,6 +27,7 @@ end
 RegisterNUICallback("submit", function(data, cb)
 
 	form_callback(data)
+	SetNuiFocus(false, false)
 	cb()
 
 end)
