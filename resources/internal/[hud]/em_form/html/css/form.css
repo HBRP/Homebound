@@ -1,4 +1,11 @@
 
+html {
+
+  background-color:transparent !important;
+  overflow: hidden;
+  
+}
+
 .form-container {
 
 	width: 25vw;

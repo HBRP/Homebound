@@ -52,7 +52,6 @@ function parse_text_input(idx, form) {
     return [true, input];
 }
 function parse_dropdown_selection(idx, form) {
-    console.log($(".dropdown-item-" + idx));
     for (var i = 0; i < form.options.length; i++) {
         if ($(".dropdown-item-" + idx)[i].classList.contains("is-active")) {
             return [true, $(".dropdown-item-" + idx)[i].innerText];
@@ -62,7 +61,7 @@ function parse_dropdown_selection(idx, form) {
 }
 function submit() {
     var found_problem = false;
-    var inputs;
+    var inputs = [];
     for (var i = 0; i < current_form.length; i++) {
         $(".input-" + i).removeClass('is-danger');
         if (current_form[i].input_type == "text_input") {
@@ -149,7 +148,7 @@ $(function () {
     $('.submit-button').click(function () {
         submit();
     });
-    test_generate();
+    //test_generate();
     window.addEventListener("message", function (event) {
         if (event.data.display) {
             $('.input-container').html('');

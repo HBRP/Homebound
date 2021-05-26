@@ -142,7 +142,6 @@ function parse_text_input(idx: number, form: FormInput) : [boolean, any] {
 
 function parse_dropdown_selection(idx: number, form: FormInput) : [boolean, any] {
 
-	console.log($(`.dropdown-item-${idx}`))
 	for (var i = 0;i < form.options.length;i++) {
 
 		 if ($(`.dropdown-item-${idx}`)[i].classList.contains("is-active")) {
@@ -160,7 +159,7 @@ function parse_dropdown_selection(idx: number, form: FormInput) : [boolean, any]
 function submit() {
 
 	let found_problem = false;
-	let inputs: ParsedInput[];
+	let inputs: ParsedInput[] = [];
 	for (var i = 0; i < current_form.length; i++) {
 
 		$(`.input-${i}`).removeClass('is-danger');
@@ -277,7 +276,7 @@ $(function() {
 
 	})
 
-	test_generate();
+	//test_generate();
 
 	window.addEventListener("message", function (event) {
 
