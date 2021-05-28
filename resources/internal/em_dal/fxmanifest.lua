@@ -245,8 +245,12 @@ export 'can_do_action_async'
 export 'can_do_action'
 
 -- c_phone.lua
-export 'get_phone_data_async'
-export 'delete_messages_async'
+export 'phone_get_phone_data_async'
+export 'phone_delete_messages_async'
+export 'phone_get_contacts_async'
+export 'phone_new_contact_async'
+export 'phone_delete_contact_async'
+export 'phone_update_contact_async'
 
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'
