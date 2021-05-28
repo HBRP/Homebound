@@ -36,7 +36,8 @@ client_scripts {
     'client/housing/c_housing.lua',
     'client/context/c_context.lua',
     'client/bank/c_bank.lua',
-    'client/actions/c_actions.lua'
+    'client/actions/c_actions.lua',
+    'client/phone/c_phone.lua'
     
 }
 
@@ -71,7 +72,8 @@ server_scripts {
     'server/cad/s_cad.lua',
     'server/housing/s_housing.lua',
     'server/context/s_context.lua',
-    'server/actions/s_actions.lua'
+    'server/actions/s_actions.lua',
+    'server/phone/s_phone.lua'
 
 }
 
@@ -241,6 +243,10 @@ export 'bank_get_transactions'
 -- c_actions.lua
 export 'can_do_action_async'
 export 'can_do_action'
+
+-- c_phone.lua
+export 'get_phone_data_async'
+export 'delete_messages_async'
 
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'
