@@ -84,15 +84,32 @@ end
 
 local function set_contact_information(phone_contacts)
 
+  for i = 1, #phone_contacts do
+    phone_contacts[i].display = phone_contacts[i].phone_contact_name
+    phone_contacts[i].number  = phone_contacts[i].phone_number
+    phone_contacts[i].identifier = ""
+  end
+
   contacts = phone_contacts
-  SendNUIMessage({event = 'updateContacts', contacts = _contacts})
+  SendNUIMessage({event = 'updateContacts', contacts = contacts})
 
 end
 
 local function set_all_messages(phone_messages)
 
+  for i = 1, #phone_messages do
+    phone_messages[i].transmitter = phone_messages[i].transmitter_phone_number
+    phone_messages[i].receiver    = phone_messages[i].receiving_phone_number
+    phone_messages[i].receiving   = phone_messages[i].receiving_phone_number
+    phone_messages[i].isRead      = phone_messages[i].is_read
+    phone_messages[i].owner       = phone_messages[i].is_owner
+    phone_messages[i].message     = phone_messages[i].phone_message
+    phone_messages[i].time        = phone_messages[i].time_sent
+  end
+
+  
   messages = phone_messages
-  SendNUIMessage({event = 'updateMessages', messages = allmessages})
+  SendNUIMessage({event = 'updateMessages', messages = phone_messages})
 
 end
 
@@ -108,9 +125,9 @@ local function set_phone_data()
 
     print(json.encode(phone_data))
     set_phone_number(phone_data.phone_number)
-    set_contact_information(phone_data.phone_contact)
+    set_contact_information(phone_data.phone_contacts)
     set_all_messages(phone_data.phone_messages)
-    set_phone_call_history(phone_data.phone_calls)
+    --set_phone_call_history(phone_data.phone_calls)
     SendNUIMessage({event = 'updateBourse', bourse = {}})
 
   end)
@@ -118,6 +135,9 @@ local function set_phone_data()
 end
 
 exports["em_commands"]:register_command("test_phone", function(source, args, raw_commands)
+
+  set_phone_data()
+  Citizen.Wait(1000)
 
   TogglePhone()
   SetNuiFocus(true, true)
