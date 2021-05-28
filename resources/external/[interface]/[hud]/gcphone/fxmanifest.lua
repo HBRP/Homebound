@@ -65,6 +65,7 @@ server_script {
 dependencies {
 
 	'em_dal',
-	'em_commands'
+	'em_commands',
+	'em_items'
 
 }

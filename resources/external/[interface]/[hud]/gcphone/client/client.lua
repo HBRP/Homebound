@@ -34,7 +34,7 @@ local soundDistanceMax = 8.0
 --  Callback true or false
 --====================================================================================
 function hasPhone (cb)
-  cb(true)
+  cb(exports["em_items"]:has_item_by_name("phone"))
 end
 --====================================================================================
 --  Que faire si le joueurs veut ouvrir sont téléphone n'est qu'il en a pas ?
@@ -85,6 +85,7 @@ end
 local function set_contact_information(phone_contacts)
 
   for i = 1, #phone_contacts do
+    phone_contacts[i].id      = phone_contacts[i].phone_contact_id
     phone_contacts[i].display = phone_contacts[i].phone_contact_name
     phone_contacts[i].number  = phone_contacts[i].phone_number
     phone_contacts[i].identifier = ""
@@ -107,7 +108,7 @@ local function set_all_messages(phone_messages)
     phone_messages[i].time        = phone_messages[i].time_sent
   end
 
-  
+
   messages = phone_messages
   SendNUIMessage({event = 'updateMessages', messages = phone_messages})
 
@@ -121,9 +122,8 @@ end
 
 local function set_phone_data()
 
-  exports["em_dal"]:get_phone_data_async(function(phone_data)
+  exports["em_dal"]:phone_get_phone_data_async(function(phone_data)
 
-    print(json.encode(phone_data))
     set_phone_number(phone_data.phone_number)
     set_contact_information(phone_data.phone_contacts)
     set_all_messages(phone_data.phone_messages)
@@ -137,7 +137,7 @@ end
 exports["em_commands"]:register_command("test_phone", function(source, args, raw_commands)
 
   set_phone_data()
-  Citizen.Wait(1000)
+  Citizen.Wait(100)
 
   TogglePhone()
   SetNuiFocus(true, true)
@@ -149,7 +149,7 @@ AddEventHandler("em_dal:character_loaded", set_phone_data)
 --====================================================================================
 --
 --====================================================================================
---[[
+
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
@@ -189,7 +189,6 @@ Citizen.CreateThread(function()
     end
   end
 end)
-]]
 
 
 --====================================================================================
@@ -412,11 +411,27 @@ end)
 --  Function client | Contacts
 --====================================================================================
 function addContact(display, num)
-    TriggerServerEvent('gcPhone:addContact', display, num)
+
+  exports["em_dal"]:phone_new_contact_async(function()
+
+    exports["em_dal"]:phone_get_contacts_async(function(phone_contacts)
+      set_contact_information(phone_contacts)
+    end)
+
+  end, num, display)
+
 end
 
-function deleteContact(num)
-    TriggerServerEvent('gcPhone:deleteContact', num)
+function deleteContact(id)
+
+  exports["em_dal"]:phone_delete_contact_async(function()
+
+    exports["em_dal"]:phone_get_contacts_async(function(phone_contacts)
+      set_contact_information(phone_contacts)
+    end)
+
+  end, id)
+
 end
 --====================================================================================
 --  Function client | Messages
@@ -687,16 +702,20 @@ end)
 --  Event - Contacts
 --====================================================================================
 RegisterNUICallback('addContact', function(data, cb)
-    TriggerServerEvent('gcPhone:addContact', data.display, data.phoneNumber)
-    cb(true)
+
+  addContact(data.phoneNumber, data.display)
+  cb(true)
+
 end)
 RegisterNUICallback('updateContact', function(data, cb)
-    TriggerServerEvent('gcPhone:updateContact', data.id, data.display, data.phoneNumber)
-    cb(true)
+  TriggerServerEvent('gcPhone:updateContact', data.id, data.display, data.phoneNumber)
+  cb(true)
 end)
 RegisterNUICallback('deleteContact', function(data, cb)
-    TriggerServerEvent('gcPhone:deleteContact', data.id)
-    cb(true)
+
+  deleteContact(data.id)
+  cb(true)
+
 end)
 RegisterNUICallback('getContacts', function(data, cb)
     cb(json.encode(contacts))
