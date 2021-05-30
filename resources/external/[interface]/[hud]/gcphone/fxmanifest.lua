@@ -66,6 +66,7 @@ dependencies {
 
 	'em_dal',
 	'em_commands',
-	'em_items'
+	'em_items',
+	't-notify'
 
 }

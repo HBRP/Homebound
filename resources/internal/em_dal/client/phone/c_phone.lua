@@ -6,9 +6,21 @@ function phone_get_phone_data_async(callback)
 
 end
 
-function phone_delete_messages_async(callback, transmitter_phone, receiving_phone)
+function phone_delete_messages_async(callback, sender_phone_number, receiver_phone_number)
 
-	trigger_server_callback_async("em_dal:phone_delete_messages", callback, transmitter_phone, receiving_phone)
+	trigger_server_callback_async("em_dal:phone_delete_messages", callback, sender_phone_number, receiver_phone_number)
+
+end
+
+function phone_new_message_async(callback, phone_number, message)
+
+	trigger_server_callback_async("em_dal:phone_new_message", callback, phone_number, message)
+
+end
+
+function phone_get_messages_async(callback)
+
+	trigger_server_callback_async("em_dal:phone_get_messages", callback)
 
 end
 

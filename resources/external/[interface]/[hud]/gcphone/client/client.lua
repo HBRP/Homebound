@@ -99,11 +99,11 @@ end
 local function set_all_messages(phone_messages)
 
   for i = 1, #phone_messages do
-    phone_messages[i].transmitter = phone_messages[i].transmitter_phone_number
-    phone_messages[i].receiver    = phone_messages[i].receiving_phone_number
-    phone_messages[i].receiving   = phone_messages[i].receiving_phone_number
+    phone_messages[i].transmitter = phone_messages[i].sender_phone_number
+    phone_messages[i].receiver    = phone_messages[i].receiver_phone_number
+    phone_messages[i].receiving   = phone_messages[i].receiver_phone_number
     phone_messages[i].isRead      = phone_messages[i].is_read
-    phone_messages[i].owner       = phone_messages[i].is_owner
+    phone_messages[i].owner       = phone_messages[i].is_sender
     phone_messages[i].message     = phone_messages[i].phone_message
     phone_messages[i].time        = phone_messages[i].time_sent
   end
@@ -276,6 +276,7 @@ AddEventHandler('gcPhone:register_FixePhone', function(phone_number, data)
   Config.FixePhone[phone_number] = data
 end)
 
+--[[
 local registeredPhones = {}
 Citizen.CreateThread(function()
   if not Config.AutoFindFixePhones then return end
@@ -297,6 +298,7 @@ Citizen.CreateThread(function()
     Citizen.Wait(1000)
   end
 end)
+]]
 
 Citizen.CreateThread(function ()
   local mod = 0
@@ -677,6 +679,11 @@ RegisterNUICallback('blur', function(data, cb)
   cb(true)
 end)
 RegisterNUICallback('reponseText', function(data, cb)
+
+  if true then
+    return
+  end
+  
   local limit = data.limit or 255
   local text = data.text or ''
 
@@ -697,12 +704,30 @@ RegisterNUICallback('getMessages', function(data, cb)
   cb(json.encode(messages))
 end)
 RegisterNUICallback('sendMessage', function(data, cb)
+
   if data.message == '%pos%' then
     local myPos = GetEntityCoords(PlayerPedId())
     data.message = 'GPS: ' .. myPos.x .. ', ' .. myPos.y
   end
-  TriggerServerEvent('gcPhone:sendMessage', data.phoneNumber, data.message)
+
+  print(json.encode(data))
+  exports["em_dal"]:phone_new_message_async(function(response)
+
+    if not response.result.success then
+      exports['t-notify']:Alert({style = "error", message = response.result.message})
+    else
+      exports["em_dal"]:phone_get_messages_async(function(phone_messages)
+        set_all_messages(phone_messages)
+      end)
+      exports["em_dal"]:trigger_targeted_phone_event("gcphone:receiveMessage", phone_number, data.message)
+      TriggerEvent("gcphone:receiveMessage", data.message)
+    end
+
+  end, data.phoneNumber, data.message)
+
+  --TriggerServerEvent('gcPhone:sendMessage', data.phoneNumber, data.message)
   cb(true)
+
 end)
 RegisterNUICallback('deleteMessage', function(data, cb)
   deleteMessage(data.id)

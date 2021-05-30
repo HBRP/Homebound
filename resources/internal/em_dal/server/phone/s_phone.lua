@@ -12,10 +12,34 @@ register_server_callback("em_dal:phone_get_phone_data", function(source, callbac
 
 end)
 
-register_server_callback("em_dal:phone_delete_messages", function(source, callback, transmitter_phone, receiving_phone)
+register_server_callback("em_dal:phone_delete_messages", function(source, callback, sender_phone_number, receiver_phone_number)
 
-	local endpoint = string.format("/Phone/DeleteMessages/%s/%s", transmitter_phone, receiving_phone)
+	local endpoint = string.format("/Phone/DeleteMessages/%s/%s", sender_phone_number, receiver_phone_number)
 	HttpPost(endpoint, nil, function(error_code, result_data, result_headers)
+
+        local temp = json.decode(result_data)
+        callback(temp)
+
+    end)
+
+end)
+
+register_server_callback("em_dal:phone_new_message", function(source, callback, phone_number, message)
+
+    local data = {character_id = get_character_id_from_source(source), phone_number = phone_number, message = message}
+    HttpPost("/Phone/Message/New", data, function(error_code, result_data, result_headers)
+
+        local temp = json.decode(result_data)
+        callback(temp)
+
+    end)
+
+end)
+
+register_server_callback("em_dal:phone_get_messages", function(source, callback)
+
+    local endpoint = string.format("/Phone/Messages/%d", get_character_id_from_source(source))
+    HttpGet(endpoint, nil, function(error_code, result_data, result_headers)
 
         local temp = json.decode(result_data)
         callback(temp)
