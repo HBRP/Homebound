@@ -436,6 +436,8 @@ end)
 --====================================================================================
 function addContact(display, num)
 
+  print(display)
+  print(num)
   exports["em_dal"]:phone_new_contact_async(function()
 
     exports["em_dal"]:phone_get_contacts_async(function(phone_contacts)
@@ -683,7 +685,7 @@ RegisterNUICallback('reponseText', function(data, cb)
   if true then
     return
   end
-  
+
   local limit = data.limit or 255
   local text = data.text or ''
 
@@ -750,7 +752,7 @@ end)
 --====================================================================================
 RegisterNUICallback('addContact', function(data, cb)
 
-  addContact(data.phoneNumber, data.display)
+  addContact(data.display, data.phoneNumber)
   cb(true)
 
 end)
