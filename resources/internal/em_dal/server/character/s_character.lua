@@ -1,7 +1,10 @@
 
 
 local character_ids = {}
-local function register_character_id_to_source(source, character_id, character_name, storage_id)
+local function register_character_id_to_source(source, character)
+
+    character.character_name = character["first_name"] .. " " .. character["last_name"]
+    character.source         = source
 
     for i = 1, #character_ids do
         if character_ids[i].source == source or character_ids[i].character_id == character_id then
@@ -9,7 +12,7 @@ local function register_character_id_to_source(source, character_id, character_n
             break
         end
     end
-    table.insert(character_ids, {source = source, character_id = character_id, character_name = character_name, storage_id = storage_id})
+    table.insert(character_ids, character)
 
 end
 
@@ -75,6 +78,16 @@ function get_character_from_source(source)
     assert(0 == 1, string.format("Could not find character for source %d", source))
 
     return nil
+
+end
+
+function get_source_from_phone_number(phone_number)
+
+    for i = 1, #character_ids do
+        if character_ids[i].phone_number == phone_number then
+            return character_ids[i].source
+        end
+    end
 
 end
 
@@ -192,8 +205,7 @@ register_server_callback("em_dal:get_character_info", function(source, callback,
     HttpGet("/Character/GetInfo", data, function(error_code, result_data, result_headers)
 
         local temp = json.decode(result_data)
-        local character_name = temp["character"]["first_name"] .. " " .. temp["character"]["last_name"]
-        register_character_id_to_source(source, temp["character"]["character_id"], character_name, temp["character"]["storage_id"])
+        register_character_id_to_source(source, temp["character"])
         callback(temp)
 
     end)

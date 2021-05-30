@@ -19,5 +19,18 @@ register_server_callback("em_dal:trigger_proximity_event", function(source, call
         end
 
     end
+    callback()
+
+end)
+
+register_server_callback("em_dal:trigger_targeted_phone_event", function(source, callback, event, phone_number, args)
+
+    local character_source = get_source_from_phone_number(phone_number)
+
+    if character_source ~= nil then
+        TriggerClientEvent(event, character_source, table.unpack(args))
+    end
+    
+    callback()
 
 end)
