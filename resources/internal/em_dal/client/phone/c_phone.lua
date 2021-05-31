@@ -54,7 +54,7 @@ function phone_delete_contact_async(callback, phone_contact_id)
 
 end
 
-function phone_update_contact_async(phone_contact_id, phone_number, phone_contact_name)
+function phone_update_contact_async(callback, phone_contact_id, phone_number, phone_contact_name)
 
 	trigger_server_callback_async("em_dal:phone_update_contact", callback, phone_contact_id, phone_number, phone_contact_name)
 
