@@ -486,7 +486,7 @@ end
 
 function setReadMessageNumber(num)
 
-  exports["em_dal"]:phone_mark_messages_read_async(nil, num)
+  exports["em_dal"]:phone_mark_messages_read_async(function() end, num)
 
   for k, v in ipairs(messages) do
     if v.transmitter == num then
