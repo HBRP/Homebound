@@ -102,12 +102,11 @@ local function set_all_messages(phone_messages)
     phone_messages[i].transmitter = phone_messages[i].sender_phone_number
     phone_messages[i].receiver    = phone_messages[i].receiver_phone_number
     phone_messages[i].receiving   = phone_messages[i].receiver_phone_number
-    phone_messages[i].isRead      = phone_messages[i].is_read
-    phone_messages[i].owner       = phone_messages[i].is_sender
+    phone_messages[i].isRead      = phone_messages[i].is_read and 1 or 0
+    phone_messages[i].owner       = phone_messages[i].is_sender and 1 or 0
     phone_messages[i].message     = phone_messages[i].phone_message
     phone_messages[i].time        = phone_messages[i].time_sent
   end
-
 
   messages = phone_messages
   SendNUIMessage({event = 'updateMessages', messages = phone_messages})
@@ -486,12 +485,15 @@ function deleteAllMessage()
 end
 
 function setReadMessageNumber(num)
-  TriggerServerEvent('gcPhone:setReadMessageNumber', num)
+
+  exports["em_dal"]:phone_mark_messages_read_async(nil, num)
+  
   for k, v in ipairs(messages) do
     if v.transmitter == num then
       v.isRead = 1
     end
   end
+
 end
 
 function requestAllMessages()
