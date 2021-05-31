@@ -248,6 +248,7 @@ export 'can_do_action'
 -- c_phone.lua
 export 'phone_get_phone_data_async'
 export 'phone_delete_messages_async'
+export 'phone_delete_all_messages_async'
 export 'phone_new_message_async'
 export 'phone_get_messages_async'
 export 'phone_mark_messages_read_async'
