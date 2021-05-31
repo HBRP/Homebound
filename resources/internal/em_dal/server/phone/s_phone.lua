@@ -48,6 +48,18 @@ register_server_callback("em_dal:phone_get_messages", function(source, callback)
 
 end)
 
+register_server_callback("em_dal:phone_mark_messages_read", function(source, callback, phone_number)
+
+    local endpoint = string.format("/Phone/Message/MarkRead/%d/%s", get_character_id_from_source(source), phone_number)
+    HttpPut(endpoint, nil, function(error_code, result_data, result_headers)
+
+        local temp = json.decode(result_data)
+        callback(temp)
+
+    end)
+
+end)
+
 register_server_callback("em_dal:phone_get_contacts", function(source, callback)
 
     local endpoint = string.format("/Phone/Contacts/%d", get_character_id_from_source(source))

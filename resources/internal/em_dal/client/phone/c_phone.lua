@@ -24,6 +24,12 @@ function phone_get_messages_async(callback)
 
 end
 
+function phone_mark_messages_read_async(callback, phone_number)
+
+	trigger_server_callback_async("em_dal:phone_mark_messages_read", callback, phone_number)
+
+end
+
 function phone_new_contact_async(callback, phone_number, phone_contact_name)
 
 	trigger_server_callback_async("em_dal:phone_new_contact", callback, phone_number, phone_contact_name)
