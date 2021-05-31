@@ -763,11 +763,20 @@ RegisterNUICallback('addContact', function(data, cb)
 
 end)
 RegisterNUICallback('updateContact', function(data, cb)
-  TriggerServerEvent('gcPhone:updateContact', data.id, data.display, data.phoneNumber)
+
+  exports["em_dal"]:phone_update_contact_async(function()
+
+    exports["em_dal"]:phone_get_contacts_async(function(phone_contacts)
+      set_contact_information(phone_contacts)
+    end)
+
+  end, data.id, data.phoneNumber, data.display)
   cb(true)
 end)
+
 RegisterNUICallback('deleteContact', function(data, cb)
 
+  print(json.encode(data))
   deleteContact(data.id)
   cb(true)
 
