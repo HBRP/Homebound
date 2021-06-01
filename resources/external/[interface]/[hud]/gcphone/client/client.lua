@@ -205,12 +205,12 @@ RegisterCommand('phone_enter', function() toggle_key_up('Enter') end, false)
 RegisterCommand('phone_backspace', function() toggle_key_up('Backspace') end, false)
 
 RegisterKeyMapping('phone_m', 'phone_m', 'keyboard', 'M')
-RegisterKeyMapping('phone_m', 'phone_m', 'keyboard', 'UP')
-RegisterKeyMapping('phone_m', 'phone_m', 'keyboard', 'DOWN')
-RegisterKeyMapping('phone_m', 'phone_m', 'keyboard', 'LEFT')
-RegisterKeyMapping('phone_m', 'phone_m', 'keyboard', 'RIGHT')
-RegisterKeyMapping('phone_m', 'phone_m', 'keyboard', 'RETURN')
-RegisterKeyMapping('phone_m', 'phone_m', 'keyboard', 'BACK')
+--RegisterKeyMapping('phone_m', 'phone_m', 'keyboard', 'UP')
+--RegisterKeyMapping('phone_m', 'phone_m', 'keyboard', 'DOWN')
+--RegisterKeyMapping('phone_m', 'phone_m', 'keyboard', 'LEFT')
+--RegisterKeyMapping('phone_m', 'phone_m', 'keyboard', 'RIGHT')
+--RegisterKeyMapping('phone_m', 'phone_m', 'keyboard', 'RETURN')
+--RegisterKeyMapping('phone_m', 'phone_m', 'keyboard', 'BACK')
 
 --====================================================================================
 --  Active ou Deactive une application (appName => config.json)
@@ -684,22 +684,29 @@ RegisterNUICallback('blur', function(data, cb)
 end)
 RegisterNUICallback('reponseText', function(data, cb)
 
-  if true then
-    return
-  end
+  SetNuiFocus(false, false)
 
-  local limit = data.limit or 255
-  local text = data.text or ''
+  local form = {
 
-  DisplayOnscreenKeyboard(1, "FMMC_MPM_NA", "", text, "", "", "", limit)
-  while (UpdateOnscreenKeyboard() == 0) do
-      DisableAllControlActions(0);
-      Wait(0);
-  end
-  if (GetOnscreenKeyboardResult()) then
-      text = GetOnscreenKeyboardResult()
-  end
-  cb(json.encode({text = text}))
+    {
+      input_type = "text_input",
+      input_name = "Link",
+      placeholder = "Image Link",
+      options = {},
+      numbers_valid = true,
+      characters_valid =  true,
+      optional = false
+    }
+
+  }
+  exports["em_form"]:display_form(function(inputs)
+
+    local text = exports["em_form"]:get_form_value(inputs, "Link")
+    SetNuiFocus(true, true)
+    cb(json.encode({text = text}))
+
+  end, "Change your Profile Pic", form)
+
 end)
 --====================================================================================
 --  Event - Messages
