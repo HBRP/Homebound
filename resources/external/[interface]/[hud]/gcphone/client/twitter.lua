@@ -240,7 +240,7 @@ RegisterNUICallback('twitter_getFavoriteTweets', function(data, cb)
 
 end)
 
-RegisterNUICallback('twitter_postTweet', function(data, cb)
+local function post_tweet(message)
 
     exports["em_dal"]:twitter_post_tweet_async(function(response)
 
@@ -253,8 +253,20 @@ RegisterNUICallback('twitter_postTweet', function(data, cb)
 
         TriggerServerEvent('gcPhone:propagate_tweet', tweet)
 
-    end, data.message)
+    end, message)
 
+end
+
+RegisterNUICallback('twitter_postTweet', function(data, cb)
+
+    post_tweet(data.message)
+    cb(true)
+
+end)
+
+RegisterNUICallback('twitter_postTweetImg', function(data, cb)
+
+    post_tweet(data.message)
     cb(true)
 
 end)
