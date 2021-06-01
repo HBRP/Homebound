@@ -149,21 +149,73 @@ AddEventHandler("gcPhone:twitter_setTweetLikes", function(tweetId, isLikes)
 end)
 
 RegisterNUICallback('twitter_login', function(data, cb)
-    TriggerServerEvent('gcPhone:twitter_login', data.username, hash(data.password))
+
+    local password_hash = hash(data.password)
+    exports["em_dal"]:twitter_login_async(function(response)
+
+        if not response.result.success then
+            TriggerEvent("gcPhone:twitter_showError", response.result.message)
+        else
+            TriggerEvent("gcPhone:twitter_showSuccess", "Account", "Account login successful")
+            TriggerEvent("gcPhone:twitter_setAccount", data.username, password_hash, response.avatar_url)
+        end
+
+    end, data.username, password_hash)
+
     cb(true)
+
 end)
 RegisterNUICallback('twitter_changePassword', function(data, cb)
-    TriggerServerEvent('gcPhone:twitter_changePassword', data.username, data.password, hash(data.newPassword))
+
+    local password_hash = hash(data.newPassword)
+    exports["em_dal"]:twitter_change_password_async(function(response)
+
+        if not response.result.success then
+            TriggerEvent("gcPhone:twitter_showError", response.result.message)
+        else
+            TriggerEvent("gcPhone:twitter_showSuccess", "Account", "Account login successful")
+            TriggerEvent("gcPhone:twitter_setAccount", data.username, password_hash, response.avatar_url)
+        end
+
+    end, data.username, data.password, password_hash)
     cb(true)
+
 end)
 
 RegisterNUICallback('twitter_createAccount', function(data, cb)
-    TriggerServerEvent('gcPhone:twitter_createAccount', data.username, hash(data.password), data.avatarUrl)
+
+    local password_hash = hash(data.password)
+    exports["em_dal"]:twitter_create_account_async(function(response)
+
+        if not response.result.success then
+            TriggerEvent("gcPhone:twitter_showError", response.result.message)
+        else
+            TriggerEvent("gcPhone:twitter_showSuccess", "Account", "Account created")
+            TriggerEvent("gcPhone:twitter_setAccount", data.username, password_hash, data.avatarUrl)
+        end
+
+    end, data.username, password_hash, data.avatarUrl)
     cb(true)
+
 end)
 
 RegisterNUICallback('twitter_getTweets', function(data, cb)
-    TriggerServerEvent('gcPhone:twitter_getTweets', data.username, data.password)
+
+    exports["em_dal"]:twitter_get_tweets_async(function(tweets)
+
+        tweets = tweets or {}
+        for i = 1, #tweets do
+
+            tweets[i].time       = tweets[i].time_sent
+            tweets[i].author     = tweets[i].username
+            tweets[i].authorIcon = tweets[i].avatar_url
+            tweets[i].isLikes    = tweets[i].is_liked
+
+        end
+        SendNUIMessage({ event = 'twitter_tweets', tweets = tweets })
+
+    end)
+
     cb(true)
 end)
 
@@ -173,8 +225,21 @@ RegisterNUICallback('twitter_getFavoriteTweets', function(data, cb)
 end)
 
 RegisterNUICallback('twitter_postTweet', function(data, cb)
-    TriggerServerEvent('gcPhone:twitter_postTweets', data.username or '', data.password or '', data.message)
+
+    exports["em_dal"]:twitter_post_tweet_async(function(response)
+
+        local tweet = response.tweet
+        tweet.time       = tweet.time_sent
+        tweet.author     = tweet.username
+        tweet.authorIcon = tweet.avatar_url
+        tweet.isLikes    = tweet.is_liked
+
+        TriggerServerEvent('gcPhone:propagate_tweet', tweet)
+
+    end, data.message)
+
     cb(true)
+    
 end)
 
 RegisterNUICallback('twitter_toggleLikeTweet', function(data, cb)
@@ -183,6 +248,22 @@ RegisterNUICallback('twitter_toggleLikeTweet', function(data, cb)
 end)
 
 RegisterNUICallback('twitter_setAvatarUrl', function(data, cb)
-    TriggerServerEvent('gcPhone:twitter_setAvatarUrl', data.username or '', data.password or '', data.avatarUrl)
+
+    if data.username == nil or data.password == nil then
+        TriggerEvent("gcPhone:twitter_showError", "Unable to change avatar url")
+        return
+    end
+
+    exports["em_dal"]:twitter_change_avatar_async(function(response)
+
+        if not response.result.success then
+            TriggerEvent("gcPhone:twitter_showError", response.result.message)
+        else
+            TriggerEvent("gcPhone:twitter_showSuccess", "Account", "Account created")
+            TriggerEvent("gcPhone:twitter_setAccount", data.username, data.password, data.avatarUrl)
+        end
+
+    end, data.username, data.password, data.avatarUrl)
+
     cb(true)
 end)

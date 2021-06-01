@@ -309,3 +309,10 @@ AddEventHandler('gcPhone:twitter_newTweets', function (tweet)
   end
   PerformHttpRequest(discord_webhook, function(err, text, headers) end, 'POST', json.encode(data), headers)
 end)
+
+RegisterNetEvent("gcPhone:propagate_tweet")
+AddEventHandler("gcPhone:propagate_tweet", function(tweet)
+
+  TriggerClientEvent("gcPhone:twitter_newTweets", -1, tweet)
+
+end)

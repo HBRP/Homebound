@@ -37,7 +37,8 @@ client_scripts {
     'client/context/c_context.lua',
     'client/bank/c_bank.lua',
     'client/actions/c_actions.lua',
-    'client/phone/c_phone.lua'
+    'client/phone/c_phone.lua',
+    'client/phone/c_twitter.lua'
     
 }
 
@@ -73,7 +74,8 @@ server_scripts {
     'server/housing/s_housing.lua',
     'server/context/s_context.lua',
     'server/actions/s_actions.lua',
-    'server/phone/s_phone.lua'
+    'server/phone/s_phone.lua',
+    'server/phone/s_twitter.lua'
 
 }
 
@@ -256,6 +258,15 @@ export 'phone_get_contacts_async'
 export 'phone_new_contact_async'
 export 'phone_delete_contact_async'
 export 'phone_update_contact_async'
+
+-- c_twitter.lua
+export 'twitter_login_async'
+export 'twitter_create_account_async'
+export 'twitter_get_tweets_async'
+export 'twitter_change_avatar_async'
+export 'twitter_change_password_async'
+export 'twitter_get_logged_in_account_async'
+export 'twitter_post_tweet_async'
 
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'
