@@ -736,7 +736,6 @@ RegisterNUICallback('sendMessage', function(data, cb)
 
   end, data.phoneNumber, data.message)
 
-  --TriggerServerEvent('gcPhone:sendMessage', data.phoneNumber, data.message)
   cb(true)
 
 end)

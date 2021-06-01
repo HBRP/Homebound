@@ -237,7 +237,7 @@ RegisterNUICallback('twitter_getFavoriteTweets', function(data, cb)
     end)
 
     cb(true)
-    
+
 end)
 
 RegisterNUICallback('twitter_postTweet', function(data, cb)
@@ -287,7 +287,7 @@ RegisterNUICallback('twitter_setAvatarUrl', function(data, cb)
         if not response.result.success then
             TriggerEvent("gcPhone:twitter_showError", response.result.message)
         else
-            TriggerEvent("gcPhone:twitter_showSuccess", "Account", "Account created")
+            TriggerEvent("gcPhone:twitter_showSuccess", "Account", "Changed your profile pic")
             TriggerEvent("gcPhone:twitter_setAccount", data.username, data.password, data.avatarUrl)
         end
 
