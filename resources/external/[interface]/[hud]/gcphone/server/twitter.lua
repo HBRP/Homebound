@@ -316,3 +316,10 @@ AddEventHandler("gcPhone:propagate_tweet", function(tweet)
   TriggerClientEvent("gcPhone:twitter_newTweets", -1, tweet)
 
 end)
+
+RegisterServerEvent("gcPhone:propagate_like")
+AddEventHandler("gcPhone:propagate_like", function(id, likes)
+
+  TriggerClientEvent('gcPhone:twitter_updateTweetLikes', -1, id, likes)
+
+end)

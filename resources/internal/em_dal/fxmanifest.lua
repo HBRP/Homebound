@@ -267,6 +267,7 @@ export 'twitter_change_avatar_async'
 export 'twitter_change_password_async'
 export 'twitter_get_logged_in_account_async'
 export 'twitter_post_tweet_async'
+export 'twitter_toggle_like_async'
 
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'

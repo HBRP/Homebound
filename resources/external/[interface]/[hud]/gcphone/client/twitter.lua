@@ -206,7 +206,7 @@ RegisterNUICallback('twitter_getTweets', function(data, cb)
         tweets = tweets or {}
         for i = 1, #tweets do
 
-            tweets[i].tweetId    = tweets[i].phone_tweet_id
+            tweets[i].id         = tweets[i].phone_tweet_id
             tweets[i].time       = tweets[i].time_sent
             tweets[i].author     = tweets[i].username
             tweets[i].authorIcon = tweets[i].avatar_url
@@ -230,7 +230,7 @@ RegisterNUICallback('twitter_postTweet', function(data, cb)
     exports["em_dal"]:twitter_post_tweet_async(function(response)
 
         local tweet = response.tweet
-        tweet.tweetId    = tweet.phone_tweet_id
+        tweet.id         = tweet.phone_tweet_id
         tweet.time       = tweet.time_sent
         tweet.author     = tweet.username
         tweet.authorIcon = tweet.avatar_url
@@ -245,8 +245,17 @@ RegisterNUICallback('twitter_postTweet', function(data, cb)
 end)
 
 RegisterNUICallback('twitter_toggleLikeTweet', function(data, cb)
-    TriggerServerEvent('gcPhone:twitter_toogleLikeTweet', data.username or '', data.password or '', data.tweetId)
+
+    print(json.encode(data))
+    exports["em_dal"]:twitter_toggle_like_async(function(result)
+
+        TriggerEvent("gcPhone:twitter_setTweetLikes", data.tweetId, result.added_like)
+        TriggerServerEvent("gcPhone:propagate_like", data.tweetId, result.likes)
+
+    end, data.tweetId)
+
     cb(true)
+
 end)
 
 RegisterNUICallback('twitter_setAvatarUrl', function(data, cb)
