@@ -199,20 +199,27 @@ RegisterNUICallback('twitter_createAccount', function(data, cb)
 
 end)
 
+local function setup_tweets(tweets)
+
+    tweets = tweets or {}
+    for i = 1, #tweets do
+
+        tweets[i].id         = tweets[i].phone_tweet_id
+        tweets[i].time       = tweets[i].time_sent
+        tweets[i].author     = tweets[i].username
+        tweets[i].authorIcon = tweets[i].avatar_url
+        tweets[i].isLikes    = tweets[i].is_liked
+
+    end
+    
+
+end
+
 RegisterNUICallback('twitter_getTweets', function(data, cb)
 
     exports["em_dal"]:twitter_get_tweets_async(function(tweets)
 
-        tweets = tweets or {}
-        for i = 1, #tweets do
-
-            tweets[i].id         = tweets[i].phone_tweet_id
-            tweets[i].time       = tweets[i].time_sent
-            tweets[i].author     = tweets[i].username
-            tweets[i].authorIcon = tweets[i].avatar_url
-            tweets[i].isLikes    = tweets[i].is_liked
-
-        end
+        setup_tweets(tweets)
         SendNUIMessage({ event = 'twitter_tweets', tweets = tweets })
 
     end)
@@ -221,8 +228,16 @@ RegisterNUICallback('twitter_getTweets', function(data, cb)
 end)
 
 RegisterNUICallback('twitter_getFavoriteTweets', function(data, cb)
-    TriggerServerEvent('gcPhone:twitter_getFavoriteTweets', data.username, data.password)
+
+    exports["em_dal"]:twitter_get_favourite_tweets_async(function(tweets)
+
+        setup_tweets(tweets)
+        SendNUIMessage({ event = 'twitter_favoritetweets', tweets = tweets })
+
+    end)
+
     cb(true)
+    
 end)
 
 RegisterNUICallback('twitter_postTweet', function(data, cb)
@@ -260,10 +275,12 @@ end)
 
 RegisterNUICallback('twitter_setAvatarUrl', function(data, cb)
 
+    print("first")
     if data.username == nil or data.password == nil then
         TriggerEvent("gcPhone:twitter_showError", "Unable to change avatar url")
         return
     end
+    print("here")
 
     exports["em_dal"]:twitter_change_avatar_async(function(response)
 
