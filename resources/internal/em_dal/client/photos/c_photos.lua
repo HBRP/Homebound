@@ -4,15 +4,27 @@ local callbacks = {}
 
 function upload_photo_async(callback, photo)
 
-	local data = {id = unique_id, upload_photo = true, session_token = "", photo = photo, endpoint = GetConvar("photo_uploader_service", "")}
-	table.insert(callbacks, {id = unique_id, callback = callback})
-	unique_id = unique_id + 1
+	trigger_server_callback_async("em_dal:player_session_token", function(session_token)
 
-	SendNUIMessage(data)
+		local data = 
+		{
+			id = unique_id, 
+			upload_photo = true, 
+			session_token = session_token, 
+			photo = photo, 
+			endpoint = GetConvar("photo_uploader_service", "")
+		}
+
+		table.insert(callbacks, {id = unique_id, callback = callback})
+		unique_id = unique_id + 1
+
+		SendNUIMessage(data)
+
+	end)
 
 end
 
-RegisterNUICallback("em_dal:photo", function(data, cb)
+RegisterNUICallback("em_dal_photo", function(data, cb)
 
 	for i = 1, #callbacks do
 

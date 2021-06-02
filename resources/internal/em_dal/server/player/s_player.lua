@@ -10,9 +10,9 @@ function get_steam_id_from_identifier(source)
 
 end
 
-local function register_player_identifier(source, steamid, player_id)
+local function register_player_identifier(source, steamid, player_id, session_token)
 
-    table.insert(player_identifiers, {source = source, steamid = steamid, player_id = player_id})
+    table.insert(player_identifiers, {source = source, steamid = steamid, player_id = player_id, session_token = session_token})
 
 end
 
@@ -47,10 +47,30 @@ function get_player_id(source)
 
 end
 
-local function create_session(player_id)
+function get_session_token(source)
+
+    for i = 1, #player_identifiers do
+
+        if player_identifiers[i].source == source then
+
+            return player_identifiers[i].session_token
+
+        end
+
+    end
+    assert(0, "Unable to find session_token")
+
+end
+
+local function create_session(callback, player_id)
 
     local endpoint = string.format("/Player/CreateSession/%d", player_id)
-    HttpPost(endpoint, nil, function(error_code, result_data, result_headers) end)
+    HttpPost(endpoint, nil, function(error_code, result_data, result_headers) 
+
+        local temp = json.decode(result_data)
+        callback(temp)
+
+    end)
 
 end
 
@@ -60,23 +80,6 @@ local function end_session(player_id)
     HttpPost(endpoint, nil, function(error_code, result_data, result_headers) end)
 
 end
-
-RegisterNetEvent("em_dal:get_player_id")
-AddEventHandler("em_dal:get_player_id", function() 
-
-    local source = source
-    local steam_identifier = {steamid = get_steam_id_from_identifier(source)}
-
-    HttpGet("/Player/GetPlayerId", steam_identifier, function(error_code, result_data, result_headers)
-
-        local temp = json.decode(result_data)
-        create_session(temp["player_id"])
-        register_player_identifier(source, steam_identifier.steamid, temp["player_id"])
-        TriggerClientEvent("get_player_info:response", source, temp)
-
-    end)
-
-end)
 
 function get_priority_if_whitelisted(steam_id)
 
@@ -93,6 +96,31 @@ function get_priority_if_whitelisted(steam_id)
     return result
 
 end
+
+register_server_callback("em_dal:player_session_token", function(source, callback)
+
+    callback(get_session_token(source))
+
+end)
+
+register_server_callback("em_dal:get_player_id", function(source, callback)
+
+    local source = source
+    local steam_identifier = {steamid = get_steam_id_from_identifier(source)}
+
+    HttpGet("/Player/GetPlayerId", steam_identifier, function(error_code, result_data, result_headers)
+
+        local temp = json.decode(result_data)
+        create_session(function(response)
+
+            register_player_identifier(source, steam_identifier.steamid, temp["player_id"], response.session_token)
+            callback(temp)
+
+        end, temp["player_id"])
+
+    end)
+
+end)
 
 AddEventHandler('playerDropped', function(reason)
 
