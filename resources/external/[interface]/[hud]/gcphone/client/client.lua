@@ -146,7 +146,7 @@ end, "test_phone")
 
 exports["em_commands"]:register_command_no_perms("test_pic", function(source, args, raw_commands)
 
-  take_photo()
+  take_photo(function() end)
 
 end)
 
