@@ -2,6 +2,16 @@
 fx_version 'bodacious'
 games { 'gta5' }
 
+ui_page 'ui/index.html'
+
+files {
+
+    'ui/index.html',
+    'ui/js/photo-uploader.js',
+    'ui/libs/jquery.js'
+
+}
+
 client_scripts {
 
     'client/server_callbacks/c_server_callbacks.lua',
@@ -38,7 +48,8 @@ client_scripts {
     'client/bank/c_bank.lua',
     'client/actions/c_actions.lua',
     'client/phone/c_phone.lua',
-    'client/phone/c_twitter.lua'
+    'client/phone/c_twitter.lua',
+    'client/photos/c_photos.lua'
     
 }
 
@@ -75,7 +86,8 @@ server_scripts {
     'server/context/s_context.lua',
     'server/actions/s_actions.lua',
     'server/phone/s_phone.lua',
-    'server/phone/s_twitter.lua'
+    'server/phone/s_twitter.lua',
+    'server/photos/s_photos.lua'
 
 }
 
@@ -269,6 +281,9 @@ export 'twitter_get_logged_in_account_async'
 export 'twitter_post_tweet_async'
 export 'twitter_toggle_like_async'
 export 'twitter_get_favourite_tweets_async'
+
+-- c_photos.lua
+export 'upload_photo_async'
 
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'
