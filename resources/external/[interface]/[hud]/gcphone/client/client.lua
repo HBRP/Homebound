@@ -156,68 +156,45 @@ AddEventHandler("em_dal:character_loaded", set_phone_data)
 --
 --====================================================================================
 
-local function set_nui_phone()
-  if menuIsOpen == true then
-    print(useMouse)
-    print(ignoreFocus)
-    if useMouse == true and hasFocus == ignoreFocus then
-      local nuiFocus = not hasFocus
-      SetNuiFocus(nuiFocus, nuiFocus)
-      hasFocus = nuiFocus
-    elseif useMouse == false and hasFocus == true then
-      SetNuiFocus(false, false)
-      hasFocus = false
+Citizen.CreateThread(function()
+  while true do
+    Citizen.Wait(0)
+    if not menuIsOpen and isDead then
+      DisableControlAction(0, 288, true)
     end
-  else
-    if hasFocus == true then
-      SetNuiFocus(false, false)
-      hasFocus = false
+    if takePhoto ~= true then
+      if IsControlJustPressed(1, Config.KeyOpenClose) then
+        hasPhone(function (hasPhone)
+          if hasPhone == true then
+            TogglePhone()
+          else
+            ShowNoPhoneWarning()
+          end
+        end)
+      end
+      if menuIsOpen == true then
+        for _, value in ipairs(KeyToucheCloseEvent) do
+          if IsControlJustPressed(1, value.code) then
+            SendNUIMessage({keyUp = value.event})
+          end
+        end
+        if useMouse == true and hasFocus == ignoreFocus then
+          local nuiFocus = not hasFocus
+          SetNuiFocus(nuiFocus, nuiFocus)
+          hasFocus = nuiFocus
+        elseif useMouse == false and hasFocus == true then
+          SetNuiFocus(false, false)
+          hasFocus = false
+        end
+      else
+        if hasFocus == true then
+          SetNuiFocus(false, false)
+          hasFocus = false
+        end
+      end
     end
   end
-end
-
-local function toggle_phone()
-
-  if (not menuIsOpen and isDead) or takePhoto then
-    return
-  end
-
-  hasPhone(function (hasPhone)
-    if hasPhone == true then
-      TogglePhone()
-      set_nui_phone()
-    else
-      ShowNoPhoneWarning()
-    end
-  end)
-
-end
-
-local function toggle_key_up(event)
-
-  if takePhoto then
-    return
-  end
-
-  SendNUIMessage({keyUp = event})
-
-end
-
-RegisterCommand('phone_m', function() toggle_phone() end, false)
-RegisterCommand('phone_up', function() toggle_key_up('ArrowUp') end, false)
-RegisterCommand('phone_down', function() toggle_key_up('ArrowDown') end, false)
-RegisterCommand('phone_left', function() toggle_key_up('ArrowLeft') end, false)
-RegisterCommand('phone_right', function() toggle_key_up('ArrowRight') end, false)
-RegisterCommand('phone_enter', function() toggle_key_up('Enter') end, false)
-RegisterCommand('phone_backspace', function() toggle_key_up('Backspace') end, false)
-
-RegisterKeyMapping('phone_m', 'phone_m', 'keyboard', 'M')
---RegisterKeyMapping('phone_m', 'phone_m', 'keyboard', 'UP')
---RegisterKeyMapping('phone_m', 'phone_m', 'keyboard', 'DOWN')
---RegisterKeyMapping('phone_m', 'phone_m', 'keyboard', 'LEFT')
---RegisterKeyMapping('phone_m', 'phone_m', 'keyboard', 'RIGHT')
---RegisterKeyMapping('phone_m', 'phone_m', 'keyboard', 'RETURN')
---RegisterKeyMapping('phone_m', 'phone_m', 'keyboard', 'BACK')
+end)
 
 --====================================================================================
 --  Active ou Deactive une application (appName => config.json)
@@ -913,34 +890,40 @@ RegisterNUICallback('takePhoto', function(data, cb)
     hasFocus = false
   end
 
-  print("starting loop")
   while takePhoto do
     Citizen.Wait(5)
 
     if IsControlJustPressed(1, 27) then -- Toogle Mode
+
       frontCam = not frontCam
       CellFrontCamActivate(frontCam)
+
     elseif IsControlJustPressed(1, 177) then -- CANCEL
+
       DestroyMobilePhone()
       CellCamActivate(false, false)
       cb(json.encode({ url = nil }))
       takePhoto = false
       break
+
     elseif IsDisabledControlJustReleased(1, 176) then -- TAKE.. PIC
-      print("here")
+
       take_photo(function(url)
         DestroyMobilePhone()
         CellCamActivate(false, false)
         cb(json.encode({ url = url }))
       end)
       takePhoto = false
+
     end
+
     HideHudComponentThisFrame(7)
     HideHudComponentThisFrame(8)
     HideHudComponentThisFrame(9)
     HideHudComponentThisFrame(6)
     HideHudComponentThisFrame(19)
     HideHudAndRadarThisFrame()
+    
   end
   Citizen.Wait(1000)
   PhonePlayAnim('text', false, true)

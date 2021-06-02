@@ -489,6 +489,7 @@
       "APP_TWITTER_ACCOUNT_PARAM": "My account",
       "APP_TWITTER_ACCOUNT_AVATAR": "Change Avatar (URL)",
       "APP_TWITTER_ACCOUNT_AVATAR_TAKE": "Change Avatar (Camera)",
+      "APP_TWITTER_ACCOUNT_TWEET_PHOTO_TAKE" : "Tweet Photo",
       "APP_TWITTER_ACCOUNT_CHANGE_PASSWORD": "Change password",
       "APP_TWITTER_ACCOUNT_NEW": "New account",
       "APP_TWIITER_ACCOUNT_SAVE": "registration",
