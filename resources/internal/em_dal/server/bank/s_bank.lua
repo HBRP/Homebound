@@ -58,6 +58,18 @@ register_server_callback("em_dal:bank_get_pending_transactions", function(source
 
 end)
 
+register_server_callback("em_dal:bank_get_default_bank_account", function(source, callback)
+
+    local endpoint = string.format("/Bank/Accounts/Default/%d", get_character_id_from_source(source))
+    HttpGet(endpoint, nil, function(error_code, result_data, result_headers)
+
+        local temp = json.decode(result_data)
+        callback(temp)
+
+    end)
+
+end)
+
 register_server_callback("em_dal:bank_get_bank_accounts", function(source, callback)
 
     local character_id = get_character_id_from_source(source)

@@ -254,6 +254,7 @@ export 'bank_get_pending_transactions'
 export 'bank_get_bank_accounts'
 export 'bank_transfer_amount'
 export 'bank_get_transactions'
+export 'bank_get_default_bank_account_async'
 
 -- c_actions.lua
 export 'can_do_action_async'
