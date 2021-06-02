@@ -55,3 +55,18 @@ Citizen.CreateThread(function()
 		SetTextRenderId(1) -- NOTE: 1 is default
 	end
 end)
+
+function take_photo(callback)
+
+  exports['screenshot-basic']:requestScreenshot(function(data)
+
+		local photo = data:gsub("data:image/jpeg;base64,", "")      
+  	exports["em_dal"]:upload_photo_async(function(response)
+
+  		callback(response)
+
+  	end, photo)
+
+  end)
+
+end

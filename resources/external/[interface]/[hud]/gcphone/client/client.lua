@@ -140,8 +140,15 @@ exports["em_commands"]:register_command("test_phone", function(source, args, raw
 
   TogglePhone()
   SetNuiFocus(true, true)
+  hasFocus = true
 
 end, "test_phone")
+
+exports["em_commands"]:register_command_no_perms("test_pic", function(source, args, raw_commands)
+
+  take_photo()
+
+end)
 
 AddEventHandler("em_dal:character_loaded", set_phone_data)
 
@@ -900,12 +907,15 @@ RegisterNUICallback('takePhoto', function(data, cb)
   CellCamActivate(true, true)
   takePhoto = true
   Citizen.Wait(0)
+
   if hasFocus == true then
     SetNuiFocus(false, false)
     hasFocus = false
   end
+
+  print("starting loop")
   while takePhoto do
-    Citizen.Wait(0)
+    Citizen.Wait(5)
 
     if IsControlJustPressed(1, 27) then -- Toogle Mode
       frontCam = not frontCam
@@ -916,12 +926,12 @@ RegisterNUICallback('takePhoto', function(data, cb)
       cb(json.encode({ url = nil }))
       takePhoto = false
       break
-    elseif IsControlJustPressed(1, 176) then -- TAKE.. PIC
-      exports['screenshot-basic']:requestScreenshotUpload(data.url, data.field, function(data)
-        local resp = json.decode(data)
+    elseif IsDisabledControlJustReleased(1, 176) then -- TAKE.. PIC
+      print("here")
+      take_photo(function(url)
         DestroyMobilePhone()
         CellCamActivate(false, false)
-        cb(json.encode({ url = resp.url }))
+        cb(json.encode({ url = url }))
       end)
       takePhoto = false
     end
