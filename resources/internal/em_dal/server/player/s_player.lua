@@ -2,11 +2,21 @@ local player_identifiers = {}
 
 function get_steam_id_from_identifier(source)
 
-  for k,v in pairs(GetPlayerIdentifiers(source))do
-    if string.sub(v, 1, string.len("steam:")) == "steam:" then
-        return v
+    for k,v in pairs(GetPlayerIdentifiers(source)) do
+        if string.sub(v, 1, string.len("steam:")) == "steam:" then
+            return v
+        end
     end
-  end
+
+end
+
+function get_ip_address_from_identifier(source)
+
+    for k, v in pairs(GetPlayerIdentifiers(source)) do
+        if string.sub(v, 1, string.len("ip:")) == "ip:" then
+            return v:gsub("ip:", "")
+        end
+    end
 
 end
 
@@ -62,10 +72,10 @@ function get_session_token(source)
 
 end
 
-local function create_session(callback, player_id)
+local function create_session(callback, source, player_id)
 
-    local endpoint = string.format("/Player/CreateSession/%d", player_id)
-    HttpPost(endpoint, nil, function(error_code, result_data, result_headers) 
+    local data = {player_id = player_id, ip_address = get_ip_address_from_identifier(source)}
+    HttpPost("/Player/CreateSession/", data, function(error_code, result_data, result_headers) 
 
         local temp = json.decode(result_data)
         callback(temp)
@@ -116,7 +126,7 @@ register_server_callback("em_dal:get_player_id", function(source, callback)
             register_player_identifier(source, steam_identifier.steamid, temp["player_id"], response.session_token)
             callback(temp)
 
-        end, temp["player_id"])
+        end, source, temp["player_id"])
 
     end)
 
