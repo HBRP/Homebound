@@ -49,8 +49,8 @@ client_scripts {
     'client/actions/c_actions.lua',
     'client/phone/c_phone.lua',
     'client/phone/c_twitter.lua',
-    'client/photos/c_photos.lua'
-    
+    'client/phone/c_appchat.lua',
+    'client/photos/c_photos.lua'    
 }
 
 server_scripts {
@@ -87,6 +87,7 @@ server_scripts {
     'server/actions/s_actions.lua',
     'server/phone/s_phone.lua',
     'server/phone/s_twitter.lua',
+    'server/phone/s_appchat.lua',
     'server/photos/s_photos.lua'
 
 }
@@ -282,6 +283,10 @@ export 'twitter_get_logged_in_account_async'
 export 'twitter_post_tweet_async'
 export 'twitter_toggle_like_async'
 export 'twitter_get_favourite_tweets_async'
+
+-- c_appchat.lua
+export 'appchat_get_messages_async'
+export 'appchat_send_message_async'
 
 -- c_photos.lua
 export 'upload_photo_async'
