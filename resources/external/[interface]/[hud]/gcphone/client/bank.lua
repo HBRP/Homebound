@@ -40,14 +40,6 @@ AddEventHandler("em_dal:DefaultBankChange", function()
 
 end)
 
-    exports["em_dal"]:bank_get_default_bank_account_async(function(account)
-
-        bank_account_cache = account
-        setBankBalance(account.funds)
-
-    end)
-
-
 --===============================================
 --==         Transfer Event                    ==
 --===============================================
@@ -61,7 +53,7 @@ AddEventHandler('gcphone:bankTransfer', function(data)
         return
 
     end
-    
+
     exports['t-notify']:Alert({style = "success", message = string.format("Sent $%d", data.amount)})
     exports["em_dal"]:bank_transfer_amount(data.amount, bank_account_cache.bank_account_id, data.id, "Phone App Transfer")
     
