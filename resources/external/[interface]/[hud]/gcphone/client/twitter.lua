@@ -244,7 +244,7 @@ local function post_tweet(message)
 
     exports["em_dal"]:twitter_post_tweet_async(function(response)
 
-        local tweet = response.tweet
+        local tweet      = response.tweet
         tweet.id         = tweet.phone_tweet_id
         tweet.time       = tweet.time_sent
         tweet.author     = tweet.username
@@ -287,12 +287,10 @@ end)
 
 RegisterNUICallback('twitter_setAvatarUrl', function(data, cb)
 
-    print("first")
     if data.username == nil or data.password == nil then
         TriggerEvent("gcPhone:twitter_showError", "Unable to change avatar url")
         return
     end
-    print("here")
 
     exports["em_dal"]:twitter_change_avatar_async(function(response)
 
@@ -306,4 +304,12 @@ RegisterNUICallback('twitter_setAvatarUrl', function(data, cb)
     end, data.username, data.password, data.avatarUrl)
 
     cb(true)
+end)
+
+AddEventHandler("em_dal:character_loaded", function()
+
+    exports["em_dal"]:twitter_get_logged_in_account_async(function(response)
+        TriggerEvent("gcPhone:twitter_setAccount", response.username, response.password, response.avatar_url)
+    end)
+
 end)

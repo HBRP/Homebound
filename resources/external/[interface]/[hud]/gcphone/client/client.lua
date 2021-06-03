@@ -419,8 +419,6 @@ end)
 --====================================================================================
 function addContact(display, num)
 
-  print(display)
-  print(num)
   exports["em_dal"]:phone_new_contact_async(function()
 
     exports["em_dal"]:phone_get_contacts_async(function(phone_contacts)
@@ -705,7 +703,6 @@ RegisterNUICallback('sendMessage', function(data, cb)
     data.message = 'GPS: ' .. myPos.x .. ', ' .. myPos.y
   end
 
-  print(json.encode(data))
   exports["em_dal"]:phone_new_message_async(function(response)
 
     if not response.result.success then
@@ -728,7 +725,6 @@ RegisterNUICallback('deleteMessage', function(data, cb)
   cb(true)
 end)
 RegisterNUICallback('deleteMessageNumber', function (data, cb)
-  print(json.encode(data))
   deleteMessageContact(data.number)
   cb(true)
 end)
@@ -766,7 +762,6 @@ end)
 
 RegisterNUICallback('deleteContact', function(data, cb)
 
-  print(json.encode(data))
   deleteContact(data.id)
   cb(true)
 
