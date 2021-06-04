@@ -15,28 +15,27 @@ checkpointMarkers = {}
 --]]
 
 RegisterNUICallback('getRaces', function (data, cb)
-    cb(
-        ESX.TriggerServerCallback('gcphone:getRaces', function(data)
-            currentRaces = data.races
-            cb(data)
-        end)
-    )
+
+    exports["em_dal"]:trigger_server_callback("gcphone:getRaces", function(races)
+        cb(races)
+    end)
+
 end)
 
 RegisterNUICallback('createRace', function (data, cb)
-    cb(
-        ESX.TriggerServerCallback('gcphone:createRace', function(res)
-            cb(res)
-        end, data)
-    )
+
+    exports["em_dal"]:trigger_server_callback("gcphone:createRace", function(res)
+        cb(res)
+    end, data)
+
 end)
 
 RegisterNUICallback('joinRace', function (data, cb)
-    cb(
-        ESX.TriggerServerCallback('gcphone:joinRace', function(res)
-            cb(res)
-        end, data)
-    )
+
+    exports["em_dal"]:trigger_server_callback("gcphone:joinRace", function(res)
+        cb(res)
+    end, data)
+
 end)
 
 
@@ -50,11 +49,12 @@ RegisterNUICallback('racingSetGPS', function (data, cb)
 end)
 
 RegisterNUICallback('racingStartRace', function (data, cb)
-    cb(
-        ESX.TriggerServerCallback('gcphone:startRace', function(res)
-            cb(res)
-        end, data)
-    )
+
+    exports["em_dal"]:trigger_server_callback("gcphone:startRace", function(res)
+        cb(res)
+    end, data)
+    cb()
+
 end)
 
 
@@ -77,7 +77,6 @@ RegisterNetEvent('gcphone:racing:updateJoinedRaces')
 AddEventHandler('gcphone:racing:updateJoinedRaces', function (eventID, value)
     local raceID = tonumber(eventID)
     joinedRaces[raceID] = true
-    print(ESX.DumpTable(joinedRaces))
 end)
 
 -- Update Client Race
@@ -123,17 +122,17 @@ function startRace(eventID)
         SetBlipColour(SetBlips[1], 3)
         SetBlipScale(SetBlips[1], 1.6)
 
-        ESX.ShowNotification("La carrera comienza en 3")
+        --ESX.ShowNotification("La carrera comienza en 3")
         PlaySound(-1, "3_2_1", "HUD_MINI_GAME_SOUNDSET", 0, 0, 1)
         Citizen.Wait(1000)
-        ESX.ShowNotification("La carrera comienza en 2")
+        --ESX.ShowNotification("La carrera comienza en 2")
         PlaySound(-1, "3_2_1", "HUD_MINI_GAME_SOUNDSET", 0, 0, 1)
         Citizen.Wait(1000)
-        ESX.ShowNotification("La carrera comienza en 1")
+        --ESX.ShowNotification("La carrera comienza en 1")
         PlaySound(-1, "3_2_1", "HUD_MINI_GAME_SOUNDSET", 0, 0, 1)
         Citizen.Wait(1000)
         PlaySound(-1, "3_2_1", "HUD_MINI_GAME_SOUNDSET", 0, 0, 1)
-        ESX.ShowNotification("Go!")
+        --ESX.ShowNotification("Go!")
         SendNUIMessage({event = 'updateRacingStatus', data = 1})
 
         while myLap < tonumber(currentRaces[raceID].Laps) and racing do
@@ -194,7 +193,7 @@ function startRace(eventID)
         end
         
         PlaySound(-1, "3_2_1", "HUD_MINI_GAME_SOUNDSET", 0, 0, 1)
-        ESX.ShowNotification("¡Has terminado!")
+        --ESX.ShowNotification("¡Has terminado!")
         SendNUIMessage({event = 'updateRacingStatus', data = 0})
         Wait(10000)
         SendNUIMessage({event = 'updateRacingActive', data = false})
