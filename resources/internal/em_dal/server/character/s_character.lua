@@ -91,6 +91,16 @@ function get_source_from_phone_number(phone_number)
 
 end
 
+function get_phone_number_from_source(source)
+
+    for i = 1, #character_ids do
+        if character_ids[i].source == source then
+            return character_ids[i].phone_number
+        end
+    end
+
+end
+
 function remove_stale_source(source)
 
     for i = 1, #character_ids do

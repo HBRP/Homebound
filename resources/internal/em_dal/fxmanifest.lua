@@ -308,6 +308,8 @@ server_export 'get_character_id_from_source'
 server_export 'get_character_storage_id_from_character_id'
 server_export 'get_character_from_source'
 server_export 'get_current_character_ids'
+server_export 'get_phone_number_from_source'
+server_export 'get_source_from_phone_number'
 
 -- s_storage.lua
 server_export 'give_item'
