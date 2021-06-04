@@ -273,7 +273,6 @@ end)
 
 RegisterNUICallback('twitter_toggleLikeTweet', function(data, cb)
 
-    print(json.encode(data))
     exports["em_dal"]:twitter_toggle_like_async(function(result)
 
         TriggerEvent("gcPhone:twitter_setTweetLikes", data.tweetId, result.added_like)
