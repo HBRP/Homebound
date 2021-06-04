@@ -50,7 +50,8 @@ client_scripts {
     'client/phone/c_phone.lua',
     'client/phone/c_twitter.lua',
     'client/phone/c_appchat.lua',
-    'client/photos/c_photos.lua'    
+    'client/phone/c_racing.lua',  
+    'client/photos/c_photos.lua'  
 }
 
 server_scripts {
@@ -88,6 +89,7 @@ server_scripts {
     'server/phone/s_phone.lua',
     'server/phone/s_twitter.lua',
     'server/phone/s_appchat.lua',
+    'server/phone/s_racing.lua',
     'server/photos/s_photos.lua'
 
 }
@@ -291,6 +293,9 @@ export 'appchat_send_message_async'
 -- c_photos.lua
 export 'upload_photo_async'
 
+-- c_racing.lua
+export 'phone_get_races_async'
+
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'
 server_export 'get_steam_id'
@@ -322,6 +327,9 @@ server_export 'get_group_alert_subscriptions'
 
 --s_bank.lua
 server_export 'direct_deposit'
+
+-- s_racing.lua
+server_export 'phone_get_races'
 
 -- s_housing.lua
 server_export 'get_all_house_ids_of_type_async'
