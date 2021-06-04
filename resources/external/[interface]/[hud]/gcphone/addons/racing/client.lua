@@ -110,6 +110,22 @@ end)
     Functions
 ]]
 
+function Draw2DText(x, y, text, scale)
+    -- Draw text on screen
+    SetTextFont(4)
+    SetTextProportional(7)
+    SetTextScale(scale, scale)
+    SetTextColour(255, 255, 255, 255)
+    SetTextDropShadow(0, 0, 0, 0,255)
+    SetTextDropShadow()
+    SetTextEdge(4, 0, 0, 0, 255)
+    SetTextOutline()
+    SetTextEntry("STRING")
+    AddTextComponentString(text)
+    DrawText(x, y)
+end
+
+
 function startRace(eventID)
     local raceID = tonumber(eventID)
     if joinedRaces[raceID] then
@@ -122,17 +138,18 @@ function startRace(eventID)
         SetBlipColour(SetBlips[1], 3)
         SetBlipScale(SetBlips[1], 1.6)
 
-        --ESX.ShowNotification("La carrera comienza en 3")
+        exports["rprogress"]:Custom({
+            Async    = true,
+            Duration = 3000,
+            Label = "Starting race"
+        })
         PlaySound(-1, "3_2_1", "HUD_MINI_GAME_SOUNDSET", 0, 0, 1)
         Citizen.Wait(1000)
-        --ESX.ShowNotification("La carrera comienza en 2")
-        PlaySound(-1, "3_2_1", "HUD_MINI_GAME_SOUNDSET", 0, 0, 1)
-        Citizen.Wait(1000)
-        --ESX.ShowNotification("La carrera comienza en 1")
         PlaySound(-1, "3_2_1", "HUD_MINI_GAME_SOUNDSET", 0, 0, 1)
         Citizen.Wait(1000)
         PlaySound(-1, "3_2_1", "HUD_MINI_GAME_SOUNDSET", 0, 0, 1)
-        --ESX.ShowNotification("Go!")
+        Citizen.Wait(1000)
+        PlaySound(-1, "3_2_1", "HUD_MINI_GAME_SOUNDSET", 0, 0, 1)
         SendNUIMessage({event = 'updateRacingStatus', data = 1})
 
         while myLap < tonumber(currentRaces[raceID].Laps) and racing do
@@ -194,6 +211,15 @@ function startRace(eventID)
         
         PlaySound(-1, "3_2_1", "HUD_MINI_GAME_SOUNDSET", 0, 0, 1)
         --ESX.ShowNotification("¡Has terminado!")
+        Citizen.CreateThread(function()
+
+            local end_time = GetGameTimer() + 1000
+            while GetGameTimer() < end_time do
+                Citizen.Wait(5)
+                Draw2DText(0.5, 0.5, 'Finished!', 0.25)
+            end
+
+        end)
         SendNUIMessage({event = 'updateRacingStatus', data = 0})
         Wait(10000)
         SendNUIMessage({event = 'updateRacingActive', data = false})

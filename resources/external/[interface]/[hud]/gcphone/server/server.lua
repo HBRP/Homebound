@@ -405,51 +405,37 @@ AddEventHandler('gcPhone:internal_startCall', function(source, phone_number, rtc
     lastIndexCall = lastIndexCall + 1
     
     local sourcePlayer = tonumber(source)
-    local xPlayer = ESX.GetPlayerFromId(source)
-    if xPlayer then
-        local identifier = xPlayer.identifier
-        
-        local srcPhone = ""
-        if extraData ~= nil and extraData.useNumber ~= nil then
-            srcPhone = extraData.useNumber
-        else
-            srcPhone = getNumberPhone(identifier)
-        end
-        local destPlayer = getIdentifierByPhoneNumber(phone_number)
-        local is_valid = destPlayer ~= nil and destPlayer ~= identifier
-        AppelsEnCours[indexCall] = {
-            id = indexCall,
-            transmitter_src = sourcePlayer,
-            transmitter_num = srcPhone,
-            receiver_src = nil,
-            receiver_num = phone_number,
-            is_valid = destPlayer ~= nil,
-            is_accepts = false,
-            hidden = hidden,
-            rtcOffer = rtcOffer,
-            extraData = extraData
-        }
-        
-        if is_valid == true then
-            getSourceFromIdentifier(
-                destPlayer,
-                function(srcTo)
-                    if srcTo ~= nil then
-                        AppelsEnCours[indexCall].receiver_src = srcTo
-                        TriggerEvent("gcPhone:addCall", AppelsEnCours[indexCall])
-                        TriggerClientEvent("gcPhone:waitingCall", sourcePlayer, AppelsEnCours[indexCall], true)
-                        TriggerClientEvent("gcPhone:waitingCall", srcTo, AppelsEnCours[indexCall], false)
-                    else
-                        TriggerEvent("gcPhone:addCall", AppelsEnCours[indexCall])
-                        TriggerClientEvent("gcPhone:waitingCall", sourcePlayer, AppelsEnCours[indexCall], true)
-                    end
-                end
-            )
-        else
-            TriggerEvent("gcPhone:addCall", AppelsEnCours[indexCall])
-            TriggerClientEvent("gcPhone:waitingCall", sourcePlayer, AppelsEnCours[indexCall], true)
-        end
+    local srcPhone = ""
+    if extraData ~= nil and extraData.useNumber ~= nil then
+        srcPhone = extraData.useNumber
+    else
+        srcPhone = exports["em_dal"]:get_phone_number_from_source(source)
     end
+    local destPlayer = exports["em_dal"]:get_source_from_phone_number(phone_number)
+    local is_valid = destPlayer ~= nil and destPlayer ~= source
+    AppelsEnCours[indexCall] = {
+        id = indexCall,
+        transmitter_src = sourcePlayer,
+        transmitter_num = srcPhone,
+        receiver_src = nil,
+        receiver_num = phone_number,
+        is_valid = destPlayer ~= nil,
+        is_accepts = false,
+        hidden = hidden,
+        rtcOffer = rtcOffer,
+        extraData = extraData
+    }
+    
+    if is_valid == true then
+        AppelsEnCours[indexCall].receiver_src = destPlayer
+        TriggerEvent("gcPhone:addCall", AppelsEnCours[indexCall])
+        TriggerClientEvent("gcPhone:waitingCall", sourcePlayer, AppelsEnCours[indexCall], true)
+        TriggerClientEvent("gcPhone:waitingCall", destPlayer, AppelsEnCours[indexCall], false)
+    else
+        TriggerEvent("gcPhone:addCall", AppelsEnCours[indexCall])
+        TriggerClientEvent("gcPhone:waitingCall", sourcePlayer, AppelsEnCours[indexCall], true)
+    end
+
 end)
 
 RegisterServerEvent('gcPhone:startCall')
@@ -550,51 +536,6 @@ AddEventHandler('gcPhone:appelsDeleteAllHistorique', function ()
     end
 end)
 
---====================================================================================
---  OnLoad
---====================================================================================
-RegisterNetEvent('esx:playerLoaded')
-AddEventHandler('esx:playerLoaded',function(playerId, xPlayer)
-    local sourcePlayer = playerId
-    local identifier = xPlayer.identifier
-    local num = getNumberPhone(identifier)
-
-	getOrGeneratePhoneNumber(identifier, function (myPhoneNumber)
-        TriggerClientEvent('gcPhone:myPhoneNumber', sourcePlayer, myPhoneNumber)
-        TriggerClientEvent('gcPhone:contactList', sourcePlayer, getContacts(identifier))
-        TriggerClientEvent('gcPhone:allMessage', sourcePlayer, getMessages(identifier))
-        TriggerClientEvent('gcPhone:getBourse', sourcePlayer, getBourse())
-        sendHistoriqueCall(sourcePlayer, num)
-    end)
-end)
-
---[[
-RegisterServerEvent('gcPhone:allUpdate')
-AddEventHandler('gcPhone:allUpdate', function()
-    local _source = source
-    local sourcePlayer = tonumber(_source)
-    local xPlayer = ESX.GetPlayerFromId(_source)
-    while xPlayer == nil do
-        print("WHILE!")
-        xPlayer = ESX.GetPlayerFromId(_source)
-        Citizen.Wait(10000)
-    end
-    if xPlayer then
-        local identifier = xPlayer.identifier
-        local num = getNumberPhone(identifier)
-        TriggerClientEvent("gcPhone:myPhoneNumber", sourcePlayer, num)
-        TriggerClientEvent("gcPhone:contactList", sourcePlayer, getContacts(identifier))
-        TriggerClientEvent("gcPhone:allMessage", sourcePlayer, getMessages(identifier))
-        TriggerClientEvent("gcPhone:getBourse", sourcePlayer, getBourse())
-        TriggerClientEvent("gcphone:phoneReady", sourcePlayer)
-        sendHistoriqueCall(sourcePlayer, num)
-    end
-end)
-]]
-
---[[ AddEventHandler('onMySQLReady', function ()
-    MySQL.Async.fetchAll("DELETE FROM phone_messages WHERE (DATEDIFF(CURRENT_DATE,time) > 10)")
-end) --]]
 
 --====================================================================================
 --  App bourse
