@@ -42,11 +42,6 @@ end
 function ShowNoPhoneWarning ()
 end
 
---[[
-  Ouverture du téphone lié a un item
-  Un solution ESC basé sur la solution donnée par HalCroves
-  https://forum.fivem.net/t/tutorial-for-gcphone-with-call-and-job-message-other/177904
-]]--
 
 
 AddEventHandler('esx:onPlayerDeath', function()
@@ -63,16 +58,6 @@ RegisterNetEvent('esx:playerLoaded')
 AddEventHandler('esx:playerLoaded', function()
   TriggerServerEvent('gcPhone:allUpdate')
 end)
-
---[[
-
-        TriggerClientEvent('gcPhone:myPhoneNumber', sourcePlayer, myPhoneNumber)
-        TriggerClientEvent('gcPhone:contactList', sourcePlayer, getContacts(identifier))
-        TriggerClientEvent('gcPhone:allMessage', sourcePlayer, getMessages(identifier))
-        TriggerClientEvent('gcPhone:getBourse', sourcePlayer, getBourse())
-        sendHistoriqueCall(sourcePlayer, num)
-
-]]
 
 local function set_phone_number(phone_number)
 
@@ -117,10 +102,11 @@ local function set_phone_call_history(phone_calls)
 
   for i = 1, #phone_calls do
 
-    phone_calls[i].id = phone_calls[i].phone_call_id
-    phone_calls[i].owner = phone_calls[i].owner_phone_number
-    phone_calls[i].num = phone_calls[i].receiving_phone_number
+    phone_calls[i].id      = phone_calls[i].phone_call_id
+    phone_calls[i].owner   = phone_calls[i].owner_phone_number
+    phone_calls[i].num     = phone_calls[i].receiving_phone_number
     phone_calls[i].accepts = phone_calls[i].accepted
+    phone_calls[i].time    = phone_calls[i].time_called
 
   end
 
