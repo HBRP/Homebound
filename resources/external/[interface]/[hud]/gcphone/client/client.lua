@@ -115,6 +115,15 @@ end
 
 local function set_phone_call_history(phone_calls)
 
+  for i = 1, #phone_calls do
+
+    phone_calls[i].id = phone_calls[i].phone_call_id
+    phone_calls[i].owner = phone_calls[i].owner_phone_number
+    phone_calls[i].num = phone_calls[i].receiving_phone_number
+    phone_calls[i].accepts = phone_calls[i].accepted
+
+  end
+
   SendNUIMessage({event = 'historiqueCall', historique = phone_calls})
 
 end
@@ -126,7 +135,7 @@ local function set_phone_data()
     set_phone_number(phone_data.phone_number)
     set_contact_information(phone_data.phone_contacts)
     set_all_messages(phone_data.phone_messages)
-    --set_phone_call_history(phone_data.phone_calls)
+    set_phone_call_history(phone_data.phone_calls)
     SendNUIMessage({event = 'updateBourse', bourse = {}})
 
   end)

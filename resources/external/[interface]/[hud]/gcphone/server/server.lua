@@ -474,7 +474,8 @@ AddEventHandler('gcPhone:acceptCall', function(infoCall, rtcAnswer)
             SetTimeout(1000, function() -- change to +1000, if necessary.
                 TriggerClientEvent('gcPhone:acceptCall', AppelsEnCours[id].receiver_src, AppelsEnCours[id], false)
             end)
-            saveAppels(AppelsEnCours[id])
+
+            exports["em_dal"]:submit_phone_call(function() end, appelInfo.transmitter_num, appelInfo.receiver_num, appelInfo.is_accepts)
         end
     end
 end)
@@ -495,8 +496,8 @@ AddEventHandler('gcPhone:rejectCall', function (infoCall)
             TriggerClientEvent('gcPhone:rejectCall', AppelsEnCours[id].receiver_src)
         end
 
-        if AppelsEnCours[id].is_accepts == false then 
-            saveAppels(AppelsEnCours[id])
+        if AppelsEnCours[id].is_accepts == false then
+            exports["em_dal"]:submit_phone_call(function() end, AppelsEnCours[id].transmitter_num, AppelsEnCours[id].receiver_num, AppelsEnCours[id].is_accepts) 
         end
         TriggerEvent('gcPhone:removeCall', AppelsEnCours)
         AppelsEnCours[id] = nil
