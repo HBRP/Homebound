@@ -1,25 +1,7 @@
-RegisterNetEvent("esx_status:add")
-RegisterNetEvent('esx_basicneeds:onEat')
-RegisterNetEvent('esx_basicneeds:onDrink')
-RegisterNetEvent('esx_basicneeds:onDonut')
-RegisterNetEvent('esx_status:set')
 
 --[[ HANDLERS ]]
 AddEventHandler("esx_status:add", function(name, amount)
     add_stat(name, amount)
-end)
-AddEventHandler("kashacters:PlayerSpawned", function()
-    --InitStats()
-end)
-AddEventHandler('esx_basicneeds:onEat', function(propName)
-    --on_eat(propName)
-end)
-AddEventHandler('esx_basicneeds:onDrink', function(propName)
-    --on_drink(propName)
-end)
-
-AddEventHandler('esx_basicneeds:onDonut', function(propName)
-    --on_donut(propName)
 end)
 
 AddEventHandler('esx_status:set', function(name, val)

@@ -143,40 +143,38 @@ AddEventHandler('kashacters:PlayerSpawned', function ()
     --start_long_loop()
 end)
 
-
-RegisterCommand("check_player", function (source, args, raw)
+exports["em_commands"]:register_command("test_check_player", function(source, args, raw)
 
     print(json.encode(PLAYER))
     print(json.encode(PLAYER_MODIFIERS))
+    
+end, "Print out player health")
 
-end)
-
-RegisterCommand("give_adrenaline", function (source, args, raw)
+exports["em_commands"]:register_command("test_give_adrenaline", function(source, args, raw)
 
     apply_adrenaline()
 
 end)
 
-RegisterCommand("give_knocked_out", function (source, args, raw)
+exports["em_commands"]:register_command("test_give_knocked_out", function(source, args, raw)
 
     apply_knocked_out()
 
 end)
 
-RegisterCommand("give_shock", function (source, args, raw)
+exports["em_commands"]:register_command("test_give_shock", function(source, args, raw)
 
     apply_shock()
 
 end)
-    
 
-RegisterCommand("clear_wounds", function (source, args, raw)
+exports["test_clear_wounds", function(source, args, raw)
 
-    heal_player()
+   heal_player() 
 
 end)
-
-RegisterCommand("give_meth", function (source, args, raw)
+    
+exports["test_give_meth", function(source, args, raw)
 
     apply_short_term_effect(EFFECTS.METH)
 

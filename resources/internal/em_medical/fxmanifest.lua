@@ -31,3 +31,9 @@ exports {
     "is_player_unconscious",
     'heal_player'
 }
+
+dependencies {
+
+    'em_commands'
+
+}
