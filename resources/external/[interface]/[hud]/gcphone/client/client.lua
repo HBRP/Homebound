@@ -254,30 +254,6 @@ AddEventHandler('gcPhone:register_FixePhone', function(phone_number, data)
   Config.FixePhone[phone_number] = data
 end)
 
---[[
-local registeredPhones = {}
-Citizen.CreateThread(function()
-  if not Config.AutoFindFixePhones then return end
-  while not ESX do Citizen.Wait(0) end
-  while true do
-    local playerPed = GetPlayerPed(-1)
-    local coords = GetEntityCoords(playerPed)
-    for _, key in pairs({'p_phonebox_01b_s', 'p_phonebox_02_s', 'prop_phonebox_01a', 'prop_phonebox_01b', 'prop_phonebox_01c', 'prop_phonebox_02', 'prop_phonebox_03', 'prop_phonebox_04'}) do
-      local closestPhone = GetClosestObjectOfType(coords.x, coords.y, coords.z, 25.0, key, false)
-      if closestPhone ~= 0 and not registeredPhones[closestPhone] then
-        local phoneCoords = GetEntityCoords(closestPhone)
-        number = ('0%.2s-%.2s%.2s'):format(math.abs(phoneCoords.x*100), math.abs(phoneCoords.y * 100), math.abs(phoneCoords.z *100))
-        if not Config.FixePhone[number] then
-          TriggerServerEvent('gcPhone:register_FixePhone', number, phoneCoords)
-        end
-        registeredPhones[closestPhone] = true
-      end
-    end
-    Citizen.Wait(1000)
-  end
-end)
-]]
-
 Citizen.CreateThread(function ()
   local mod = 0
   while true do
@@ -368,47 +344,6 @@ RegisterNetEvent("gcPhone:getBourse")
 AddEventHandler("gcPhone:getBourse", function(bourse)
   SendNUIMessage({event = 'updateBourse', bourse = bourse})
 end)
-
-RegisterNetEvent("gcPhone:receiveMessage")
-AddEventHandler("gcPhone:receiveMessage", function(message)
-  -- SendNUIMessage({event = 'updateMessages', messages = messages})
-  SendNUIMessage({event = 'newMessage', message = message})
-  table.insert(messages, message)
-  hasPhone(function (hasPhone)
-    if hasPhone == true then
-      if message.owner == 0 then
-        local app = _U('new_message')
-        if Config.ShowNumberNotification == true then
-          app = _U('new_message_from', message.transmitter)
-          for _,contact in pairs(contacts) do
-            if contact.number == message.transmitter then
-              app = _U('new_message_transmitter', contact.display)
-              break
-            end
-          end
-        end
-
-        SendNUIMessage({event = 'updateNotification', active = true})
-        SendNUIMessage({
-          event = 'updateNotificationInfo', 
-          info = {
-            app = app,
-            icon = 'sms',
-            prefix = 'fas',
-            color = '#87fc6a',
-            message = message
-          }
-        })
-        PlaySound(-1, "Menu_Accept", "Phone_SoundSet_Default", 0, 0, 1)
-        Citizen.Wait(300)
-        PlaySound(-1, "Menu_Accept", "Phone_SoundSet_Default", 0, 0, 1)
-        Citizen.Wait(300)
-        PlaySound(-1, "Menu_Accept", "Phone_SoundSet_Default", 0, 0, 1)
-      end
-    end
-  end)
-end)
-
 --====================================================================================
 --  Function client | Contacts
 --====================================================================================
@@ -706,8 +641,8 @@ RegisterNUICallback('sendMessage', function(data, cb)
       exports["em_dal"]:phone_get_messages_async(function(phone_messages)
         set_all_messages(phone_messages)
       end)
-      exports["em_dal"]:trigger_targeted_phone_event("gcphone:receiveMessage", phone_number, data.message)
-      TriggerEvent("gcphone:receiveMessage", data.message)
+      exports["em_dal"]:trigger_targeted_phone_event("gcphone:send_ping", myPhoneNumber, data.phoneNumber)
+      exports["em_dal"]:trigger_targeted_phone_event("gcphone:send_ping", data.phoneNumber, myPhoneNumber)
     end
 
   end, data.phoneNumber, data.message)
@@ -715,6 +650,32 @@ RegisterNUICallback('sendMessage', function(data, cb)
   cb(true)
 
 end)
+
+RegisterNetEvent("gcphone:send_ping")
+AddEventHandler("gcphone:send_ping", function(from_number)
+  hasPhone(function (hasPhone)
+    if not hasPhone then
+      return
+    end
+    local app = string.format("New message from %s", from_number)
+
+    for _, contact in pairs(contacts) do
+      if contact.number == from_number then
+        app = string.format("New message from %s", contact.display)
+        break
+      end
+    end
+
+    exports['t-notify']:Alert({style = "info", message = app})
+    PlaySound(-1, "Menu_Accept", "Phone_SoundSet_Default", 0, 0, 1)
+    Citizen.Wait(300)
+    PlaySound(-1, "Menu_Accept", "Phone_SoundSet_Default", 0, 0, 1)
+    Citizen.Wait(300)
+    PlaySound(-1, "Menu_Accept", "Phone_SoundSet_Default", 0, 0, 1)
+
+  end)
+end)
+
 RegisterNUICallback('deleteMessage', function(data, cb)
   deleteMessage(data.id)
   cb(true)
