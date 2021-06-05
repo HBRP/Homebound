@@ -168,13 +168,13 @@ exports["em_commands"]:register_command("test_give_shock", function(source, args
 
 end)
 
-exports["test_clear_wounds", function(source, args, raw)
+exports["em_commands"]:register_command("test_clear_wounds", function(source, args, raw)
 
    heal_player() 
 
 end)
     
-exports["test_give_meth", function(source, args, raw)
+exports["em_commands"]:register_command("test_give_meth", function(source, args, raw)
 
     apply_short_term_effect(EFFECTS.METH)
 
