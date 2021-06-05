@@ -253,7 +253,10 @@ function heal_player()
     PLAYER.WOUNDS = {}
     PLAYER.SHORTERM_EFFECTS = {}
 
-    ClearPedTasksImmediately(ped)
+    if GetVehiclePedIsIn(ped, false) == 0 then
+        ClearPedTasks(ped)
+    end
+
     AnimpostfxStop("FocusIn")
     ClearPedBloodDamage(ped)
 
