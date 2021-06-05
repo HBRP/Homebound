@@ -119,3 +119,20 @@ register_server_callback("em_dal:phone_update_contact", function(source, callbac
     end)
 
 end)
+
+function submit_phone_call(callback, owner_phone_number, receiving_phone_number, accepted)
+
+    local data = 
+    {
+        accepted = accepted,
+        owner_phone_number = owner_phone_number,
+        receiving_phone_number = receiving_phone_number
+    }
+    HttpPost("/Phone/Calls/Submit", data, function(error_code, result_data, result_headers)
+
+        local temp = json.decode(result_data)
+        callback(temp)
+
+    end)
+
+end

@@ -641,7 +641,6 @@ RegisterNUICallback('sendMessage', function(data, cb)
       exports["em_dal"]:phone_get_messages_async(function(phone_messages)
         set_all_messages(phone_messages)
       end)
-      exports["em_dal"]:trigger_targeted_phone_event("gcphone:send_ping", myPhoneNumber, data.phoneNumber)
       exports["em_dal"]:trigger_targeted_phone_event("gcphone:send_ping", data.phoneNumber, myPhoneNumber)
     end
 

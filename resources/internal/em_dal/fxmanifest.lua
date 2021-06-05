@@ -330,6 +330,9 @@ server_export 'get_group_alert_subscriptions'
 --s_bank.lua
 server_export 'direct_deposit'
 
+-- s_phone.lua
+server_export 'submit_phone_call'
+
 -- s_racing.lua
 server_export 'phone_get_races'
 
