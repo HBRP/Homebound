@@ -24,3 +24,15 @@ RegisterCommand('unlock_car', function()
 end, false)
 
 RegisterKeyMapping('unlock_car', 'unlock_car', 'keyboard', 'u')
+
+
+exports["em_commands"]:register_command("repair_car", function(source, args, raw)
+
+    local veh = GetVehiclePedIsIn(PlayerPedId(), false)
+    if veh == 0 then
+        return
+    end
+
+    repair_vehicle(veh)
+
+end)

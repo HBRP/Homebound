@@ -41,6 +41,7 @@ exports {
 dependencies {
 
     'em_dal',
-    't-notify'
+    't-notify',
+    'em_commands'
 
 }
