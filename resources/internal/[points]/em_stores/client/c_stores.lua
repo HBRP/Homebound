@@ -2,16 +2,6 @@
 local is_there_nearby_stores = false
 local nearby_stores = {}
 
-local store_type_ids = {
-
-    CONVENIENCE  = 1,
-    BLACK_MARKET = 2,
-    PAWN_SHOP    = 3,
-    AMMUNATION   = 4,
-    TATTOO_SHOP  = 5
-
-}
-
 local function open_selected_store(store)
 
     if store.store_type_id == store_type_ids.TATTOO_SHOP then
