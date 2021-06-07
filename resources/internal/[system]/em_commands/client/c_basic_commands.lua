@@ -76,3 +76,22 @@ register_command_no_perms("camera_rotation", function(source, args, raw_command)
     })
 
 end, "Show the camera rotation")
+
+register_command_no_perms("pospic", function(source, args, raw_command)
+
+    exports['screenshot-basic']:requestScreenshot(function(data)
+
+        local photo = data:gsub("data:image/jpeg;base64,", "") 
+
+        exports["em_dal"]:upload_photo_async(function(link)
+
+            local coords = GetEntityCoords(PlayerPedId())
+            local heading = GetEntityHeading(PlayerPedId())
+
+            Citizen.Trace(string.format("(%s, %f, %f, %f, %f)\n", link, coords.x, coords.y, coords.z, heading))
+
+        end, photo)
+
+    end)
+
+end, "Take a picture at your current position")
