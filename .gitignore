@@ -5,7 +5,7 @@ webservices/target
 /txData
 /not_used
 /resources/interiors
-/[assets]
+[assets]/
 node_modules/
 *.bat
 *.7z
