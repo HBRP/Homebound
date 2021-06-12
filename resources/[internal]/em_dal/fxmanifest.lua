@@ -51,7 +51,8 @@ client_scripts {
     'client/phone/c_twitter.lua',
     'client/phone/c_appchat.lua',
     'client/phone/c_racing.lua',  
-    'client/photos/c_photos.lua'  
+    'client/photos/c_photos.lua',
+    'client/crafting/c_crafting.lua' 
 }
 
 server_scripts {
@@ -90,7 +91,8 @@ server_scripts {
     'server/phone/s_twitter.lua',
     'server/phone/s_appchat.lua',
     'server/phone/s_racing.lua',
-    'server/photos/s_photos.lua'
+    'server/photos/s_photos.lua',
+    'server/crafting/s_crafting.lua'
 
 }
 
@@ -295,6 +297,9 @@ export 'upload_photo_async'
 
 -- c_racing.lua
 export 'phone_get_races_async'
+
+-- c_crafting.lua
+export 'get_recipes_async'
 
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'
