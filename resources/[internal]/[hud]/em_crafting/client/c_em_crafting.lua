@@ -31,9 +31,22 @@ end)
 
 RegisterNUICallback("craft", function(data, cb)
 
-	print(json.encode(data))
+	if data.amount == 0 then
+		return
+	end
 
-	
+	local inputs  = data.recipe.inputs
+	local outputs = data.recipe.outputs
+	local storage_id = exports["em_dal"]:get_character_storage_id()
+
+	for i = 1, #inputs do
+		exports["em_dal"]:remove_any_item(storage_id, inputs[i].itemid, inputs[i].amount * data.amount)
+	end
+
+	for i = 1, #outputs do
+		exports["t-notify"]:Alert({style = "success", message = string.format("Made %d %s", outputs[i].amount * data.amount, outputs[i].itemname)})
+		exports["em_dal"]:give_item(storage_id, outputs[i].itemid, outputs[i].amount * data.amount, -1, -1)
+	end
 
 	local inventory = exports["em_dal"]:get_character_storage()["storage_items"]
 	SendNUIMessage({display = true, inventory = inventory, recipes = recipes_cache, title = "Personal Crafting"})
@@ -45,5 +58,11 @@ RegisterNUICallback("close", function(data, cb)
 
 	SetNuiFocus(false, false)
 	cb(true)
+
+end)
+
+RegisterNUICallback("notify", function(data, cb)
+
+	exports["t-notify"]:Alert(data)
 
 end)

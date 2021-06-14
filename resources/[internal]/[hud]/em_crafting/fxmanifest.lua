@@ -23,6 +23,7 @@ dependencies {
 
 	'em_dal',
 	'em_items',
-	'em_commands'
+	'em_commands',
+	't-notify'
 
 }
