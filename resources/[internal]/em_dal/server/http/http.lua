@@ -53,7 +53,7 @@ end
 
 local function HttpSimplified(endpoint, data, callback, error_code, result_data, result_headers)
 
-    local response = result_data or {}
+    local response = result_data or ""
     local temp = json.decode(response)
     callback(temp)
 
@@ -62,7 +62,7 @@ end
 function HttpGetSim(endpoint, data, callback)
 
     Http('GET', endpoint, data, function(error_code, result_data, result_headers)
-        HttpSimplified(endpoint, data, error_code, result_data, result_headers)
+        HttpSimplified(endpoint, data, callback, error_code, result_data, result_headers)
     end)
 
 end
@@ -70,7 +70,7 @@ end
 function HttpPostSim(endpoint, data, callback)
 
     Http('POST', endpoint, data, function(error_code, result_data, result_headers)
-        HttpSimplified(endpoint, data, error_code, result_data, result_headers)
+        HttpSimplified(endpoint, data, callback, error_code, result_data, result_headers)
     end)
 
 end
@@ -78,7 +78,7 @@ end
 function HttpPutSim(endpoint, data, callback)
 
     Http('PUT', endpoint, data, function(error_code, result_data, result_headers)
-        HttpSimplified(endpoint, data, error_code, result_data, result_headers)
+        HttpSimplified(endpoint, data, callback, error_code, result_data, result_headers)
     end)
 
 end

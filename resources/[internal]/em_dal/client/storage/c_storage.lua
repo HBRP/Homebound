@@ -58,6 +58,12 @@ function remove_item(storage_item_id, amount)
 
 end
 
+function remove_any_item(storage_id, item_id, amount)
+
+    trigger_server_callback("em_dal:remove_any_item", function() end, storage_id, item_id, amount)
+
+end
+
 function move_item(old_storage_id, old_storage_item_id, new_storage_id, new_slot_id, item_id, amount)
 
     local move_item_response = nil

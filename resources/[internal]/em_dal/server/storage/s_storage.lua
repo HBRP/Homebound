@@ -39,6 +39,15 @@ function remove_item(source, callback, storage_item_id, amount)
 
 end
 
+function remove_any_item(source, callback, storage_id, item_id, amount)
+
+    local data = {storage_id = storage_id, item_id = item_id, amount = amount}
+    HttpPostSim("/Storage/RemoveAny", data, callback)
+
+end
+
+
+register_server_callback("em_dal:remove_any_item", remove_any_item)
 register_server_callback("em_dal:get_storage", get_storage)
 register_server_callback("em_dal:give_item", give_item)
 register_server_callback("em_dal:remove_item", remove_item)
