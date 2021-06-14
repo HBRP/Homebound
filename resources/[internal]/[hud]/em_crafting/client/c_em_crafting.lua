@@ -1,4 +1,6 @@
 
+local recipes_cache = {}
+
 local function open_crafting()
 
 	exports["em_dal"]:get_recipes_async(function(recipes)
@@ -11,6 +13,7 @@ local function open_crafting()
 				recipes[i].outputs[j].itemname = exports["em_items"]:get_item_name_from_item_id(recipes[i].outputs[j].itemid)
 			end
 		end
+		recipes_cache = recipes
 
 		local inventory = exports["em_dal"]:get_character_storage()["storage_items"]
 		SendNUIMessage({display = true, inventory = inventory, recipes = recipes, title = "Personal Crafting"})
@@ -23,6 +26,18 @@ end
 exports["em_commands"]:register_command("test_crafting", function()
 
 	open_crafting()
+
+end)
+
+RegisterNUICallback("craft", function(data, cb)
+
+	print(json.encode(data))
+
+	
+
+	local inventory = exports["em_dal"]:get_character_storage()["storage_items"]
+	SendNUIMessage({display = true, inventory = inventory, recipes = recipes_cache, title = "Personal Crafting"})
+	SetNuiFocus(true, true)
 
 end)
 
