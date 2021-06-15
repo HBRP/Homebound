@@ -35,6 +35,12 @@ exports["em_commands"]:register_command("test_radio", function(source, args, raw
 
 end, "Test the radio!")
 
+exports["em_items"]:register_item_use("radio", function()
+
+  enableRadio(true)
+
+end)
+
 
 local function can_join_restricted_channel()
 
@@ -110,17 +116,20 @@ AddEventHandler('ls-radio:use', function()
   enableRadio(true)
 end)
 
-RegisterNetEvent('ls-radio:onRadioDrop')
-AddEventHandler('ls-radio:onRadioDrop', function(source)
-  local playerName = GetPlayerName(source)
+AddEventHandler("em_dal:inventory_change", function()
 
-  if current_radio_channel ~= nil then
-
-    exports["pma-voice"]:removePlayerFromRadio()
-    exports["pma-voice"]:setVoiceProperty("radioEnabled", false)
-    exports['t-notify']:Alert({style = info, message = Config.messages['you_leave'] .. current_radio_channel .. '.00 MHz'})
-
+  if current_radio_channel == nil then
+    return
   end
+
+  if exports["em_items"]:has_item_by_name("radio") then
+    return
+  end
+
+  exports["pma-voice"]:removePlayerFromRadio()
+  exports["pma-voice"]:setVoiceProperty("radioEnabled", false)
+  exports['t-notify']:Alert({style = info, message = Config.messages['you_leave'] .. current_radio_channel .. '.00 MHz'})
+
 end)
 
 Citizen.CreateThread(function()

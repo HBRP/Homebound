@@ -25,6 +25,7 @@ dependencies {
 
   'em_dal',
   'em_commands',
+  'em_items',
   'pma-voice',
   't-notify'
 
