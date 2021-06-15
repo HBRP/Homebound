@@ -174,27 +174,7 @@ local function remove_ammo(ammo_item_id, amount, storage_items)
     if amount == 0 then
         return
     end
-
-    amount_left_to_remove = amount
-    for i = 1, #storage_items do
-
-        if amount_left_to_remove == 0 then
-            return
-        end
-
-        if storage_items[i].item_id == ammo_item_id then
-
-            if storage_items[i].amount - amount_left_to_remove >= 0 then
-                exports["em_dal"]:remove_item(storage_items[i].storage_item_id, amount_left_to_remove)
-                amount_left_to_remove = 0
-            else
-                exports["em_dal"]:remove_item(storage_items[i].storage_item_id, storage_items[i].amount)
-                amount_left_to_remove = amount_left_to_remove - storage_items[i].amount
-            end
-
-        end
-
-    end
+    exports["em_dal"]:remove_any_item(exports["em_dal"]:get_character_storage_id(), ammo_item_id, amount)
 
 end
 
@@ -225,15 +205,22 @@ local function shooting_loop()
             
             local ammo_item_id  = get_weapon_ammo_item_id(shooting_weapon_item_id)
             local storage_items = (exports["em_dal"]:get_character_storage())["storage_items"]
-            local ammo_diff = get_ammo_for_weapon(ammo_item_id, storage_items) - GetAmmoInPedWeapon(ped, shooting_weapon_hash)
+            local inventory_ammo = get_ammo_for_weapon(ammo_item_id, storage_items)
+            local ammo_diff = inventory_ammo - GetAmmoInPedWeapon(ped, shooting_weapon_hash)
 
-            assert(ammo_diff >= 0, string.format("More ammo in gun than in inventory ammo_diff: %d for weapon_item_id: %d", ammo_diff, shooting_weapon_item_id))
+            if ammo_diff < 0 then
+                SetPedAmmo(ped, equipped_weapon_hash, inventory_ammo)
+                goto shooting_loop_continue
+            end
+
+            --assert(ammo_diff >= 0, string.format("More ammo in gun than in inventory ammo_diff: %d for weapon_item_id: %d", ammo_diff, shooting_weapon_item_id))
 
             remove_ammo(ammo_item_id, ammo_diff, storage_items)
 
             ped_was_shooting = false
-            shooting_weapon_hash    = nil
+            shooting_weapon_hash = nil
             shooting_weapon_item_id = nil
+            ::shooting_loop_continue::
 
         end
 
