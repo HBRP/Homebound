@@ -1,25 +1,38 @@
 
 local recipes_cache = {}
 
-local function open_crafting()
+local function set_recipes(recipes)
 
-	exports["em_dal"]:get_recipes_async(function(recipes)
-
-		for i = 1, #recipes do
-			for j = 1, #recipes[i].inputs do
-				recipes[i].inputs[j].itemname = exports["em_items"]:get_item_name_from_item_id(recipes[i].inputs[j].itemid)
-			end
-			for j = 1, #recipes[i].outputs do
-				recipes[i].outputs[j].itemname = exports["em_items"]:get_item_name_from_item_id(recipes[i].outputs[j].itemid)
-			end
+	for i = 1, #recipes do
+		for j = 1, #recipes[i].inputs do
+			recipes[i].inputs[j].itemname = exports["em_items"]:get_item_name_from_item_id(recipes[i].inputs[j].itemid)
 		end
-		recipes_cache = recipes
+		for j = 1, #recipes[i].outputs do
+			recipes[i].outputs[j].itemname = exports["em_items"]:get_item_name_from_item_id(recipes[i].outputs[j].itemid)
+		end
+	end
+	recipes_cache = recipes
 
+end
+
+function open_crafting(context)
+
+	local crafting_function = nil
+
+	if context == 0 or context == nil then
+		crafting_function = function(callback) exports["em_dal"]:get_recipes_async(callback) end
+	else
+		crafting_function = function(callback, context) exports["em_dal"]:get_context_recipes_async(callback, context) end
+	end
+
+	crafting_function(function(recipes)
+
+		set_recipes(recipes)
 		local inventory = exports["em_dal"]:get_character_storage()["storage_items"]
 		SendNUIMessage({display = true, inventory = inventory, recipes = recipes, title = "Personal Crafting"})
 		SetNuiFocus(true, true)
 
-	end)
+	end, context)
 
 end
 

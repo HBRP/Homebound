@@ -301,6 +301,7 @@ export 'phone_get_races_async'
 
 -- c_crafting.lua
 export 'get_recipes_async'
+export 'get_context_recipes_async'
 
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'

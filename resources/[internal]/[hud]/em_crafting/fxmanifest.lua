@@ -19,6 +19,12 @@ client_scripts {
 
 }
 
+exports {
+
+	'open_crafting'
+
+}
+
 dependencies {
 
 	'em_dal',
