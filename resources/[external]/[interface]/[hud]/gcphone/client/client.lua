@@ -446,7 +446,7 @@ AddEventHandler("gcPhone:acceptCall", function(infoCall, initiator)
   if inCall == false and USE_RTC == false then
     inCall = true
     if Config.UseMumbleVoIP then
-      exports["mumble-voip"]:SetCallChannel(infoCall.id+1)
+      exports["pma-voice"]:setCallChannel(infoCall.id+1)
     elseif Config.UseSaltyChat then
       exports['saltychat']:EstablishCall(AppelsEnCours[id].receiver_src, AppelsEnCours[id].transmitter_src) --Assign Channel
       exports['saltychat']:EstablishCall(AppelsEnCours[id].transmitter_src, AppelsEnCours[id].receiver_src) --Assign Channel
@@ -467,7 +467,7 @@ AddEventHandler("gcPhone:rejectCall", function(infoCall)
   if inCall == true then
     inCall = false
     if Config.UseMumbleVoIP then
-      exports["mumble-voip"]:SetCallChannel(0)
+      exports["pma-voice"]:setCallChannel(0)
     elseif Config.UseSaltyChat then
       exports['saltychat']:EndCall(AppelsEnCours[id].receiver_src, AppelsEnCours[id].transmitter_src) --Assign Channel
       exports['saltychat']:EndCall(AppelsEnCours[id].transmitter_src, AppelsEnCours[id].receiver_src) --Assign Channel
