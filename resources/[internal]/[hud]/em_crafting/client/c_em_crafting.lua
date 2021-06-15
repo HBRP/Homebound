@@ -66,3 +66,6 @@ RegisterNUICallback("notify", function(data, cb)
 	exports["t-notify"]:Alert(data)
 
 end)
+
+RegisterCommand('crafting_tab', open_crafting, false)
+RegisterKeyMapping('crafting_tab', 'crafting_tab', 'keyboard', 'TAB')

@@ -77,6 +77,7 @@ RegisterCommand('hotbar_2', function() use_hotkey(2) end, false)
 RegisterCommand('hotbar_3', function() use_hotkey(3) end, false)
 RegisterCommand('hotbar_4', function() use_hotkey(4) end, false)
 RegisterCommand('hotbar_5', function() use_hotkey(5) end, false)
+--[[
 RegisterCommand('hotbar_tab', function()
 
     local weapon_hash = GetSelectedPedWeapon(PlayerPedId())
@@ -88,11 +89,11 @@ RegisterCommand('hotbar_tab', function()
     put_away_weapon(weapon_hash)
 
 end, false)
-
+]]
 
 RegisterKeyMapping('hotbar_1', 'hotbar_1', 'keyboard', '1')
 RegisterKeyMapping('hotbar_2', 'hotbar_2', 'keyboard', '2')
 RegisterKeyMapping('hotbar_3', 'hotbar_3', 'keyboard', '3')
 RegisterKeyMapping('hotbar_4', 'hotbar_4', 'keyboard', '4')
 RegisterKeyMapping('hotbar_5', 'hotbar_5', 'keyboard', '5')
-RegisterKeyMapping('hotbar_tab', 'hotbar_tab', 'keyboard', 'TAB')
+--RegisterKeyMapping('hotbar_tab', 'hotbar_tab', 'keyboard', 'TAB')
