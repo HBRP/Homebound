@@ -20,6 +20,7 @@ function open_crafting(context)
 	local crafting_function = nil
 
 	if context == 0 or context == nil then
+		context = "Personal Crafting"
 		crafting_function = function(callback) exports["em_dal"]:get_recipes_async(callback) end
 	else
 		crafting_function = function(callback, context) exports["em_dal"]:get_context_recipes_async(callback, context) end
@@ -29,7 +30,7 @@ function open_crafting(context)
 
 		set_recipes(recipes)
 		local inventory = exports["em_dal"]:get_character_storage()["storage_items"]
-		SendNUIMessage({display = true, inventory = inventory, recipes = recipes, title = "Personal Crafting"})
+		SendNUIMessage({display = true, inventory = inventory, recipes = recipes, title = context})
 		SetNuiFocus(true, true)
 
 	end, context)
