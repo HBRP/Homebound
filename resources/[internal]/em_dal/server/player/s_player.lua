@@ -132,6 +132,20 @@ register_server_callback("em_dal:get_player_id", function(source, callback)
 
 end)
 
+register_server_callback("em_dal:ban_player", function(source, callback, player_id, length)
+
+    local endpoint = string.format("/Player/Ban/%d/%d", player_id, length)
+    HttpPostSim(endpoint, nil, callback)
+
+end)
+
+register_server_callback("em_dal:whitelist_player", function(source, callback, player_id, whitelist_flag)
+
+    local endpoint = string.format("/Player/Whitelist/%d/%d", player_id, whitelist_flag)
+    HttpPostSim(endpoint, nil, callback)
+
+end)
+
 AddEventHandler('playerDropped', function(reason)
 
     local player_id = get_player_id(source)

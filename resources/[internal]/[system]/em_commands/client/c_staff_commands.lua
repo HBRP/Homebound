@@ -41,3 +41,36 @@ register_command("give_item", function(source, args, raw)
     end
 
 end, "Give item by item id", {{ name = "id", help = "item id"}, {name = "amount", help = "amount to give"}})
+
+register_command("ban_player", function(source, args, raw)
+
+    local player_id = tonumber(args[1])
+    local length = tonumber(args[2])
+
+    exports["em_dal"]:ban_player_async(function(response) 
+
+        if response.result.success then
+            exports['t-notify']:Alert({style = 'success', message = response.result.message})
+        else
+            exports['t-notify']:Alert({style = 'error', message = response.result.message})
+        end
+
+    end, player_id, length)
+
+end, "Ban player", {{name = "player_id", help = "integer"}, {name = "length in days", message = "integer"}})
+
+
+register_command("whitelist_player", function(source, args, raw)
+
+    local player_id = tonumber(args[1])
+    exports["em_dal"]:whitelist_player_async(function(response) 
+
+        if response.result.success then
+            exports['t-notify']:Alert({style = 'success', message = response.result.message})
+        else
+            exports['t-notify']:Alert({style = 'error', message = response.result.message})
+        end
+
+    end, player_id, 1)
+
+end, "Whitelist player", {{name = "player_id", help = "integer"}})
