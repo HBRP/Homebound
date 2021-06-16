@@ -92,3 +92,20 @@ register_command("whitelist_player", function(source, args, raw)
     end, player_id, 1)
 
 end, "Whitelist player", {{name = "player_id", help = "integer"}})
+
+register_command("kick_character", function(source, args, raw)
+
+    local character_id = tonumber(args[1])
+    local message = "You have been kicked"
+
+    if #args > 1 then
+        message = table.concat({table.unpack(args, 2, #args)}, " ")
+    end
+
+    exports["em_dal"]:trigger_server_callback_async("em_commands:kick_character", function(response)
+
+        exports['t-notify']:Alert({style = "info", message = response})
+
+    end, character_id, message)
+
+end, "Kick character", {{name = "character_id", help = "integer"}, {name = "message", help = "(optional) why this person has been kicked"}})

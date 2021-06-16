@@ -6,6 +6,7 @@ client_script 'client/c_basic_commands.lua'
 client_script 'client/c_staff_commands.lua'
 
 server_script 'server/s_basic_commands.lua'
+server_script 'server/s_staff_commands.lua'
 
 export 'register_command'
 export 'register_command_no_perms'
