@@ -132,6 +132,20 @@ register_server_callback("em_dal:get_player_id", function(source, callback)
 
 end)
 
+register_server_callback("em_dal:ban_character", function(source, callback, character_id, length)
+
+    local player_id = get_player_id_by_character_id(character_id)
+
+    if player_id == nil then
+        callback({result = {success = false, message = "Character is not online right now"}})
+        return
+    end
+
+    local endpoint = string.format("/Player/Ban/%d/%d", player_id, length)
+    HttpPostSim(endpoint, nil, callback)
+
+end)
+
 register_server_callback("em_dal:ban_player", function(source, callback, player_id, length)
 
     local endpoint = string.format("/Player/Ban/%d/%d", player_id, length)

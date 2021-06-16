@@ -140,6 +140,7 @@ export 'get_blips'
 -- c_player.lua
 export 'get_player_id'
 export 'ban_player_async'
+export 'ban_character_async'
 export 'whitelist_player_async'
 
 -- c_storage.lua

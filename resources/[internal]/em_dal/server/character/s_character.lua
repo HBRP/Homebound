@@ -1,10 +1,11 @@
 
 
 local character_ids = {}
-local function register_character_id_to_source(source, character)
+local function register_character_id_to_source(source, character, player_id)
 
     character.character_name = character["first_name"] .. " " .. character["last_name"]
     character.source         = source
+    character.player_id      = player_id
 
     for i = 1, #character_ids do
         if character_ids[i].source == source or character_ids[i].character_id == character_id then
@@ -96,6 +97,16 @@ function get_phone_number_from_source(source)
     for i = 1, #character_ids do
         if character_ids[i].source == source then
             return character_ids[i].phone_number
+        end
+    end
+
+end
+
+function get_player_id_by_character_id(character_id)
+
+    for i = 1, #character_ids do
+        if character_ids[i].character_id == character_id then
+            return character_ids[i].player_id
         end
     end
 
@@ -215,7 +226,7 @@ register_server_callback("em_dal:get_character_info", function(source, callback,
     HttpGet("/Character/GetInfo", data, function(error_code, result_data, result_headers)
 
         local temp = json.decode(result_data)
-        register_character_id_to_source(source, temp["character"])
+        register_character_id_to_source(source, temp["character"], get_player_id(source))
         callback(temp)
 
     end)

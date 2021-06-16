@@ -13,6 +13,12 @@ function ban_player_async(callback, player_id, length)
 
 end
 
+function ban_character_async(callback, character_id, length)
+
+    trigger_server_callback_async("em_dal:ban_character", callback, character_id, length)
+
+end
+
 function whitelist_player_async(callback, player_id, whitelist_flag)
 
     trigger_server_callback_async("em_dal:whitelist_player", callback, player_id, whitelist_flag)

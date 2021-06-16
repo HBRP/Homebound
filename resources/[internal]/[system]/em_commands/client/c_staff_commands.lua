@@ -49,6 +49,7 @@ register_command("ban_player", function(source, args, raw)
 
     exports["em_dal"]:ban_player_async(function(response) 
 
+        print(json.encode(response))
         if response.result.success then
             exports['t-notify']:Alert({style = 'success', message = response.result.message})
         else
@@ -58,6 +59,23 @@ register_command("ban_player", function(source, args, raw)
     end, player_id, length)
 
 end, "Ban player", {{name = "player_id", help = "integer"}, {name = "length in days", message = "integer"}})
+
+register_command("ban_by_character", function(source, args, raw)
+
+    local character_id = tonumber(args[1])
+    local length = tonumber(args[2])
+
+    exports["em_dal"]:ban_character_async(function(response) 
+
+        if response.result.success then
+            exports['t-notify']:Alert({style = 'success', message = response.result.message})
+        else
+            exports['t-notify']:Alert({style = 'error', message = response.result.message})
+        end
+
+    end, character_id, length)
+
+end, "Ban character", {{name = "character_id", help = "integer"}, {name = "length in days", message = "integer"}})
 
 
 register_command("whitelist_player", function(source, args, raw)
