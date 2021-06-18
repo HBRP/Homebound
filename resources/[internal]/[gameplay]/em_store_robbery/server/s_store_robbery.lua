@@ -26,6 +26,8 @@ exports["em_dal"]:register_server_callback("em_store_robbery:begin_robbing_store
 
     end
 
+    exports["em_dal"]:log_generic(source, string.format("start_store_robbery:%d", interaction_ped_id), {})
+
     table.insert(recently_robbed, {interaction_ped_id = interaction_ped_id, end_robbery_time = GetGameTimer() + 1000 * 60 * 25})
     callback(true)
 
@@ -59,6 +61,7 @@ exports["em_dal"]:register_server_callback("em_store_robbery:finished_robbing_st
             })
 
         end, character_id, storage_id, item_id, amount, -1, -1)
+        exports["em_dal"]:log_generic(source, string.format("finished_store_robbery:%d", interaction_ped_id), {amount_robbed = amount})
         callback(amount)
     end
     callback(0)

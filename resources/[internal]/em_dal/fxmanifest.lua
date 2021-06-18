@@ -92,7 +92,8 @@ server_scripts {
     'server/phone/s_appchat.lua',
     'server/phone/s_racing.lua',
     'server/photos/s_photos.lua',
-    'server/crafting/s_crafting.lua'
+    'server/crafting/s_crafting.lua',
+    'server/log/s_log.lua'
 
 }
 
@@ -352,3 +353,6 @@ server_export 'phone_get_races'
 server_export 'get_all_house_ids_of_type_async'
 server_export 'get_housing_storage_async'
 server_export 'lock_doors_for_house_id'
+
+-- s_log.lua
+server_export 'log_generic'
