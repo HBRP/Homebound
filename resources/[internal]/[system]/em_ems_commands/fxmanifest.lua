@@ -4,7 +4,14 @@ games { 'gta5' }
 
 client_scripts {
 
-    'client/c_ems_commands.lua'
+    'client/c_ems_commands.lua',
+    'client/c_311.lua'
+
+}
+
+server_scripts {
+
+    'server/s_311.lua'
 
 }
 

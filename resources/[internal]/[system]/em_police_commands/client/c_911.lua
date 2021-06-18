@@ -20,14 +20,19 @@ exports["em_commands"]:register_command_no_perms("911", function(source, args, r
 	local coords = GetEntityCoords(PlayerPedId())
 	TriggerServerEvent("em_police_commands:911", message, coords)
 
+    TriggerEvent('chat:addMessage', {
+        template = string.format('<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(224, 17, 2, 0.8); border-radius: 3px; font-size:18px;"> (911) (you): %s</div>', message),
+        args = {}
+    })
+
 end, "Send a 911 call", {{name = "Message", help = "Your message!"}})
 
 RegisterNetEvent("em_police_commands:911")
 AddEventHandler("em_police_commands:911", function(from_source, message, coords)
 
-    TriggerServerEvent("em_commands:propagate_to_clients", {
-        template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(224, 17, 2, 0.8); border-radius: 3px; font-size:18px;"> (911) ({0}): {1}</div>',
-        args = { from_source, message }
+    TriggerEvent('chat:addMessage', {
+        template = string.format('<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(224, 17, 2, 0.8); border-radius: 3px; font-size:18px;"> (911) (%d): %s</div>', from_source, message),
+        args = {}
     })
 
     exports["em_blips"]:create_temp_blip(coords, 280, 4, string.format('911 call for %d', from_source), 60*1000)
@@ -37,9 +42,9 @@ end)
 RegisterNetEvent("em_police_commands:911r")
 AddEventHandler("em_police_commands:911r", function(to_source, message)
 
-    TriggerServerEvent("em_commands:propagate_to_clients", {
-        template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(140, 9, 0, 0.8); border-radius: 3px; font-size:18px;"> (911) ({0}): {1}</div>',
-        args = { to_source, message }
+    TriggerEvent('chat:addMessage', {
+        template = string.format('<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(140, 9, 0, 0.8); border-radius: 3px; font-size:18px;"> (911r) (%d): %s</div>', to_source, message),
+        args = {}
     })
 
 end)

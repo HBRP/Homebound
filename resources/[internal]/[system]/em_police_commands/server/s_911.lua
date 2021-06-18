@@ -3,12 +3,9 @@
 RegisterServerEvent("em_police_commands:911")
 AddEventHandler("em_police_commands:911", function(message, coords)
 
-	print("here")
 	local character_jobs = exports["em_dal"]:get_all_characters_with_group_name("Law Enforcement")
 
-	print(#character_jobs)
 	for i = 1, #character_jobs do
-		print(character_jobs[i].source)
 		TriggerClientEvent("em_police_commands:911", character_jobs[i].source, source, message, coords)
 	end
 
@@ -19,7 +16,7 @@ RegisterServerEvent("em_police_commands:911r", function(to_source, message)
 
 	local character_jobs = exports["em_dal"]:get_all_characters_with_group_name("Law Enforcement")
 
-	TriggerClientEvent("em_police_commands:911r", source, to_source, message)
+	TriggerClientEvent("em_police_commands:911r", to_source, source, message)
 
 	for i = 1, #character_jobs do
 		TriggerClientEvent("em_police_commands:911r", character_jobs[i].source, to_source, message)
