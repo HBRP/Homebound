@@ -339,6 +339,7 @@ server_export 'register_server_callback'
 server_export 'get_current_character_jobs'
 server_export 'get_group_alerts'
 server_export 'get_group_alert_subscriptions'
+server_export 'get_all_characters_with_group_name'
 
 --s_bank.lua
 server_export 'direct_deposit'

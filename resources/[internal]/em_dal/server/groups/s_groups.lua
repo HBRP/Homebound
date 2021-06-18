@@ -1,5 +1,7 @@
 
 local character_jobs = {}
+local group_alerts = {}
+local group_subscriptions = {}
 
 local function clear_previous_entry(source, character_id)
 
@@ -18,6 +20,47 @@ local function register_character_job(source, character_id, job)
 
     clear_previous_entry(source, character_id)
     table.insert(character_jobs, {source = source, character_id = character_id, job = job})
+
+end
+
+local function get_group_alert_id(group_alert_name)
+
+    for i = 1, #group_alerts do
+        if group_alerts[i].group_alert_name == group_alert_name then
+            return group_alerts[i].group_alert_id
+        end
+    end
+    assert(0, string.format("Could not find group_alert_name %s", group_alert_name))
+
+end
+
+local function get_group_ids(group_alert_id)
+
+    local group_ids = {}
+    for i = 1, #group_subscriptions do
+        if group_subscriptions[i].group_alert_id == group_alert_id then
+            table.insert(group_ids, group_subscriptions[i].group_id)
+        end
+    end
+
+    return group_ids
+
+end
+
+function get_all_characters_with_group_name(group_alert_name)
+
+    local group_alert_id = get_group_alert_id(group_alert_name)
+    local group_ids = get_group_ids(group_alert_id)
+    local temp = {}
+
+    for i = 1, #character_jobs do
+        for j = 1, #group_ids do
+            if character_jobs[i].job.group_id == group_ids[j] then
+                table.insert(temp, character_jobs[i])
+            end
+        end
+    end
+    return temp
 
 end
 
@@ -105,3 +148,20 @@ function get_group_alert_subscriptions(callback)
     end)
 
 end
+
+Citizen.CreateThread(function()
+
+    Citizen.Wait(0)
+    get_group_alerts(function(result)
+
+        group_alerts = result or {}
+
+    end)
+
+    get_group_alert_subscriptions(function(result)
+
+        group_subscriptions = result or {}
+
+    end)
+
+end)
