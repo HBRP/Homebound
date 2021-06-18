@@ -44,7 +44,7 @@ end)
 
 local function can_join_restricted_channel()
 
-  return true
+  return exports["em_dal"]:can_do_action("encrypted_radio")
 
 end
 
