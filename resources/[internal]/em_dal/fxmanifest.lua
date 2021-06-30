@@ -52,7 +52,8 @@ client_scripts {
     'client/phone/c_appchat.lua',
     'client/phone/c_racing.lua',  
     'client/photos/c_photos.lua',
-    'client/crafting/c_crafting.lua' 
+    'client/crafting/c_crafting.lua',
+    'client/placeable/c_placeable.lua'
 }
 
 server_scripts {
@@ -93,7 +94,8 @@ server_scripts {
     'server/phone/s_racing.lua',
     'server/photos/s_photos.lua',
     'server/crafting/s_crafting.lua',
-    'server/log/s_log.lua'
+    'server/log/s_log.lua',
+    'server/placeable/s_placeable.lua'
 
 }
 
@@ -306,6 +308,10 @@ export 'phone_get_races_async'
 -- c_crafting.lua
 export 'get_recipes_async'
 export 'get_context_recipes_async'
+
+-- c_placeable.lua
+export 'placeable_get_placed_props_async'
+export 'placeable_insert_prop_async'
 
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'
