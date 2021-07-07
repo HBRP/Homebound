@@ -97,6 +97,8 @@ function interact_motel(house)
         {
             dialog = "Knock",
             callback = function()
+                TriggerEvent("PlaySoundForEveryoneInVicinity", "sounds/Doors/door_knocking.mp3")
+                TriggerEvent("PlaySoundForEveryoneNearPoint", "sounds/Doors/door_knocking.mp3", house.t_x, house.t_y, house.t_z)
                 exports["em_dialog"]:hide_dialog()
             end
         }

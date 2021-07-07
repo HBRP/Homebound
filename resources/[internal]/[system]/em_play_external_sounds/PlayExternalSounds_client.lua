@@ -61,5 +61,11 @@ local function PlaySoundForEveryoneInVicinity(audio_file)
 
 end
 
+AddEventHandler("PlaySoundForEveryoneNearPoint", function(audio_file, x, y, z)
+
+  TriggerServerEvent("StartClientAudioForBystanders", audio_file, BASE_VOLUME, x, y, z)
+
+end)
+
 RegisterNetEvent("PlaySoundForEveryoneInVicinity")
 AddEventHandler("PlaySoundForEveryoneInVicinity", PlaySoundForEveryoneInVicinity)
