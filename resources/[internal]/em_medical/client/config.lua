@@ -133,7 +133,7 @@ DAMAGE_SEVERITY_TYPES = {
 	MINOR     = 2,
 	MEDIUM    = 3,
 	SEVERE    = 4,
-	CRTICICAL = 5
+	CRITICAL = 5
 
 }
 

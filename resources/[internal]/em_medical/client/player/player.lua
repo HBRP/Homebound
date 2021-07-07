@@ -167,7 +167,7 @@ function get_wound_hit_modifier()
         return 2
     elseif hit_severity == DAMAGE_SEVERITY_TYPES.SEVERE then
         return 3
-    elseif hit_severity == DAMAGE_SEVERITY_TYPES.CRTICICAL then
+    elseif hit_severity == DAMAGE_SEVERITY_TYPES.CRITICAL then
         return 5
     end
 
@@ -188,7 +188,7 @@ function get_hit_severity()
     elseif health_diff <= 100 then
         return DAMAGE_SEVERITY_TYPES.SEVERE
     elseif health_diff <= 200 then
-        return DAMAGE_SEVERITY_TYPES.CRTICICAL
+        return DAMAGE_SEVERITY_TYPES.CRITICAL
     end
 
 end
@@ -264,3 +264,26 @@ function heal_player()
     TriggerEvent("em_medical:is_conscious")
 
 end
+
+AddEventHandler("em_dal:character_loaded", function()
+
+    exports["em_dal"]:get_character_health(function(response)
+
+        if response.result.success then
+            PLAYER = response.health
+        else
+            exports["em_dal"]:set_character_health(PLAYER)
+        end
+
+        Citizen.CreateThread(function()
+
+            while true do
+                Citizen.Wait(1000*10)
+                exports["em_dal"]:set_character_health(PLAYER)
+            end
+
+        end)
+
+    end)
+
+end)

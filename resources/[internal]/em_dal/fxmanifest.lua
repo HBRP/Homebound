@@ -95,7 +95,8 @@ server_scripts {
     'server/photos/s_photos.lua',
     'server/crafting/s_crafting.lua',
     'server/log/s_log.lua',
-    'server/placeable/s_placeable.lua'
+    'server/placeable/s_placeable.lua',
+    'server/character/s_character_health.lua'
 
 }
 
@@ -312,6 +313,10 @@ export 'get_context_recipes_async'
 -- c_placeable.lua
 export 'placeable_get_placed_props_async'
 export 'placeable_insert_prop_async'
+
+-- c_character_health
+export 'get_character_health'
+export 'set_character_health'
 
 -- s_player.lua
 server_export 'get_priority_if_whitelisted'
