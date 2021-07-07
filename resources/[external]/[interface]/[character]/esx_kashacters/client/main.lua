@@ -47,6 +47,7 @@ local function spawn_character(character)
     IsChoosing = false
     DisplayHud(true)
     SetEntityCoords(GetPlayerPed(-1), pos.x, pos.y, pos.z)
+    NetworkFadeInEntity(PlayerPedId(), false)
     TriggerEvent("esx_kashacters:spawned_character")
 
 end

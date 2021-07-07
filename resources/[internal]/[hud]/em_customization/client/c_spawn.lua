@@ -30,7 +30,7 @@ local function open_full_customization()
 end
 
 AddEventHandler("esx_kashacters:spawned_character", function()
-
+    
     local skin = exports["em_dal"]:get_skin()
     if skin == nil then
         open_full_customization()
