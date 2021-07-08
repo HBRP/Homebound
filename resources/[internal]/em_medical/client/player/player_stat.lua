@@ -98,7 +98,7 @@ function food_loop()
     end
 
     if PLAYER.MISC_LEVELS.FOOD <= 0 then
-        if not is_player_unconscious() then
+        if not is_player_unconscious() --[[and PLAYER.SHORTERM_EFFECTS["Starved"] == nil]] then
             apply_short_term_effect(EFFECTS.STARVED)
         end
     else
@@ -126,7 +126,7 @@ function water_loop()
     end
 
     if PLAYER.MISC_LEVELS.WATER <= 0 then
-        if not is_player_unconscious() then
+        if PLAYER.SHORTERM_EFFECTS["Dehydrated"] == nil and not is_player_unconscious() then
             apply_short_term_effect(EFFECTS.DEHYDRATED)
         end
     else

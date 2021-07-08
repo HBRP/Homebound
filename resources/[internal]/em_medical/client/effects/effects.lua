@@ -127,3 +127,71 @@ register_effect_function(EFFECTS.TAZED, "outro", function()
     FreezeEntityPosition(ped, false)
     
 end)
+
+register_effect_function(EFFECTS.DEHYDRATED, 'intro', function()
+
+    print("intro")
+    Citizen.CreateThread(function()
+
+        DoScreenFadeOut(1000)
+        Citizen.Wait(1000)
+        DoScreenFadeIn(1000)
+
+    end)
+
+end)
+
+register_effect_function(EFFECTS.DEHYDRATED, 'loop', function()
+
+
+
+end)
+
+register_effect_function(EFFECTS.DEHYDRATED, 'outro', function()
+
+    Citizen.CreateThread(function()
+
+        DoScreenFadeOut(1000)
+        if PLAYER.MISC_LEVELS.WATER < 0.1 then
+            apply_short_term_effect(EFFECTS.SHOCK)
+        end
+        Citizen.Wait(1000)
+        DoScreenFadeIn(1000)
+
+    end)
+
+
+end)
+
+register_effect_function(EFFECTS.STARVED, 'intro', function()
+
+    Citizen.CreateThread(function()
+
+        TriggerScreenblurFadeIn(1000)
+        Citizen.Wait(1000)
+        TriggerScreenblurFadeIn(1000)
+
+    end)
+
+end)
+
+register_effect_function(EFFECTS.STARVED, 'loop', function()
+
+
+
+end)
+
+register_effect_function(EFFECTS.STARVED, 'outro', function()
+
+    Citizen.CreateThread(function()
+
+        DoScreenFadeOut(1000)
+        if PLAYER.MISC_LEVELS.FOOD < 0.1 then
+            apply_short_term_effect(EFFECTS.SHOCK)
+        end
+        Citizen.Wait(1000)
+        DoScreenFadeIn(1000)
+
+    end)
+
+end)

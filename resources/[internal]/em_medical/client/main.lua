@@ -135,12 +135,11 @@ local function start_long_loop()
 
 end
 
-start_damage_loop()
-start_long_loop()
+AddEventHandler("em_dal:character_loaded", function()
 
-AddEventHandler('kashacters:PlayerSpawned', function ()
-    --start_damage_loop()
-    --start_long_loop()
+    start_damage_loop()
+    start_long_loop()
+    
 end)
 
 exports["em_commands"]:register_command("test_check_player", function(source, args, raw)

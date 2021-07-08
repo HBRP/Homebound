@@ -1,9 +1,9 @@
-fx_version 'bodacious'
+fx_version 'cerulean'
 
 game 'gta5'
 
 client_scripts {
-    'client/prototype.lua',
+    'client/main.lua',
     'client/config.lua',
     'client/wounds/wounds_core.lua',
     'client/wounds/wounds.lua',
