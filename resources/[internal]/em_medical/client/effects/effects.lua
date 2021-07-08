@@ -150,10 +150,12 @@ register_effect_function(EFFECTS.DEHYDRATED, 'outro', function()
 
     Citizen.CreateThread(function()
 
-        DoScreenFadeOut(1000)
-        if PLAYER.MISC_LEVELS.WATER < 0.1 then
-            apply_short_term_effect(EFFECTS.SHOCK)
+        if PLAYER.MISC_LEVELS.WATER >= 0.1 then
+            return            
         end
+
+        DoScreenFadeOut(1000)
+        apply_short_term_effect(EFFECTS.SHOCK)
         Citizen.Wait(1000)
         DoScreenFadeIn(1000)
 
@@ -184,10 +186,12 @@ register_effect_function(EFFECTS.STARVED, 'outro', function()
 
     Citizen.CreateThread(function()
 
-        DoScreenFadeOut(1000)
-        if PLAYER.MISC_LEVELS.FOOD < 0.1 then
-            apply_short_term_effect(EFFECTS.SHOCK)
+        if PLAYER.MISC_LEVELS.FOOD >= 0.1 then
+            return
         end
+        
+        DoScreenFadeOut(1000)
+        apply_short_term_effect(EFFECTS.SHOCK)
         Citizen.Wait(1000)
         DoScreenFadeIn(1000)
 
