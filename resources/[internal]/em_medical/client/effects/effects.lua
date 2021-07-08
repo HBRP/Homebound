@@ -130,7 +130,6 @@ end)
 
 register_effect_function(EFFECTS.DEHYDRATED, 'intro', function()
 
-    print("intro")
     Citizen.CreateThread(function()
 
         DoScreenFadeOut(1000)
