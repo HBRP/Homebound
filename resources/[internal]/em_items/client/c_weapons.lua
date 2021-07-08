@@ -169,6 +169,13 @@ function does_character_have_a_weapon()
 
 end
 
+function is_character_holding_a_weapon()
+
+    local weapon_hash = GetSelectedPedWeapon(PlayerPedId())
+    return not (weapon_hash == -1569615261 or weapon_hash == 0)
+
+end
+
 local function remove_ammo(ammo_item_id, amount, storage_items)
 
     if amount == 0 then

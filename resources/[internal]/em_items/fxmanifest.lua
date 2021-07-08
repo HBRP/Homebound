@@ -39,7 +39,8 @@ exports {
     'animate_weapon_pullout',
     'get_weapon_item_id_from_hash',
     'get_item_amount_by_name',
-    'has_item_by_name'
+    'has_item_by_name',
+    'is_character_holding_a_weapon'
 
 }
 
