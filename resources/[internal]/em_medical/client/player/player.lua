@@ -275,6 +275,10 @@ AddEventHandler("em_dal:character_loaded", function()
             exports["em_dal"]:set_character_health(PLAYER)
         end
 
+        if is_player_unconscious() then
+            start_unconscious_loop()
+        end
+
         Citizen.CreateThread(function()
 
             while true do
