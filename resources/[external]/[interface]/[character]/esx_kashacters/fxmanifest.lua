@@ -15,8 +15,8 @@ files {
     'html/css/main.css',
     'html/js/app.js',
     'html/img/idbg.png',
-    'html/img/logo.png',
     'html/img/placeholder.jpg',
+    'html/img/wallpaper.jpg',
     'html/bankgothic.ttf',
     'html/bulma/css/bulma.min.css'
 }

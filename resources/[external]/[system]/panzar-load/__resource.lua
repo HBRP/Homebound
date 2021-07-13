@@ -2,12 +2,9 @@
 description 'panzarload'
 
 files {
-    -- Main
     'edit_this.html',
     'keks.css',
-    
-    -- Musiken
-    'music/music.ogg'
+    'wallpaper.jpg'
 }
 
 loadscreen 'edit_this.html'
