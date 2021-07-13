@@ -1,11 +1,13 @@
 
 function phone_get_races(source, callback)
 
-    HttpGet("/Phone/Racing", nil, function(error_code, result_data, result_headers)
+    Citizen.CreateThread(function()
+        HttpGet("/Phone/Racing", nil, function(error_code, result_data, result_headers)
 
-        local temp = json.decode(result_data)
-        callback(temp)
+            local temp = json.decode(result_data)
+            callback(temp)
 
+        end)
     end)
     
 end

@@ -26,11 +26,13 @@ end)
 
 function get_items(callback)
 
-    HttpGet("/Item/Items", data, function(error_code, result_data, result_headers)
+    Citizen.CreateThread(function()
+        HttpGet("/Item/Items", data, function(error_code, result_data, result_headers)
 
-        local temp = json.decode(result_data)
-        callback(temp)
+            local temp = json.decode(result_data)
+            callback(temp)
 
+        end)
     end)
 
 end

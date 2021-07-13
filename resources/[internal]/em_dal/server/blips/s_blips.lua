@@ -12,11 +12,13 @@ end)
 
 function get_blip_group_subscription(callback)
 
-    HttpGet("/Blip/GroupSubscriptions", nil, function(error_code, result_data, result_headers)
+    Citizen.CreateThread(function()
+        HttpGet("/Blip/GroupSubscriptions", nil, function(error_code, result_data, result_headers)
 
-        blips = json.decode(result_data)
-        callback(blips)
+            blips = json.decode(result_data)
+            callback(blips)
 
+        end)
     end)
 
 end
