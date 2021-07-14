@@ -37,12 +37,12 @@ RegisterCommand('drag_command', function()
         return
     end
 
-    local player_id, player_distance = exports["em_ped"]:get_closest_player()
+    local player_id, player_distance = table.unpack(exports["em_ped"]:get_closest_player())
 
     if player_distance > 2.5 then
         return
     end
-    
+
     local server_id = GetPlayerServerId(player_id)
     TriggerServerEvent("em_drag:drag_request", server_id)
 
