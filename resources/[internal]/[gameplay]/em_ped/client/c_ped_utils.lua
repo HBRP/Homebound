@@ -54,3 +54,23 @@ function is_ped_an_animal(ped)
     return GetPedType(ped) == 28
 
 end
+
+function get_closest_player()
+
+    local my_coords = GetEntityCoords(PlayerPedId())
+    local player_id = -1
+    local closest_player_distance = 100000000
+    for player in GetActivePlayers() do
+
+        local distance = #(my_coords - GetEntityCoords(player))
+        if distance < closest_player_distance then
+
+            closest_player_distance = distance
+            player_id = player
+
+        end
+
+    end
+    return player_id, closest_player_distance
+
+end

@@ -14,7 +14,8 @@ client_scripts {
 }
 
 exports {
-    'does_any_ped_see_ped'
+    'does_any_ped_see_ped',
+    'get_closest_player'
 }
 
 dependencies {
