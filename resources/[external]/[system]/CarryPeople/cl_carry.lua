@@ -18,12 +18,6 @@ local carry = {
 	}
 }
 
-local function drawNativeNotification(text)
-    SetTextComponentFormat("STRING")
-    AddTextComponentString(text)
-    DisplayHelpTextFromStringLabel(0, 0, 1, -1)
-end
-
 local function GetClosestPlayer(radius)
     local players = GetActivePlayers()
     local closestDistance = -1
@@ -88,10 +82,10 @@ RegisterCommand("carry",function(source, args)
 				ensureAnimDict(carry.personCarrying.animDict)
 				carry.type = "carrying"
 			else
-				drawNativeNotification("~r~No one nearby to carry!")
+				exports['t-notify']:Alert({style = "error", message = "No one is nearby to carry"})
 			end
 		else
-			drawNativeNotification("~r~No one nearby to carry!")
+			exports['t-notify']:Alert({style = "error", message = "No one is nearby to carry"})
 		end
 	else
 		carry.InProgress = false

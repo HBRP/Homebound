@@ -8,3 +8,7 @@ version '1.0.0'
 
 client_script "cl_carry.lua"
 server_script "sv_carry.lua"
+
+dependencies {
+	't-notify'
+}
