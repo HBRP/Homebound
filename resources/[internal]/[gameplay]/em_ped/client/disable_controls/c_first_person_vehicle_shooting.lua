@@ -7,10 +7,10 @@ Citizen.CreateThread(function()
         if GetVehiclePedIsIn(PlayerPedId(), false) ~= 0 then
             if GetFollowPedCamViewMode() ~= 4 then
                 DisableControlAction(0, 24, true)
-                DisableControlAction(0, 25, true)
+                --DisableControlAction(0, 25, true)
                 DisableControlAction(0, 63, true)
                 DisableControlAction(0, 64, true)
-                DisableControlAction(0, 68, true)
+                --DisableControlAction(0, 68, true)
                 DisableControlAction(0, 69, true)
                 DisableControlAction(0, 70, true)
             end
