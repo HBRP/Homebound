@@ -35,7 +35,13 @@ exports["em_commands"]:register_command("test_radio", function(source, args, raw
 
 end, "Test the radio!")
 
-exports["em_items"]:register_item_use("radio", function()
+exports["em_items"]:register_item_use("walkie", function()
+
+  enableRadio(true)
+
+end)
+
+exports["em_items"]:register_item_use("peppa_pig_walkie", function()
 
   enableRadio(true)
 
