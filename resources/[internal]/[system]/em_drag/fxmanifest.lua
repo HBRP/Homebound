@@ -18,6 +18,7 @@ dependencies {
 
     'em_ped',
     'em_medical',
+    'em_vehicles',
     'em_gen_commands',
     't-notify'
 

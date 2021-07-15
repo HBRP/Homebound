@@ -8,7 +8,8 @@ client_scripts {
     'client/c_vehicle_commands.lua',
     'client/c_vehicle_mod.lua',
     'client/c_vehicle_spawn.lua',
-    'client/c_vehicle_repair.lua'
+    'client/c_vehicle_repair.lua',
+    'client/c_vehicle_utils.lua'
 
 }
 
@@ -34,7 +35,8 @@ exports {
     'is_vehicle_owned_by_character',
     'has_keys',
     'transfer_keys',
-    'repair_vehicle'
+    'repair_vehicle',
+    'get_closest_vehicle'
     
 }
 
