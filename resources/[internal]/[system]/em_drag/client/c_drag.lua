@@ -7,11 +7,18 @@ local is_being_dragged = false
 RegisterNetEvent("em_drag:drag_request")
 AddEventHandler("em_drag:drag_request", function(requesting_source)
 
-    if is_being_dragged then
-        DetachEntity(PlayerPedId(), true, false)
-    else
-        AttachEntityToEntity(PlayerPedId(), GetPlayerPed(GetPlayerFromServerId(requesting_source)), 4103, 11816, 0.48, 0.00, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, true)
+    if not is_dragging_person then
+
+        if is_being_dragged then
+            DetachEntity(PlayerPedId(), true, false)
+        else
+            AttachEntityToEntity(PlayerPedId(), GetPlayerPed(GetPlayerFromServerId(requesting_source)), 4103, 11816, 0.48, 0.00, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, true)
+        end
+        is_being_dragged = not is_being_dragged
+
     end
+
+    TriggerServerEvent("em_drag:drag_response", requesting_source, is_being_dragged)
 
 end)
 
@@ -43,8 +50,7 @@ RegisterCommand('drag_command', function()
         return
     end
 
-    local server_id = GetPlayerServerId(player_id)
-    TriggerServerEvent("em_drag:drag_request", server_id)
+    TriggerServerEvent("em_drag:drag_request", GetPlayerServerId(player_id))
 
 end, false)
 

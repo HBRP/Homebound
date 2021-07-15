@@ -57,18 +57,25 @@ end
 
 function get_closest_player()
 
-    local my_coords = GetEntityCoords(PlayerPedId())
+    local player_ped = PlayerPedId()
+    local my_coords = GetEntityCoords(player_ped)
     local player_id = -1
     local closest_player_distance = 100000000
+    
     for _, player in ipairs(GetActivePlayers()) do
 
-        local distance = #(my_coords - GetEntityCoords(player))
+        if player_ped == GetPlayerPed(player) then
+            goto closest_player_continue
+        end
+
+        local distance = #(my_coords - GetEntityCoords(GetPlayerPed(player)))
         if distance < closest_player_distance then
 
             closest_player_distance = distance
             player_id = player
 
         end
+        ::closest_player_continue::
 
     end
     return {player_id, closest_player_distance}
