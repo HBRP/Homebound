@@ -5,6 +5,7 @@ games { 'gta5' }
 client_scripts {
 
     'config.lua',
+    'client/c_grocery.lua',
     'client/c_stores.lua',
     'client/c_mega_mall.lua',
     'client/c_youtool.lua',

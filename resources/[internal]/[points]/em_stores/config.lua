@@ -8,6 +8,7 @@ store_type_ids = {
     TATTOO_SHOP  = 5,
     MEGA_MALL    = 6,
     YOUTOOL      = 7,
-    LOCKSMITH    = 8
+    LOCKSMITH    = 8,
+    GROCERY_STORE = 9
 
 }
