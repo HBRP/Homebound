@@ -18,7 +18,7 @@ local function refresh_loop(refresh_check)
 end
 
 local function text(stash)
-    return "Press [E] to access stash"
+    return string.format("Press [E] to access %s", stash.stash_name)
 end
 
 AddEventHandler("em_dal:character_loaded", function()
