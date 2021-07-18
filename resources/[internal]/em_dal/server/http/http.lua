@@ -35,7 +35,19 @@ local function Http(method, endpoint, data, callback)
 
     local data = data or ''
     data = json.encode(data)
-    PerformHttpRequest(base_service_url .. endpoint, callback, method, data, service_header)
+    PerformHttpRequest(base_service_url .. endpoint, function(error_code, result_data, result_headers)
+
+        if error_code ~= 200 then
+            print(string.format("Received error code %d when calling endpoint %s", error_code, endpoint))
+        end
+
+        if callback ~= nil then
+            callback(error_code, result_data, result_headers)
+        else
+            print(string.format("Received nil callback when calling endpoint %s", endpoint))
+        end
+
+    end, method, data, service_header)
 
 end
 
