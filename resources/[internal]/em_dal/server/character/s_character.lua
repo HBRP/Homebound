@@ -286,7 +286,7 @@ AddEventHandler("em_dal:update_character_position", function(character_id, posit
 
     local source = source
     local data = {character_id = character_id, position = position}
-    HttpPut("/Character/UpdatePosition", data)
+    HttpPut("/Character/UpdatePosition", data, function() end)
 
 end)
 

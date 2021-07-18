@@ -6,8 +6,8 @@ function get_recipes_async(callback)
 
 end
 
-function get_context_recipes_async(callback)
+function get_context_recipes_async(callback, context)
 
-	trigger_server_callback_async("em_dal:get_context_recipes", callback)
+	trigger_server_callback_async("em_dal:get_context_recipes", callback, context)
 
 end
