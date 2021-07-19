@@ -1,9 +1,13 @@
 
 AddEventHandler("cooktop_burner", function()
 
+	exports["em_crafting"]:open_crafting("Cook Stove")
+
 end)
 
 AddEventHandler("fryer", function()
+
+	exports["em_crafting"]:open_crafting("Fryer")
 
 end)
 
@@ -15,8 +19,12 @@ end)
 
 AddEventHandler("drink_machine", function()
 
+	exports["em_crafting"]:open_crafting("Drink Machine")
+
 end)
 
 AddEventHandler("food_table", function()
+
+	exports["em_crafting"]:open_crafting("Food Table")
 
 end)
