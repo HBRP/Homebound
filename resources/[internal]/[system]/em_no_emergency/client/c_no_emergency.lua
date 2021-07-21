@@ -85,7 +85,6 @@ local function remove_vehicles_from_areas()
     RemoveVehiclesFromGeneratorsInArea(378.5925, -575.367, 28.839, 354.327, -600.7609, 28.77) -- Pillbox Medical Lower
     RemoveVehiclesFromGeneratorsInArea(1837.8359, -3697.2387, 34.207, 1802.4299, 3682.012, 34.224) -- Sandy Medical
     RemoveVehiclesFromGeneratorsInArea(339.08, -1341.817, 32.4525, 326.145, -1491.701, 32.4525) -- Crusade Hospital (DOES NOT WORK)
-
 end
 
 

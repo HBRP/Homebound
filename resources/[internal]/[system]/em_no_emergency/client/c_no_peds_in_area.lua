@@ -7,7 +7,8 @@ local area_locations = {
 }
 
 local vehicle_locations = {
-    {x = 1639.77, y = 2599.09, z = 45.56, radius = 10.0} -- Boilingbroke buses
+    {x = 1639.77, y = 2599.09, z = 45.56, radius = 10.0}, -- Boilingbroke buses
+    {x = -43.479973, y = -1098.057617, z = 26.422350, radius = 10.0} -- PDM
 }
 
 local function clear_area_of_peds()
@@ -18,7 +19,7 @@ local function clear_area_of_peds()
 
 end
 
-local function clear_area_of_cards()
+local function clear_area_of_cars()
 
     for i = 1, #vehicle_locations do
         ClearAreaOfVehicles(vehicle_locations[i].x, vehicle_locations[i].y, vehicle_locations[i].z, vehicle_locations[i].radius, false, false, false, false, false)
@@ -31,9 +32,9 @@ end
 Citizen.CreateThread(function()
 
     while true do
-        Citizen.Wait(100)
+        Citizen.Wait(50)
         clear_area_of_peds()
-        clear_area_of_cards()
+        clear_area_of_cars()
     end
 
 end)
