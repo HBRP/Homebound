@@ -1,7 +1,7 @@
 
 register_server_callback("em_dal:get_nearby_interaction_points", function(source, callback, x, y, z)
 
-    local endpoint = string.format("/Interaction/NearbyPoints/%.3f/%.3f/%.3f", x, y, z)
+    local endpoint = string.format("/Interaction/NearbyPoints/%d/%.3f/%.3f/%.3f", get_character_id_from_source(source), x, y, z)
     HttpGet(endpoint, nil, function(error_code, result_data, result_headers)
 
         local temp = json.decode(result_data)
