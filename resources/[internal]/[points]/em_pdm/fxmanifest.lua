@@ -11,5 +11,5 @@ client_scripts {
 dependencies {
     'em_dal',
     'em_dialog',
-    'em_job'
+    'em_jobs'
 }
