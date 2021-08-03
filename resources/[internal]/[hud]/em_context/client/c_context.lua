@@ -1,6 +1,7 @@
 
 local context_functions = {}
 local always_checked_context_functions = {}
+local always_checked_multi_context_functions = {}
 
 function register_context(name, callback)
 
@@ -31,6 +32,22 @@ function register_always_checked_context(name, callback)
     table.insert(always_checked_context_functions, {name = name, callback = callback})
 
 end
+
+function register_always_checked_multi_context(name, callback)
+
+    for i = 1, #always_checked_multi_context_functions do
+
+        if always_checked_multi_context_functions[i].name == name then
+            Citizen.Trace(string.format("Replacing context %s\n", name))
+            always_checked_multi_context_functions[i].callback = callback
+            return
+        end
+
+    end
+    table.insert(always_checked_multi_context_functions, {name = name, callback = callback})
+
+end
+
 
 local function build_context_menu()
 
@@ -81,6 +98,15 @@ local function setup_context()
             local context = always_checked_context_functions[i].callback()
             if context ~= nil then
                 table.insert(context_dialog, context)
+            end
+        end
+
+        for i = 1, #always_checked_multi_context_functions do
+            local context = always_checked_multi_context_functions[i].callback()
+            if context ~= nil then
+                for i = 1, #context do
+                    table.insert(context_dialog, context[i])
+                end
             end
         end
 
