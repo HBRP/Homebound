@@ -26,18 +26,72 @@ local function setup_menus()
 
 end
 
+local function has_any_vehicles_from_category(stock, vehicle_category_id)
+
+    for i = 1, #stock do
+        if stock[i].vehicle_category_id == vehicle_category_id then
+            return true
+        end
+    end
+    return false
+
+end
+
+local showcasing_vehicle = 0
+
+local function add_vehicle_button_to_category(vehicle, menu)
+
+    local spawn_vehicle = function()
+
+        print(showcasing_vehicle)
+        if showcasing_vehicle ~= 0 then
+
+            exports["em_vehicles"]:despawn_vehicle(showcasing_vehicle)
+            showcasing_vehicle = 0
+
+        end
+
+        local player_coords = GetEntityCoords(PlayerPedId())
+        local forward_vec   = GetEntityForwardVector(PlayerPedId())
+
+        local veh_position  = {
+            forward_vec.x * 2.5 + player_coords.x,
+            forward_vec.y * 2.5 + player_coords.y,
+            forward_vec.z * 1.0 + player_coords.z 
+        }
+        local veh_heading = GetEntityHeading(PlayerPedId()) + 90.0
+        showcasing_vehicle = exports["em_vehicles"]:spawn_vehicle(vehicle.vehicle_model, false, false, veh_position, veh_heading, false, false)
+
+    end
+
+    local button = menu:AddButton({label = string.format("(%d) %s - $%d", vehicle.stock, vehicle.vehicle_name, vehicle.vehicle_price)})
+    button:On("select", spawn_vehicle)
+
+end
+
 local function open_vehicle_shop_menu(stock)
 
     vehicle_shop_menu:ClearItems()
 
 	for i = 1, #categories do
 
+        if not has_any_vehicles_from_category(stock, i) then
+            goto vehicle_shop_menu_continue
+        end
+
 		local button = vehicle_shop_menu:AddButton({label = categories[i], value = category_menus[i]})
 
-		category_menus[i]:On('open', function(m)
+		category_menus[i]:On('open', function(menu)
+
             category_menus[i]:ClearItems()
-			m:AddButton({label = 'temp', value = function() end})
+            for j = 1, #stock do
+                if stock[j].vehicle_category_id == i then
+                    add_vehicle_button_to_category(stock[j], menu)
+                end
+            end
+
 		end)
+        ::vehicle_shop_menu_continue::
 
 	end
     MenuV:OpenMenu(vehicle_shop_menu)
@@ -55,7 +109,7 @@ exports["em_context"]:register_context("PDM Vehicle Floor", function()
 
                 open_vehicle_shop_menu(stock)
 
-            end, "PDM Basic")
+            end, "PDM%20Basic")
 
         end
     }
