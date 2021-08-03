@@ -39,17 +39,18 @@ end
 
 local showcasing_vehicle = 0
 
+local function delete_showcased_vehicle()
+
+    exports["em_vehicles"]:despawn_vehicle(showcasing_vehicle)
+    showcasing_vehicle = 0
+
+end
+
 local function add_vehicle_button_to_category(vehicle, menu)
 
     local spawn_vehicle = function()
 
-        print(showcasing_vehicle)
-        if showcasing_vehicle ~= 0 then
-
-            exports["em_vehicles"]:despawn_vehicle(showcasing_vehicle)
-            showcasing_vehicle = 0
-
-        end
+        delete_showcased_vehicle()
 
         local player_coords = GetEntityCoords(PlayerPedId())
         local forward_vec   = GetEntityForwardVector(PlayerPedId())
@@ -61,6 +62,7 @@ local function add_vehicle_button_to_category(vehicle, menu)
         }
         local veh_heading = GetEntityHeading(PlayerPedId()) + 90.0
         showcasing_vehicle = exports["em_vehicles"]:spawn_vehicle(vehicle.vehicle_model, false, false, veh_position, veh_heading, false, false)
+        exports["em_vehicles"]:register_vehicle_as_player_owned(showcasing_vehicle)
 
     end
 
@@ -94,6 +96,7 @@ local function open_vehicle_shop_menu(stock)
         ::vehicle_shop_menu_continue::
 
 	end
+
     MenuV:OpenMenu(vehicle_shop_menu)
 
 end
@@ -113,6 +116,39 @@ exports["em_context"]:register_context("PDM Vehicle Floor", function()
 
         end
     }
+
+end)
+
+exports["em_context"]:register_always_checked_multi_context("Put Away Showcased Vehicle", function()
+
+    if showcasing_vehicle == 0 then
+        return nil
+    end
+
+    return {
+        {
+            dialog = "[Put away vehicle]",
+            callback = function()
+                exports["em_dialog"]:hide_dialog()
+                delete_showcased_vehicle()
+            end
+        },
+        {
+            dialog = "[Finance Vehicle]",
+            callback = function()
+                exports["em_dialog"]:hide_dialog()
+                showcasing_vehicle = 0
+            end
+        },
+        {
+            dialog = "[Sell Vehicle]",
+            callback = function()
+                exports["em_dialog"]:hide_dialog()
+                showcasing_vehicle = 0
+            end
+        }
+    }
+
 
 end)
 
