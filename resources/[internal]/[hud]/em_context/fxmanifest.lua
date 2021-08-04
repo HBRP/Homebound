@@ -10,6 +10,7 @@ client_scripts {
 
 exports {
     'register_context',
+    'register_multi_context',
     'register_always_checked_context',
     'register_always_checked_multi_context'
 }

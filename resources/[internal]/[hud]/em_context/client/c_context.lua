@@ -1,5 +1,6 @@
 
 local context_functions = {}
+local multi_context_functions = {}
 local always_checked_context_functions = {}
 local always_checked_multi_context_functions = {}
 
@@ -18,12 +19,27 @@ function register_context(name, callback)
 
 end
 
+function register_multi_context(name, callback)
+
+    for i = 1, #multi_context_functions do
+
+        if multi_context_functions[i].name == name then
+            Citizen.Trace(string.format("Replacing multi context %s\n", name))
+            multi_context_functions[i].callback = callback
+            return
+        end
+
+    end
+    table.insert(multi_context_functions, {name = name, callback = callback})
+
+end
+
 function register_always_checked_context(name, callback)
 
     for i = 1, #always_checked_context_functions do
 
         if always_checked_context_functions[i].name == name then
-            Citizen.Trace(string.format("Replacing context %s\n", name))
+            Citizen.Trace(string.format("Replacing always checked context %s\n", name))
             always_checked_context_functions[i].callback = callback
             return
         end
@@ -38,7 +54,7 @@ function register_always_checked_multi_context(name, callback)
     for i = 1, #always_checked_multi_context_functions do
 
         if always_checked_multi_context_functions[i].name == name then
-            Citizen.Trace(string.format("Replacing context %s\n", name))
+            Citizen.Trace(string.format("Replacing always checked multi context %s\n", name))
             always_checked_multi_context_functions[i].callback = callback
             return
         end
@@ -68,15 +84,14 @@ local function build_context_menu()
 
 end
 
-local function get_context_if_exists(context_name)
+local function get_context_if_exists(funcs, context_name)
 
-    for i = 1, #context_functions do
-        if context_functions[i].name == context_name then
-            return context_functions[i].callback()
+    for i = 1, #funcs do
+        if funcs[i].name == context_name then
+            return funcs[i].callback()
         end
     end
 
-    assert(0 == 1, string.format("get_context_if_exists: context_name %s does not exist", context_name))
     return nil
 
 end
@@ -87,11 +102,20 @@ local function setup_context()
 
         local context_dialog = build_context_menu()
 
-        for i = 1, #results do 
-            local context = get_context_if_exists(results[i].context_name)
+        for i = 1, #results do
+
+            local context = get_context_if_exists(context_functions, results[i].context_name)
             if context ~= nil then
                 table.insert(context_dialog, context)
             end
+
+            local context = get_context_if_exists(multi_context_functions, results[i].context_name)
+            if context ~= nil then
+                for j = 1, #context do
+                    table.insert(context_dialog, context[j])
+                end
+            end
+
         end
 
         for i = 1, #always_checked_context_functions do
@@ -104,7 +128,7 @@ local function setup_context()
         for i = 1, #always_checked_multi_context_functions do
             local context = always_checked_multi_context_functions[i].callback()
             if context ~= nil then
-                for i = 1, #context do
+                for j = 1, #context do
                     table.insert(context_dialog, context[i])
                 end
             end

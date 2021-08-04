@@ -101,31 +101,27 @@ local function open_vehicle_shop_menu(stock)
 
 end
 
-exports["em_context"]:register_context("PDM Vehicle Floor", function()
+exports["em_context"]:register_multi_context("PDM Vehicle Floor", function()
 
-    return {
-        dialog = "Pull out vehicle",
-        callback = function()
+    local dialog_menu = {}
+    
+    if GetVehiclePedIsIn(PlayerPedId(), false) == 0 then
+        table.insert(dialog_menu, {
+            dialog = "Pull out vehicle",
+            callback = function()
 
-            exports["em_dialog"]:hide_dialog()
-            exports["em_dal"]:get_vehicle_store_stock_async(function(stock)
+                exports["em_dialog"]:hide_dialog()
+                exports["em_dal"]:get_vehicle_store_stock_async(function(stock)
 
-                open_vehicle_shop_menu(stock)
+                    open_vehicle_shop_menu(stock)
 
-            end, "PDM%20Basic")
+                end, "PDM%20Basic")
 
-        end
-    }
-
-end)
-
-exports["em_context"]:register_always_checked_multi_context("Put Away Showcased Vehicle", function()
-
-    if showcasing_vehicle == 0 then
-        return nil
+            end
+        })
     end
 
-    return {
+    local showcase_items = {
         {
             dialog = "[Put away vehicle]",
             callback = function()
@@ -149,6 +145,13 @@ exports["em_context"]:register_always_checked_multi_context("Put Away Showcased 
         }
     }
 
+    if showcasing_vehicle ~= 0 and GetVehiclePedIsIn(PlayerPedId(), false) == showcasing_vehicle then
+        for i = 1, #showcase_items do
+            table.insert(dialog_menu, showcase_items[i])
+        end
+    end
+
+    return dialog_menu
 
 end)
 
