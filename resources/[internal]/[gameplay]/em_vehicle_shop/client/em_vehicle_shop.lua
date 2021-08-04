@@ -1,19 +1,4 @@
 
-local categories ={
-	'muscle',
-    'compacts',
-    'vans',
-    'sedans',
-    'suvs',
-    'sports classics',
-    'offroad',
-    'coupes',
-    'sports',
-    'super',
-    'motorcycles',
-    'bicycles'
-}
-
 local vehicle_shop_menu = nil
 local category_menus = {}
 
