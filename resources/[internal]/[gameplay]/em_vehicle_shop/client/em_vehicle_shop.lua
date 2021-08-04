@@ -100,7 +100,7 @@ exports["em_context"]:register_multi_context("PDM Vehicle Floor", function()
 
                     open_vehicle_shop_menu(stock)
 
-                end, "PDM%20Basic")
+                end, PDM_STORE)
 
             end
         })
