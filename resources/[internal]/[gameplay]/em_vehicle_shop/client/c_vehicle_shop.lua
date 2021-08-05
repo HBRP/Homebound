@@ -11,17 +11,6 @@ local function setup_menus()
 
 end
 
-local function has_any_vehicles_from_category(stock, vehicle_category_id)
-
-    for i = 1, #stock do
-        if stock[i].vehicle_category_id == vehicle_category_id then
-            return true
-        end
-    end
-    return false
-
-end
-
 local showcasing_vehicle = 0
 
 local function delete_showcased_vehicle()
@@ -62,7 +51,7 @@ local function open_vehicle_shop_menu(stock)
 
 	for i = 1, #categories do
 
-        if not has_any_vehicles_from_category(stock, i) then
+        if not has_any_stock_from_category(stock, i) then
             goto vehicle_shop_menu_continue
         end
 
