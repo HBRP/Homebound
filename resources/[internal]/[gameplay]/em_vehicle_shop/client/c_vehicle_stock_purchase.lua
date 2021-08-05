@@ -7,6 +7,16 @@ local current_stock_menu    = MenuV:CreateMenu('Current Stock', 'Select category
 local vehicle_stock_categories = {}
 local vehicle_shop_categories  = {}
 
+local function add_vehicle_button(vehicle, menu)
+
+	local button = menu:AddButton({label = string.format("(%d) %s - $%d", vehicle.stock, vehicle.vehicle_name, vehicle.vehicle_price)})
+	button:On("select", function()
+
+
+
+	end)
+
+end
 
 local function populate_local_stock_menu(stock)
 
@@ -16,14 +26,14 @@ local function populate_local_stock_menu(stock)
             goto vehicle_stock_menu_continue
         end
 
-		local button = vehicle_shop_menu:AddButton({label = categories[i], value = vehicle_stock_categories[i]})
+		current_stock_menu:AddButton({label = categories[i], value = vehicle_stock_categories[i]})
 
 		vehicle_stock_categories[i]:On('open', function(menu)
 
             vehicle_stock_categories[i]:ClearItems()
             for j = 1, #stock do
                 if stock[j].vehicle_category_id == i then
-                    --add_vehicle_button_to_category(stock[j], menu)
+                    add_vehicle_button(stock[j], menu)
                 end
             end
 
@@ -40,6 +50,7 @@ local function initialize_category_menus(store_name)
 
 		for i = 1, #vehicle_stock_categories do
 			vehicle_stock_categories[i]:ClearItems()
+
 		end
 		for i = 1, #vehicle_shop_categories do
 			vehicle_shop_categories[i]:ClearItems()
@@ -55,7 +66,7 @@ local function initialize_category_menus(store_name)
 
 			end)
 
-			vehicle_stock_categories[i]:On('open', function(menu)
+			vehicle_shop_categories[i]:On('open', function(menu)
 
 			end)
 
@@ -86,9 +97,9 @@ local function initialize_menus(store_name)
 
 	current_stock_menu:On('open', function(menu)
 
-		current_stock_menu:ClearItems()
 		exports["em_dal"]:get_vehicle_store_stock_async(function(stock)
 
+			current_stock_menu:ClearItems()
 			populate_local_stock_menu(stock)
 
 		end, PDM_STORE)
@@ -101,7 +112,6 @@ end
 
 AddEventHandler("vehicle_shop", function(args)
 
-	print("here")
 	initialize_menus(args.store_name)
 
 end)
