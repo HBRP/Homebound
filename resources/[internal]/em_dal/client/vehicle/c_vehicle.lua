@@ -18,3 +18,9 @@ function get_nearest_vehicle()
     return closest_veh
 
 end
+
+function get_all_vehicle_models_async(callback)
+
+    trigger_server_callback_async("em_dal:get_all_vehicle_models", callback)
+
+end

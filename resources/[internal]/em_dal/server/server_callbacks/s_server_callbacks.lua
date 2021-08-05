@@ -31,7 +31,7 @@ AddEventHandler('em_dal:server_callback', function(event, callback_id, ...)
     local callback = find_server_callback(event)
 
     if callback == nil then
-        Citizen.Trace(event .. " callback was nil\n")
+        Citizen.Trace(event .. " callback was nil. Check if properly registered\n")
         return
     end
 
