@@ -14,6 +14,10 @@ AddEventHandler("Vehicle Shop", function(args)
 
 end)
 
+local function populate_local_stock_menu(stock)
+
+end
+
 local function initialize_menus()
 
 	vehicle_stock_menu:AddButton({label = 'Purchase Vehicle', value = purchase_vehicle_menu})
@@ -31,10 +35,11 @@ local function initialize_menus()
 
 	current_stock_menu:On('open', function(menu)
 
+		current_stock_menu:ClearItems()
         exports["em_dal"]:get_vehicle_store_stock_async(function(stock)
 
-            open_vehicle_shop_menu(stock)
-
+            populate_local_stock_menu(stock)
+            
         end, PDM_STORE)
 
 	end)

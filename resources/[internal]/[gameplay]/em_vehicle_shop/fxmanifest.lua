@@ -5,8 +5,9 @@ games { 'gta5' }
 client_scripts {
 	'@menuv/menuv.lua',
 	'config.lua',
-	'client/em_vehicle_shop.lua',
-	'cllient/em_vehicle_stock_purchase.lua'
+	'client/c_vehicle_shop_utils.lua'
+	'client/c_vehicle_shop.lua',
+	'cllient/c_vehicle_stock_purchase.lua'
 }
 
 dependencies {
