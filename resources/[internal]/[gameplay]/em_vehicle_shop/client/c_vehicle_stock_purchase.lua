@@ -68,9 +68,6 @@ end
 local function initialize_menus(store_name)
 
 	vehicle_stock_menu:ClearItems()
-	purchase_vehicle_menu:ClearItems()
-	current_stock_menu:ClearItems()
-
 	vehicle_stock_menu:AddButton({label = 'Purchase Vehicle', value = purchase_vehicle_menu})
 	vehicle_stock_menu:AddButton({label = "Current Stock", value = current_stock_menu})
 
@@ -78,9 +75,10 @@ local function initialize_menus(store_name)
 	initialize_category_menus()
 	purchase_vehicle_menu:On('open', function(menu)
 
+		purchase_vehicle_menu:ClearItems()
 		for i = 1, #categories do
 
-			menu:AddButton({label = categories[i], value = category_menus[i]})
+			menu:AddButton({label = categories[i], value = vehicle_shop_categories[i]})
 
 		end
 
