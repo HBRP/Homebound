@@ -13,5 +13,7 @@ client_scripts {
 dependencies {
 	'em_dal',
 	'em_context',
-	'em_vehicles'
+	'em_vehicles',
+	'em_form',
+	't-notify'
 }

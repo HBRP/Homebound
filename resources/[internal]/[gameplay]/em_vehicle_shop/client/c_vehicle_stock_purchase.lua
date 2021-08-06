@@ -9,6 +9,8 @@ local vehicle_stock_categories = {}
 local vehicle_shop_categories  = {}
 local vehicle_models = {}
 
+local current_store = ""
+
 local function add_vehicle_button(vehicle, menu)
 
 	local button = menu:AddButton({label = string.format("(%d) %s - $%d", vehicle.stock, vehicle.vehicle_name, vehicle.vehicle_price)})
@@ -46,6 +48,32 @@ local function populate_local_stock_menu(stock)
 
 end
 
+local function purchase_vehicle_form(vehicle)
+
+	local purchase_form = {
+
+		{
+			input_type = "text_input",
+			input_name = "purchase_amount",
+			placeholder = "How many to order",
+			options = {},
+			numbers_valid = true,
+			characters_valid =  false,
+			optional = false
+		}
+	}
+
+	exports["em_form"]:display_form(function(inputs)
+
+		local purchase_amount = tonumber(exports["em_form"]:get_form_value(inputs, "purchase_amount"))
+		if purchase_amount < 1 then
+			exports['t-notify']:Alert({style = "error", message = "You must type a number greater than 0"})
+		end
+
+	end, string.format("Ordering %s", vehicle.vehicle_name), purchase_form)
+
+end
+
 local function set_vehicle_models(idx, menu)
 
 	for i = 1, #vehicle_models do
@@ -55,7 +83,10 @@ local function set_vehicle_models(idx, menu)
 			local button = menu:AddButton({label = string.format("%s (%s) $%d", vehicle_models[i].vehicle_name, vehicle_models[i].vehicle_model, vehicle_models[i].vehicle_base_price)})
 			button:On("select", function()
 
-
+				purchase_vehicle_form(vehicle_models[i])
+				MenuV:CloseMenu(menu)
+				MenuV:CloseMenu(purchase_vehicle_menu)
+				MenuV:CloseMenu(vehicle_stock_menu)
 
 			end)
 
@@ -150,7 +181,7 @@ AddEventHandler("vehicle_shop", function(args)
 	end)
 
 	]]
-
+	current_store = args.store_name
 	initialize_menus(args.store_name)
 
 end)
