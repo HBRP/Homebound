@@ -76,22 +76,18 @@ end
 
 local function set_vehicle_models(idx, menu)
 
-	for i = 1, #vehicle_models do
 
-		if vehicle_models[i].vehicle_category_id == idx then
+	local relevant_models = Fun:new(vehicle_models):filter(function(obj) return obj.vehicle_category_id == idx end):into_inner()
+	for i = 1, #relevant_models do
+		local button = menu:AddButton({label = string.format("%s (%s) $%d", relevant_models[i].vehicle_name, relevant_models[i].vehicle_model, relevant_models[i].vehicle_base_price)})
+		button:On("select", function()
 
-			local button = menu:AddButton({label = string.format("%s (%s) $%d", vehicle_models[i].vehicle_name, vehicle_models[i].vehicle_model, vehicle_models[i].vehicle_base_price)})
-			button:On("select", function()
+			purchase_vehicle_form(relevant_models[i])
+			MenuV:CloseMenu(menu)
+			MenuV:CloseMenu(purchase_vehicle_menu)
+			MenuV:CloseMenu(vehicle_stock_menu)
 
-				purchase_vehicle_form(vehicle_models[i])
-				MenuV:CloseMenu(menu)
-				MenuV:CloseMenu(purchase_vehicle_menu)
-				MenuV:CloseMenu(vehicle_stock_menu)
-
-			end)
-
-		end
-
+		end)
 	end
 
 end

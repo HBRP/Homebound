@@ -7,7 +7,8 @@ client_scripts {
 	'config.lua',
 	'client/c_vehicle_shop_utils.lua',
 	'client/c_vehicle_shop.lua',
-	'client/c_vehicle_stock_purchase.lua'
+	'client/c_vehicle_stock_purchase.lua',
+	'@em_fun/c_fun.lua'
 }
 
 dependencies {
@@ -15,5 +16,6 @@ dependencies {
 	'em_context',
 	'em_vehicles',
 	'em_form',
-	't-notify'
+	't-notify',
+	'em_fun'
 }
