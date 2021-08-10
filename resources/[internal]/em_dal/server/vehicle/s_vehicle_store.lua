@@ -38,7 +38,6 @@ end)
 register_server_callback("em_dal:order_vehicle", function(source, callback, vehicle_model_id, amount_to_order)
 
     local character_job = get_character_job(source).job
-    print(json.encode(character_job))
     local data = {
         character_id = get_character_id_from_source(source),
         group_rank_id = character_job.group_rank_id,
@@ -49,9 +48,9 @@ register_server_callback("em_dal:order_vehicle", function(source, callback, vehi
 
 end)
 
-register_server_callback("em_dal:get_vehicle_orders", function(source, callback, store_name)
+register_server_callback("em_dal:get_vehicle_orders", function(source, callback, vehicle_store_name)
 
-    local data = {store_name = store_name}
+    local data = {vehicle_store_name = vehicle_store_name}
     HttpPostSim("/Vehicle/Store/Orders", data, callback)
 
 end)

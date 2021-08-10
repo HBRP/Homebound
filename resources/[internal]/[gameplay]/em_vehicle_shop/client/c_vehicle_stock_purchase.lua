@@ -128,6 +128,15 @@ local function initialize_category_menus(store_name)
 
 end
 
+local function set_vehicle_orders_menu(orders)
+
+	for i = 1, #orders do
+		print(json.encode(orders[i]))
+		local button = current_orders_menu:AddButton({label = string.format("(%d) %s : (Arrival Date) %s ", orders[i].order_amount, orders[i].vehicle_name, orders[i].order_fill_date)})
+	end
+
+end
+
 local function initialize_menus(store_name)
 
 	vehicle_stock_menu:ClearItems()
@@ -146,6 +155,7 @@ local function initialize_menus(store_name)
 
 		end
 
+
 	end)
 
 	current_stock_menu:On('open', function(menu)
@@ -158,6 +168,19 @@ local function initialize_menus(store_name)
 		end, store_name)
 
 	end)
+
+	current_orders_menu:On('open', function(menu)
+
+		exports["em_dal"]:get_vehicle_orders_async(function(orders)
+
+			print(json.encode(orders))
+			current_orders_menu:ClearItems()
+			set_vehicle_orders_menu(orders)
+
+		end, store_name)
+
+	end)
+
 	MenuV:OpenMenu(vehicle_stock_menu)
 
 end
@@ -175,18 +198,9 @@ AddEventHandler("em_dal:character_loaded", function()
 end)
 
 
-AddEventHandler("vehicle_shop", function(args)
+AddEventHandler("vehicle_shop", function(point)
 
-	--[[
-	exports["em_dal"]:get_all_vehicle_models_async(function(response)
-
-		vehicle_models = response
-		initialize_menus(args.store_name)
-
-	end)
-
-	]]
-	current_store = args.store_name
-	initialize_menus(args.store_name)
+	current_store = point.args.store_name
+	initialize_menus(point.args.store_name)
 
 end)
