@@ -13,4 +13,4 @@ categories ={
     'bicycles'
 }
 
-PDM_STORE = "PDM%20Basic"
+PDM_STORE = "PDM"

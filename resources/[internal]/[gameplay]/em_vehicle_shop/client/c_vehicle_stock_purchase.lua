@@ -69,6 +69,15 @@ local function purchase_vehicle_form(vehicle)
 		if purchase_amount < 1 then
 			exports['t-notify']:Alert({style = "error", message = "You must type a number greater than 0"})
 		end
+		exports["em_dal"]:order_vehicle_async(function(response)
+
+			if response.result.success then
+				exports['t-notify']:Alert({style="success", message=string.format("Successfully purchased %d %s", purchase_amount, vehicle.vehicle_name)})
+			else
+				exports['t-notify']:Alert({style = "error", message = response.result.success})
+			end
+
+		end, vehicle.vehicle_model_id, purchase_amount)
 
 	end, string.format("Ordering %s", vehicle.vehicle_name), purchase_form)
 
@@ -146,7 +155,7 @@ local function initialize_menus(store_name)
 			current_stock_menu:ClearItems()
 			populate_local_stock_menu(stock)
 
-		end, PDM_STORE)
+		end, store_name)
 
 	end)
 	MenuV:OpenMenu(vehicle_stock_menu)
