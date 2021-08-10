@@ -70,6 +70,19 @@ function get_current_character_jobs()
 
 end
 
+function get_character_job(source)
+
+    for i = 1, #character_jobs do
+
+        if character_jobs[i].source == source then
+            return character_jobs[i]
+        end
+
+    end
+    return nil
+
+end
+
 register_server_callback("em_dal:get_nearby_job_clock_in", function(source, callback, character_id, x, y, z)
 
     local endpoint = string.format("/Groups/GetNeabyJobClockIn/%d/%f/%f/%f", character_id, x, y, z)
