@@ -24,3 +24,8 @@ function insert_new_vehicle_async(callback, vehicle_model, vehicle_mods, vehicle
 
 end
 
+function order_vehicle_async(callback, vehicle_model_id, amount_to_order)
+
+    trigger_server_callback_async("em_dal:order_vehicle", callback, vehicle_model_id, amount_to_order)
+
+end
