@@ -50,10 +50,10 @@ function Fun:filter(func)
 
 		end
 	else
-		for k, v in pairs(self.data) do
+		for i = 1, #self.data do
 
-			if func(v) then
-				data[#data + 1] = v
+			if func(self.data[i]) then
+				data[#data + 1] = self.data[i]
 			end
 
 		end
