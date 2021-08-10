@@ -48,3 +48,10 @@ register_server_callback("em_dal:order_vehicle", function(source, callback, vehi
     HttpPostSim("/Vehicle/Store/OrderVehicle", data, callback)
 
 end)
+
+register_server_callback("em_dal:get_vehicle_orders", function(source, callback, store_name)
+
+    local data = {store_name = store_name}
+    HttpPostSim("/Vehicle/Store/Orders", data, callback)
+
+end)

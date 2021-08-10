@@ -29,3 +29,9 @@ function order_vehicle_async(callback, vehicle_model_id, amount_to_order)
     trigger_server_callback_async("em_dal:order_vehicle", callback, vehicle_model_id, amount_to_order)
 
 end
+
+function get_vehicle_orders_async(callback, store_name)
+
+    trigger_server_callback_async("em_dal:get_vehicle_orders", callback, store_name)
+
+end
