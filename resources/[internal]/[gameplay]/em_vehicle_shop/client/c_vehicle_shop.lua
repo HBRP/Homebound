@@ -12,6 +12,7 @@ local function setup_menus()
 end
 
 local showcasing_vehicle = 0
+local showcasing_vehicle_stats = nil
 
 local function delete_showcased_vehicle()
 
@@ -37,6 +38,8 @@ local function add_vehicle_button_to_category(vehicle, menu)
         local veh_heading = GetEntityHeading(PlayerPedId()) + 90.0
         showcasing_vehicle = exports["em_vehicles"]:spawn_vehicle(vehicle.vehicle_model, false, false, veh_position, veh_heading, false, false)
         exports["em_vehicles"]:register_vehicle_as_player_owned(showcasing_vehicle)
+        showcasing_vehicle_stats = vehicle
+
 
     end
 
@@ -75,6 +78,58 @@ local function open_vehicle_shop_menu(stock)
 
 end
 
+RegisterNetEvent("em_vehicle_shop:sell_vehicle_query")
+AddEventHandler("em_vehicle_shop:sell_vehicle_query", function(seller_character_id, vehicle)
+
+    local form_inputs = {
+        {
+            input_type = "radiobutton",
+            input_name =  "radio_button",
+            options =  {"Agree", "Disagree"}
+        }
+    }
+    exports["em_form"]:display_form(function(inputs)
+
+        local response = exports["em_form"]:get_form_value(inputs, "radio_button")
+        if response == "Agree" then
+
+            exports["em_dal"]:trigger_event_for_character("em_vehicle_shop:sell_vehicle_acceptance", exports["em_dal"]:get_character_id())
+
+        end
+
+    end, string.format("Do you agree to purchase a %s for %d", vehicle.vehicle_name, vehicle.vehicle_price), form_inputs)
+
+end)
+
+RegisterNetEvent("em_vehicle_shop:sell_vehicle_acceptance")
+AddEventHandler("em_vehicle_shop:sell_vehicle_acceptance", function(accepting_character_id)
+
+    print("Accepted")
+
+end)
+
+local function sell_vehicle_form()
+
+    local form_inputs = {
+        {
+            input_type = "text_input",
+            input_name = "character_id",
+            placeholder = "The character's id",
+            options = {},
+            numbers_valid = true,
+            characters_valid =  false,
+            optional = false
+        }
+    }
+    exports["em_form"]:display_form(function(inputs)
+
+        local character_id = tonumber(exports["em_form"]:get_form_value(inputs, "character_id"))
+        exports["em_dal"]:trigger_event_for_character("em_vehicle_shop:sell_vehicle_query", character_id, exports["em_dal"]:get_character_id(), showcasing_vehicle_stats)
+
+    end, "Selling Vehicle", form_inputs)
+
+end
+
 exports["em_context"]:register_multi_context("PDM Vehicle Floor", function()
 
     local dialog_menu = {}
@@ -107,14 +162,13 @@ exports["em_context"]:register_multi_context("PDM Vehicle Floor", function()
             dialog = "[Finance Vehicle]",
             callback = function()
                 exports["em_dialog"]:hide_dialog()
-                showcasing_vehicle = 0
             end
         },
         {
             dialog = "[Sell Vehicle]",
             callback = function()
                 exports["em_dialog"]:hide_dialog()
-                showcasing_vehicle = 0
+                sell_vehicle_form()
             end
         }
     }
