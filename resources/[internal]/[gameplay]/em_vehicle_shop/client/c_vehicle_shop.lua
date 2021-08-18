@@ -78,6 +78,21 @@ local function open_vehicle_shop_menu(stock)
 
 end
 
+local function confirm_purchase_ability(seller_character_id, vehicle)
+
+    exports["em_dal"]:bank_get_default_bank_account_async(function(bank_account)
+
+        print(json.encode(bank_account))
+        if bank_account.funds < vehicle.vehicle_price then
+            exports["t-notify"]:Alert({style = "error", duration=5000, message="You do not have the required funds in your bank account"})
+        else
+            exports["em_dal"]:trigger_event_for_character("em_vehicle_shop:sell_vehicle_acceptance", exports["em_dal"]:get_character_id())
+        end
+
+    end)
+
+end
+
 RegisterNetEvent("em_vehicle_shop:sell_vehicle_query")
 AddEventHandler("em_vehicle_shop:sell_vehicle_query", function(seller_character_id, vehicle)
 
@@ -93,7 +108,7 @@ AddEventHandler("em_vehicle_shop:sell_vehicle_query", function(seller_character_
         local response = exports["em_form"]:get_form_value(inputs, "radio_button")
         if response == "Agree" then
 
-            exports["em_dal"]:trigger_event_for_character("em_vehicle_shop:sell_vehicle_acceptance", exports["em_dal"]:get_character_id())
+            confirm_purchase_ability(seller_character_id, vehicle)
 
         end
 
@@ -104,7 +119,7 @@ end)
 RegisterNetEvent("em_vehicle_shop:sell_vehicle_acceptance")
 AddEventHandler("em_vehicle_shop:sell_vehicle_acceptance", function(accepting_character_id)
 
-    print("Accepted")
+    print("accepted")
 
 end)
 
