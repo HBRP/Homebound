@@ -23,6 +23,17 @@ register_server_callback("em_dal:can_purchase_a_vehicle", function(source, callb
 
 end)
 
+register_server_callback("em_dal:purchase_vehicle", function(source, callback, vehicle, vehicle_store_name)
+
+    local data = {
+        vehicle_store_name = vehicle_store_name,
+        seller_character_id = get_character_id_from_source(source),
+        vehicle = vehicle
+    }
+    HttpPostSim("/Vehicle/Purchase", data, callback)
+
+end)
+
 register_server_callback("em_dal:insert_new_vehicle", function(source, callback, character_id, vehicle_model, vehicle_mods, vehicle_state)
 
     local data = {character_id = character_id, vehicle_model = vehicle_model, vehicle_mods = vehicle_mods, vehicle_state = vehicle_state}
