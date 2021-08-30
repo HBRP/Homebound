@@ -1,6 +1,7 @@
 
 local vehicle_shop_menu = nil
 local category_menus = {}
+local vehicle_store_name = nil
 
 local function setup_menus()
 
@@ -11,13 +12,13 @@ local function setup_menus()
 
 end
 
-local showcasing_vehicle = 0
-local showcasing_vehicle_stats = nil
+local showcasing_vehicle_id = 0
+local showcasing_vehicle = nil
 
 local function delete_showcased_vehicle()
 
-    exports["em_vehicles"]:despawn_vehicle(showcasing_vehicle)
-    showcasing_vehicle = 0
+    exports["em_vehicles"]:despawn_vehicle(showcasing_vehicle_id)
+    showcasing_vehicle_id = 0
 
 end
 
@@ -36,9 +37,9 @@ local function add_vehicle_button_to_category(vehicle, menu)
             forward_vec.z * 1.0 + player_coords.z 
         }
         local veh_heading = GetEntityHeading(PlayerPedId()) + 90.0
-        showcasing_vehicle = exports["em_vehicles"]:spawn_vehicle(vehicle.vehicle_model, false, false, veh_position, veh_heading, false, false)
-        exports["em_vehicles"]:register_vehicle_as_player_owned(showcasing_vehicle)
-        showcasing_vehicle_stats = vehicle
+        showcasing_vehicle_id = exports["em_vehicles"]:spawn_vehicle(vehicle.vehicle_model, false, false, veh_position, veh_heading, false, false)
+        exports["em_vehicles"]:register_vehicle_as_player_owned(showcasing_vehicle_id)
+        showcasing_vehicle = vehicle
 
 
     end
@@ -86,7 +87,7 @@ local function confirm_purchase_ability(seller_character_id, vehicle)
         if bank_account.funds < vehicle.vehicle_price then
             exports["t-notify"]:Alert({style = "error", duration=5000, message="You do not have the required funds in your bank account"})
         else
-            exports["em_dal"]:trigger_event_for_character("em_vehicle_shop:sell_vehicle_acceptance", exports["em_dal"]:get_character_id())
+            exports["em_dal"]:trigger_event_for_character("em_vehicle_shop:sell_vehicle_acceptance", seller_character_id, exports["em_dal"]:get_character_id())
         end
 
     end)
@@ -119,7 +120,25 @@ end)
 RegisterNetEvent("em_vehicle_shop:sell_vehicle_acceptance")
 AddEventHandler("em_vehicle_shop:sell_vehicle_acceptance", function(accepting_character_id)
 
-    print("accepted")
+    local vehicle = {
+
+        character_id = accepting_character_id,
+        vehicle_model = showcasing_vehicle.vehicle_model,
+        vehicle_mods = exports["em_vehicles"]:get_vehicle_mods(showcasing_vehicle_id),
+        vehicle_state = exports["em_vehicles"]:get_vehicle_state(showcasing_vehicle_id)
+
+    }
+
+    exports["em_dal"]:purchase_vehicle_async(function(response)
+
+        if response.result.success then
+            SetVehicleNumberPlateText(response.plate)
+            exports['t-notify']:Alert({style = "success", message = "Successfully sold vehicle"})
+        else
+            exports["t-notify"]:Alert({style = "error", message = response.result.message})
+        end
+
+    end, vehicle, vehicle_store_name)
 
 end)
 
@@ -139,14 +158,15 @@ local function sell_vehicle_form()
     exports["em_form"]:display_form(function(inputs)
 
         local character_id = tonumber(exports["em_form"]:get_form_value(inputs, "character_id"))
-        exports["em_dal"]:trigger_event_for_character("em_vehicle_shop:sell_vehicle_query", character_id, exports["em_dal"]:get_character_id(), showcasing_vehicle_stats)
+        exports["em_dal"]:trigger_event_for_character("em_vehicle_shop:sell_vehicle_query", character_id, exports["em_dal"]:get_character_id(), showcasing_vehicle)
 
     end, "Selling Vehicle", form_inputs)
 
 end
 
-exports["em_context"]:register_multi_context("PDM Vehicle Floor", function()
+local function setup_vehicle_floor(store_name)
 
+    vehicle_store_name = store_name
     local dialog_menu = {}
     
     if GetVehiclePedIsIn(PlayerPedId(), false) == 0 then
@@ -159,7 +179,7 @@ exports["em_context"]:register_multi_context("PDM Vehicle Floor", function()
 
                     open_vehicle_shop_menu(stock)
 
-                end, PDM_STORE)
+                end, vehicle_store_name)
 
             end
         })
@@ -188,13 +208,19 @@ exports["em_context"]:register_multi_context("PDM Vehicle Floor", function()
         }
     }
 
-    if showcasing_vehicle ~= 0 and GetVehiclePedIsIn(PlayerPedId(), false) == showcasing_vehicle then
+    if showcasing_vehicle_id ~= 0 and GetVehiclePedIsIn(PlayerPedId(), false) == showcasing_vehicle_id then
         for i = 1, #showcase_items do
             table.insert(dialog_menu, showcase_items[i])
         end
     end
 
     return dialog_menu
+
+end
+
+exports["em_context"]:register_multi_context("PDM Vehicle Floor", function()
+
+    return setup_vehicle_floor(PDM_STORE)
 
 end)
 
