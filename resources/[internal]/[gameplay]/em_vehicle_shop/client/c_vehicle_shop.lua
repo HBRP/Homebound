@@ -133,7 +133,9 @@ AddEventHandler("em_vehicle_shop:sell_vehicle_acceptance", function(accepting_ch
 
         if response.result.success then
             SetVehicleNumberPlateText(showcasing_vehicle_id, response.plate)
+            exports["em_vehicles"]:register_vehicle_as_player_owned(showcasing_vehicle_id, accepting_character_id)
             exports['t-notify']:Alert({style = "success", message = "Successfully sold vehicle"})
+            showcasing_vehicle_id = 0
         else
             exports["t-notify"]:Alert({style = "error", message = response.result.message})
         end

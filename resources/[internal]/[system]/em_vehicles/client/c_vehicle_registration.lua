@@ -31,11 +31,11 @@ function is_vehicle_owned_by_group(veh)
 
 end
 
-function register_vehicle_as_player_owned(veh)
+function register_vehicle_as_player_owned(veh, character_id)
 
     local plate = GetVehicleNumberPlateText(veh)
-    local character_id = exports["em_dal"]:get_character_id()
-    exports["em_dal"]:trigger_server_callback_async("em_vehicles:register_plate_as_player_owned", function() end, character_id, plate)
+    local owning_character_id = character_id or exports["em_dal"]:get_character_id()
+    exports["em_dal"]:trigger_server_callback_async("em_vehicles:register_plate_as_player_owned", function() end, owning_character_id, plate)
 
 end
 
