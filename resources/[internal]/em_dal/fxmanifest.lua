@@ -229,6 +229,7 @@ export 'can_purchase_a_vehicle'
 export 'insert_new_vehicle_async'
 export 'order_vehicle_async'
 export 'get_vehicle_orders_async'
+export 'purchase_vehicle_async'
 
 -- c_vehicle_garage.lua
 export 'get_character_vehicles_async'
