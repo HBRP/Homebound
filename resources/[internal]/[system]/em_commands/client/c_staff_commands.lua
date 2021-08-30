@@ -109,3 +109,18 @@ register_command("kick_character", function(source, args, raw)
     end, character_id, message)
 
 end, "Kick character", {{name = "character_id", help = "integer"}, {name = "message", help = "(optional) why this person has been kicked"}})
+
+RegisterNetEvent("em_commands:fetch_character_event")
+AddEventHandler("em_commands:fetch_character_event", function(coords)
+
+    SetEntityCoords(PlayerPedId(), coords)
+
+end)
+
+register_command("fetch_character", function(source, args, raw)
+
+    local character_id = tonumber(args[1])
+    local player_coords = GetEntityCoords(PlayerPedId())
+    exports["em_dal"]:trigger_event_for_character("em_commands:fetch_character_event", character_id, player_coords)
+
+end)
