@@ -30,6 +30,7 @@ dependencies {
 	'em_dal',
 	'em_items',
 	'em_commands',
-	't-notify'
+	't-notify',
+	'em_ui_lock'
 
 }

@@ -1,5 +1,6 @@
 
 local recipes_cache = {}
+local ui_lock_id = 0
 
 local function set_recipes(recipes)
 
@@ -16,6 +17,11 @@ local function set_recipes(recipes)
 end
 
 function open_crafting(context)
+
+	ui_lock_id = exports["em_ui_lock"]:try_ui_lock()
+	if ui_lock_id == 0 then
+		return
+	end
 
 	local crafting_function = nil
 
@@ -70,6 +76,7 @@ end)
 
 RegisterNUICallback("close", function(data, cb)
 
+	exports["em_ui_lock"]:try_ui_unlock(ui_lock_id)
 	SetNuiFocus(false, false)
 	cb(true)
 

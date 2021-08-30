@@ -23,3 +23,9 @@ exports {
     'hide_dialog'
 
 }
+
+dependencies {
+
+    'em_ui_lock'
+
+}

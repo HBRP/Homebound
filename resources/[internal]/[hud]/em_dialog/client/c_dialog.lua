@@ -1,10 +1,16 @@
 
 local unique_id = 0
+local ui_lock_id = 0
 local callbacks = {}
 
 local cleanup_callback = nil
 
 function show_dialog(title, dialog, cleanup_cb)
+
+    ui_lock_id = exports["em_ui_lock"]:try_ui_lock()
+    if ui_lock_id == 0 then
+        return
+    end
 
     callbacks = {}
     cleanup_callback = cleanup_cb
@@ -26,6 +32,7 @@ function hide_dialog()
         cleanup_callback()
     end
     
+    exports["em_ui_lock"]:try_ui_unlock(ui_lock_id)
     SendNUIMessage({display = "hide"})
     SetNuiFocus(false, false)
 
