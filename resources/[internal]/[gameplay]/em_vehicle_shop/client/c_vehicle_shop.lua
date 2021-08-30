@@ -132,7 +132,7 @@ AddEventHandler("em_vehicle_shop:sell_vehicle_acceptance", function(accepting_ch
     exports["em_dal"]:purchase_vehicle_async(function(response)
 
         if response.result.success then
-            SetVehicleNumberPlateText(response.plate)
+            SetVehicleNumberPlateText(showcasing_vehicle_id, response.plate)
             exports['t-notify']:Alert({style = "success", message = "Successfully sold vehicle"})
         else
             exports["t-notify"]:Alert({style = "error", message = response.result.message})
