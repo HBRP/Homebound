@@ -753,9 +753,17 @@ RegisterNUICallback('deleteALL', function(data, cb)
     cb(true)
 end)
 
-
+local ui_lock_id = 0
 
 function TogglePhone()
+
+  if not menuIsOpen then
+    ui_lock_id = exports["em_ui_lock"]:try_ui_lock()
+    if ui_lock_id == 0 then
+      return
+    end
+  end
+
   menuIsOpen = not menuIsOpen
   SendNUIMessage({show = menuIsOpen})
   if menuIsOpen == true then
@@ -777,6 +785,9 @@ RegisterNUICallback('faketakePhoto', function(data, cb)
 end)
 
 RegisterNUICallback('closePhone', function(data, cb)
+
+  exports["em_ui_lock"]:try_ui_unlock(ui_lock_id)
+
   menuIsOpen = false
   TriggerEvent('gcPhone:setMenuStatus', false)
   SendNUIMessage({show = false})

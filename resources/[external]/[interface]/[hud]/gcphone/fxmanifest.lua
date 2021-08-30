@@ -68,6 +68,7 @@ dependencies {
 	'em_commands',
 	'em_items',
 	't-notify',
-	'em_form'
+	'em_form',
+	'em_ui_lock'
 
 }
