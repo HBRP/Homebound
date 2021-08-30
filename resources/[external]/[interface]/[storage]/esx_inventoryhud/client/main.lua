@@ -92,8 +92,14 @@ local left_storage_id  = nil
 local right_storage_id = nil
 local right_inventory_name = nil
 local in_store = false
+local ui_lock_id = 0
 
 function openInventory()
+
+    ui_lock_id = exports["em_ui_lock"]:try_ui_lock()
+    if ui_lock_id == 0 then
+        return
+    end
 
     left_storage_id  = nil
     right_storage_id = nil
@@ -109,6 +115,7 @@ end
 
 function closeInventory()
 
+    exports["em_ui_lock"]:try_ui_unlock(ui_lock_id)
     isInInventory = false
     SendNUIMessage({action = "hide"})
     SetNuiFocus(false, false)

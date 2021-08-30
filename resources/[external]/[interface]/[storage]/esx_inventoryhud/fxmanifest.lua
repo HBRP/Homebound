@@ -30,6 +30,7 @@ dependencies {
   "em_items",
   "em_storage",
   "em_transactions",
-  "t-notify"
+  "t-notify",
+  "em_ui_lock"
 
 }
