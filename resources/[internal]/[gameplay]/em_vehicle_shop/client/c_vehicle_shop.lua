@@ -86,7 +86,7 @@ local function confirm_purchase_ability(seller_character_id, vehicle)
         if bank_account.funds < vehicle.vehicle_price then
             exports["t-notify"]:Alert({style = "error", duration=5000, message="You do not have the required funds in your bank account"})
         else
-            exports["em_dal"]:trigger_event_for_character("em_vehicle_shop:sell_vehicle_acceptance", seller_character_id, exports["em_dal"]:get_character_id())
+            exports["em_dal"]:trigger_event_for_character("em_vehicle_shop:sell_vehicle_acceptance", seller_character_id, exports["em_dal"]:get_character_id(), vehicle)
         end
 
     end)
@@ -117,7 +117,12 @@ AddEventHandler("em_vehicle_shop:sell_vehicle_query", function(seller_character_
 end)
 
 RegisterNetEvent("em_vehicle_shop:sell_vehicle_acceptance")
-AddEventHandler("em_vehicle_shop:sell_vehicle_acceptance", function(accepting_character_id)
+AddEventHandler("em_vehicle_shop:sell_vehicle_acceptance", function(accepting_character_id, vehicle)
+
+    if vehicle.vehicle_model ~= showcasing_vehicle.vehicle_model then
+        exports["t-notify"]:Alert({style="info", duration=10000, message=string.format("Someone attempted to purchase a %s, but was unable to. Please seek them out when possible to restart the process", vehicle.vehicle_model)})
+        return
+    end
 
     local vehicle = {
 
@@ -212,10 +217,10 @@ RegisterNetEvent("em_vehicle_shop:finance_vehicle_query_acceptance")
 AddEventHandler("em_vehicle_shop:finance_vehicle_query_acceptance", function(buyer_character_id, finance_weeks, vehicle)
 
     if vehicle.vehicle_model ~= showcasing_vehicle.vehicle_model then
-        exports["t-notify"]:Alert({style="info", duration=10000, message=string.format("Someone attempted to purchase a %s, but was unable to. Please seek them out when possible to restart the process", vehicle.vehicle_model)})
+        exports["t-notify"]:Alert({style="info", duration=10000, message=string.format("Someone attempted to finance a %s, but was unable to. Please seek them out when possible to restart the process", vehicle.vehicle_model)})
         return
     end
-    
+
 
 end)
 
