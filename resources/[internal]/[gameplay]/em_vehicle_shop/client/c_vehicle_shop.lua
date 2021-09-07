@@ -83,7 +83,6 @@ local function confirm_purchase_ability(seller_character_id, vehicle)
 
     exports["em_dal"]:bank_get_default_bank_account_async(function(bank_account)
 
-        print(json.encode(bank_account))
         if bank_account.funds < vehicle.vehicle_price then
             exports["t-notify"]:Alert({style = "error", duration=5000, message="You do not have the required funds in your bank account"})
         else
@@ -161,6 +160,92 @@ local function sell_vehicle_form()
 
         local character_id = tonumber(exports["em_form"]:get_form_value(inputs, "character_id"))
         exports["em_dal"]:trigger_event_for_character("em_vehicle_shop:sell_vehicle_query", character_id, exports["em_dal"]:get_character_id(), showcasing_vehicle)
+
+    end, "Selling Vehicle", form_inputs)
+
+end
+
+local function confirm_finance_ability(seller_character_id, finance_weeks, vehicle)
+
+    exports["em_dal"]:bank_get_default_bank_account_async(function(bank_account)
+
+        if bank_account.funds < math.floor(vehicle.vehicle_price * 0.2) then
+            exports["t-notify"]:Alert({style = "error", duration=5000, message="You do not have the required funds in your bank account."})
+        else
+            exports["em_dal"]:trigger_event_for_character("em_vehicle_shop:finance_vehicle_query_acceptance", seller_character_id, exports["em_dal"]:get_character_id(), finance_weeks, vehicle)
+        end
+
+    end)
+
+end
+
+RegisterNetEvent("em_vehicle_shop:finance_vehicle_query")
+AddEventHandler("em_vehicle_shop:finance_vehicle_query", function(seller_character_id, finance_weeks, vehicle)
+
+    local form_inputs = {
+        {
+            input_type = "radiobutton",
+            input_name =  "radio_button",
+            options =  {"Agree", "Disagree"}
+        }
+    }
+
+    local downpayment_amount = math.floor(vehicle.vehicle_price * 0.2)
+    local weekly_amount = math.floor(vehicle.vehicle_price * 0.8 / finance_weeks)
+
+    local question = "Do you agree to finance a %s and pay the down payment of $%d? Keep in mind, with financing, you agree to make a payment for %d every week for %d weeks"
+    question = string.format(question, vehicle.vehicle_name, downpayment_amount, weekly_amount, finance_weeks)
+    exports["em_form"]:display_form(function(inputs)
+
+        local response = exports["em_form"]:get_form_value(inputs, "radio_button")
+        if response == "Agree" then
+
+            confirm_finance_ability(seller_character_id, finance_weeks, vehicle)
+
+        end
+
+    end, question, form_inputs)
+
+end)
+
+RegisterNetEvent("em_vehicle_shop:finance_vehicle_query_acceptance")
+AddEventHandler("em_vehicle_shop:finance_vehicle_query_acceptance", function(buyer_character_id, finance_weeks, vehicle)
+
+    if vehicle.vehicle_model ~= showcasing_vehicle.vehicle_model then
+        exports["t-notify"]:Alert({style="info", duration=10000, message=string.format("Someone attempted to purchase a %s, but was unable to. Please seek them out when possible to restart the process", vehicle.vehicle_model)})
+        return
+    end
+    
+
+end)
+
+local function finance_vehicle_form()
+
+    local form_inputs = {
+        {
+            input_type = "text_input",
+            input_name = "character_id",
+            placeholder = "The character's id",
+            options = {},
+            numbers_valid = true,
+            characters_valid =  false,
+            optional = false
+        },
+        {  
+            input_type = "dropdown",
+            input_name = "finance_weeks",
+            placeholder = "",
+            options = ["4", "8", "12"],
+            numbers_valid = true,
+            characters_valid = true,
+            optional = false
+        }
+    }
+    exports["em_form"]:display_form(function(inputs)
+
+        local character_id = tonumber(exports["em_form"]:get_form_value(inputs, "character_id"))
+        local finance_weeks = tonumber(exports["em_form"]:get_form_value(inputs, "finance_weeks"))
+        exports["em_dal"]:trigger_event_for_character("em_vehicle_shop:finance_vehicle_query", character_id, exports["em_dal"]:get_character_id(), finance_weeks, showcasing_vehicle)
 
     end, "Selling Vehicle", form_inputs)
 
